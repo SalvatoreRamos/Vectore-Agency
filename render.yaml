@@ -1,0 +1,20 @@
+services:
+  # Web Service (Node.js Backend + Frontend)
+  - type: web
+    name: vectore-agency
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+    # MongoDB Connection String (will be provided by you in dashboard)
+      - key: MONGODB_URI
+        sync: false
+    # JWT Secret
+      - key: JWT_SECRET
+        generateValue: true
+

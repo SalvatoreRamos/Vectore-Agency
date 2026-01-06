@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Vectore - Agencia publicitaria líder en diseño gráfico, impresión y marketing digital. Transformamos tus ideas en realidad.">
+    <title>Vectore | Agencia Publicitaria</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <span class="logo-icon">✦</span>
+                Vectore
+            </a>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#inicio" class="nav-link">Inicio</a></li>
+                <li><a href="#servicios" class="nav-link">Servicios</a></li>
+                <li><a href="#catalogo" class="nav-link">Catálogo</a></li>
+                <li><a href="#cotizador" class="nav-link">Cotizador IA</a></li>
+                <li><a href="#contacto" class="nav-link">Contacto</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <div class="hero-bg">
+            <div class="floating-shape shape-1"></div>
+            <div class="floating-shape shape-2"></div>
+            <div class="floating-shape shape-3"></div>
+            <div class="floating-shape shape-4"></div>
+        </div>
+        <div class="hero-content">
+            <span class="hero-badge">🚀 Agencia Creativa #1</span>
+            <h1 class="hero-title">
+                Transformamos tus
+                <span class="gradient-text">ideas</span> en
+                <span class="gradient-text">realidad</span>
+            </h1>
+            <p class="hero-subtitle">
+                Somos expertos en diseño gráfico, impresión de alta calidad y marketing digital.
+                Llevamos tu marca al siguiente nivel con soluciones creativas que impactan.
+            </p>
+            <div class="hero-cta">
+                <a href="#cotizador" class="btn btn-primary">
+                    <span>Cotizar Ahora</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </a>
+                <a href="#catalogo" class="btn btn-secondary">Ver Catálogo</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number">500+</span>
+                    <span class="stat-label">Proyectos</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">150+</span>
+                    <span class="stat-label">Clientes</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">10+</span>
+                    <span class="stat-label">Años</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="servicios">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Nuestros Servicios</span>
+                <h2 class="section-title">Soluciones creativas para tu negocio</h2>
+                <p class="section-subtitle">Ofrecemos un portafolio completo de servicios para impulsar tu marca</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                        </svg>
+                    </div>
+                    <h3>Diseño Gráfico</h3>
+                    <p>Creamos identidades visuales únicas que conectan con tu audiencia y destacan tu marca.</p>
+                    <ul class="service-features">
+                        <li>Logos e identidad</li>
+                        <li>Material publicitario</li>
+                        <li>Diseño editorial</li>
+                    </ul>
+                </div>
+                <div class="service-card featured">
+                    <div class="service-badge">Popular</div>
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M6.6 11.2L2 22l10.6-4.6M6.6 11.2L22 2l-9.4 9.2M6.6 11.2l5 2.6" />
+                        </svg>
+                    </div>
+                    <h3>Impresión Digital</h3>
+                    <p>Impresión de alta calidad con tecnología de última generación para todo tipo de materiales.</p>
+                    <ul class="service-features">
+                        <li>Gran formato</li>
+                        <li>Offset y digital</li>
+                        <li>Acabados premium</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                        </svg>
+                    </div>
+                    <h3>Marketing Digital</h3>
+                    <p>Estrategias digitales que generan resultados medibles y aumentan tu presencia online.</p>
+                    <ul class="service-features">
+                        <li>Redes sociales</li>
+                        <li>SEO y SEM</li>
+                        <li>Email marketing</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M12 6v6l4 2" />
+                        </svg>
+                    </div>
+                    <h3>Branding</h3>
+                    <p>Desarrollamos la personalidad de tu marca con estrategias de posicionamiento efectivas.</p>
+                    <ul class="service-features">
+                        <li>Estrategia de marca</li>
+                        <li>Manual de identidad</li>
+                        <li>Naming</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Catalog Section -->
+    <section class="catalog" id="catalogo">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Catálogo</span>
+                <h2 class="section-title">Nuestros productos</h2>
+                <p class="section-subtitle">Explora nuestra amplia gama de productos digitales y físicos</p>
+            </div>
+
+            <div class="catalog-filters">
+                <button class="filter-btn active" data-filter="all">Todos</button>
+                <button class="filter-btn" data-filter="digital">Digitales</button>
+                <button class="filter-btn" data-filter="fisico">Físicos</button>
+            </div>
+
+            <div class="catalog-grid" id="catalogGrid">
+                <!-- Digital Products -->
+                <div class="product-card" data-category="digital">
+                    <div class="product-image">
+                        <div class="product-placeholder digital-1">
+                            <span class="product-icon">🎨</span>
+                        </div>
+                        <span class="product-tag">Digital</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Diseño de Logo</h3>
+                        <p>Identidad visual única para tu marca</p>
+                        <div class="product-price">
+                            <span class="price">Desde $150</span>
+                            <button class="btn-quote" data-product="Diseño de Logo">Cotizar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card" data-category="digital">
+                    <div class="product-image">
+                        <div class="product-placeholder digital-2">
+                            <span class="product-icon">💻</span>
+                        </div>
+                        <span class="product-tag">Digital</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Diseño Web</h3>
+                        <p>Sitios web modernos y responsivos</p>
+                        <div class="product-price">
+                            <span class="price">Desde $500</span>
+                            <button class="btn-quote" data-product="Diseño Web">Cotizar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card" data-category="digital">
+                    <div class="product-image">
+                        <div class="product-placeholder digital-3">
+                            <span class="product-icon">📱</span>
+                        </div>
+                        <span class="product-tag">Digital</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Contenido Redes Sociales</h3>
+                        <p>Posts y stories profesionales</p>
+                        <div class="product-price">
+                            <span class="price">Desde $80</span>
+                            <button class="btn-quote" data-product="Contenido Redes Sociales">Cotizar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card" data-category="digital">
+                    <div class="product-image">
+                        <div class="product-placeholder digital-4">
+                            <span class="product-icon">📊</span>
+                        </div>
+                        <span class="product-tag">Digital</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Presentaciones Corporativas</h3>
+                        <p>Slides impactantes para tu negocio</p>
+                        <div class="product-price">
+                            <span class="price">Desde $120</span>
+                            <button class="btn-quote" data-product="Presentaciones Corporativas">Cotizar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card" data-category="digital">
+                    <div class="product-image">
+                        <div class="product-placeholder digital-5">
+                            <span class="product-icon">🎬</span>
+                        </div>
+                        <span class="product-tag">Digital</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Motion Graphics</h3>
+                        <p>Animaciones y videos promocionales</p>
+                        <div class="product-price">
+                            <span class="price">Desde $300</span>
+                            <button class="btn-quote" data-product="Motion Graphics">Cotizar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Physical Products -->
+                <div class="product-card" data-category="fisico">
+                    <div class="product-image">
+                        <div class="product-placeholder fisico-1">
+                            <span class="product-icon">💳</span>
+                        </div>
+                        <span class="product-tag physical">Físico</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Tarjetas de Presentación</h3>
+                        <p>Impresión premium en diversos materiales</p>
+                        <div class="product-price">
+                            <span class="price">Desde $25</span>
+                            <button class="btn-quote" data-product="Tarjetas de Presentación">Cotizar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card" data-category="fisico">
+                    <div class="product-image">
+                        <div class="product-placeholder fisico-2">
+                            <span class="product-icon">📄</span>
+                        </div>
+                        <span class="product-tag physical">Físico</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Flyers y Folletos</h3>
+                        <p>Material promocional de alto impacto</p>
+                        <div class="product-price">
+                            <span class="price">Desde $35</span>
+                            <button class="btn-quote" data-product="Flyers y Folletos">Cotizar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card" data-category="fisico">
+                    <div class="product-image">
+                        <div class="product-placeholder fisico-3">
+                            <span class="product-icon">🪧</span>
+                        </div>
+                        <span class="product-tag physical">Físico</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Banners y Lonas</h3>
+                        <p>Gran formato para máxima visibilidad</p>
+                        <div class="product-price">
+                            <span class="price">Desde $45</span>
+                            <button class="btn-quote" data-product="Banners y Lonas">Cotizar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card" data-category="fisico">
+                    <div class="product-image">
+                        <div class="product-placeholder fisico-4">
+                            <span class="product-icon">✉️</span>
+                        </div>
+                        <span class="product-tag physical">Físico</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Papelería Corporativa</h3>
+                        <p>Hojas membretadas, sobres y más</p>
+                        <div class="product-price">
+                            <span class="price">Desde $60</span>
+                            <button class="btn-quote" data-product="Papelería Corporativa">Cotizar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card" data-category="fisico">
+                    <div class="product-image">
+                        <div class="product-placeholder fisico-5">
+                            <span class="product-icon">🎁</span>
+                        </div>
+                        <span class="product-tag physical">Físico</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Merchandising</h3>
+                        <p>Productos promocionales personalizados</p>
+                        <div class="product-price">
+                            <span class="price">Desde $15</span>
+                            <button class="btn-quote" data-product="Merchandising">Cotizar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Quoter Section -->
+    <section class="quoter" id="cotizador">
+        <div class="container">
+            <div class="quoter-wrapper">
+                <div class="quoter-info">
+                    <span class="section-badge">Cotizador Inteligente</span>
+                    <h2 class="section-title">Obtén tu cotización con IA</h2>
+                    <p class="section-subtitle">
+                        Nuestro asistente virtual te ayudará a obtener una cotización
+                        personalizada en segundos. Simplemente describe lo que necesitas.
+                    </p>
+                    <div class="quoter-features">
+                        <div class="quoter-feature">
+                            <div class="feature-icon">⚡</div>
+                            <div>
+                                <h4>Respuesta Instantánea</h4>
+                                <p>Obtén tu presupuesto en menos de 30 segundos</p>
+                            </div>
+                        </div>
+                        <div class="quoter-feature">
+                            <div class="feature-icon">🎯</div>
+                            <div>
+                                <h4>Personalizado</h4>
+                                <p>Cotización adaptada a tus necesidades específicas</p>
+                            </div>
+                        </div>
+                        <div class="quoter-feature">
+                            <div class="feature-icon">💬</div>
+                            <div>
+                                <h4>Conversacional</h4>
+                                <p>Interactúa de forma natural con nuestra IA</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quoter-chat">
+                    <div class="chat-header">
+                        <div class="chat-avatar">
+                            <span>🤖</span>
+                        </div>
+                        <div class="chat-info">
+                            <h4>VectoreBot</h4>
+                            <span class="chat-status">En línea</span>
+                        </div>
+                    </div>
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message bot">
+                            <div class="message-content">
+                                ¡Hola! 👋 Soy VectoreBot, tu asistente virtual.
+                                Estoy aquí para ayudarte a obtener una cotización rápida y personalizada.
+                                <br><br>
+                                ¿Qué tipo de producto o servicio te interesa?
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-quick-actions" id="quickActions">
+                        <button class="quick-action" data-value="Diseño de Logo">🎨 Logo</button>
+                        <button class="quick-action" data-value="Tarjetas de Presentación">💳 Tarjetas</button>
+                        <button class="quick-action" data-value="Diseño Web">💻 Web</button>
+                        <button class="quick-action" data-value="Banners">🪧 Banners</button>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="chatInput" placeholder="Escribe tu mensaje...">
+                        <button class="btn-send" id="btnSend">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contacto">
+        <div class="container">
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <span class="section-badge">Contacto</span>
+                    <h2 class="section-title">¿Listo para empezar?</h2>
+                    <p class="section-subtitle">
+                        Contáctanos y transformemos juntos tu visión en realidad.
+                    </p>
+
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <div class="contact-icon">📍</div>
+                            <div>
+                                <h4>Dirección</h4>
+                                <p>Av. Principal 123, Ciudad</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">📧</div>
+                            <div>
+                                <h4>Email</h4>
+                                <p>info@vectore.com</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">📞</div>
+                            <div>
+                                <h4>Teléfono</h4>
+                                <p>+1 234 567 890</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Facebook">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Instagram">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" fill="none" stroke="#160F50"
+                                    stroke-width="2" />
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke="#160F50" stroke-width="2" />
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="LinkedIn">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                                <rect x="2" y="9" width="4" height="12" />
+                                <circle cx="4" cy="4" r="2" />
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Twitter">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Nombre</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="service">Servicio de interés</label>
+                        <select id="service" name="service">
+                            <option value="">Selecciona una opción</option>
+                            <option value="diseno">Diseño Gráfico</option>
+                            <option value="impresion">Impresión</option>
+                            <option value="marketing">Marketing Digital</option>
+                            <option value="branding">Branding</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Mensaje</label>
+                        <textarea id="message" name="message" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">
+                        Enviar Mensaje
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <span class="logo-icon">✦</span>
+                        Vectore
+                    </a>
+                    <p>Transformando ideas en realidad desde 2014. Tu agencia creativa de confianza.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Servicios</h4>
+                        <ul>
+                            <li><a href="#servicios">Diseño Gráfico</a></li>
+                            <li><a href="#servicios">Impresión</a></li>
+                            <li><a href="#servicios">Marketing Digital</a></li>
+                            <li><a href="#servicios">Branding</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Productos</h4>
+                        <ul>
+                            <li><a href="#catalogo">Digitales</a></li>
+                            <li><a href="#catalogo">Físicos</a></li>
+                            <li><a href="#cotizador">Cotizador IA</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Empresa</h4>
+                        <ul>
+                            <li><a href="#inicio">Inicio</a></li>
+                            <li><a href="#contacto">Contacto</a></li>
+                            <li><a href="#">Política de Privacidad</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2024 Vectore. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="api-client.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
