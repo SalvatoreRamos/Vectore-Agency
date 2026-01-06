@@ -1,17 +1,21 @@
 import express from 'express';
 import { body, validationResult } from 'express-validator';
-import OpenAI from 'openai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import Quotation from '../models/Quotation.js';
 import { authenticate, isAdmin, optionalAuth } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Initialize OpenAI only if API key is provided
-let openai = null;
-if (process.env.OPENAI_API_KEY) {
-    openai = new OpenAI({
-        apiKey: process.env.OPENAI_API_KEY
-    });
+// Initialize Gemini only if API key is provided
+let genAI = null;
+let model = null;
+
+// Use GOOGLE_API_KEY if available, otherwise fallback to OPENAI_API_KEY checking for gemini key pattern
+const apiKey = process.env.GOOGLE_API_KEY || process.env.OPENAI_API_KEY;
+
+if (apiKey) {
+    genAI = new GoogleGenerativeAI(apiKey);
+    model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 }
 
 // @route   POST /api/quotations
@@ -34,8 +38,8 @@ router.post('/', [
 
         const quotationData = req.body;
 
-        // Generate AI suggestions if OpenAI is configured
-        if (openai && quotationData.description) {
+        // Generate AI suggestions if Gemini is configured
+        if (model && quotationData.description) {
             try {
                 const prompt = `You are an expert advertising agency consultant. A client has requested a quotation for the following project:
 
@@ -50,27 +54,14 @@ Please provide:
 3. Suggested pricing for each component
 4. Professional recommendations to maximize project success
 
-Format the response in a clear, professional manner suitable for a client quotation.`;
+Format the response in a clear, professional manner suitable for a client quotation (Plain text or Markdown).`;
 
-                const completion = await openai.chat.completions.create({
-                    model: "gpt-4",
-                    messages: [
-                        {
-                            role: "system",
-                            content: "You are a professional advertising agency consultant providing detailed project quotations."
-                        },
-                        {
-                            role: "user",
-                            content: prompt
-                        }
-                    ],
-                    temperature: 0.7,
-                    max_tokens: 1000
-                });
+                const result = await model.generateContent(prompt);
+                const response = await result.response;
+                quotationData.aiSuggestions = response.text();
 
-                quotationData.aiSuggestions = completion.choices[0].message.content;
             } catch (aiError) {
-                console.error('OpenAI error:', aiError);
+                console.error('Gemini AI error:', aiError);
                 // Continue without AI suggestions
             }
         }
