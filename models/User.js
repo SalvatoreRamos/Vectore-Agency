@@ -10,9 +10,17 @@ const userSchema = new mongoose.Schema({
         trim: true,
         match: [/^\S+@\S+\.\S+$/, 'Please enter a valid email']
     },
+    googleId: {
+        type: String,
+        unique: true,
+        sparse: true
+    },
     password: {
         type: String,
-        required: [true, 'Password is required'],
+        required: function () {
+            // Password is only required if googleId is not present
+            return !this.googleId;
+        },
         minlength: [6, 'Password must be at least 6 characters']
     },
     name: {

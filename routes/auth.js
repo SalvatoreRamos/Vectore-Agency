@@ -3,6 +3,9 @@ import jwt from 'jsonwebtoken';
 import { body, validationResult } from 'express-validator';
 import User from '../models/User.js';
 import { authenticate } from '../middleware/auth.js';
+import { OAuth2Client } from 'google-auth-library';
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const router = express.Router();
 
@@ -148,6 +151,76 @@ router.post('/login', [
         });
     }
 });
+
+
+// @route   POST /api/auth/google
+// @desc    Google Login
+// @access  Public
+router.post('/google', async (req, res) => {
+    try {
+        const { idToken } = req.body;
+
+        if (!idToken) {
+            return res.status(400).json({
+                success: false,
+                message: 'ID Token is required'
+            });
+        }
+
+        const ticket = await client.verifyIdToken({
+            idToken,
+            audience: process.env.GOOGLE_CLIENT_ID
+        });
+
+        const { sub, email, name, picture } = ticket.getPayload();
+
+        // Find or create user
+        let user = await User.findOne({
+            $or: [
+                { googleId: sub },
+                { email: email }
+            ]
+        });
+
+        if (!user) {
+            user = new User({
+                email,
+                name,
+                googleId: sub,
+                role: 'user'
+            });
+            await user.save();
+        } else if (!user.googleId) {
+            // Update existing user with googleId if they login with Google for the first time
+            user.googleId = sub;
+            await user.save();
+        }
+
+        // Generate token
+        const token = generateToken(user._id);
+
+        res.json({
+            success: true,
+            message: 'Google login successful',
+            token,
+            user: {
+                id: user._id,
+                email: user.email,
+                name: user.name,
+                role: user.role,
+                picture
+            }
+        });
+    } catch (error) {
+        console.error('Google Login Error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error authenticating with Google',
+            error: error.message
+        });
+    }
+});
+
 
 // @route   GET /api/auth/me
 // @desc    Get current user

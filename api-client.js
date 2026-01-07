@@ -70,6 +70,18 @@ class VectoreAPI {
         return data;
     }
 
+    async googleLogin(idToken) {
+        const data = await this.request('/auth/google', {
+            method: 'POST',
+            body: JSON.stringify({ idToken })
+        });
+        if (data.token) {
+            this.setToken(data.token);
+        }
+        return data;
+    }
+
+
     async register(name, email, password) {
         const data = await this.request('/auth/register', {
             method: 'POST',

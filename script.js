@@ -42,13 +42,13 @@ navMenu.querySelectorAll('.nav-link').forEach(link => {
 // ===================================
 // Catalog & API Integration
 // ===================================
-const productCatalog = {}; // To store products for chatbot
+const productCatalog = {};
+
+let currentUser = null;
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
 async function loadProducts() {
     const catalogGrid = document.getElementById('catalogGrid');
-
-    // Show skeleton/loading state if needed
-    // catalogGrid.innerHTML = '<div class="loader">Loading...</div>';
 
     try {
         const response = await api.getProducts();
@@ -62,25 +62,15 @@ async function loadProducts() {
             return;
         }
 
-        // Populate catalog map for chatbot
-        products.forEach(p => {
-            productCatalog[p.name] = {
-                basePrice: p.price,
-                description: p.description,
-                // Assuming backend might have options or we use defaults
-                options: p.specifications ? formatSpecsToOptions(p.specifications) : getDefaultOptions(p)
-            };
-        });
-
         // Render products
         products.forEach(product => {
             const card = createProductCard(product);
             catalogGrid.appendChild(card);
         });
 
-        // Re-initialize animations and event listeners for new elements
+        // Initialize events
         initializeCatalogEvents();
-        initializeQuoteButtons();
+        updateAuthUI();
 
     } catch (error) {
         console.error('Error loading products:', error);
@@ -93,7 +83,6 @@ function createProductCard(product) {
     div.className = 'product-card reveal';
     div.dataset.category = product.category;
 
-    // Determine icon based on category/name if image fails or as placeholder
     const icon = getProductIcon(product);
 
     const imageContent = product.images && product.images.length > 0 && product.images[0].url
@@ -114,40 +103,144 @@ function createProductCard(product) {
             <p>${product.description}</p>
             <div class="product-price">
                 <span class="price">Desde $${product.price}</span>
-                <button class="btn-quote" data-product="${product.name}">Cotizar</button>
+                <div class="product-actions">
+                    <button class="btn-quote" onclick="window.location.href='https://wa.me/950699910?text=Hola, me interesa el producto: ${product.name}'">Consultar</button>
+                    <button class="btn-add-cart" data-id="${product._id}" data-name="${product.name}" data-price="${product.price}">+ Carrito</button>
+                </div>
             </div>
         </div>
     `;
+
+    const btnAddCart = div.querySelector('.btn-add-cart');
+    btnAddCart.addEventListener('click', () => addToCart(product));
+
     return div;
 }
 
-function getProductIcon(product) {
-    // Simple mapping keywords to emojis
-    const name = product.name.toLowerCase();
-    if (name.includes('logo')) return '🎨';
-    if (name.includes('web')) return '💻';
-    if (name.includes('redes') || name.includes('social')) return '📱';
-    if (name.includes('video') || name.includes('motion')) return '🎬';
-    if (name.includes('tarjeta')) return '💳';
-    if (name.includes('flyer')) return '📄';
-    return product.category === 'digital' ? '✨' : '📦';
+// ===================================
+// Authentication (Google)
+// ===================================
+window.handleCredentialResponse = async (response) => {
+    try {
+        const data = await api.googleLogin(response.credential);
+        currentUser = data.user;
+        updateAuthUI();
+        showNotification(`¡Bienvenido, ${currentUser.name}!`);
+    } catch (error) {
+        console.error('Login failed:', error);
+        showNotification('Error al iniciar sesión', 'error');
+    }
+};
+
+function updateAuthUI() {
+    const authContainer = document.getElementById('authContainer');
+    const userProfile = document.getElementById('userProfile');
+    const userAvatar = document.getElementById('userAvatar');
+    const userName = document.getElementById('userName');
+    const btnLogout = document.getElementById('btnLogout');
+    const cartButtons = document.querySelectorAll('.btn-add-cart');
+
+    if (!authContainer) return; // Guard for other pages
+
+    if (currentUser) {
+        authContainer.style.display = 'none';
+        userProfile.style.display = 'block';
+        userAvatar.src = currentUser.picture || 'https://via.placeholder.com/32';
+        userName.textContent = currentUser.name.split(' ')[0];
+
+        cartButtons.forEach(btn => btn.style.display = 'block');
+    } else {
+        authContainer.style.display = 'block';
+        userProfile.style.display = 'none';
+        cartButtons.forEach(btn => btn.style.display = 'none');
+    }
 }
 
-function getDefaultOptions(product) {
-    // Fallback options if none provided
-    return {
-        'básico': { price: product.price, includes: 'Servicio estándar' },
-        'premium': { price: Math.round(product.price * 1.5), includes: 'Servicio prioritario + extras' }
+document.getElementById('btnLogout')?.addEventListener('click', () => {
+    api.logout();
+    currentUser = null;
+    updateAuthUI();
+    showNotification('Sesión cerrada');
+});
+
+// ===================================
+// Cart Logic
+// ===================================
+function addToCart(product) {
+    if (!currentUser) {
+        showNotification('Por favor, inicia sesión para añadir al carrito', 'warning');
+        return;
+    }
+
+    const item = {
+        id: product._id,
+        name: product.name,
+        price: product.price,
+        quantity: 1
     };
+
+    const existing = cart.find(i => i.id === item.id);
+    if (existing) {
+        existing.quantity += 1;
+    } else {
+        cart.push(item);
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+    showNotification(`${product.name} añadido al carrito 🛒`);
+    updateCartBadge();
 }
 
-function formatSpecsToOptions(specs) {
-    // Helper to convert specifications map to chatbot options format
-    // Implementation depends on how specs are stored
-    return {
-        'estándar': { price: 0, includes: 'Según especificaciones' }
-    };
+function updateCartBadge() {
+    // If there were a cart badge in the UI, we would update it here
+    console.log('Cart updated:', cart);
 }
+
+function showNotification(message, type = 'success') {
+    // Simple toast notification
+    const toast = document.createElement('div');
+    toast.className = `notification ${type}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    // Quick styling for notification
+    Object.assign(toast.style, {
+        position: 'fixed',
+        bottom: '20px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        padding: '12px 24px',
+        borderRadius: '30px',
+        background: type === 'success' ? '#22c55e' : (type === 'error' ? '#ef4444' : '#f59e0b'),
+        color: 'white',
+        fontWeight: '600',
+        zIndex: '2000',
+        boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
+        animation: 'fadeInUp 0.3s ease-out'
+    });
+
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(-50%) translateY(20px)';
+        toast.style.transition = 'all 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+// Initial session check
+const checkSession = async () => {
+    if (!localStorage.getItem('authToken')) return;
+    try {
+        const data = await api.getCurrentUser();
+        if (data.success) {
+            currentUser = data.user;
+            updateAuthUI();
+        }
+    } catch (error) {
+        // Not logged in, that's fine
+    }
+};
+checkSession();
 
 // ===================================
 // Catalog Filters
@@ -158,288 +251,22 @@ function initializeCatalogEvents() {
 
     filterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            // Update active button
             filterBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
             const filter = btn.dataset.filter;
 
-            // Filter products with animation
             productCards.forEach(card => {
                 const category = card.dataset.category;
-
                 if (filter === 'all' || category === filter) {
-                    card.classList.remove('hidden');
-                    card.style.animation = 'fadeInUp 0.5s ease forwards';
                     card.style.display = 'block';
                 } else {
-                    card.classList.add('hidden');
-                    setTimeout(() => {
-                        if (card.classList.contains('hidden')) card.style.display = 'none';
-                    }, 500); // Wait for fade out if any
-                    card.style.display = 'none'; // Immediate hide for simplicity
+                    card.style.display = 'none';
                 }
             });
         });
     });
 }
-
-function initializeQuoteButtons() {
-    document.querySelectorAll('.btn-quote').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const product = btn.dataset.product;
-
-            // Scroll to quoter section
-            document.querySelector('#cotizador').scrollIntoView({ behavior: 'smooth' });
-
-            // Simulate clicking on product in chat
-            setTimeout(() => {
-                addMessage(product, false);
-                generateResponse(product);
-            }, 800);
-        });
-    });
-}
-
-// ===================================
-// AI Chatbot
-// ===================================
-const chatMessages = document.getElementById('chatMessages');
-const chatInput = document.getElementById('chatInput');
-const btnSend = document.getElementById('btnSend');
-const quickActions = document.getElementById('quickActions');
-
-// Conversation state
-let conversationState = {
-    step: 'initial',
-    product: null,
-    quantity: null
-};
-
-// Add message to chat
-function addMessage(content, isBot = true) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${isBot ? 'bot' : 'user'}`;
-    messageDiv.innerHTML = `<div class="message-content">${content}</div>`;
-    chatMessages.appendChild(messageDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-// Show typing indicator
-function showTyping() {
-    const typingDiv = document.createElement('div');
-    typingDiv.className = 'message bot';
-    typingDiv.id = 'typingIndicator';
-    typingDiv.innerHTML = `
-        <div class="typing-indicator">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-    `;
-    chatMessages.appendChild(typingDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-// Hide typing indicator
-function hideTyping() {
-    const typing = document.getElementById('typingIndicator');
-    if (typing) typing.remove();
-}
-
-// Generate AI response
-function generateResponse(userMessage) {
-    showTyping();
-
-    setTimeout(() => {
-        hideTyping();
-
-        const lowerMessage = userMessage.toLowerCase();
-
-        // Check if user mentions a product
-        let detectedProduct = null;
-        for (const product in productCatalog) {
-            if (lowerMessage.includes(product.toLowerCase()) ||
-                product.toLowerCase().includes(lowerMessage)) {
-                detectedProduct = product;
-                break;
-            }
-        }
-
-        // Check for partial matches
-        if (!detectedProduct) {
-            const keywords = {
-                'logo': 'Diseño de Logo',
-                'logotipo': 'Diseño de Logo',
-                'web': 'Diseño Web',
-                'página web': 'Diseño Web',
-                'sitio web': 'Diseño Web',
-                'redes': 'Contenido Redes Sociales',
-                'tarjeta': 'Tarjetas de Presentación',
-                'flyer': 'Flyers y Folletos'
-            };
-
-            for (const keyword in keywords) {
-                if (lowerMessage.includes(keyword)) {
-                    // Only select if it exists in loaded catalog
-                    const targetName = keywords[keyword];
-                    // Find actual product name in catalog that matches
-                    const catalogName = Object.keys(productCatalog).find(k => k.includes(targetName) || targetName.includes(k));
-                    if (catalogName) detectedProduct = catalogName;
-                    break;
-                }
-            }
-        }
-
-        if (detectedProduct) {
-            conversationState.product = detectedProduct;
-            conversationState.step = 'options';
-
-            const product = productCatalog[detectedProduct];
-            let optionsHTML = `¡Excelente elección! 🎨 <strong>${detectedProduct}</strong> - ${product.description}<br><br>`;
-            optionsHTML += `Tenemos las siguientes opciones:<br><br>`;
-
-            for (const [option, details] of Object.entries(product.options)) {
-                optionsHTML += `<strong>• ${option.charAt(0).toUpperCase() + option.slice(1)}</strong>: $${details.price} USD<br>`;
-                optionsHTML += `<small style="color: #6c757d; margin-left: 12px;">Incluye: ${details.includes}</small><br><br>`;
-            }
-
-            optionsHTML += `¿Cuál de estas opciones te interesa?`;
-
-            addMessage(optionsHTML);
-
-            // Update quick actions
-            quickActions.innerHTML = '';
-            for (const option of Object.keys(product.options)) {
-                const btn = document.createElement('button');
-                btn.className = 'quick-action';
-                btn.dataset.value = option;
-                btn.textContent = option.charAt(0).toUpperCase() + option.slice(1);
-                btn.addEventListener('click', () => handleQuickAction(option));
-                quickActions.appendChild(btn);
-            }
-
-        } else if (conversationState.step === 'options' && conversationState.product) {
-            // Check if user selected an option
-            const product = productCatalog[conversationState.product];
-            let selectedOption = null;
-
-            for (const option of Object.keys(product.options)) {
-                if (lowerMessage.includes(option.toLowerCase())) {
-                    selectedOption = option;
-                    break;
-                }
-            }
-
-            if (selectedOption) {
-                const details = product.options[selectedOption];
-                const quoteHTML = `
-                    ¡Perfecto! He generado tu cotización:
-                    <div class="quote-result">
-                        <h5>📋 COTIZACIÓN</h5>
-                        <p><strong>Producto:</strong> ${conversationState.product}</p>
-                        <p><strong>Opción:</strong> ${selectedOption.charAt(0).toUpperCase() + selectedOption.slice(1)}</p>
-                        <p><strong>Incluye:</strong> ${details.includes}</p>
-                        <p class="quote-price">Total: $${details.price} USD</p>
-                    </div>
-                    <br>
-                    ¿Te gustaría proceder con esta cotización? Puedes contactarnos directamente o explorar otros productos. 🚀
-                `;
-                addMessage(quoteHTML);
-
-                // Initialize creating quotation in backend
-                createBackendQuotation(conversationState.product, selectedOption, details);
-
-                // Reset state
-                conversationState = { step: 'initial', product: null, quantity: null };
-
-                // Restore default quick actions
-                restoreDefaultQuickActions();
-
-            } else {
-                addMessage(`Disculpa, no encontré esa opción. Por favor, selecciona una de las opciones disponibles o escribe "ver productos" para explorar nuestro catálogo completo. 🤔`);
-            }
-
-        } else if (lowerMessage.includes('precio') || lowerMessage.includes('costo')) {
-            addMessage(`¡Con gusto te ayudo! Por favor selecciona un producto del catálogo o escribe el nombre de lo que buscas.`);
-            restoreDefaultQuickActions();
-
-        } else if (lowerMessage.includes('hola')) {
-            addMessage(`¡Hola! 👋 Soy VectoreBot. ¿Qué producto te interesa hoy?`);
-
-        } else {
-            addMessage(`Para ayudarte mejor, cuéntame ¿qué producto o servicio te interesa?`);
-        }
-
-    }, 1000 + Math.random() * 1000);
-}
-
-// Function to send quotation to backend (placeholder for now as we don't have user details in chat)
-async function createBackendQuotation(product, option, details) {
-    // In a real flow, we would ask for name/email here.
-    // For now, we just log it or maybe create a "draft" quotation if we had session.
-    console.log("Quotation generated:", { product, option, details });
-}
-
-// Restore default quick actions
-function restoreDefaultQuickActions() {
-    const defaultActions = [
-        { value: 'Diseño de Logo', label: '🎨 Logo' },
-        { value: 'Diseño Web', label: '💻 Web' }
-    ];
-    // Populate from loaded catalog if possible
-    if (Object.keys(productCatalog).length > 0) {
-        // take first 4 keys
-        const keys = Object.keys(productCatalog).slice(0, 4);
-        quickActions.innerHTML = '';
-        keys.forEach(key => {
-            const btn = document.createElement('button');
-            btn.className = 'quick-action';
-            btn.dataset.value = key;
-            // extract icon if possible or use generic
-            btn.textContent = key;
-            btn.addEventListener('click', () => handleQuickAction(key));
-            quickActions.appendChild(btn);
-        });
-    } else {
-        quickActions.innerHTML = '';
-        defaultActions.forEach(action => {
-            const btn = document.createElement('button');
-            btn.className = 'quick-action';
-            btn.dataset.value = action.value;
-            btn.textContent = action.label;
-            btn.addEventListener('click', () => handleQuickAction(action.value));
-            quickActions.appendChild(btn);
-        });
-    }
-}
-
-// Handle quick action clicks
-function handleQuickAction(value) {
-    addMessage(value, false);
-    generateResponse(value);
-}
-
-// Send message
-function sendMessage() {
-    const message = chatInput.value.trim();
-    if (!message) return;
-
-    addMessage(message, false);
-    chatInput.value = '';
-    generateResponse(message);
-}
-
-// Event listeners for chat
-btnSend.addEventListener('click', sendMessage);
-chatInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') sendMessage();
-});
-
-// Quick actions initial setup
-quickActions.querySelectorAll('.quick-action').forEach(btn => {
-    btn.addEventListener('click', () => handleQuickAction(btn.dataset.value));
-});
 
 
 // ===================================

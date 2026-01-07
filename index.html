@@ -12,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
 <body>
@@ -31,8 +32,23 @@
                 <li><a href="#inicio" class="nav-link">Inicio</a></li>
                 <li><a href="#servicios" class="nav-link">Servicios</a></li>
                 <li><a href="#catalogo" class="nav-link">Catálogo</a></li>
-                <li><a href="#cotizador" class="nav-link">Cotizador IA</a></li>
                 <li><a href="#contacto" class="nav-link">Contacto</a></li>
+                <li id="authContainer">
+                    <div id="g_id_onload"
+                        data-client_id="433259886019-haiklq9fuqr673839bq03p97jmnlnvtt.apps.googleusercontent.com"
+                        data-callback="handleCredentialResponse" data-auto_prompt="false">
+                    </div>
+                    <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline"
+                        data-text="signin_with" data-size="medium" data-logo_alignment="left">
+                    </div>
+                </li>
+                <li id="userProfile" style="display: none;">
+                    <div class="user-info">
+                        <img id="userAvatar" src="" alt="User Avatar" class="user-avatar">
+                        <span id="userName"></span>
+                        <button id="btnLogout" class="btn-logout">Salir</button>
+                    </div>
+                </li>
             </ul>
         </div>
     </nav>
@@ -344,81 +360,63 @@
         </div>
     </section>
 
-    <!-- AI Quoter Section -->
-    <section class="quoter" id="cotizador">
+    <!-- WhatsApp Contact Section -->
+    <section class="whatsapp-cta" id="contacto-whatsapp">
         <div class="container">
-            <div class="quoter-wrapper">
-                <div class="quoter-info">
-                    <span class="section-badge">Cotizador Inteligente</span>
-                    <h2 class="section-title">Obtén tu cotización con IA</h2>
+            <div class="whatsapp-wrapper">
+                <div class="whatsapp-content">
+                    <span class="section-badge">Atención Personalizada</span>
+                    <h2 class="section-title">Contáctanos por WhatsApp</h2>
                     <p class="section-subtitle">
-                        Nuestro asistente virtual te ayudará a obtener una cotización
-                        personalizada en segundos. Simplemente describe lo que necesitas.
+                        ¿Tienes dudas sobre algún producto o servicio? Chatea directamente con nosotros
+                        y obtén una respuesta inmediata y personalizada.
                     </p>
-                    <div class="quoter-features">
-                        <div class="quoter-feature">
-                            <div class="feature-icon">⚡</div>
-                            <div>
-                                <h4>Respuesta Instantánea</h4>
-                                <p>Obtén tu presupuesto en menos de 30 segundos</p>
-                            </div>
-                        </div>
-                        <div class="quoter-feature">
-                            <div class="feature-icon">🎯</div>
-                            <div>
-                                <h4>Personalizado</h4>
-                                <p>Cotización adaptada a tus necesidades específicas</p>
-                            </div>
-                        </div>
-                        <div class="quoter-feature">
+                    <div class="whatsapp-features">
+                        <div class="whatsapp-feature">
                             <div class="feature-icon">💬</div>
                             <div>
-                                <h4>Conversacional</h4>
-                                <p>Interactúa de forma natural con nuestra IA</p>
+                                <h4>Respuesta Inmediata</h4>
+                                <p>Estamos disponibles para ayudarte en tiempo real.</p>
+                            </div>
+                        </div>
+                        <div class="whatsapp-feature">
+                            <div class="feature-icon">🛍️</div>
+                            <div>
+                                <h4>Asesoría de Compra</h4>
+                                <p>Te ayudamos a elegir el mejor producto para tus necesidades.</p>
                             </div>
                         </div>
                     </div>
+                    <a href="https://wa.me/950699910" target="_blank" class="btn btn-whatsapp">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                        </svg>
+                        <span>Chatear en WhatsApp</span>
+                    </a>
                 </div>
-
-                <div class="quoter-chat">
-                    <div class="chat-header">
-                        <div class="chat-avatar">
-                            <span>🤖</span>
+                <div class="whatsapp-mockup">
+                    <div class="chat-bg">
+                        <div class="chat-bubble received">
+                            ¡Hola! 👋 Bienvenido a Vectore. ¿En qué podemos ayudarte hoy?
                         </div>
-                        <div class="chat-info">
-                            <h4>VectoreBot</h4>
-                            <span class="chat-status">En línea</span>
+                        <div class="chat-bubble received">
+                            Nuestros asesores están listos para atenderte.
                         </div>
-                    </div>
-                    <div class="chat-messages" id="chatMessages">
-                        <div class="message bot">
-                            <div class="message-content">
-                                ¡Hola! 👋 Soy VectoreBot, tu asistente virtual.
-                                Estoy aquí para ayudarte a obtener una cotización rápida y personalizada.
-                                <br><br>
-                                ¿Qué tipo de producto o servicio te interesa?
-                            </div>
-                        </div>
-                    </div>
-                    <div class="chat-quick-actions" id="quickActions">
-                        <button class="quick-action" data-value="Diseño de Logo">🎨 Logo</button>
-                        <button class="quick-action" data-value="Tarjetas de Presentación">💳 Tarjetas</button>
-                        <button class="quick-action" data-value="Diseño Web">💻 Web</button>
-                        <button class="quick-action" data-value="Banners">🪧 Banners</button>
-                    </div>
-                    <div class="chat-input">
-                        <input type="text" id="chatInput" placeholder="Escribe tu mensaje...">
-                        <button class="btn-send" id="btnSend">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
-                            </svg>
-                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/950699910" class="whatsapp-float" target="_blank" aria-label="WhatsApp">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+        </svg>
+    </a>
+
 
     <!-- Contact Section -->
     <section class="contact" id="contacto">
@@ -531,7 +529,7 @@
                         <span class="logo-icon">✦</span>
                         Vectore
                     </a>
-                    <p>Transformando ideas en realidad desde 2014. Tu agencia creativa de confianza.</p>
+                    <p>Transformando ideas en realidad desde 2021. Tu agencia creativa de confianza.</p>
                 </div>
                 <div class="footer-links">
                     <div class="footer-column">
@@ -562,7 +560,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>© 2024 Vectore. Todos los derechos reservados.</p>
+                <p>© 2026 Vectore. Todos los derechos reservados.</p>
             </div>
         </div>
     </footer>

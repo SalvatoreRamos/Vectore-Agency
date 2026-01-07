@@ -28,126 +28,117 @@ const seedData = async () => {
         // Create sample products
         const products = await Product.insertMany([
             {
-                name: 'Logo Design Premium',
-                description: 'Professional logo design with unlimited revisions',
+                name: 'Diseño de Logo',
+                description: 'Identidad visual única para tu marca con entrega de archivos editables.',
                 category: 'digital',
                 subcategory: 'Branding',
-                price: 299,
-                images: [
-                    { url: '/images/logo-design.jpg', alt: 'Logo Design', isPrimary: true }
-                ],
-                features: [
-                    '3 initial concepts',
-                    'Unlimited revisions',
-                    'Vector files included',
-                    'Brand guidelines'
-                ],
+                price: 150,
                 stock: 999,
                 isAvailable: true,
-                tags: ['logo', 'branding', 'design'],
+                tags: ['logo', 'branding', 'diseño'],
                 createdBy: admin._id
             },
             {
-                name: 'Social Media Management',
-                description: 'Complete social media management for 1 month',
-                category: 'digital',
-                subcategory: 'Social Media',
-                price: 499,
-                images: [
-                    { url: '/images/social-media.jpg', alt: 'Social Media', isPrimary: true }
-                ],
-                features: [
-                    '20 posts per month',
-                    'Content creation',
-                    'Analytics reports',
-                    'Community management'
-                ],
-                stock: 999,
-                isAvailable: true,
-                tags: ['social media', 'marketing', 'content'],
-                createdBy: admin._id
-            },
-            {
-                name: 'Business Cards (500 units)',
-                description: 'Premium business cards with custom design',
-                category: 'physical',
-                subcategory: 'Printing',
-                price: 89,
-                images: [
-                    { url: '/images/business-cards.jpg', alt: 'Business Cards', isPrimary: true }
-                ],
-                features: [
-                    '500 units',
-                    'Premium cardstock',
-                    'Custom design included',
-                    'Free shipping'
-                ],
-                stock: 50,
-                isAvailable: true,
-                tags: ['printing', 'business cards', 'physical'],
-                createdBy: admin._id
-            },
-            {
-                name: 'Website Design & Development',
-                description: 'Complete website design and development',
+                name: 'Diseño Web',
+                description: 'Sitios web modernos, responsivos y optimizados para SEO.',
                 category: 'digital',
                 subcategory: 'Web Design',
-                price: 1999,
-                images: [
-                    { url: '/images/web-design.jpg', alt: 'Web Design', isPrimary: true }
-                ],
-                features: [
-                    'Responsive design',
-                    'Up to 5 pages',
-                    'SEO optimization',
-                    '3 months support'
-                ],
+                price: 500,
                 stock: 999,
                 isAvailable: true,
-                tags: ['web', 'design', 'development'],
+                tags: ['web', 'diseño', 'desarrollo'],
                 createdBy: admin._id
             },
             {
-                name: 'Promotional Flyers (1000 units)',
-                description: 'High-quality promotional flyers',
-                category: 'physical',
-                subcategory: 'Printing',
-                price: 149,
-                images: [
-                    { url: '/images/flyers.jpg', alt: 'Flyers', isPrimary: true }
-                ],
-                features: [
-                    '1000 units',
-                    'Full color printing',
-                    'Custom design',
-                    'Multiple sizes available'
-                ],
-                stock: 30,
-                isAvailable: true,
-                tags: ['printing', 'flyers', 'marketing'],
-                createdBy: admin._id
-            },
-            {
-                name: 'Brand Identity Package',
-                description: 'Complete brand identity development',
+                name: 'Contenido Redes Sociales',
+                description: 'Posts y stories profesionales para destacar tu negocio.',
                 category: 'digital',
-                subcategory: 'Branding',
-                price: 899,
-                images: [
-                    { url: '/images/brand-identity.jpg', alt: 'Brand Identity', isPrimary: true }
-                ],
-                features: [
-                    'Logo design',
-                    'Color palette',
-                    'Typography selection',
-                    'Brand guidelines document'
-                ],
+                subcategory: 'Marketing',
+                price: 80,
                 stock: 999,
                 isAvailable: true,
-                tags: ['branding', 'identity', 'design'],
+                tags: ['social media', 'marketing', 'contenido'],
+                createdBy: admin._id
+            },
+            {
+                name: 'Presentaciones Corporativas',
+                description: 'Slides impactantes para tus reuniones de negocios.',
+                category: 'digital',
+                subcategory: 'Diseño',
+                price: 120,
+                stock: 999,
+                isAvailable: true,
+                tags: ['presentaciones', 'corporativo', 'powerpoint'],
+                createdBy: admin._id
+            },
+            {
+                name: 'Motion Graphics',
+                description: 'Animaciones y videos promocionales que captan la atención.',
+                category: 'digital',
+                subcategory: 'Multimedia',
+                price: 300,
+                stock: 999,
+                isAvailable: true,
+                tags: ['video', 'animacion', 'motion graphics'],
+                createdBy: admin._id
+            },
+            {
+                name: 'Tarjetas de Presentación',
+                description: 'Impresión premium de 500 tarjetas en diversos materiales y acabados.',
+                category: 'physical',
+                subcategory: 'Impresión',
+                price: 25,
+                stock: 100,
+                isAvailable: true,
+                tags: ['tarjetas', 'impresión', 'branding'],
+                createdBy: admin._id
+            },
+            {
+                name: 'Flyers y Folletos',
+                description: 'Material promocional de alto impacto para distribución.',
+                category: 'physical',
+                subcategory: 'Impresión',
+                price: 35,
+                stock: 100,
+                isAvailable: true,
+                tags: ['flyers', 'publicidad', 'impresión'],
+                createdBy: admin._id
+            },
+            {
+                name: 'Banners y Lonas',
+                description: 'Gran formato para máxima visibilidad en exteriores e interiores.',
+                category: 'physical',
+                subcategory: 'Impresión',
+                price: 45,
+                stock: 50,
+                isAvailable: true,
+                tags: ['banners', 'lonas', 'formato gigante'],
+                createdBy: admin._id
+            },
+            {
+                name: 'Papelería Corporativa',
+                description: 'Hojas membretadas, sobres y folders con tu identidad visual.',
+                category: 'physical',
+                subcategory: 'Papelería',
+                price: 60,
+                stock: 50,
+                isAvailable: true,
+                tags: ['papelería', 'corporativo', 'impresión'],
+                createdBy: admin._id
+            },
+            {
+                name: 'Merchandising',
+                description: 'Productos promocionales personalizados (tazas, gorras, polos).',
+                category: 'physical',
+                subcategory: 'Regalos',
+                price: 15,
+                stock: 200,
+                isAvailable: true,
+                tags: ['regalos', 'merchandising', 'branding'],
                 createdBy: admin._id
             }
         ]);
+
 
         console.log(`📦 Created ${products.length} sample products`);
         console.log('\n✅ Database seeded successfully!');
