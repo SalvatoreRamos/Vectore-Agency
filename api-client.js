@@ -1,7 +1,7 @@
 // API Configuration for Frontend
 const API_CONFIG = {
     baseURL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? '/api'
+        ? (window.location.port === '3000' ? '/api' : 'http://localhost:3000/api')
         : 'https://vectore-agency.onrender.com/api',
     timeout: 15000,
     headers: {
@@ -219,6 +219,14 @@ class VectoreAPI {
     async deleteQuotation(id) {
         return this.request(`/quotations/${id}`, {
             method: 'DELETE'
+        });
+    }
+
+    // Contact
+    async sendContactMessage(contactData) {
+        return this.request('/contact', {
+            method: 'POST',
+            body: JSON.stringify(contactData)
         });
     }
 

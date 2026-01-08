@@ -75,7 +75,6 @@ async function loadProducts(retries = 3) {
 
         // Initialize events
         initializeCatalogEvents();
-        updateAuthUI();
 
     } catch (error) {
         console.error('Error loading products:', error);
@@ -95,10 +94,12 @@ function createProductCard(product) {
     div.dataset.category = product.category;
 
     const icon = getProductIcon(product);
+    const productId = product._id || product.id;
+    const gradient = getGradient(product.category, productId);
 
     const imageContent = product.images && product.images.length > 0 && product.images[0].url
         ? `<img src="${product.images[0].url}" alt="${product.name}" class="product-img-bg">`
-        : `<div class="product-placeholder ${product.category}-1"><span class="product-icon">${icon}</span></div>`;
+        : `<div class="product-placeholder" style="background: ${gradient}"><span class="product-icon">${icon}</span></div>`;
 
     const categoryTag = product.category === 'digital'
         ? '<span class="product-tag">Digital</span>'
@@ -116,7 +117,7 @@ function createProductCard(product) {
                 <span class="price">Desde $${product.price}</span>
                 <div class="product-actions">
                     <button class="btn-quote" onclick="window.location.href='https://wa.me/950699910?text=Hola, me interesa el producto: ${product.name}'">Consultar</button>
-                    <button class="btn-add-cart" data-id="${product._id}" data-name="${product.name}" data-price="${product.price}">+ Carrito</button>
+                    <button class="btn-add-cart" data-id="${productId}" data-name="${product.name}" data-price="${product.price}">+ Carrito</button>
                 </div>
             </div>
         </div>
@@ -128,60 +129,39 @@ function createProductCard(product) {
     return div;
 }
 
-// ===================================
-// Authentication (Google)
-// ===================================
-window.handleCredentialResponse = async (response) => {
-    try {
-        const data = await api.googleLogin(response.credential);
-        currentUser = data.user;
-        updateAuthUI();
-        showNotification(`¡Bienvenido, ${currentUser.name}!`);
-    } catch (error) {
-        console.error('Login failed:', error);
-        showNotification('Error al iniciar sesión', 'error');
-    }
-};
-
-function updateAuthUI() {
-    const authContainer = document.getElementById('authContainer');
-    const userProfile = document.getElementById('userProfile');
-    const userAvatar = document.getElementById('userAvatar');
-    const userName = document.getElementById('userName');
-    const btnLogout = document.getElementById('btnLogout');
-    const cartButtons = document.querySelectorAll('.btn-add-cart');
-
-    if (!authContainer) return; // Guard for other pages
-
-    if (currentUser) {
-        authContainer.style.display = 'none';
-        userProfile.style.display = 'block';
-        userAvatar.src = currentUser.picture || 'https://via.placeholder.com/32';
-        userName.textContent = currentUser.name.split(' ')[0];
-
-        cartButtons.forEach(btn => btn.style.display = 'block');
-    } else {
-        authContainer.style.display = 'block';
-        userProfile.style.display = 'none';
-        cartButtons.forEach(btn => btn.style.display = 'none');
-    }
+function getProductIcon(product) {
+    if (product.icon) return product.icon;
+    const name = product.name ? product.name.toLowerCase() : '';
+    if (name.includes('logo')) return '🎨';
+    if (name.includes('web')) return '💻';
+    if (name.includes('redes')) return '📱';
+    if (name.includes('video')) return '🎬';
+    if (name.includes('tarjeta')) return '💳';
+    if (name.includes('flyer')) return '📄';
+    return product.category === 'digital' ? '✨' : '📦';
 }
 
-document.getElementById('btnLogout')?.addEventListener('click', () => {
-    api.logout();
-    currentUser = null;
-    updateAuthUI();
-    showNotification('Sesión cerrada');
-});
+function getGradient(category, id) {
+    const numId = typeof id === 'string' ? id.charCodeAt(id.length - 1) : 0;
+    const gradients = category === 'digital' ? [
+        'linear-gradient(135deg, #8655FF 0%, #a67fff 100%)',
+        'linear-gradient(135deg, #5a35cc 0%, #8655FF 100%)',
+        'linear-gradient(135deg, #a67fff 0%, #c9b3ff 100%)',
+        'linear-gradient(135deg, #160F50 0%, #2a1f6b 100%)',
+        'linear-gradient(135deg, #6b3fd9 0%, #8655FF 100%)'
+    ] : [
+        'linear-gradient(135deg, #160F50 0%, #8655FF 100%)',
+        'linear-gradient(135deg, #2a1f6b 0%, #5a35cc 100%)',
+        'linear-gradient(135deg, #8655FF 0%, #160F50 100%)',
+        'linear-gradient(135deg, #5a35cc 0%, #a67fff 100%)',
+        'linear-gradient(135deg, #a67fff 0%, #8655FF 100%)'
+    ];
+    return gradients[numId % gradients.length];
+}
 
-// ===================================
 // Cart Logic
 // ===================================
 function addToCart(product) {
-    if (!currentUser) {
-        showNotification('Por favor, inicia sesión para añadir al carrito', 'warning');
-        return;
-    }
 
     const item = {
         id: product._id,
@@ -238,21 +218,6 @@ function showNotification(message, type = 'success') {
     }, 3000);
 }
 
-// Initial session check
-const checkSession = async () => {
-    if (!localStorage.getItem('authToken')) return;
-    try {
-        const data = await api.getCurrentUser();
-        if (data.success) {
-            currentUser = data.user;
-            updateAuthUI();
-        }
-    } catch (error) {
-        // Not logged in, that's fine
-    }
-};
-checkSession();
-
 // ===================================
 // Catalog Filters
 // ===================================
@@ -298,14 +263,11 @@ contactForm.addEventListener('submit', async (e) => {
     btn.disabled = true;
 
     try {
-        // Since we don't have a specific endpoint for contact form messages in this quick backend, 
-        // we could create a "Quotation" request or just log it for now.
-        // Let's assume we map it to a basic quotation request or just success message
-
-        // Mock API call delay
-        await new Promise(r => setTimeout(r, 1000));
+        // Send message to API
+        const response = await api.sendContactMessage(data);
 
         // Success
+        showNotification(response.message || '¡Mensaje enviado correctamente!', 'success');
         btn.innerHTML = '<span>¡Mensaje Enviado!</span> ✓';
         btn.style.background = 'linear-gradient(135deg, #4ade80, #22c55e)';
 
@@ -318,9 +280,11 @@ contactForm.addEventListener('submit', async (e) => {
 
     } catch (error) {
         console.error('Error sending message:', error);
+        showNotification(error.message || 'Error al enviar el mensaje. Revisa tu conexión.', 'error');
         btn.innerHTML = '<span>Error</span>';
         setTimeout(() => {
             btn.innerHTML = originalText;
+            btn.style.background = '';
             btn.disabled = false;
         }, 3000);
     }
