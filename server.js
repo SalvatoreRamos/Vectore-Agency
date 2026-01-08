@@ -24,7 +24,16 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Security middleware
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+      "script-src": ["'self'", "'unsafe-inline'", "https://accounts.google.com/gsi/client"],
+      "frame-src": ["'self'", "https://accounts.google.com/"],
+      "connect-src": ["'self'", "https://accounts.google.com/gsi/"],
+    },
+  },
+}));
 
 // Rate limiting
 const limiter = rateLimit({
@@ -35,9 +44,10 @@ app.use('/api/', limiter);
 
 // CORS configuration
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5500',
+  origin: [process.env.FRONTEND_URL, 'http://localhost:5500', 'https://vectore-agency.onrender.com'],
   credentials: true
 }));
+
 
 // Body parser middleware
 app.use(express.json());
