@@ -1,11 +1,14 @@
 // API Configuration for Frontend
 const API_CONFIG = {
-    baseURL: '/api',
-    timeout: 10000,
+    baseURL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? '/api'
+        : 'https://vectore-agency.onrender.com/api',
+    timeout: 15000,
     headers: {
         'Content-Type': 'application/json'
     }
 };
+
 
 // API Helper Functions
 class VectoreAPI {

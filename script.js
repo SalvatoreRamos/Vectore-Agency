@@ -47,7 +47,7 @@ const productCatalog = {};
 let currentUser = null;
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-async function loadProducts() {
+async function loadProducts(retries = 3) {
     const catalogGrid = document.getElementById('catalogGrid');
 
     try {
@@ -57,7 +57,12 @@ async function loadProducts() {
         // Clear current content
         catalogGrid.innerHTML = '';
 
-        if (products.length === 0) {
+        if (!products || products.length === 0) {
+            if (retries > 0) {
+                console.log(`No products found, retrying in 2s... (${retries} retries left)`);
+                setTimeout(() => loadProducts(retries - 1), 2000);
+                return;
+            }
             catalogGrid.innerHTML = '<div class="no-products">No hay productos disponibles por el momento.</div>';
             return;
         }
@@ -74,9 +79,15 @@ async function loadProducts() {
 
     } catch (error) {
         console.error('Error loading products:', error);
-        catalogGrid.innerHTML = '<div class="error">Hubo un error al cargar los productos. Por favor intenta más tarde.</div>';
+        if (retries > 0) {
+            console.log(`Load failed, retrying in 2s... (${retries} retries left)`);
+            setTimeout(() => loadProducts(retries - 1), 2000);
+        } else {
+            catalogGrid.innerHTML = '<div class="error">Hubo un error al cargar los productos. Por favor intenta más tarde.</div>';
+        }
     }
 }
+
 
 function createProductCard(product) {
     const div = document.createElement('div');
