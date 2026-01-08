@@ -33,7 +33,10 @@ app.use(helmet({
       "connect-src": ["'self'", "https://accounts.google.com/gsi/"],
     },
   },
+  crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" },
+  crossOriginEmbedderPolicy: false,
 }));
+
 
 // Rate limiting
 const limiter = rateLimit({
