@@ -31,6 +31,7 @@ app.use(helmet({
       "script-src": ["'self'", "'unsafe-inline'", "https://accounts.google.com/gsi/client"],
       "frame-src": ["'self'", "https://accounts.google.com/"],
       "connect-src": ["'self'", "https://accounts.google.com/gsi/"],
+      "img-src": ["'self'", "data:", "https:", "http:", "blob:"]
     },
   },
   crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" },
