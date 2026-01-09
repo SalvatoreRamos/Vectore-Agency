@@ -277,53 +277,11 @@ function initializeCatalogEvents() {
 // ===================================
 // Contact Form
 // ===================================
-const contactForm = document.getElementById('contactForm');
-
-contactForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    // Get form data
-    const formData = new FormData(contactForm);
-    const data = Object.fromEntries(formData);
-
-    const btn = contactForm.querySelector('button[type="submit"]');
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '<span>Enviando...</span>';
-    btn.disabled = true;
-
-    try {
-        // Send message to API
-        const response = await api.sendContactMessage(data);
-
-        // Success
-        showNotification(response.message || '¡Mensaje enviado correctamente!', 'success');
-        btn.innerHTML = '<span>¡Mensaje Enviado!</span> ✓';
-        btn.style.background = 'linear-gradient(135deg, #4ade80, #22c55e)';
-
-        setTimeout(() => {
-            btn.innerHTML = originalText;
-            btn.style.background = '';
-            btn.disabled = false;
-            contactForm.reset();
-        }, 3000);
-
-    } catch (error) {
-        console.error('Error sending message:', error);
-        showNotification(error.message || 'Error al enviar el mensaje. Revisa tu conexión.', 'error');
-        btn.innerHTML = '<span>Error</span>';
-        setTimeout(() => {
-            btn.innerHTML = originalText;
-            btn.style.background = '';
-            btn.disabled = false;
-        }, 3000);
-    }
-});
+// La lógica del formulario de contacto ha sido removida en favor del contacto por WhatsApp.
 
 // ===================================
 // Scroll Reveal Animation
 // ===================================
-const revealElements = document.querySelectorAll('.service-card, .product-card, .contact-item');
-
 const revealOnScroll = () => {
     const elements = document.querySelectorAll('.reveal');
     elements.forEach(el => {
@@ -350,26 +308,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 behavior: 'smooth',
                 block: 'start'
             });
-        }
-    });
-});
-
-// ===================================
-// Form validation styles
-// ===================================
-const formInputs = document.querySelectorAll('.form-group input, .form-group textarea, .form-group select');
-
-formInputs.forEach(input => {
-    input.addEventListener('focus', () => {
-        input.parentElement.classList.add('focused');
-    });
-
-    input.addEventListener('blur', () => {
-        input.parentElement.classList.remove('focused');
-        if (input.value) {
-            input.parentElement.classList.add('filled');
-        } else {
-            input.parentElement.classList.remove('filled');
         }
     });
 });
