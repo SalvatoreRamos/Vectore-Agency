@@ -168,11 +168,19 @@ async function updateProduct(id, productData) {
 
 async function deleteProductAction(id) {
     try {
-        await api.deleteProduct(id);
-        await fetchAndRenderProducts();
+        const response = await api.deleteProduct(id);
+        if (response.success) {
+            // Small delay to let DB update
+            setTimeout(async () => {
+                await fetchAndRenderProducts();
+                alert('Producto eliminado con éxito');
+            }, 500);
+        } else {
+            throw new Error(response.message || 'Error desconocido');
+        }
     } catch (error) {
         console.error('Error deleting product:', error);
-        alert('Error deleting product: ' + error.message);
+        alert('No se pudo eliminar: ' + error.message);
     }
 }
 

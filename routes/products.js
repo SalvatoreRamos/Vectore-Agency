@@ -173,25 +173,36 @@ router.put('/:id', [authenticate, isAdmin], async (req, res) => {
 // @access  Private/Admin
 router.delete('/:id', [authenticate, isAdmin], async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id);
+        const { id } = req.params;
+
+        // Validate ObjectId
+        if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+            return res.status(400).json({
+                success: false,
+                message: 'ID de producto inválido'
+            });
+        }
+
+        const product = await Product.findById(id);
 
         if (!product) {
             return res.status(404).json({
                 success: false,
-                message: 'Product not found'
+                message: 'Producto no encontrado en la base de datos'
             });
         }
 
-        await product.deleteOne();
+        await Product.findByIdAndDelete(id);
 
         res.json({
             success: true,
-            message: 'Product deleted successfully'
+            message: 'Producto eliminado correctamente'
         });
     } catch (error) {
+        console.error('Delete error:', error);
         res.status(500).json({
             success: false,
-            message: 'Error deleting product',
+            message: 'Error al eliminar el producto',
             error: error.message
         });
     }

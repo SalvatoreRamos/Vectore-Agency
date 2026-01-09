@@ -132,21 +132,16 @@ async function loadProducts(retries = 3) {
         // Clear current content
         catalogGrid.innerHTML = '';
 
-        // Render products (API + Backup if needed)
+        // Render logic: If there are real products in the API, show ONLY those.
+        // Backups are only for showing a nice UI on the very first visit.
         let productsToRender = [];
 
         if (products.length > 0) {
-            productsToRender = [...products];
-
-            // Si hay pocos productos en la API, añadimos algunos backup que no estén repetidos
-            if (products.length < 6) {
-                const existingNames = products.map(p => p.name.toLowerCase());
-                const extraProducts = BACKUP_PRODUCTS.filter(p => !existingNames.includes(p.name.toLowerCase()));
-                productsToRender = [...productsToRender, ...extraProducts.slice(0, 12 - products.length)];
-            }
+            productsToRender = products;
+            console.log(`Rendering ${products.length} products from database.`);
         } else {
-            // Si la API devuelve un array vacío, usamos los de backup
             productsToRender = BACKUP_PRODUCTS;
+            console.log("No products in DB, showing backup products.");
         }
 
         productsToRender.forEach(product => {
