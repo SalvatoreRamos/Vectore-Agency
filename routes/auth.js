@@ -11,7 +11,7 @@ const router = express.Router();
 
 // Generate JWT token
 const generateToken = (userId) => {
-    const secret = process.env.JWT_SECRET || 'vectore_secret_fallback_key_2026';
+    const secret = process.env.JWT_SECRET || '81c69871012f9818750a4d11b475b5f3';
     return jwt.sign(
         { userId },
         secret,

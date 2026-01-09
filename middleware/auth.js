@@ -17,7 +17,7 @@ export const authenticate = async (req, res, next) => {
         const token = authHeader.split(' ')[1];
 
         // Verify token
-        const secret = process.env.JWT_SECRET || 'vectore_secret_fallback_key_2026';
+        const secret = process.env.JWT_SECRET || '81c69871012f9818750a4d11b475b5f3';
         const decoded = jwt.verify(token, secret);
 
         // Get user from token
@@ -82,7 +82,7 @@ export const optionalAuth = async (req, res, next) => {
 
         if (authHeader && authHeader.startsWith('Bearer ')) {
             const token = authHeader.split(' ')[1];
-            const secret = process.env.JWT_SECRET || 'vectore_secret_fallback_key_2026';
+            const secret = process.env.JWT_SECRET || '81c69871012f9818750a4d11b475b5f3';
             const decoded = jwt.verify(token, secret);
             const user = await User.findById(decoded.userId).select('-password');
 
