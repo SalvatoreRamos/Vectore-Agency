@@ -7,6 +7,42 @@ let editingProductId = null;
 let deletingProductId = null;
 
 // ===================================
+// Preloader & Custom Cursor Logic
+// ===================================
+window.addEventListener('load', () => {
+    const preloader = document.getElementById('preloader');
+    setTimeout(() => {
+        preloader.classList.add('hidden');
+    }, 800);
+});
+
+const cursor = document.getElementById('cursor');
+const cursorDot = document.getElementById('cursorDot');
+
+document.addEventListener('mousemove', (e) => {
+    const posX = e.clientX;
+    const posY = e.clientY;
+    cursor.style.transform = `translate3d(${posX}px, ${posY}px, 0)`;
+    cursorDot.style.transform = `translate3d(${posX}px, ${posY}px, 0)`;
+});
+
+document.addEventListener('mouseover', (e) => {
+    const target = e.target.closest('a, button, .admin-product-card, .filter-btn, .nav-item');
+    if (target) {
+        cursor.classList.add('active');
+        cursorDot.classList.add('active');
+    }
+});
+
+document.addEventListener('mouseout', (e) => {
+    const target = e.target.closest('a, button, .admin-product-card, .filter-btn, .nav-item');
+    if (target) {
+        cursor.classList.remove('active');
+        cursorDot.classList.remove('active');
+    }
+});
+
+// ===================================
 // DOM Elements
 // ===================================
 const loginScreen = document.getElementById('loginScreen');
