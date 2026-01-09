@@ -374,8 +374,160 @@ body {
 }
 
 /* ===================================
-   Section Styles
+   Preloader & Custom Cursor
    =================================== */
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--dark);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.8s ease, visibility 0.8s;
+}
+
+.preloader.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.preloader-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.preloader-logo {
+    font-size: 4rem;
+    color: var(--white);
+    animation: pulseLogo 2s infinite ease-in-out;
+}
+
+.preloader-bar {
+    width: 100px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+    border-radius: 2px;
+}
+
+.preloader-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--primary);
+    animation: loadingBar 1.5s infinite ease-in-out;
+}
+
+@keyframes pulseLogo {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 1;
+        text-shadow: 0 0 20px var(--primary);
+    }
+}
+
+@keyframes loadingBar {
+    0% {
+        left: -100%;
+    }
+
+    50% {
+        left: 0;
+    }
+
+    100% {
+        left: 100%;
+    }
+}
+
+/* Custom Cursor */
+.custom-cursor,
+.custom-cursor-dot {
+    pointer-events: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    z-index: 10000;
+    transition: transform 0.1s ease-out, opacity 0.3s ease;
+    opacity: 0;
+}
+
+.custom-cursor {
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    margin-left: -20px;
+    margin-top: -20px;
+    transition: width 0.3s, height 0.3s, background 0.3s, border-color 0.3s, opacity 0.3s;
+}
+
+.custom-cursor-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--primary);
+    margin-left: -3px;
+    margin-top: -3px;
+}
+
+body:hover .custom-cursor,
+body:hover .custom-cursor-dot {
+    opacity: 1;
+}
+
+/* Cursor States */
+.custom-cursor.active {
+    width: 60px;
+    height: 60px;
+    background: rgba(134, 85, 255, 0.1);
+    border-color: var(--primary);
+    margin-left: -30px;
+    margin-top: -30px;
+}
+
+.custom-cursor-dot.active {
+    transform: scale(2);
+    background: var(--white);
+}
+
+@media (max-width: 1024px) {
+
+    .custom-cursor,
+    .custom-cursor-dot {
+        display: none;
+    }
+}
+
+/* ===================================
+   Global Styles
+   =================================== */
+@media (min-width: 1025px) {
+
+    html,
+    body,
+    a,
+    button {
+        cursor: none !important;
+    }
+}
+
 .section-header {
     text-align: center;
     margin-bottom: 60px;
