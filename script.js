@@ -48,7 +48,7 @@ function renderPortfolioItems(projects) {
         const item = document.createElement('div');
         item.className = 'portfolio-item';
         item.innerHTML = `
-            <img src="${project.thumbnail}" alt="${project.title}" onerror="this.src='https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg'">
+            <img src="${project.thumbnail}" alt="Proyecto Vectore: ${project.title}" loading="lazy" onerror="this.src='https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg'">
             <div class="portfolio-overlay">
                 <span class="portfolio-category">${project.category}</span>
                 <h3 class="portfolio-title">${project.title}</h3>
@@ -84,7 +84,7 @@ function openProjectModal(project) {
 
         <div class="project-gallery">
             ${(project.images || []).map(img => `
-                <img src="${img.url}" alt="${img.caption || ''}" onerror="this.style.display='none'">
+                <img src="${img.url}" alt="Galería: ${project.title}" loading="lazy" onerror="this.style.display='none'">
             `).join('')}
         </div>
 
@@ -325,7 +325,7 @@ function createProductCard(product) {
     const gradient = getGradient(product.category, productId);
 
     const imageContent = product.images && product.images.length > 0 && product.images[0].url
-        ? `<img src="${product.images[0].url}" alt="${product.name}" class="product-img-bg">`
+        ? `<img src="${product.images[0].url}" alt="Catálogo Vectore: ${product.name}" class="product-img-bg" loading="lazy">`
         : `<div class="product-placeholder" style="background: ${gradient}"><span class="product-icon">${icon}</span></div>`;
 
     const categoryTag = product.category === 'digital'
