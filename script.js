@@ -48,7 +48,7 @@ function renderPortfolioItems(projects) {
         const item = document.createElement('div');
         item.className = 'portfolio-item';
         item.innerHTML = `
-            <img src="${project.thumbnail}" alt="${project.title}">
+            <img src="${project.thumbnail}" alt="${project.title}" onerror="this.src='https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg'">
             <div class="portfolio-overlay">
                 <span class="portfolio-category">${project.category}</span>
                 <h3 class="portfolio-title">${project.title}</h3>
@@ -80,11 +80,11 @@ function openProjectModal(project) {
             <p>${project.description}</p>
         </div>
 
-        <img src="${project.thumbnail}" alt="${project.title}" class="project-main-image">
+        <img src="${project.thumbnail}" alt="${project.title}" class="project-main-image" onerror="this.src='https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg'">
 
         <div class="project-gallery">
             ${(project.images || []).map(img => `
-                <img src="${img.url}" alt="${img.caption || ''}">
+                <img src="${img.url}" alt="${img.caption || ''}" onerror="this.style.display='none'">
             `).join('')}
         </div>
 

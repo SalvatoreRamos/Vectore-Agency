@@ -144,6 +144,18 @@ async function handleLogin(email, password) {
     return { success: false, message: 'Fallo al iniciar sesión' };
 }
 
+function closeProductModal() {
+    productModal.classList.remove('active');
+    editingProductId = null;
+    productForm.reset();
+}
+
+function closeProjectModal() {
+    projectFormModal.classList.remove('active');
+    editingProjectId = null;
+    projectForm.reset();
+}
+
 function logout() {
     api.logout();
     showLogin();
@@ -311,7 +323,7 @@ function renderProjects() {
         return `
         <div class="admin-product-card" data-id="${projectId}">
             <div class="admin-product-image">
-                <img src="${project.thumbnail}" alt="${project.title}">
+                <img src="${project.thumbnail}" alt="${project.title}" onerror="this.src='https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg'">
                 <span class="category-badge digital">${project.category}</span>
             </div>
             <div class="admin-product-info">
@@ -419,6 +431,8 @@ function openEditProjectModal(id) {
 
 function closeProjectModal() {
     projectFormModal.classList.remove('active');
+    editingProjectId = null;
+    projectForm.reset();
 }
 
 function openEditModal(id) {
@@ -586,7 +600,10 @@ function setupEventListeners() {
 
 // Make functions available globally for onclick handlers
 window.openEditModal = openEditModal;
+window.openEditProjectModal = openEditProjectModal;
 window.openDeleteModal = openDeleteModal;
+window.openAddModal = openAddModal;
+window.openAddProjectModal = openAddProjectModal;
 
 // Initialize on load
 init();
