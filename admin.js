@@ -9,6 +9,17 @@ let editingProjectId = null;
 let deletingId = null;
 let deletingType = null; // 'product' or 'project'
 
+// Global helper for event delegation
+function getTargetData(e, className) {
+    const card = e.target.closest('.admin-product-card');
+    const btn = e.target.closest(className);
+    if (!card || !btn) return null;
+    return {
+        id: card.dataset.id,
+        name: card.dataset.name // We'll add this to the HTML
+    };
+}
+
 // ===================================
 // Preloader & Custom Cursor Logic
 // ===================================
@@ -294,7 +305,7 @@ function renderProducts() {
             : `<span>${getProductIcon(product)}</span>`;
 
         return `
-        <div class="admin-product-card" data-id="${productId}">
+        <div class="admin-product-card" data-id="${productId}" data-name="${product.name}">
             <div class="admin-product-image" style="background: ${getGradient(product.category, productId)}">
                 ${imageContent}
                 <span class="category-badge ${product.category}">${product.category === 'digital' ? 'Digital' : 'Físico'}</span>
@@ -304,8 +315,8 @@ function renderProducts() {
                 <p>${product.description}</p>
                 <div class="admin-product-price">Desde $${product.price}</div>
                 <div class="admin-product-actions">
-                    <button class="btn-edit" onclick="openEditModal('${productId}')">Editar</button>
-                    <button class="btn-delete" onclick="openDeleteModal('${productId}', 'product', '${product.name}')">Eliminar</button>
+                    <button class="btn-edit">Editar</button>
+                    <button class="btn-delete">Eliminar</button>
                 </div>
             </div>
         </div>`;
@@ -321,7 +332,7 @@ function renderProjects() {
     adminProjectsGrid.innerHTML = projects.map(project => {
         const projectId = project._id || project.id;
         return `
-        <div class="admin-product-card" data-id="${projectId}">
+        <div class="admin-product-card" data-id="${projectId}" data-name="${project.title}">
             <div class="admin-product-image">
                 <img src="${project.thumbnail}" alt="${project.title}" onerror="this.src='https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg'">
                 <span class="category-badge digital">${project.category}</span>
@@ -330,8 +341,8 @@ function renderProjects() {
                 <h3>${project.title}</h3>
                 <p><strong>Cliente:</strong> ${project.client}</p>
                 <div class="admin-product-actions">
-                    <button class="btn-edit" onclick="openEditProjectModal('${projectId}')">Editar</button>
-                    <button class="btn-delete" onclick="openDeleteModal('${projectId}', 'project', '${project.title}')">Eliminar</button>
+                    <button class="btn-edit">Editar</button>
+                    <button class="btn-delete">Eliminar</button>
                 </div>
             </div>
         </div>`;
@@ -588,6 +599,23 @@ function setupEventListeners() {
         });
     });
 
+    // Grid Event Delegation
+    adminProductsGrid.addEventListener('click', (e) => {
+        const editData = getTargetData(e, '.btn-edit');
+        if (editData) openEditModal(editData.id);
+
+        const deleteData = getTargetData(e, '.btn-delete');
+        if (deleteData) openDeleteModal(deleteData.id, 'product', deleteData.name);
+    });
+
+    adminProjectsGrid.addEventListener('click', (e) => {
+        const editData = getTargetData(e, '.btn-edit');
+        if (editData) openEditProjectModal(editData.id);
+
+        const deleteData = getTargetData(e, '.btn-delete');
+        if (deleteData) openDeleteModal(deleteData.id, 'project', deleteData.name);
+    });
+
     // Close modals on outside click
     productModal.addEventListener('click', (e) => {
         if (e.target === productModal) closeProductModal();
@@ -596,14 +624,16 @@ function setupEventListeners() {
     deleteModal.addEventListener('click', (e) => {
         if (e.target === deleteModal) closeDeleteModal();
     });
+
+    projectFormModal.addEventListener('click', (e) => {
+        if (e.target === projectFormModal) closeProjectModal();
+    });
 }
 
-// Make functions available globally for onclick handlers
-window.openEditModal = openEditModal;
-window.openEditProjectModal = openEditProjectModal;
-window.openDeleteModal = openDeleteModal;
+// Make functions available globally just in case, but using delegation is safer
 window.openAddModal = openAddModal;
 window.openAddProjectModal = openAddProjectModal;
+window.switchSection = switchSection;
 
 // Initialize on load
 init();
