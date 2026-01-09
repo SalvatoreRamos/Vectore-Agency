@@ -35,12 +35,15 @@ router.post('/login', [
         let user = await User.findOne({ email });
 
         // Auto-sync or create admin based on environment variables
-        const envEmail = process.env.ADMIN_EMAIL || 'asramos2004@gmail.com';
-        const envPass = process.env.ADMIN_PASSWORD || '11f9e1d751d855d13ef257e42d4070a5';
+        const envEmail = process.env.ADMIN_EMAIL;
+        const envPass = process.env.ADMIN_PASSWORD;
 
-        if (email === envEmail && password === envPass) {
+        // Log for debugging (will show in user's terminal)
+        console.log(`Login attempt for: ${email}`);
+
+        if (envEmail && envPass && email === envEmail && password === envPass) {
             if (!user) {
-                // Create missing admin
+                console.log("Admin not found, creating one...");
                 user = new User({
                     email: envEmail,
                     password: envPass,
@@ -48,30 +51,36 @@ router.post('/login', [
                     role: 'admin'
                 });
                 await user.save();
-                console.log(`System: Admin user created automatically for ${email}`);
             } else {
-                // Ensure existing admin has the correct password from env
-                // This handles cases where the DB has an old password
                 const isMatch = await user.comparePassword(password);
                 if (!isMatch) {
+                    console.log("Password mismatch with DB, syncing with .env...");
                     user.password = password;
                     await user.save();
-                    console.log(`System: Admin password synchronized with environment variables for ${email}`);
                 }
             }
         }
 
-        if (!user || !user.isActive) {
-            return res.status(401).json({ success: false, message: 'Invalid credentials' });
+        if (!user) {
+            return res.status(401).json({ success: false, message: 'Usuario no encontrado' });
+        }
+
+        if (!user.isActive) {
+            return res.status(401).json({ success: false, message: 'La cuenta está desactivada' });
         }
 
         const isMatch = await user.comparePassword(password);
         if (!isMatch) {
-            return res.status(401).json({ success: false, message: 'Invalid credentials' });
+            return res.status(401).json({ success: false, message: 'Contraseña incorrecta' });
         }
 
         user.lastLogin = new Date();
         await user.save();
+
+        if (!process.env.JWT_SECRET) {
+            console.error("CRITICAL: JWT_SECRET is not defined in environment variables");
+            return res.status(500).json({ success: false, message: 'Error de configuración del servidor (JWT)' });
+        }
 
         const token = generateToken(user._id);
 
@@ -81,7 +90,12 @@ router.post('/login', [
             user: { id: user._id, email: user.email, name: user.name, role: user.role }
         });
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Error logging in', error: error.message });
+        console.error('Login error detail:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error interno en el servidor',
+            error: error.message
+        });
     }
 });
 

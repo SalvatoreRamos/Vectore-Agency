@@ -51,7 +51,8 @@ class VectoreAPI {
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.message || 'Request failed');
+                const errorMsg = data.message + (data.error ? ` (${data.error})` : '');
+                throw new Error(errorMsg || 'Request failed');
             }
 
             return data;
