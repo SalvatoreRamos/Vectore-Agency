@@ -38,7 +38,7 @@ router.post('/login', [
         const envEmail = process.env.ADMIN_EMAIL;
         const envPass = process.env.ADMIN_PASSWORD;
 
-        // Log for debugging (will show in user's terminal)
+        // Log for debugging
         console.log(`Login attempt for: ${email}`);
 
         if (envEmail && envPass && email === envEmail && password === envPass) {
@@ -52,10 +52,20 @@ router.post('/login', [
                 });
                 await user.save();
             } else {
-                const isMatch = await user.comparePassword(password);
+                // Defensive check to avoid Bcrypt error if password is missing in DB
+                let isMatch = false;
+                if (user.password) {
+                    try {
+                        isMatch = await user.comparePassword(password);
+                    } catch (e) {
+                        console.log("Bcrypt comparison failed, syncing...");
+                    }
+                }
+
                 if (!isMatch) {
-                    console.log("Password mismatch with DB, syncing with .env...");
+                    console.log("Password mismatch or missing in DB, syncing with .env...");
                     user.password = password;
+                    user.role = 'admin';
                     await user.save();
                 }
             }
@@ -69,9 +79,16 @@ router.post('/login', [
             return res.status(401).json({ success: false, message: 'La cuenta está desactivada' });
         }
 
-        const isMatch = await user.comparePassword(password);
-        if (!isMatch) {
-            return res.status(401).json({ success: false, message: 'Contraseña incorrecta' });
+        // Final check with error protection
+        try {
+            if (!user.password) throw new Error("Missing password in DB");
+            const isMatch = await user.comparePassword(password);
+            if (!isMatch) {
+                return res.status(401).json({ success: false, message: 'Contraseña incorrecta' });
+            }
+        } catch (error) {
+            console.error("Auth error:", error.message);
+            return res.status(401).json({ success: false, message: 'Fallo de autenticación (credenciales inválidas o corruptas)' });
         }
 
         user.lastLogin = new Date();
