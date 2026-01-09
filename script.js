@@ -44,6 +44,82 @@ navMenu.querySelectorAll('.nav-link').forEach(link => {
 // ===================================
 const productCatalog = {};
 
+// Productos estáticos de respaldo por si la API está vacía o tiene pocos productos
+const BACKUP_PRODUCTS = [
+    {
+        _id: 'bkup-1',
+        name: 'Diseño de Logo Premium',
+        description: 'Identidad visual única para tu marca con entrega de archivos editables y manual de uso.',
+        category: 'digital',
+        price: 150,
+        isAvailable: true
+    },
+    {
+        _id: 'bkup-2',
+        name: 'Diseño Web Profesional',
+        description: 'Sitios web modernos, responsivos y optimizados para SEO y conversión.',
+        category: 'digital',
+        price: 450,
+        isAvailable: true
+    },
+    {
+        _id: 'bkup-3',
+        name: 'Gestión de Redes Sociales',
+        description: 'Estrategia y creación de contenido mensual para tus canales digitales.',
+        category: 'digital',
+        price: 200,
+        isAvailable: true
+    },
+    {
+        _id: 'bkup-4',
+        name: 'Diseño de Interiores',
+        description: 'Planificación y visualización 3D profesional para transformar tus espacios.',
+        category: 'digital',
+        price: 500,
+        isAvailable: true
+    },
+    {
+        _id: 'bkup-5',
+        name: 'Personalización de Vehículos',
+        description: 'Diseño creativo de wraps y rotulación para flotas comerciales.',
+        category: 'digital',
+        price: 200,
+        isAvailable: true
+    },
+    {
+        _id: 'bkup-6',
+        name: 'Diseño de Fachada',
+        description: 'Propuestas arquitectónicas visuales para el exterior de tu negocio.',
+        category: 'digital',
+        price: 300,
+        isAvailable: true
+    },
+    {
+        _id: 'bkup-7',
+        name: 'Tarjetas de Presentación',
+        description: '500 unidades en papel premium con acabados especiales y diseño incluido.',
+        category: 'physical',
+        price: 30,
+        isAvailable: true
+    },
+    {
+        _id: 'bkup-8',
+        name: 'Flyers Publicitarios',
+        description: 'Mil volantes a full color en alta resolución para promocionar tu negocio.',
+        category: 'physical',
+        price: 45,
+        isAvailable: true
+    },
+    {
+        _id: 'bkup-9',
+        name: 'Banners y Gigantografías',
+        description: 'Impresión en gran formato para máxima visibilidad en exteriores.',
+        category: 'physical',
+        price: 55,
+        isAvailable: true
+    }
+];
+
 let currentUser = null;
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
@@ -52,23 +128,29 @@ async function loadProducts(retries = 3) {
 
     try {
         const response = await api.getProducts();
-        const products = response.data;
+        let products = response.data || [];
 
         // Clear current content
         catalogGrid.innerHTML = '';
 
-        if (!products || products.length === 0) {
-            if (retries > 0) {
-                console.log(`No products found, retrying in 2s... (${retries} retries left)`);
-                setTimeout(() => loadProducts(retries - 1), 2000);
-                return;
+        // Render products (API + Backup if needed)
+        let productsToRender = [];
+
+        if (products.length > 0) {
+            productsToRender = [...products];
+
+            // Si hay pocos productos en la API, añadimos algunos backup que no estén repetidos
+            if (products.length < 6) {
+                const existingNames = products.map(p => p.name.toLowerCase());
+                const extraProducts = BACKUP_PRODUCTS.filter(p => !existingNames.includes(p.name.toLowerCase()));
+                productsToRender = [...productsToRender, ...extraProducts.slice(0, 12 - products.length)];
             }
-            catalogGrid.innerHTML = '<div class="no-products">No hay productos disponibles por el momento.</div>';
-            return;
+        } else {
+            // Si la API devuelve un array vacío, usamos los de backup
+            productsToRender = BACKUP_PRODUCTS;
         }
 
-        // Render products
-        products.forEach(product => {
+        productsToRender.forEach(product => {
             const card = createProductCard(product);
             catalogGrid.appendChild(card);
         });
@@ -78,11 +160,20 @@ async function loadProducts(retries = 3) {
 
     } catch (error) {
         console.error('Error loading products:', error);
+
+        // En caso de error de conexión, mostramos al menos los productos de respaldo
+        // para que el sitio no se vea vacío
+        catalogGrid.innerHTML = '';
+        BACKUP_PRODUCTS.forEach(product => {
+            const card = createProductCard(product);
+            catalogGrid.appendChild(card);
+        });
+
+        initializeCatalogEvents();
+
         if (retries > 0) {
-            console.log(`Load failed, retrying in 2s... (${retries} retries left)`);
-            setTimeout(() => loadProducts(retries - 1), 2000);
-        } else {
-            catalogGrid.innerHTML = '<div class="error">Hubo un error al cargar los productos. Por favor intenta más tarde.</div>';
+            console.log(`Load failed, retrying in 3s... (${retries} retries left)`);
+            setTimeout(() => loadProducts(retries - 1), 3000);
         }
     }
 }

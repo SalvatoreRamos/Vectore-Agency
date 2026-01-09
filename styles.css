@@ -14,21 +14,21 @@
     --gray-400: #ced4da;
     --gray-500: #adb5bd;
     --gray-600: #6c757d;
-    
+
     --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
     --gradient-dark: linear-gradient(135deg, var(--dark) 0%, var(--dark-light) 100%);
     --gradient-hero: linear-gradient(135deg, var(--dark) 0%, #1a1354 50%, var(--dark-light) 100%);
-    
+
     --shadow-sm: 0 2px 8px rgba(22, 15, 80, 0.08);
     --shadow-md: 0 4px 20px rgba(22, 15, 80, 0.12);
     --shadow-lg: 0 8px 40px rgba(22, 15, 80, 0.16);
     --shadow-primary: 0 4px 20px rgba(134, 85, 255, 0.4);
-    
+
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 20px;
     --radius-xl: 30px;
-    
+
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -107,8 +107,15 @@ body {
 }
 
 @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
 }
 
 .nav-menu {
@@ -222,10 +229,23 @@ body {
 }
 
 @keyframes float {
-    0%, 100% { transform: translate(0, 0) rotate(0deg); }
-    25% { transform: translate(30px, -30px) rotate(5deg); }
-    50% { transform: translate(-20px, 20px) rotate(-5deg); }
-    75% { transform: translate(20px, 30px) rotate(3deg); }
+
+    0%,
+    100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+
+    25% {
+        transform: translate(30px, -30px) rotate(5deg);
+    }
+
+    50% {
+        transform: translate(-20px, 20px) rotate(-5deg);
+    }
+
+    75% {
+        transform: translate(20px, 30px) rotate(3deg);
+    }
 }
 
 .hero-content {
@@ -346,6 +366,7 @@ body {
         opacity: 0;
         transform: translateY(30px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -588,16 +609,45 @@ body {
     font-size: 4rem;
 }
 
-.digital-1 { background: linear-gradient(135deg, #8655FF 0%, #a67fff 100%); }
-.digital-2 { background: linear-gradient(135deg, #5a35cc 0%, #8655FF 100%); }
-.digital-3 { background: linear-gradient(135deg, #a67fff 0%, #c9b3ff 100%); }
-.digital-4 { background: linear-gradient(135deg, #160F50 0%, #2a1f6b 100%); }
-.digital-5 { background: linear-gradient(135deg, #6b3fd9 0%, #8655FF 100%); }
-.fisico-1 { background: linear-gradient(135deg, #160F50 0%, #8655FF 100%); }
-.fisico-2 { background: linear-gradient(135deg, #2a1f6b 0%, #5a35cc 100%); }
-.fisico-3 { background: linear-gradient(135deg, #8655FF 0%, #160F50 100%); }
-.fisico-4 { background: linear-gradient(135deg, #5a35cc 0%, #a67fff 100%); }
-.fisico-5 { background: linear-gradient(135deg, #a67fff 0%, #8655FF 100%); }
+.digital-1 {
+    background: linear-gradient(135deg, #8655FF 0%, #a67fff 100%);
+}
+
+.digital-2 {
+    background: linear-gradient(135deg, #5a35cc 0%, #8655FF 100%);
+}
+
+.digital-3 {
+    background: linear-gradient(135deg, #a67fff 0%, #c9b3ff 100%);
+}
+
+.digital-4 {
+    background: linear-gradient(135deg, #160F50 0%, #2a1f6b 100%);
+}
+
+.digital-5 {
+    background: linear-gradient(135deg, #6b3fd9 0%, #8655FF 100%);
+}
+
+.fisico-1 {
+    background: linear-gradient(135deg, #160F50 0%, #8655FF 100%);
+}
+
+.fisico-2 {
+    background: linear-gradient(135deg, #2a1f6b 0%, #5a35cc 100%);
+}
+
+.fisico-3 {
+    background: linear-gradient(135deg, #8655FF 0%, #160F50 100%);
+}
+
+.fisico-4 {
+    background: linear-gradient(135deg, #5a35cc 0%, #a67fff 100%);
+}
+
+.fisico-5 {
+    background: linear-gradient(135deg, #a67fff 0%, #8655FF 100%);
+}
 
 .product-tag {
     position: absolute;
@@ -904,7 +954,8 @@ body {
     font-weight: 600;
     cursor: pointer;
     transition: var(--transition);
-    display: none; /* Hidden by default, shown when logged in */
+    display: none;
+    /* Hidden by default, shown when logged in */
 }
 
 .btn-add-cart:hover {
@@ -962,7 +1013,8 @@ body {
     font-size: 0.95rem;
 }
 
-.social-links {
+.social-links,
+.footer-social {
     display: flex;
     gap: 12px;
     margin-top: 32px;
@@ -1111,12 +1163,13 @@ body {
    Responsive Design
    =================================== */
 @media (max-width: 1024px) {
+
     .quoter-wrapper,
     .contact-wrapper {
         grid-template-columns: 1fr;
         gap: 40px;
     }
-    
+
     .footer-content {
         grid-template-columns: 1fr;
         gap: 40px;
@@ -1137,50 +1190,50 @@ body {
         transition: var(--transition);
         box-shadow: var(--shadow-lg);
     }
-    
+
     .nav-menu.active {
         right: 0;
     }
-    
+
     .nav-menu .nav-link {
         color: var(--white);
         padding: 15px 0;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
-    
+
     .nav-toggle {
         display: flex;
         z-index: 1001;
     }
-    
+
     .nav-toggle.active span:nth-child(1) {
         transform: rotate(45deg) translate(5px, 5px);
     }
-    
+
     .nav-toggle.active span:nth-child(2) {
         opacity: 0;
     }
-    
+
     .nav-toggle.active span:nth-child(3) {
         transform: rotate(-45deg) translate(7px, -6px);
     }
-    
+
     .hero-stats {
         gap: 30px;
     }
-    
+
     .stat-number {
         font-size: 2rem;
     }
-    
+
     .services-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .catalog-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .footer-links {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -1191,30 +1244,30 @@ body {
         flex-direction: column;
         align-items: center;
     }
-    
+
     .btn {
         width: 100%;
         justify-content: center;
     }
-    
+
     .hero-stats {
         flex-direction: column;
         gap: 20px;
     }
-    
+
     .catalog-filters {
         flex-direction: column;
         align-items: center;
     }
-    
+
     .filter-btn {
         width: 100%;
     }
-    
+
     .contact-form {
         padding: 24px;
     }
-    
+
     .footer-links {
         grid-template-columns: 1fr;
     }
@@ -1253,13 +1306,29 @@ body {
     animation: typing 1.4s infinite ease-in-out;
 }
 
-.typing-indicator span:nth-child(1) { animation-delay: 0s; }
-.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
-.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+.typing-indicator span:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
 
 @keyframes typing {
-    0%, 60%, 100% { transform: translateY(0); }
-    30% { transform: translateY(-6px); }
+
+    0%,
+    60%,
+    100% {
+        transform: translateY(0);
+    }
+
+    30% {
+        transform: translateY(-6px);
+    }
 }
 
 /* Quote result styling */
