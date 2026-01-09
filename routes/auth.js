@@ -34,20 +34,31 @@ router.post('/login', [
         const { email, password } = req.body;
         let user = await User.findOne({ email });
 
-        // Auto-create admin if it doesn't exist and matches env credentials
-        if (!user && (email === process.env.ADMIN_EMAIL || email === 'admin@vectore.com')) {
-            const adminPass = process.env.ADMIN_PASSWORD || 'Admin123!';
-            // Only create if password also matches (simple fallback check)
-            // But usually we just want to ensure at least one admin exists.
-            // Let's create it and then continue to the password comparison.
-            user = new User({
-                email: email,
-                password: adminPass,
-                name: 'Administrator',
-                role: 'admin'
-            });
-            await user.save();
-            console.log(`System: Admin user created automatically for ${email}`);
+        // Auto-sync or create admin based on environment variables
+        const envEmail = process.env.ADMIN_EMAIL || 'asramos2004@gmail.com';
+        const envPass = process.env.ADMIN_PASSWORD || '11f9e1d751d855d13ef257e42d4070a5';
+
+        if (email === envEmail && password === envPass) {
+            if (!user) {
+                // Create missing admin
+                user = new User({
+                    email: envEmail,
+                    password: envPass,
+                    name: 'Administrator',
+                    role: 'admin'
+                });
+                await user.save();
+                console.log(`System: Admin user created automatically for ${email}`);
+            } else {
+                // Ensure existing admin has the correct password from env
+                // This handles cases where the DB has an old password
+                const isMatch = await user.comparePassword(password);
+                if (!isMatch) {
+                    user.password = password;
+                    await user.save();
+                    console.log(`System: Admin password synchronized with environment variables for ${email}`);
+                }
+            }
         }
 
         if (!user || !user.isActive) {

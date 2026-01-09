@@ -18,7 +18,7 @@ const seedData = async () => {
 
         // Create admin user
         const admin = await User.create({
-            email: process.env.ADMIN_EMAIL || 'admin@vectore.com',
+            email: process.env.ADMIN_EMAIL || 'asramos2004@gmail.com',
             password: process.env.ADMIN_PASSWORD || 'Admin123!',
             name: 'Administrator',
             role: 'admin'
