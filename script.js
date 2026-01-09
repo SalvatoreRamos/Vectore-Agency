@@ -205,9 +205,6 @@ function createProductCard(product) {
             <p>${product.description}</p>
             <div class="product-price">
                 <span class="price">Desde $${product.price}</span>
-                <div class="product-actions">
-                    <button class="btn-quote" onclick="window.location.href='https://wa.me/950699910?text=Hola, me interesa el producto: ${product.name}'">Consultar por WhatsApp</button>
-                </div>
             </div>
         </div>
     `;

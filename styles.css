@@ -685,34 +685,18 @@ body {
 .product-price {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    padding-top: 15px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .price {
-    font-size: 1.1rem;
-    font-weight: 700;
+    font-size: 1.25rem;
+    font-weight: 800;
     color: var(--primary);
 }
 
-.btn-quote {
-    width: 100%;
-    padding: 12px 20px;
-    background: var(--dark);
-    color: var(--white);
-    border: none;
-    border-radius: var(--radius-xl);
-    font-size: 0.95rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition);
-    margin-top: 10px;
-}
-
-.btn-quote:hover {
-    background: var(--primary);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-}
+/* Botón de consulta removido del catálogo por estética */
 
 /* ===================================
    Quoter Section
