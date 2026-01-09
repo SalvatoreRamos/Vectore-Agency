@@ -387,13 +387,13 @@ contactForm.addEventListener('submit', async (e) => {
 const revealElements = document.querySelectorAll('.service-card, .product-card, .contact-item');
 
 const revealOnScroll = () => {
-    const elements = document.querySelectorAll('.service-card, .product-card, .contact-item');
+    const elements = document.querySelectorAll('.reveal');
     elements.forEach(el => {
         const elementTop = el.getBoundingClientRect().top;
         const windowHeight = window.innerHeight;
 
         if (elementTop < windowHeight - 100) {
-            el.classList.add('reveal', 'active');
+            el.classList.add('active');
         }
     });
 };
