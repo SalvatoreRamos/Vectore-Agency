@@ -4,36 +4,35 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { authenticate, isAdmin } from '../middleware/auth.js';
 
+import { v2 as cloudinary } from 'cloudinary';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const router = express.Router();
 
-// Configure multer for file uploads
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, path.join(__dirname, '../uploads'));
-    },
-    filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+// Cloudinary Configuration
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+// Configure Cloudinary Storage
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'vectore-agency',
+        allowed_formats: ['jpg', 'png', 'jpeg', 'gif', 'webp'],
+        transformation: [{ width: 1000, crop: 'limit' }]
     }
 });
 
-const fileFilter = (req, file, cb) => {
-    // Accept images only
-    if (file.mimetype.startsWith('image/')) {
-        cb(null, true);
-    } else {
-        cb(new Error('Only image files are allowed!'), false);
-    }
-};
-
 const upload = multer({
     storage: storage,
-    fileFilter: fileFilter,
     limits: {
-        fileSize: 5 * 1024 * 1024 // 5MB max file size
+        fileSize: 5 * 1024 * 1024 // 5MB max
     }
 });
 
@@ -49,7 +48,7 @@ router.post('/image', [authenticate, isAdmin], upload.single('image'), (req, res
             });
         }
 
-        const fileUrl = `/uploads/${req.file.filename}`;
+        const fileUrl = req.file.path; // Cloudinary URL
 
         res.json({
             success: true,
@@ -84,7 +83,7 @@ router.post('/images', [authenticate, isAdmin], upload.array('images', 10), (req
 
         const files = req.files.map(file => ({
             filename: file.filename,
-            url: `/uploads/${file.filename}`,
+            url: file.path, // Cloudinary URL
             size: file.size,
             mimetype: file.mimetype
         }));

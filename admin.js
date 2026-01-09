@@ -89,6 +89,14 @@ const btnCancelDelete = document.getElementById('btnCancelDelete');
 const btnConfirmDelete = document.getElementById('btnConfirmDelete');
 const deleteItemName = document.getElementById('deleteItemName');
 
+// File inputs
+const productFile = document.getElementById('productFile');
+const pThumbFile = document.getElementById('pThumbFile');
+const pGalleryFiles = document.getElementById('pGalleryFiles');
+const productImageInput = document.getElementById('productImage');
+const pThumbnailInput = document.getElementById('pThumbnail');
+const pImageGalleryInput = document.getElementById('pImageGallery');
+
 // Stats elements
 const totalProductsEl = document.getElementById('totalProducts');
 const digitalProductsEl = document.getElementById('digitalProducts');
@@ -627,6 +635,60 @@ function setupEventListeners() {
 
     projectFormModal.addEventListener('click', (e) => {
         if (e.target === projectFormModal) closeProjectModal();
+    });
+
+    // File Upload Listeners
+    productFile.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        try {
+            productImageInput.value = 'Subiendo...';
+            const res = await api.uploadImage(file);
+            if (res.success) {
+                productImageInput.value = res.data.url;
+            }
+        } catch (error) {
+            console.error('Upload error:', error);
+            productImageInput.value = '';
+            alert('Error al subir imagen');
+        }
+    });
+
+    pThumbFile.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        try {
+            pThumbnailInput.value = 'Subiendo...';
+            const res = await api.uploadImage(file);
+            if (res.success) {
+                pThumbnailInput.value = res.data.url;
+            }
+        } catch (error) {
+            console.error('Upload error:', error);
+            pThumbnailInput.value = '';
+            alert('Error al subir miniatura');
+        }
+    });
+
+    pGalleryFiles.addEventListener('change', async (e) => {
+        const files = e.target.files;
+        if (files.length === 0) return;
+
+        try {
+            const currentVal = pImageGalleryInput.value;
+            pImageGalleryInput.value = (currentVal ? currentVal + ', ' : '') + 'Subiendo ' + files.length + ' imágenes...';
+
+            const res = await api.uploadImages(files);
+            if (res.success) {
+                const newUrls = res.data.map(img => img.url).join(', ');
+                pImageGalleryInput.value = (currentVal ? currentVal + ', ' : '') + newUrls;
+            }
+        } catch (error) {
+            console.error('Upload error:', error);
+            alert('Error al subir imágenes a la galería');
+        }
     });
 }
 

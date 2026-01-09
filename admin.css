@@ -510,6 +510,33 @@
     margin-top: 24px;
 }
 
+/* File Upload Area */
+.file-upload-area {
+    background: var(--gray-100);
+    padding: 16px;
+    border-radius: var(--radius-md);
+    border: 2px dashed var(--gray-300);
+    margin-bottom: 8px;
+    transition: var(--transition);
+}
+
+.file-upload-area:hover {
+    border-color: var(--primary);
+    background: rgba(134, 85, 255, 0.05);
+}
+
+.file-upload-area input[type="file"] {
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.file-upload-area .form-hint {
+    margin: 8px 0;
+    font-weight: 600;
+    color: var(--dark);
+    text-align: center;
+}
+
 .form-actions .btn {
     flex: 1;
     justify-content: center;

@@ -225,9 +225,12 @@
                     <input type="text" id="productIcon" required placeholder="🎨" maxlength="4">
                 </div>
                 <div class="form-group">
-                    <label for="productImage">URL de Imagen (Opcional)</label>
-                    <input type="url" id="productImage" placeholder="https://ejemplo.com/imagen.jpg">
-                    <small class="form-hint">Deja vacío para usar el icono como imagen</small>
+                    <label>Imagen del Producto</label>
+                    <div class="file-upload-area">
+                        <input type="file" id="productFile" accept="image/*" class="form-control">
+                        <small class="form-hint">O pega un enlace debajo:</small>
+                        <input type="url" id="productImage" placeholder="https://ejemplo.com/imagen.jpg">
+                    </div>
                 </div>
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" id="btnCancelProduct">Cancelar</button>
@@ -266,13 +269,18 @@
                         rows="3"></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="pThumbnail">URL de Miniatura (Thumb)</label>
-                    <input type="url" id="pThumbnail" required placeholder="https://ejemplo.com/thumb.jpg">
+                    <label>Miniatura (Thumbnail)</label>
+                    <div class="file-upload-area">
+                        <input type="file" id="pThumbFile" accept="image/*" class="form-control">
+                        <small class="form-hint">O pega un enlace:</small>
+                        <input type="url" id="pThumbnail" required placeholder="https://ejemplo.com/thumb.jpg">
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label for="pImageGallery">Galería de imágenes (URLs separadas por coma)</label>
+                    <label>Subir Imágenes a la Galería</label>
+                    <input type="file" id="pGalleryFiles" accept="image/*" multiple class="form-control">
+                    <small class="form-hint">Se añadirán a la lista de abajo:</small>
                     <textarea id="pImageGallery" placeholder="URL1, URL2, URL3" rows="2"></textarea>
-                    <small class="form-hint">Máximo 10 imágenes</small>
                 </div>
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" id="btnCancelProject">Cancelar</button>
