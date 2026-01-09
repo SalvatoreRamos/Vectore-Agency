@@ -6,7 +6,11 @@ import Product from '../models/Product.js';
 import { authenticate, isAdmin, optionalAuth } from '../middleware/auth.js';
 
 const router = express.Router();
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+let stripe = null;
+
+if (process.env.STRIPE_SECRET_KEY) {
+    stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+}
 
 // @route   POST /api/orders
 // @desc    Create new order
@@ -136,6 +140,13 @@ router.post('/:id/payment/stripe', async (req, res) => {
             return res.status(400).json({
                 success: false,
                 message: 'Order already paid'
+            });
+        }
+
+        if (!stripe) {
+            return res.status(503).json({
+                success: false,
+                message: 'Stripe payment service is not configured'
             });
         }
 
