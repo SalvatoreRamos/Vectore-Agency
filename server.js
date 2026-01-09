@@ -10,8 +10,6 @@ import { fileURLToPath } from 'url';
 // Import routes
 import authRoutes from './routes/auth.js';
 import productRoutes from './routes/products.js';
-import orderRoutes from './routes/orders.js';
-import quotationRoutes from './routes/quotations.js';
 import uploadRoutes from './routes/upload.js';
 import contactRoutes from './routes/contact.js';
 
@@ -64,8 +62,6 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
-app.use('/api/orders', orderRoutes);
-app.use('/api/quotations', quotationRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/contact', contactRoutes);
 

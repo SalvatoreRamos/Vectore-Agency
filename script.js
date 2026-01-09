@@ -120,8 +120,7 @@ const BACKUP_PRODUCTS = [
     }
 ];
 
-let currentUser = null;
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
+// El estado del usuario y carrito ha sido removido para simplificar la experiencia de usuario.
 
 async function loadProducts(retries = 3) {
     const catalogGrid = document.getElementById('catalogGrid');
@@ -207,15 +206,11 @@ function createProductCard(product) {
             <div class="product-price">
                 <span class="price">Desde $${product.price}</span>
                 <div class="product-actions">
-                    <button class="btn-quote" onclick="window.location.href='https://wa.me/950699910?text=Hola, me interesa el producto: ${product.name}'">Consultar</button>
-                    <button class="btn-add-cart" data-id="${productId}" data-name="${product.name}" data-price="${product.price}">+ Carrito</button>
+                    <button class="btn-quote" onclick="window.location.href='https://wa.me/950699910?text=Hola, me interesa el producto: ${product.name}'">Consultar por WhatsApp</button>
                 </div>
             </div>
         </div>
     `;
-
-    const btnAddCart = div.querySelector('.btn-add-cart');
-    btnAddCart.addEventListener('click', () => addToCart(product));
 
     return div;
 }
@@ -250,64 +245,7 @@ function getGradient(category, id) {
     return gradients[numId % gradients.length];
 }
 
-// Cart Logic
-// ===================================
-function addToCart(product) {
-
-    const item = {
-        id: product._id,
-        name: product.name,
-        price: product.price,
-        quantity: 1
-    };
-
-    const existing = cart.find(i => i.id === item.id);
-    if (existing) {
-        existing.quantity += 1;
-    } else {
-        cart.push(item);
-    }
-
-    localStorage.setItem('cart', JSON.stringify(cart));
-    showNotification(`${product.name} añadido al carrito 🛒`);
-    updateCartBadge();
-}
-
-function updateCartBadge() {
-    // If there were a cart badge in the UI, we would update it here
-    console.log('Cart updated:', cart);
-}
-
-function showNotification(message, type = 'success') {
-    // Simple toast notification
-    const toast = document.createElement('div');
-    toast.className = `notification ${type}`;
-    toast.textContent = message;
-    document.body.appendChild(toast);
-
-    // Quick styling for notification
-    Object.assign(toast.style, {
-        position: 'fixed',
-        bottom: '20px',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        padding: '12px 24px',
-        borderRadius: '30px',
-        background: type === 'success' ? '#22c55e' : (type === 'error' ? '#ef4444' : '#f59e0b'),
-        color: 'white',
-        fontWeight: '600',
-        zIndex: '2000',
-        boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
-        animation: 'fadeInUp 0.3s ease-out'
-    });
-
-    setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.transform = 'translateX(-50%) translateY(20px)';
-        toast.style.transition = 'all 0.3s ease';
-        setTimeout(() => toast.remove(), 300);
-    }, 3000);
-}
+// La lógica de carrito y notificaciones asociadas ha sido removida.
 
 // ===================================
 // Catalog Filters

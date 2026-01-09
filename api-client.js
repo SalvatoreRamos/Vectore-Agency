@@ -73,32 +73,8 @@ class VectoreAPI {
         return data;
     }
 
-    async googleLogin(idToken) {
-        const data = await this.request('/auth/google', {
-            method: 'POST',
-            body: JSON.stringify({ idToken })
-        });
-        if (data.token) {
-            this.setToken(data.token);
-        }
-        return data;
-    }
+    // El login con Google y registro de usuarios han sido removidos para simplificar el flujo.
 
-
-    async register(name, email, password) {
-        const data = await this.request('/auth/register', {
-            method: 'POST',
-            body: JSON.stringify({ name, email, password })
-        });
-        if (data.token) {
-            this.setToken(data.token);
-        }
-        return data;
-    }
-
-    async getCurrentUser() {
-        return this.request('/auth/me');
-    }
 
     logout() {
         this.removeToken();
@@ -142,85 +118,9 @@ class VectoreAPI {
         return this.request(`/products/category/${category}`);
     }
 
-    // Orders
-    async createOrder(orderData) {
-        return this.request('/orders', {
-            method: 'POST',
-            body: JSON.stringify(orderData)
-        });
-    }
+    // La creación de órdenes y procesamiento de pagos han sido removidos.
 
-    async getOrders(params = {}) {
-        const queryString = new URLSearchParams(params).toString();
-        return this.request(`/orders${queryString ? '?' + queryString : ''}`);
-    }
-
-    async getOrder(id) {
-        return this.request(`/orders/${id}`);
-    }
-
-    async createStripePayment(orderId) {
-        return this.request(`/orders/${orderId}/payment/stripe`, {
-            method: 'POST'
-        });
-    }
-
-    async confirmPayment(orderId, transactionId, paymentInfo) {
-        return this.request(`/orders/${orderId}/payment/confirm`, {
-            method: 'POST',
-            body: JSON.stringify({ transactionId, paymentInfo })
-        });
-    }
-
-    async updateOrderStatus(orderId, status, note) {
-        return this.request(`/orders/${orderId}/status`, {
-            method: 'PUT',
-            body: JSON.stringify({ status, note })
-        });
-    }
-
-    // Quotations
-    async createQuotation(quotationData) {
-        return this.request('/quotations', {
-            method: 'POST',
-            body: JSON.stringify(quotationData)
-        });
-    }
-
-    async getQuotations(params = {}) {
-        const queryString = new URLSearchParams(params).toString();
-        return this.request(`/quotations${queryString ? '?' + queryString : ''}`);
-    }
-
-    async getQuotation(id) {
-        return this.request(`/quotations/${id}`);
-    }
-
-    async updateQuotation(id, quotationData) {
-        return this.request(`/quotations/${id}`, {
-            method: 'PUT',
-            body: JSON.stringify(quotationData)
-        });
-    }
-
-    async updateQuotationStatus(id, status) {
-        return this.request(`/quotations/${id}/status`, {
-            method: 'PUT',
-            body: JSON.stringify({ status })
-        });
-    }
-
-    async acceptQuotation(id) {
-        return this.request(`/quotations/${id}/accept`, {
-            method: 'POST'
-        });
-    }
-
-    async deleteQuotation(id) {
-        return this.request(`/quotations/${id}`, {
-            method: 'DELETE'
-        });
-    }
+    // La gestión detallada de cotizaciones ha sido removida.
 
     // Contact
     async sendContactMessage(contactData) {
