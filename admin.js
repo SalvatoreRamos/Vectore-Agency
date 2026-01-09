@@ -80,13 +80,13 @@ async function handleLogin(email, password) {
         const response = await api.login(email, password);
         if (response.success) {
             showDashboard();
-            return true;
+            return { success: true };
         }
     } catch (error) {
         console.error('Login error:', error);
-        return false;
+        return { success: false, message: error.message };
     }
-    return false;
+    return { success: false, message: 'Fallo al iniciar sesión' };
 }
 
 function logout() {
@@ -300,11 +300,11 @@ function setupEventListeners() {
         const password = document.getElementById('loginPassword').value;
         loginError.textContent = 'Iniciando sesión...';
 
-        const success = await handleLogin(email, password);
-        if (success) {
+        const result = await handleLogin(email, password);
+        if (result.success) {
             loginError.textContent = '';
         } else {
-            loginError.textContent = 'Credenciales incorrectas. Intenta de nuevo.';
+            loginError.textContent = result.message || 'Credenciales incorrectas. Intenta de nuevo.';
         }
     });
 

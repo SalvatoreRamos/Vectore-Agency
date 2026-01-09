@@ -73,6 +73,10 @@ class VectoreAPI {
         return data;
     }
 
+    async getCurrentUser() {
+        return this.request('/auth/me');
+    }
+
     // El login con Google y registro de usuarios han sido removidos para simplificar el flujo.
 
 
