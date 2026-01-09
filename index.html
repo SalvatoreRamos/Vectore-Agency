@@ -198,6 +198,23 @@
         </div>
     </section>
 
+    <!-- Portfolio Section -->
+    <section class="portfolio-section" id="portafolio">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-badge">Portafolio</span>
+                <h2 class="section-title">Trabajos Realizados</h2>
+                <p class="section-subtitle">Una muestra de nuestra pasión por el diseño y la estrategia</p>
+            </div>
+        </div>
+
+        <div class="portfolio-marquee-container">
+            <div class="portfolio-marquee" id="portfolioMarquee">
+                <!-- Proyectos cargados dinámicamente -->
+            </div>
+        </div>
+    </section>
+
     <!-- Catalog Section -->
     <section class="catalog" id="catalogo">
         <div class="container">
@@ -352,6 +369,22 @@
             </div>
         </div>
     </footer>
+
+    <!-- Project Details Modal (Behance style) -->
+    <div class="project-modal" id="projectModal">
+        <div class="project-modal-overlay"></div>
+        <div class="project-modal-container">
+            <button class="project-modal-close" id="closeProjectModal">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <div class="project-modal-content" id="projectModalContent">
+                <!-- Contenido cargado dinámicamente -->
+            </div>
+        </div>
+    </div>
 
     <script src="api-client.js"></script>
     <script src="script.js"></script>

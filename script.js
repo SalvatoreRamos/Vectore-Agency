@@ -5,8 +5,113 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initial scroll check
     revealOnScroll();
 
-    // Load products from API
-    await loadProducts();
+    // Load products
+    loadProducts();
+
+    // Load portfolio projects
+    loadProjects();
+});
+
+// ===================================
+// Portfolio & Project Modal
+// ===================================
+async function loadProjects() {
+    const marquee = document.getElementById('portfolioMarquee');
+    if (!marquee) return;
+
+    try {
+        const response = await api.getProjects();
+        const projects = response.data || [];
+
+        if (projects.length === 0) {
+            // Render dummy projects if DB is empty
+            const dummyProjects = [
+                { title: 'Identidad Vectore', client: 'Vectore Agency', category: 'Branding', thumbnail: 'https://images.pexels.com/photos/3182773/pexels-photo-3182773.jpeg', description: 'Desarrollo de identidad corporativa completa para agencia creativa.' },
+                { title: 'Eco Home App', client: 'EcoSmart', category: 'UI/UX Design', thumbnail: 'https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg', description: 'Interfaz intuitiva para control de hogar inteligente.' },
+                { title: 'Nebula Coffee', client: 'Nebula', category: 'Packaging', thumbnail: 'https://images.pexels.com/photos/4264049/pexels-photo-4264049.jpeg', description: 'Diseño de empaques premium para café de especialidad.' },
+                { title: 'Urban Flota', client: 'Urban Express', category: 'Vehicle Wrap', thumbnail: 'https://images.pexels.com/photos/3853338/pexels-photo-3853338.jpeg', description: 'Rotulación integral de flota vehicular logística.' }
+            ];
+            renderPortfolioItems([...dummyProjects, ...dummyProjects]); // Duplicate for smooth loop
+        } else {
+            renderPortfolioItems([...projects, ...projects]);
+        }
+    } catch (error) {
+        console.error('Error loading projects:', error);
+    }
+}
+
+function renderPortfolioItems(projects) {
+    const marquee = document.getElementById('portfolioMarquee');
+    marquee.innerHTML = '';
+
+    projects.forEach(project => {
+        const item = document.createElement('div');
+        item.className = 'portfolio-item';
+        item.innerHTML = `
+            <img src="${project.thumbnail}" alt="${project.title}">
+            <div class="portfolio-overlay">
+                <span class="portfolio-category">${project.category}</span>
+                <h3 class="portfolio-title">${project.title}</h3>
+                <span class="portfolio-client">${project.client}</span>
+            </div>
+        `;
+        item.addEventListener('click', () => openProjectModal(project));
+        marquee.appendChild(item);
+    });
+}
+
+function openProjectModal(project) {
+    const modal = document.getElementById('projectModal');
+    const content = document.getElementById('projectModalContent');
+
+    // Behance-style template
+    content.innerHTML = `
+        <div class="project-header">
+            <span class="section-badge">${project.category}</span>
+            <h1>${project.title}</h1>
+            <div class="project-meta">
+                <span><strong>Cliente</strong> ${project.client}</span>
+                <span><strong>Fecha</strong> ${new Date(project.date || Date.now()).toLocaleDateString()}</span>
+                <span><strong>Servicio</strong> ${project.category}</span>
+            </div>
+        </div>
+
+        <div class="project-description">
+            <p>${project.description}</p>
+        </div>
+
+        <img src="${project.thumbnail}" alt="${project.title}" class="project-main-image">
+
+        <div class="project-gallery">
+            ${(project.images || []).map(img => `
+                <img src="${img.url}" alt="${img.caption || ''}">
+            `).join('')}
+        </div>
+
+        <div class="project-footer">
+            <h2>¿Te gusta lo que ves?</h2>
+            <p>Hablemos sobre tu próximo proyecto</p>
+            <a href="#whatsapp" class="btn btn-primary" onclick="closeProjectModalFunc()">Contactar por WhatsApp</a>
+        </div>
+    `;
+
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden'; // Prevent scroll
+}
+
+function closeProjectModalFunc() {
+    const modal = document.getElementById('projectModal');
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+// Modal event listeners
+document.addEventListener('DOMContentLoaded', () => {
+    const closeBtn = document.getElementById('closeProjectModal');
+    const overlay = document.querySelector('.project-modal-overlay');
+
+    if (closeBtn) closeBtn.addEventListener('click', closeProjectModalFunc);
+    if (overlay) overlay.addEventListener('click', closeProjectModalFunc);
 });
 
 // ===================================

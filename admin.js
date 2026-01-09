@@ -2,9 +2,12 @@
 // State Management
 // ===================================
 let products = [];
-let currentFilter = 'all';
+let projects = [];
+let activeSection = 'catalog';
 let editingProductId = null;
-let deletingProductId = null;
+let editingProjectId = null;
+let deletingId = null;
+let deletingType = null; // 'product' or 'project'
 
 // ===================================
 // Preloader & Custom Cursor Logic
@@ -51,26 +54,39 @@ const loginForm = document.getElementById('loginForm');
 const loginError = document.getElementById('loginError');
 const btnLogout = document.getElementById('btnLogout');
 const btnAddProduct = document.getElementById('btnAddProduct');
+const btnAddProject = document.getElementById('btnAddProject');
+
+// Section elements
+const catalogSection = document.getElementById('catalogSection');
+const portfolioSection = document.getElementById('portfolioSection');
+const navItems = document.querySelectorAll('.nav-item');
 
 // Modal elements
 const productModal = document.getElementById('productModal');
+const projectFormModal = document.getElementById('projectFormModal');
 const deleteModal = document.getElementById('deleteModal');
 const productForm = document.getElementById('productForm');
+const projectForm = document.getElementById('projectForm');
 const modalTitle = document.getElementById('modalTitle');
+const projectModalTitle = document.getElementById('projectModalTitle');
 const modalClose = document.getElementById('modalClose');
+const projectModalClose = document.getElementById('projectModalClose');
 const btnCancelProduct = document.getElementById('btnCancelProduct');
+const btnCancelProject = document.getElementById('btnCancelProject');
 const deleteModalClose = document.getElementById('deleteModalClose');
 const btnCancelDelete = document.getElementById('btnCancelDelete');
 const btnConfirmDelete = document.getElementById('btnConfirmDelete');
-const deleteProductName = document.getElementById('deleteProductName');
+const deleteItemName = document.getElementById('deleteItemName');
 
 // Stats elements
 const totalProductsEl = document.getElementById('totalProducts');
 const digitalProductsEl = document.getElementById('digitalProducts');
 const physicalProductsEl = document.getElementById('physicalProducts');
+const totalProjectsEl = document.getElementById('totalProjects');
 
-// Products grid
+// Grids
 const adminProductsGrid = document.getElementById('adminProductsGrid');
+const adminProjectsGrid = document.getElementById('adminProjectsGrid');
 
 // Filter buttons
 const filterBtns = document.querySelectorAll('.filter-btn');
@@ -108,7 +124,10 @@ function showLogin() {
 async function showDashboard() {
     loginScreen.style.display = 'none';
     adminDashboard.style.display = 'flex';
-    await fetchAndRenderProducts();
+    await Promise.all([
+        fetchAndRenderProducts(),
+        fetchAndRenderProjects()
+    ]);
 }
 
 async function handleLogin(email, password) {
@@ -131,19 +150,71 @@ function logout() {
 }
 
 // ===================================
-// Products CRUD
+// CRUD Logic - Products
 // ===================================
 async function fetchAndRenderProducts() {
     try {
         adminProductsGrid.innerHTML = '<div class="loader">Loading...</div>';
         const response = await api.getProducts();
-        products = response.data;
+        products = response.data || [];
         renderProducts();
         updateStats();
     } catch (error) {
         console.error('Error fetching products:', error);
         adminProductsGrid.innerHTML = 'Error loading products';
     }
+}
+
+// ===================================
+// CRUD Logic - Projects
+// ===================================
+async function fetchAndRenderProjects() {
+    try {
+        adminProjectsGrid.innerHTML = '<div class="loader">Loading...</div>';
+        const response = await api.getProjects();
+        projects = response.data || [];
+        renderProjects();
+        updateStats();
+    } catch (error) {
+        console.error('Error fetching projects:', error);
+        adminProjectsGrid.innerHTML = 'Error loading projects';
+    }
+}
+
+async function saveProject(projectData) {
+    try {
+        if (editingProjectId) {
+            await api.updateProject(editingProjectId, projectData);
+            alert('Proyecto actualizado');
+        } else {
+            await api.createProject(projectData);
+            alert('Proyecto creado');
+        }
+        await fetchAndRenderProjects();
+        closeProjectModal();
+    } catch (error) {
+        alert('Error al guardar proyecto: ' + error.message);
+    }
+}
+
+async function deleteItemAction() {
+    if (!deletingId) return;
+    try {
+        const res = deletingType === 'product'
+            ? await api.deleteProduct(deletingId)
+            : await api.deleteProject(deletingId);
+
+        if (res.success) {
+            setTimeout(async () => {
+                if (deletingType === 'product') await fetchAndRenderProducts();
+                else await fetchAndRenderProjects();
+                alert('Eliminado con éxito');
+            }, 500);
+        }
+    } catch (error) {
+        alert('Error al eliminar: ' + error.message);
+    }
+    closeDeleteModal();
 }
 
 async function addProduct(productData) {
@@ -192,56 +263,67 @@ function getProduct(id) {
 // UI Rendering
 // ===================================
 function renderProducts() {
-    const filteredProducts = currentFilter === 'all'
+    const filter = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
+    const mappedFilter = filter === 'fisico' ? 'physical' : filter;
+
+    const filteredProducts = mappedFilter === 'all'
         ? products
-        : products.filter(p => p.category === currentFilter);
+        : products.filter(p => p.category === mappedFilter);
 
     if (filteredProducts.length === 0) {
-        adminProductsGrid.innerHTML = '<div class="no-products">No matches found</div>';
+        adminProductsGrid.innerHTML = '<div class="no-products">No se encontraron productos</div>';
         return;
     }
 
     adminProductsGrid.innerHTML = filteredProducts.map(product => {
-        // Handle MongoDB _id
         const productId = product._id || product.id;
-        // Determine icon or image
         const imageContent = product.images && product.images.length > 0 && product.images[0].url
             ? `<img src="${product.images[0].url}" alt="${product.name}">`
             : `<span>${getProductIcon(product)}</span>`;
-
-        // Handle category display
-        const categoryLabel = product.category === 'digital' ? 'Digital' : 'Físico';
-        const categoryClass = product.category;
 
         return `
         <div class="admin-product-card" data-id="${productId}">
             <div class="admin-product-image" style="background: ${getGradient(product.category, productId)}">
                 ${imageContent}
-                <span class="category-badge ${categoryClass}">${categoryLabel}</span>
+                <span class="category-badge ${product.category}">${product.category === 'digital' ? 'Digital' : 'Físico'}</span>
             </div>
             <div class="admin-product-info">
                 <h3>${product.name}</h3>
                 <p>${product.description}</p>
                 <div class="admin-product-price">Desde $${product.price}</div>
                 <div class="admin-product-actions">
-                    <button class="btn-edit" onclick="openEditModal('${productId}')">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                        </svg>
-                        Editar
-                    </button>
-                    <button class="btn-delete" onclick="openDeleteModal('${productId}')">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="3 6 5 6 21 6"></polyline>
-                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                        </svg>
-                        Eliminar
-                    </button>
+                    <button class="btn-edit" onclick="openEditModal('${productId}')">Editar</button>
+                    <button class="btn-delete" onclick="openDeleteModal('${productId}', 'product', '${product.name}')">Eliminar</button>
                 </div>
             </div>
-        </div>
-    `}).join('');
+        </div>`;
+    }).join('');
+}
+
+function renderProjects() {
+    if (projects.length === 0) {
+        adminProjectsGrid.innerHTML = '<div class="no-products">No hay proyectos en el portafolio</div>';
+        return;
+    }
+
+    adminProjectsGrid.innerHTML = projects.map(project => {
+        const projectId = project._id || project.id;
+        return `
+        <div class="admin-product-card" data-id="${projectId}">
+            <div class="admin-product-image">
+                <img src="${project.thumbnail}" alt="${project.title}">
+                <span class="category-badge digital">${project.category}</span>
+            </div>
+            <div class="admin-product-info">
+                <h3>${project.title}</h3>
+                <p><strong>Cliente:</strong> ${project.client}</p>
+                <div class="admin-product-actions">
+                    <button class="btn-edit" onclick="openEditProjectModal('${projectId}')">Editar</button>
+                    <button class="btn-delete" onclick="openDeleteModal('${projectId}', 'project', '${project.title}')">Eliminar</button>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
 }
 
 function getProductIcon(product) {
@@ -278,12 +360,25 @@ function getGradient(category, id) {
 }
 
 function updateStats() {
-    const digitalCount = products.filter(p => p.category === 'digital').length;
-    const physicalCount = products.filter(p => p.category === 'physical' || p.category === 'fisico').length;
-
     totalProductsEl.textContent = products.length;
-    digitalProductsEl.textContent = digitalCount;
-    physicalProductsEl.textContent = physicalCount;
+    digitalProductsEl.textContent = products.filter(p => p.category === 'digital').length;
+    physicalProductsEl.textContent = products.filter(p => p.category === 'physical').length;
+    totalProjectsEl.textContent = projects.length;
+}
+
+function switchSection(section) {
+    activeSection = section;
+    navItems.forEach(item => {
+        item.classList.toggle('active', item.dataset.section === section);
+    });
+
+    if (section === 'catalog') {
+        catalogSection.style.display = 'block';
+        portfolioSection.style.display = 'none';
+    } else {
+        catalogSection.style.display = 'none';
+        portfolioSection.style.display = 'block';
+    }
 }
 
 // ===================================
@@ -294,6 +389,36 @@ function openAddModal() {
     modalTitle.textContent = 'Agregar Producto';
     productForm.reset();
     productModal.classList.add('active');
+}
+
+function openAddProjectModal() {
+    editingProjectId = null;
+    projectModalTitle.textContent = 'Agregar Proyecto';
+    projectForm.reset();
+    projectFormModal.classList.add('active');
+}
+
+function openEditProjectModal(id) {
+    editingProjectId = id;
+    const project = projects.find(p => p._id === id || p.id === id);
+    if (!project) return;
+
+    projectModalTitle.textContent = 'Editar Proyecto';
+    document.getElementById('editProjectId').value = project._id;
+    document.getElementById('pTitle').value = project.title;
+    document.getElementById('pClient').value = project.client;
+    document.getElementById('pCategory').value = project.category;
+    document.getElementById('pDescription').value = project.description;
+    document.getElementById('pThumbnail').value = project.thumbnail;
+
+    const galleryUrls = (project.images || []).map(img => img.url).join(', ');
+    document.getElementById('pImageGallery').value = galleryUrls;
+
+    projectFormModal.classList.add('active');
+}
+
+function closeProjectModal() {
+    projectFormModal.classList.remove('active');
 }
 
 function openEditModal(id) {
@@ -319,18 +444,17 @@ function closeProductModal() {
     productForm.reset();
 }
 
-function openDeleteModal(id) {
-    deletingProductId = id;
-    const product = getProduct(id);
-    if (!product) return;
-
-    deleteProductName.textContent = product.name;
+function openDeleteModal(id, type, name) {
+    deletingId = id;
+    deletingType = type;
+    deleteItemName.textContent = name;
     deleteModal.classList.add('active');
 }
 
 function closeDeleteModal() {
     deleteModal.classList.remove('active');
-    deletingProductId = null;
+    deletingId = null;
+    deletingType = null;
 }
 
 // ===================================
@@ -358,11 +482,25 @@ function setupEventListeners() {
     // Add product button
     btnAddProduct.addEventListener('click', openAddModal);
 
+    // Navigation
+    navItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            const section = item.dataset.section;
+            if (section) switchSection(section);
+        });
+    });
+
     // Modal close buttons
     modalClose.addEventListener('click', closeProductModal);
     btnCancelProduct.addEventListener('click', closeProductModal);
+    projectModalClose.addEventListener('click', closeProjectModal);
+    btnCancelProject.addEventListener('click', closeProjectModal);
     deleteModalClose.addEventListener('click', closeDeleteModal);
     btnCancelDelete.addEventListener('click', closeDeleteModal);
+
+    btnAddProduct.addEventListener('click', openAddModal);
+    btnAddProject.addEventListener('click', openAddProjectModal);
 
     // Product form submit
     productForm.addEventListener('submit', (e) => {
@@ -395,13 +533,25 @@ function setupEventListeners() {
         closeProductModal();
     });
 
-    // Delete confirm
-    btnConfirmDelete.addEventListener('click', () => {
-        if (deletingProductId) {
-            deleteProductAction(deletingProductId);
-            closeDeleteModal();
-        }
+    projectForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const galleryRaw = document.getElementById('pImageGallery').value;
+        const images = galleryRaw.split(',').map(url => ({ url: url.trim() })).filter(img => img.url);
+
+        const projectData = {
+            title: document.getElementById('pTitle').value,
+            client: document.getElementById('pClient').value,
+            category: document.getElementById('pCategory').value,
+            description: document.getElementById('pDescription').value,
+            thumbnail: document.getElementById('pThumbnail').value,
+            images: images
+        };
+
+        saveProject(projectData);
     });
+
+    // Delete confirm
+    btnConfirmDelete.addEventListener('click', deleteItemAction);
 
     // Filter buttons
     filterBtns.forEach(btn => {

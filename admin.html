@@ -76,6 +76,14 @@
                     </svg>
                     Catálogo
                 </a>
+                <a href="#" class="nav-item" data-section="portfolio">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                    </svg>
+                    Portafolio
+                </a>
                 <a href="index.html" class="nav-item">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
@@ -110,43 +118,73 @@
                 </button>
             </header>
 
-            <!-- Product Stats -->
-            <div class="admin-stats">
-                <div class="stat-card">
-                    <div class="stat-icon digital">📦</div>
-                    <div class="stat-info">
-                        <span class="stat-number" id="totalProducts">0</span>
-                        <span class="stat-label">Total Productos</span>
+            <!-- Catalog Section -->
+            <div id="catalogSection">
+                <div class="admin-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon digital">📦</div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="totalProducts">0</span>
+                            <span class="stat-label">Total Productos</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon digital">💻</div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="digitalProducts">0</span>
+                            <span class="stat-label">Digitales</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon physical">📄</div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="physicalProducts">0</span>
+                            <span class="stat-label">Físicos</span>
+                        </div>
                     </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon digital">💻</div>
-                    <div class="stat-info">
-                        <span class="stat-number" id="digitalProducts">0</span>
-                        <span class="stat-label">Digitales</span>
+
+                <div class="admin-section">
+                    <div class="section-header">
+                        <h2>Productos</h2>
+                        <div class="filter-buttons">
+                            <button class="filter-btn active" data-filter="all">Todos</button>
+                            <button class="filter-btn" data-filter="digital">Digitales</button>
+                            <button class="filter-btn" data-filter="fisico">Físicos</button>
+                        </div>
                     </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon physical">📄</div>
-                    <div class="stat-info">
-                        <span class="stat-number" id="physicalProducts">0</span>
-                        <span class="stat-label">Físicos</span>
+                    <div class="products-grid" id="adminProductsGrid">
+                        <!-- Products will be loaded here dynamically -->
                     </div>
                 </div>
             </div>
 
-            <!-- Products Table -->
-            <div class="admin-section">
-                <div class="section-header">
-                    <h2>Productos</h2>
-                    <div class="filter-buttons">
-                        <button class="filter-btn active" data-filter="all">Todos</button>
-                        <button class="filter-btn" data-filter="digital">Digitales</button>
-                        <button class="filter-btn" data-filter="fisico">Físicos</button>
+            <!-- Portfolio Section -->
+            <div id="portfolioSection" style="display: none;">
+                <div class="admin-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon digital">🎨</div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="totalProjects">0</span>
+                            <span class="stat-label">Total Proyectos</span>
+                        </div>
                     </div>
                 </div>
-                <div class="products-grid" id="adminProductsGrid">
-                    <!-- Products will be loaded here dynamically -->
+
+                <div class="admin-section">
+                    <div class="section-header">
+                        <h2>Proyectos en Portafolio</h2>
+                        <button class="btn btn-primary" id="btnAddProject">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            Agregar Proyecto
+                        </button>
+                    </div>
+                    <div class="products-grid" id="adminProjectsGrid">
+                        <!-- Projects will be loaded here dynamically -->
+                    </div>
                 </div>
             </div>
         </main>
@@ -199,6 +237,51 @@
         </div>
     </div>
 
+    <!-- Add/Edit Project Modal -->
+    <div class="modal" id="projectFormModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="projectModalTitle">Agregar Proyecto</h2>
+                <button class="modal-close" id="projectModalClose">&times;</button>
+            </div>
+            <form class="modal-form" id="projectForm">
+                <input type="hidden" id="editProjectId">
+                <div class="form-group">
+                    <label for="pTitle">Título del Proyecto</label>
+                    <input type="text" id="pTitle" required placeholder="Ej: Rediseño Nebula">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pClient">Cliente</label>
+                        <input type="text" id="pClient" required placeholder="Ej: Nebula Coffee">
+                    </div>
+                    <div class="form-group">
+                        <label for="pCategory">Categoría</label>
+                        <input type="text" id="pCategory" required placeholder="Ej: Branding">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="pDescription">Descripción</label>
+                    <textarea id="pDescription" required placeholder="Describe el trabajo realizado..."
+                        rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="pThumbnail">URL de Miniatura (Thumb)</label>
+                    <input type="url" id="pThumbnail" required placeholder="https://ejemplo.com/thumb.jpg">
+                </div>
+                <div class="form-group">
+                    <label for="pImageGallery">Galería de imágenes (URLs separadas por coma)</label>
+                    <textarea id="pImageGallery" placeholder="URL1, URL2, URL3" rows="2"></textarea>
+                    <small class="form-hint">Máximo 10 imágenes</small>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="btnCancelProject">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Proyecto</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Delete Confirmation Modal -->
     <div class="modal" id="deleteModal">
         <div class="modal-content modal-small">
@@ -207,8 +290,8 @@
                 <button class="modal-close" id="deleteModalClose">&times;</button>
             </div>
             <div class="modal-body">
-                <p>¿Estás seguro de que deseas eliminar este producto?</p>
-                <p class="delete-product-name" id="deleteProductName"></p>
+                <p id="deleteModalMessage">¿Estás seguro de que deseas eliminar este elemento?</p>
+                <p class="delete-product-name" id="deleteItemName"></p>
                 <p class="warning-text">Esta acción no se puede deshacer.</p>
             </div>
             <div class="modal-footer">

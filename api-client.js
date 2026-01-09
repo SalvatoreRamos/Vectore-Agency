@@ -115,6 +115,31 @@ class VectoreAPI {
         });
     }
 
+    // Projects (Portfolio)
+    async getProjects() {
+        return this.request('/projects');
+    }
+
+    async createProject(projectData) {
+        return this.request('/projects', {
+            method: 'POST',
+            body: JSON.stringify(projectData)
+        });
+    }
+
+    async updateProject(id, projectData) {
+        return this.request(`/projects/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify(projectData)
+        });
+    }
+
+    async deleteProject(id) {
+        return this.request(`/projects/${id}`, {
+            method: 'DELETE'
+        });
+    }
+
     async getFeaturedProducts() {
         return this.request('/products/featured/list');
     }
