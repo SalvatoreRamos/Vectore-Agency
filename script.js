@@ -10,7 +10,55 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Load portfolio projects
     loadProjects();
+
+    // Load testimonials
+    loadTestimonials();
 });
+
+// ===================================
+// Testimonials Logic
+// ===================================
+async function loadTestimonials() {
+    const grid = document.getElementById('testimonialsGrid');
+    if (!grid) return;
+
+    try {
+        const response = await api.getTestimonials();
+        const testimonials = response.data || [];
+
+        if (testimonials.length === 0) {
+            // Dummy testimonials to show visual potential
+            const dummy = [
+                { clientName: 'Ana Ruiz', businessName: 'Café Lavanda', comment: '¡Increíble trabajo con mi logo y redes! La gente ahora me reconoce en toda la ciudad.', photo: 'https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg' },
+                { clientName: 'Juan Pérez', businessName: 'Taller Mecánico JP', comment: 'Los flyers y la publicidad exterior que hicieron atrajeron muchos clientes nuevos este mes.', photo: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg' },
+                { clientName: 'Elena Soto', businessName: 'Sport Fit', comment: 'Mi web ahora es súper rápida y mis clientes pueden agendar clases sin problemas.', photo: 'https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg' }
+            ];
+            renderTestimonials(dummy);
+        } else {
+            renderTestimonials(testimonials);
+        }
+    } catch (error) {
+        console.error('Error loading testimonials:', error);
+    }
+}
+
+function renderTestimonials(testimonials) {
+    const grid = document.getElementById('testimonialsGrid');
+    grid.innerHTML = testimonials.map(t => `
+        <div class="testimonial-card reveal">
+            <div class="testimonial-image">
+                <img src="${t.photo}" alt="${t.clientName}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x300?text=Vectore+Client'">
+            </div>
+            <div class="testimonial-content">
+                <p class="testimonial-comment">"${t.comment}"</p>
+            </div>
+            <div class="testimonial-footer">
+                <span class="testimonial-business">${t.businessName}</span>
+                <span class="testimonial-client">${t.clientName}</span>
+            </div>
+        </div>
+    `).join('');
+}
 
 // ===================================
 // Portfolio & Project Modal

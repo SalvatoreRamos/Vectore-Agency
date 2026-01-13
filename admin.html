@@ -84,6 +84,14 @@
                     </svg>
                     Portafolio
                 </a>
+                <a href="#" class="nav-item" data-section="testimonials">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon
+                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                        </polygon>
+                    </svg>
+                    Clientes Destacados
+                </a>
                 <a href="index.html" class="nav-item">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
@@ -187,6 +195,35 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Testimonials Section -->
+            <div id="testimonialsSection" style="display: none;">
+                <div class="admin-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon digital">⭐</div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="totalTestimonials">0</span>
+                            <span class="stat-label">Clientes Destacados</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-section">
+                    <div class="section-header">
+                        <h2>Clientes Destacados</h2>
+                        <button class="btn btn-primary" id="btnAddTestimonial">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            Agregar Cliente
+                        </button>
+                    </div>
+                    <div class="products-grid" id="adminTestimonialsGrid">
+                        <!-- Testimonials will be loaded here dynamically -->
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 
@@ -285,6 +322,45 @@
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" id="btnCancelProject">Cancelar</button>
                     <button type="submit" class="btn btn-primary">Guardar Proyecto</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add/Edit Testimonial Modal -->
+    <div class="modal" id="testimonialModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="testimonialModalTitle">Agregar Cliente Destacado</h2>
+                <button class="modal-close" id="testimonialModalClose">&times;</button>
+            </div>
+            <form class="modal-form" id="testimonialForm">
+                <input type="hidden" id="editTestimonialId">
+                <div class="form-group">
+                    <label for="tClientName">Nombre del Cliente</label>
+                    <input type="text" id="tClientName" required placeholder="Ej: María García">
+                </div>
+                <div class="form-group">
+                    <label for="tBusinessName">Nombre del Negocio</label>
+                    <input type="text" id="tBusinessName" required placeholder="Ej: Café El Sol">
+                </div>
+                <div class="form-group">
+                    <label for="tComment">Comentario / Testimonio</label>
+                    <textarea id="tComment" required placeholder="Su experiencia con nuestro servicio..." rows="3"
+                        maxlength="300"></textarea>
+                    <small class="form-hint">Máximo 300 caracteres</small>
+                </div>
+                <div class="form-group">
+                    <label>Foto del Cliente con su Producto</label>
+                    <div class="file-upload-area">
+                        <input type="file" id="tPhotoFile" accept="image/*" class="form-control">
+                        <small class="form-hint">O pega un enlace:</small>
+                        <input type="url" id="tPhoto" required placeholder="https://ejemplo.com/foto.jpg">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="btnCancelTestimonial">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Cliente</button>
                 </div>
             </form>
         </div>

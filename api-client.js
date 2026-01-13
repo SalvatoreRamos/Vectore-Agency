@@ -31,7 +31,7 @@ class VectoreAPI {
 
     // Get headers with auth token
     getHeaders(customHeaders = {}) {
-        const headers = { ...API_CONFIG.headers, ...customHeaders };
+        const headers = { ...customHeaders };
         if (this.token) {
             headers['Authorization'] = `Bearer ${this.token}`;
         }
@@ -41,9 +41,17 @@ class VectoreAPI {
     // Generic request method
     async request(endpoint, options = {}) {
         const url = `${this.baseURL}${endpoint}`;
+
+        const headers = this.getHeaders(options.headers || {});
+
+        // Add JSON content type if body is object and not FormData
+        if (options.body && !(options.body instanceof FormData) && !headers['Content-Type']) {
+            headers['Content-Type'] = 'application/json';
+        }
+
         const config = {
             ...options,
-            headers: this.getHeaders(options.headers)
+            headers
         };
 
         try {
@@ -146,6 +154,35 @@ class VectoreAPI {
 
     async getProductsByCategory(category) {
         return this.request(`/products/category/${category}`);
+    }
+
+    // Testimonials
+    async getTestimonials() {
+        return this.request('/testimonials');
+    }
+
+    async getAllTestimonials() {
+        return this.request('/testimonials/all');
+    }
+
+    async createTestimonial(testimonialData) {
+        return this.request('/testimonials', {
+            method: 'POST',
+            body: JSON.stringify(testimonialData)
+        });
+    }
+
+    async updateTestimonial(id, testimonialData) {
+        return this.request(`/testimonials/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify(testimonialData)
+        });
+    }
+
+    async deleteTestimonial(id) {
+        return this.request(`/testimonials/${id}`, {
+            method: 'DELETE'
+        });
     }
 
     // La creación de órdenes y procesamiento de pagos han sido removidos.

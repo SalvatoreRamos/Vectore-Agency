@@ -12,6 +12,7 @@ import authRoutes from './routes/auth.js';
 import productRoutes from './routes/products.js';
 import uploadRoutes from './routes/upload.js';
 import projectRoutes from './routes/projects.js';
+import testimonialRoutes from './routes/testimonials.js';
 
 // Load environment variables
 dotenv.config();
@@ -66,6 +67,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/testimonials', testimonialRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

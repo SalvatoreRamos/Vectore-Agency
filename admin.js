@@ -3,11 +3,13 @@
 // ===================================
 let products = [];
 let projects = [];
+let testimonials = [];
 let activeSection = 'catalog';
 let editingProductId = null;
 let editingProjectId = null;
+let editingTestimonialId = null;
 let deletingId = null;
-let deletingType = null; // 'product' or 'project'
+let deletingType = null; // 'product', 'project', or 'testimonial'
 
 // Global helper for event delegation
 function getTargetData(e, className) {
@@ -66,24 +68,31 @@ const loginError = document.getElementById('loginError');
 const btnLogout = document.getElementById('btnLogout');
 const btnAddProduct = document.getElementById('btnAddProduct');
 const btnAddProject = document.getElementById('btnAddProject');
+const btnAddTestimonial = document.getElementById('btnAddTestimonial');
 
 // Section elements
 const catalogSection = document.getElementById('catalogSection');
 const portfolioSection = document.getElementById('portfolioSection');
+const testimonialsSection = document.getElementById('testimonialsSection');
 const navItems = document.querySelectorAll('.nav-item');
 
 // Modal elements
 const productModal = document.getElementById('productModal');
 const projectFormModal = document.getElementById('projectFormModal');
+const testimonialModal = document.getElementById('testimonialModal');
 const deleteModal = document.getElementById('deleteModal');
 const productForm = document.getElementById('productForm');
 const projectForm = document.getElementById('projectForm');
+const testimonialForm = document.getElementById('testimonialForm');
 const modalTitle = document.getElementById('modalTitle');
 const projectModalTitle = document.getElementById('projectModalTitle');
+const testimonialModalTitle = document.getElementById('testimonialModalTitle');
 const modalClose = document.getElementById('modalClose');
 const projectModalClose = document.getElementById('projectModalClose');
+const testimonialModalClose = document.getElementById('testimonialModalClose');
 const btnCancelProduct = document.getElementById('btnCancelProduct');
 const btnCancelProject = document.getElementById('btnCancelProject');
+const btnCancelTestimonial = document.getElementById('btnCancelTestimonial');
 const deleteModalClose = document.getElementById('deleteModalClose');
 const btnCancelDelete = document.getElementById('btnCancelDelete');
 const btnConfirmDelete = document.getElementById('btnConfirmDelete');
@@ -93,9 +102,11 @@ const deleteItemName = document.getElementById('deleteItemName');
 const productFile = document.getElementById('productFile');
 const pThumbFile = document.getElementById('pThumbFile');
 const pGalleryFiles = document.getElementById('pGalleryFiles');
+const tPhotoFile = document.getElementById('tPhotoFile');
 const productImageInput = document.getElementById('productImage');
 const pThumbnailInput = document.getElementById('pThumbnail');
 const pImageGalleryInput = document.getElementById('pImageGallery');
+const tPhotoInput = document.getElementById('tPhoto');
 
 // Stats elements
 const totalProductsEl = document.getElementById('totalProducts');
@@ -145,7 +156,8 @@ async function showDashboard() {
     adminDashboard.style.display = 'flex';
     await Promise.all([
         fetchAndRenderProducts(),
-        fetchAndRenderProjects()
+        fetchAndRenderProjects(),
+        fetchAndRenderTestimonials()
     ]);
 }
 
@@ -228,17 +240,115 @@ async function saveProject(projectData) {
     }
 }
 
+// ===================================
+// CRUD Logic - Testimonials
+// ===================================
+async function fetchAndRenderTestimonials() {
+    try {
+        const grid = document.getElementById('adminTestimonialsGrid');
+        grid.innerHTML = '<div class="loader">Loading...</div>';
+        const response = await api.getAllTestimonials();
+        testimonials = response.data || [];
+        renderTestimonials();
+        updateStats();
+    } catch (error) {
+        console.error('Error fetching testimonials:', error);
+        document.getElementById('adminTestimonialsGrid').innerHTML = 'Error loading testimonials';
+    }
+}
+
+function renderTestimonials() {
+    const grid = document.getElementById('adminTestimonialsGrid');
+    grid.innerHTML = '';
+
+    if (testimonials.length === 0) {
+        grid.innerHTML = '<p style="color: var(--text-muted); padding: 2rem;">No hay clientes destacados aún.</p>';
+        return;
+    }
+
+    testimonials.forEach(t => {
+        const card = document.createElement('div');
+        card.className = 'admin-product-card';
+        card.dataset.id = t._id;
+        card.dataset.name = t.clientName;
+        card.innerHTML = `
+            <div class="admin-product-image">
+                <img src="${t.photo}" alt="${t.clientName}" onerror="this.src='https://via.placeholder.com/300x200?text=Sin+Foto'">
+            </div>
+            <div class="admin-product-info">
+                <h3>${t.clientName}</h3>
+                <p class="product-category">${t.businessName}</p>
+                <p class="product-description">"${t.comment.substring(0, 60)}${t.comment.length > 60 ? '...' : ''}"</p>
+            </div>
+            <div class="admin-product-actions">
+                <button class="btn-edit">Editar</button>
+                <button class="btn-delete">Eliminar</button>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+async function saveTestimonial(testimonialData) {
+    try {
+        if (editingTestimonialId) {
+            await api.updateTestimonial(editingTestimonialId, testimonialData);
+            alert('Cliente actualizado');
+        } else {
+            await api.createTestimonial(testimonialData);
+            alert('Cliente agregado');
+        }
+        await fetchAndRenderTestimonials();
+        closeTestimonialModal();
+    } catch (error) {
+        alert('Error al guardar cliente: ' + error.message);
+    }
+}
+
+function openAddTestimonialModal() {
+    testimonialModalTitle.textContent = 'Agregar Cliente Destacado';
+    editingTestimonialId = null;
+    testimonialForm.reset();
+    testimonialModal.classList.add('active');
+}
+
+function openEditTestimonialModal(id) {
+    const testimonial = testimonials.find(t => t._id === id);
+    if (!testimonial) return;
+
+    testimonialModalTitle.textContent = 'Editar Cliente Destacado';
+    editingTestimonialId = id;
+    document.getElementById('editTestimonialId').value = id;
+    document.getElementById('tClientName').value = testimonial.clientName;
+    document.getElementById('tBusinessName').value = testimonial.businessName;
+    document.getElementById('tComment').value = testimonial.comment;
+    document.getElementById('tPhoto').value = testimonial.photo;
+    testimonialModal.classList.add('active');
+}
+
+function closeTestimonialModal() {
+    testimonialModal.classList.remove('active');
+    editingTestimonialId = null;
+    testimonialForm.reset();
+}
+
 async function deleteItemAction() {
     if (!deletingId) return;
     try {
-        const res = deletingType === 'product'
-            ? await api.deleteProduct(deletingId)
-            : await api.deleteProject(deletingId);
+        let res;
+        if (deletingType === 'product') {
+            res = await api.deleteProduct(deletingId);
+        } else if (deletingType === 'project') {
+            res = await api.deleteProject(deletingId);
+        } else if (deletingType === 'testimonial') {
+            res = await api.deleteTestimonial(deletingId);
+        }
 
         if (res.success) {
             setTimeout(async () => {
                 if (deletingType === 'product') await fetchAndRenderProducts();
-                else await fetchAndRenderProjects();
+                else if (deletingType === 'project') await fetchAndRenderProjects();
+                else if (deletingType === 'testimonial') await fetchAndRenderTestimonials();
                 alert('Eliminado con éxito');
             }, 500);
         }
@@ -395,6 +505,9 @@ function updateStats() {
     digitalProductsEl.textContent = products.filter(p => p.category === 'digital').length;
     physicalProductsEl.textContent = products.filter(p => p.category === 'physical').length;
     totalProjectsEl.textContent = projects.length;
+    if (document.getElementById('totalTestimonials')) {
+        document.getElementById('totalTestimonials').textContent = testimonials.length;
+    }
 }
 
 function switchSection(section) {
@@ -403,12 +516,10 @@ function switchSection(section) {
         item.classList.toggle('active', item.dataset.section === section);
     });
 
-    if (section === 'catalog') {
-        catalogSection.style.display = 'block';
-        portfolioSection.style.display = 'none';
-    } else {
-        catalogSection.style.display = 'none';
-        portfolioSection.style.display = 'block';
+    catalogSection.style.display = section === 'catalog' ? 'block' : 'none';
+    portfolioSection.style.display = section === 'portfolio' ? 'block' : 'none';
+    if (testimonialsSection) {
+        testimonialsSection.style.display = section === 'testimonials' ? 'block' : 'none';
     }
 }
 
@@ -529,11 +640,14 @@ function setupEventListeners() {
     btnCancelProduct.addEventListener('click', closeProductModal);
     projectModalClose.addEventListener('click', closeProjectModal);
     btnCancelProject.addEventListener('click', closeProjectModal);
+    testimonialModalClose.addEventListener('click', closeTestimonialModal);
+    btnCancelTestimonial.addEventListener('click', closeTestimonialModal);
     deleteModalClose.addEventListener('click', closeDeleteModal);
     btnCancelDelete.addEventListener('click', closeDeleteModal);
 
     btnAddProduct.addEventListener('click', openAddModal);
     btnAddProject.addEventListener('click', openAddProjectModal);
+    btnAddTestimonial.addEventListener('click', openAddTestimonialModal);
 
     // Product form submit
     productForm.addEventListener('submit', (e) => {
@@ -582,6 +696,36 @@ function setupEventListeners() {
 
         saveProject(projectData);
     });
+
+    // Testimonial form submit
+    testimonialForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const testimonialData = {
+            clientName: document.getElementById('tClientName').value,
+            businessName: document.getElementById('tBusinessName').value,
+            comment: document.getElementById('tComment').value,
+            photo: document.getElementById('tPhoto').value
+        };
+
+        saveTestimonial(testimonialData);
+    });
+
+    // Testimonial photo file upload
+    if (tPhotoFile) {
+        tPhotoFile.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            tPhotoInput.value = 'Subiendo...';
+            try {
+                const result = await api.uploadImage(file);
+                tPhotoInput.value = result.url || result.data?.url || '';
+            } catch (error) {
+                alert('Error al subir imagen: ' + error.message);
+                tPhotoInput.value = '';
+            }
+        });
+    }
 
     // Delete confirm
     btnConfirmDelete.addEventListener('click', deleteItemAction);
@@ -636,6 +780,22 @@ function setupEventListeners() {
     projectFormModal.addEventListener('click', (e) => {
         if (e.target === projectFormModal) closeProjectModal();
     });
+
+    testimonialModal.addEventListener('click', (e) => {
+        if (e.target === testimonialModal) closeTestimonialModal();
+    });
+
+    // Testimonial grid delegation
+    const adminTestimonialsGrid = document.getElementById('adminTestimonialsGrid');
+    if (adminTestimonialsGrid) {
+        adminTestimonialsGrid.addEventListener('click', (e) => {
+            const editData = getTargetData(e, '.btn-edit');
+            if (editData) openEditTestimonialModal(editData.id);
+
+            const deleteData = getTargetData(e, '.btn-delete');
+            if (deleteData) openDeleteModal(deleteData.id, 'testimonial', deleteData.name);
+        });
+    }
 
     // File Upload Listeners
     productFile.addEventListener('change', async (e) => {
