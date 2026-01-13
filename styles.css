@@ -1559,11 +1559,11 @@ body:hover .custom-cursor-dot {
     padding: 40px 0;
     cursor: grab;
     -webkit-overflow-scrolling: touch;
-    /* Smooth scroll on iOS */
+    scroll-behavior: smooth;
+    scroll-snap-type: none;
+    /* Aseguramos que no haya snapping */
     scrollbar-width: none;
-    /* Hide scrollbar Firefox */
     -ms-overflow-style: none;
-    /* Hide scrollbar IE/Edge */
 }
 
 .portfolio-marquee-container::-webkit-scrollbar {
@@ -1582,6 +1582,8 @@ body:hover .custom-cursor-dot {
     gap: 30px;
     padding: 0 15px;
     width: max-content;
+    will-change: transform;
+    /* Hint to browser for smoother animation */
 }
 
 .portfolio-marquee.paused {

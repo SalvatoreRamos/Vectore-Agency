@@ -125,15 +125,19 @@ function setupMarqueeInteraction(marquee) {
         marquee.classList.add('paused');
         clearTimeout(resumeTimeout);
         resumeTimeout = setTimeout(() => {
-            marquee.classList.remove('paused');
-        }, 3000); // Resume after 3 seconds of no interaction
+            // Only resume if not dragging or being hovered (optional, keeping current logic)
+            if (!isDown) marquee.classList.remove('paused');
+        }, 3000);
     }
 
-    // Mouse wheel -> horizontal scroll
+    // Mouse wheel -> horizontal scroll with smoothing
     container.addEventListener('wheel', (e) => {
         if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
             e.preventDefault();
-            container.scrollLeft += e.deltaY;
+            container.scrollBy({
+                left: e.deltaY * 1.5, // Increased multiplier for better feel
+                behavior: 'smooth'
+            });
         }
         pauseMarquee();
     }, { passive: false });
@@ -142,6 +146,7 @@ function setupMarqueeInteraction(marquee) {
     container.addEventListener('mousedown', (e) => {
         isDown = true;
         container.style.cursor = 'grabbing';
+        container.classList.add('grabbing');
         startX = e.pageX - container.offsetLeft;
         scrollLeft = container.scrollLeft;
         pauseMarquee();
@@ -150,22 +155,24 @@ function setupMarqueeInteraction(marquee) {
     container.addEventListener('mouseleave', () => {
         isDown = false;
         container.style.cursor = 'grab';
+        container.classList.remove('grabbing');
     });
 
     container.addEventListener('mouseup', () => {
         isDown = false;
         container.style.cursor = 'grab';
+        container.classList.remove('grabbing');
     });
 
     container.addEventListener('mousemove', (e) => {
         if (!isDown) return;
         e.preventDefault();
         const x = e.pageX - container.offsetLeft;
-        const walk = (x - startX) * 2; // Scroll speed multiplier
+        const walk = (x - startX) * 2;
         container.scrollLeft = scrollLeft - walk;
     });
 
-    // Touch events for mobile (native scroll works, just pause animation)
+    // Touch events for mobile
     container.addEventListener('touchstart', pauseMarquee, { passive: true });
     container.addEventListener('touchmove', pauseMarquee, { passive: true });
 }
