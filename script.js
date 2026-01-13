@@ -58,6 +58,32 @@ function renderPortfolioItems(projects) {
         item.addEventListener('click', () => openProjectModal(project));
         marquee.appendChild(item);
     });
+
+    // Setup touch/scroll pause behavior
+    setupMarqueeInteraction(marquee);
+}
+
+// Pause marquee on user interaction (touch/scroll), resume after inactivity
+function setupMarqueeInteraction(marquee) {
+    const container = marquee.closest('.portfolio-marquee-container');
+    if (!container) return;
+
+    let resumeTimeout = null;
+
+    function pauseMarquee() {
+        marquee.style.animationPlayState = 'paused';
+        clearTimeout(resumeTimeout);
+        resumeTimeout = setTimeout(() => {
+            marquee.style.animationPlayState = 'running';
+        }, 3000); // Resume after 3 seconds of no interaction
+    }
+
+    // Touch events for mobile
+    container.addEventListener('touchstart', pauseMarquee, { passive: true });
+    container.addEventListener('touchmove', pauseMarquee, { passive: true });
+
+    // Wheel/scroll events for desktop
+    container.addEventListener('wheel', pauseMarquee, { passive: true });
 }
 
 function openProjectModal(project) {
