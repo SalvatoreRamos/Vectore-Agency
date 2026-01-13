@@ -70,18 +70,24 @@ async function showDashboard() {
 
 function switchSection(section) {
     activeSection = section;
+
+    // Refresh DOM references strictly
+    const secCatalog = document.getElementById('catalogSection');
+    const secPortfolio = document.getElementById('portfolioSection');
+    const secTestimonials = document.getElementById('testimonialsSection');
+    const secEvents = document.getElementById('eventsSection');
+
+    // Update Nav
+    const navItems = document.querySelectorAll('.nav-item');
     navItems.forEach(item => {
         item.classList.toggle('active', item.dataset.section === section);
     });
 
-    catalogSection.style.display = section === 'catalog' ? 'block' : 'none';
-    portfolioSection.style.display = section === 'portfolio' ? 'block' : 'none';
-    if (testimonialsSection) {
-        testimonialsSection.style.display = section === 'testimonials' ? 'block' : 'none';
-    }
-    if (eventsSection) {
-        eventsSection.style.display = section === 'events' ? 'block' : 'none';
-    }
+    // Toggle Visibility
+    if (secCatalog) secCatalog.style.display = section === 'catalog' ? 'block' : 'none';
+    if (secPortfolio) secPortfolio.style.display = section === 'portfolio' ? 'block' : 'none';
+    if (secTestimonials) secTestimonials.style.display = section === 'testimonials' ? 'block' : 'none';
+    if (secEvents) secEvents.style.display = section === 'events' ? 'block' : 'none';
 }
 
 // ===================================
