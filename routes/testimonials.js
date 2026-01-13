@@ -1,6 +1,6 @@
 import express from 'express';
 import Testimonial from '../models/Testimonial.js';
-import { authenticateToken, isAdmin } from '../middleware/auth.js';
+import { authenticate, isAdmin } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
 });
 
 // Get all testimonials (admin)
-router.get('/all', authenticateToken, isAdmin, async (req, res) => {
+router.get('/all', authenticate, isAdmin, async (req, res) => {
     try {
         const testimonials = await Testimonial.find()
             .sort({ order: 1, createdAt: -1 });
@@ -41,7 +41,7 @@ router.get('/all', authenticateToken, isAdmin, async (req, res) => {
 });
 
 // Create testimonial (admin only)
-router.post('/', authenticateToken, isAdmin, async (req, res) => {
+router.post('/', authenticate, isAdmin, async (req, res) => {
     try {
         const testimonial = new Testimonial(req.body);
         await testimonial.save();
@@ -60,7 +60,7 @@ router.post('/', authenticateToken, isAdmin, async (req, res) => {
 });
 
 // Update testimonial (admin only)
-router.put('/:id', authenticateToken, isAdmin, async (req, res) => {
+router.put('/:id', authenticate, isAdmin, async (req, res) => {
     try {
         const testimonial = await Testimonial.findByIdAndUpdate(
             req.params.id,
@@ -88,7 +88,7 @@ router.put('/:id', authenticateToken, isAdmin, async (req, res) => {
 });
 
 // Delete testimonial (admin only)
-router.delete('/:id', authenticateToken, isAdmin, async (req, res) => {
+router.delete('/:id', authenticate, isAdmin, async (req, res) => {
     try {
         const testimonial = await Testimonial.findByIdAndDelete(req.params.id);
         if (!testimonial) {
