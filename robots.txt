@@ -4,4 +4,4 @@ Disallow: /admin.html
 Disallow: /admin.js
 Disallow: /api/
 
-Sitemap: https://vectore-agency.onrender.com/sitemap.xml
+Sitemap: https://agenciavectore.com/sitemap.xml

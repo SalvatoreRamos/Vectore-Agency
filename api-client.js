@@ -2,7 +2,7 @@
 const API_CONFIG = {
     baseURL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
         ? (window.location.port === '3000' ? '/api' : 'http://localhost:3000/api')
-        : 'https://vectore-agency.onrender.com/api',
+        : '/api',
     timeout: 15000,
     headers: {
         'Content-Type': 'application/json'

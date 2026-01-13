@@ -49,7 +49,13 @@ app.use('/api/', limiter);
 
 // CORS configuration
 app.use(cors({
-  origin: [process.env.FRONTEND_URL, 'http://localhost:5500', 'https://vectore-agency.onrender.com'],
+  origin: [
+    process.env.FRONTEND_URL,
+    'http://localhost:5500',
+    'https://vectore-agency.onrender.com',
+    'https://agenciavectore.com',
+    'https://www.agenciavectore.com'
+  ],
   credentials: true
 }));
 
