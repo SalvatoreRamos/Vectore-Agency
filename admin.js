@@ -887,6 +887,15 @@ function closeDeleteModal() {
 // Event Listeners
 // ===================================
 function setupEventListeners() {
+    // Navigation
+    navItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            const section = item.dataset.section;
+            if (section) switchSection(section);
+        });
+    });
+
     // Login form
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
