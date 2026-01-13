@@ -154,6 +154,16 @@ router.put('/:id', authenticate, isAdmin, async (req, res) => {
     }
 });
 
+// Delete Event
+router.delete('/:id', authenticate, isAdmin, async (req, res) => {
+    try {
+        await Event.findByIdAndDelete(req.params.id);
+        res.json({ success: true, message: 'Evento eliminado' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
 // Get Stats/Participants
 router.get('/:id/stats', authenticate, isAdmin, async (req, res) => {
     try {

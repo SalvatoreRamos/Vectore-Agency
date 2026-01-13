@@ -221,6 +221,45 @@ class VectoreAPI {
             headers: {} // Let browser set Content-Type for FormData
         });
     }
+
+    // ===================================
+    // EVENTS ENDPOINTS
+    // ===================================
+    async getEvents() {
+        return this.request('/events', { // Admin route to get all events
+            headers: this.getHeaders()
+        });
+    }
+
+    async createEvent(eventData) {
+        return this.request('/events', {
+            method: 'POST',
+            body: JSON.stringify(eventData),
+            headers: this.getHeaders()
+        });
+    }
+
+    async updateEvent(id, eventData) {
+        return this.request(`/events/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify(eventData),
+            headers: this.getHeaders()
+        });
+    }
+
+    async deleteEvent(id) {
+        return this.request(`/events/${id}`, {
+            method: 'DELETE',
+            headers: this.getHeaders()
+        });
+    }
+
+    async drawWinner(id) {
+        return this.request(`/events/${id}/draw`, {
+            method: 'POST',
+            headers: this.getHeaders()
+        });
+    }
 }
 
 // Create a global instance

@@ -4,12 +4,300 @@
 let products = [];
 let projects = [];
 let testimonials = [];
+let events = [];
 let activeSection = 'catalog';
 let editingProductId = null;
 let editingProjectId = null;
 let editingTestimonialId = null;
+let editingEventId = null;
 let deletingId = null;
-let deletingType = null; // 'product', 'project', or 'testimonial'
+let deletingType = null; // 'product', 'project', 'testimonial', 'event'
+
+// ... (Rest of code)
+
+// Global helper for event delegation
+function getTargetData(e, className) {
+    const card = e.target.closest('.admin-product-card');
+    const btn = e.target.closest(className);
+    if (!card || !btn) return null;
+    return {
+        id: card.dataset.id,
+        name: card.dataset.name
+    };
+}
+
+// ...
+
+// ===================================
+// DOM Elements
+// ===================================
+// ... (Previous DOM elements)
+const catalogSection = document.getElementById('catalogSection');
+const portfolioSection = document.getElementById('portfolioSection');
+const testimonialsSection = document.getElementById('testimonialsSection');
+const eventsSection = document.getElementById('eventsSection');
+
+// Events DOM
+const adminEventsGrid = document.getElementById('adminEventsGrid');
+const eventAdminModal = document.getElementById('eventAdminModal');
+const eventAdminForm = document.getElementById('eventAdminForm');
+const btnAddEvent = document.getElementById('btnAddEvent');
+const btnCancelEvent = document.getElementById('btnCancelEvent');
+const eventAdminModalClose = document.getElementById('eventAdminModalClose');
+
+const drawModal = document.getElementById('drawModal');
+const drawModalClose = document.getElementById('drawModalClose');
+const btnStartDraw = document.getElementById('btnStartDraw');
+const drawAnimation = document.getElementById('drawAnimation');
+const winnerReveal = document.getElementById('winnerReveal');
+let currentDrawEventId = null;
+
+// ===================================
+// Initialize
+// ===================================
+async function showDashboard() {
+    loginScreen.style.display = 'none';
+    adminDashboard.style.display = 'flex';
+    await Promise.all([
+        fetchAndRenderProducts(),
+        fetchAndRenderProjects(),
+        fetchAndRenderTestimonials(),
+        fetchAndRenderEvents()
+    ]);
+}
+
+// ...
+
+function switchSection(section) {
+    activeSection = section;
+    navItems.forEach(item => {
+        item.classList.toggle('active', item.dataset.section === section);
+    });
+
+    catalogSection.style.display = section === 'catalog' ? 'block' : 'none';
+    portfolioSection.style.display = section === 'portfolio' ? 'block' : 'none';
+    if (testimonialsSection) {
+        testimonialsSection.style.display = section === 'testimonials' ? 'block' : 'none';
+    }
+    if (eventsSection) {
+        eventsSection.style.display = section === 'events' ? 'block' : 'none';
+    }
+}
+
+// ===================================
+// CRUD Logic - Events
+// ===================================
+async function fetchAndRenderEvents() {
+    try {
+        adminEventsGrid.innerHTML = '<div class="loader">Loading...</div>';
+        const response = await api.getEvents();
+        events = response.data || [];
+        renderEvents();
+    } catch (error) {
+        console.error('Error fetching events:', error);
+        adminEventsGrid.innerHTML = 'Error loading events';
+    }
+}
+
+function renderEvents() {
+    if (events.length === 0) {
+        adminEventsGrid.innerHTML = '<p class="no-products">No hay eventos creados.</p>';
+        return;
+    }
+
+    adminEventsGrid.innerHTML = events.map(event => {
+        const isActive = event.isActive ? 'active' : 'inactive';
+        const statusLabel = event.isActive ? 'ACTIVO' : 'FINALIZADO';
+        const statusColor = event.isActive ? '#4CAF50' : '#888';
+
+        return `
+        <div class="admin-product-card event-card" data-id="${event._id}" data-name="${event.title}">
+            <div class="event-card-header" style="background: ${statusColor}; color: white; padding: 10px; font-weight: bold; text-align: center;">
+                ${statusLabel}
+            </div>
+            <div class="admin-product-info">
+                <h3>${event.title}</h3>
+                <p><strong>Premio:</strong> ${event.prize}</p>
+                <p><strong>Fin:</strong> ${new Date(event.endDate).toLocaleDateString()}</p>
+                
+                ${event.winner ? `<p class="winner-badge">🏆 Ganador Seleccionado</p>` : ''}
+
+                <div class="admin-product-actions">
+                    <button class="btn-edit">Editar</button>
+                    ${!event.winner ? `<button class="btn-draw" onclick="openDrawModal('${event._id}')">🎲 Sortear</button>` : ''}
+                    <button class="btn-delete">Eliminar</button>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+async function saveEvent(eventData) {
+    try {
+        if (editingEventId) {
+            await api.updateEvent(editingEventId, eventData);
+            alert('Evento actualizado');
+        } else {
+            await api.createEvent(eventData);
+            alert('Evento creado');
+        }
+        await fetchAndRenderEvents();
+        closeEventAdminModal();
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
+}
+
+function openEventAdminModal(id = null) {
+    eventAdminForm.reset();
+    editingEventId = id;
+
+    if (id) {
+        const event = events.find(e => e._id === id);
+        document.getElementById('modalEventTitle').textContent = 'Editar Evento';
+        document.getElementById('eTitle').value = event.title;
+        document.getElementById('eDescription').value = event.description;
+        document.getElementById('ePrize').value = event.prize;
+        // Format date for datetime-local
+        const date = new Date(event.endDate);
+        date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+        document.getElementById('eEndDate').value = date.toISOString().slice(0, 16);
+        document.getElementById('eIsActive').checked = event.isActive;
+    } else {
+        document.getElementById('modalEventTitle').textContent = 'Nuevo Evento';
+    }
+
+    eventAdminModal.classList.add('active');
+}
+
+function closeEventAdminModal() {
+    eventAdminModal.classList.remove('active');
+    editingEventId = null;
+}
+
+// Draw Logic window
+window.openDrawModal = function (id) {
+    currentDrawEventId = id;
+    drawModal.classList.add('active');
+    drawAnimation.style.display = 'flex';
+    winnerReveal.style.display = 'none';
+    btnStartDraw.disabled = false;
+    btnStartDraw.innerHTML = '🎁 ¡Girar Ruleta!';
+};
+
+async function performDraw() {
+    if (!currentDrawEventId) return;
+
+    btnStartDraw.disabled = true;
+    btnStartDraw.innerHTML = 'Girando...';
+
+    // Simulate animation
+    let counter = 0;
+    const interval = setInterval(() => {
+        drawAnimation.querySelector('h2').textContent = Math.floor(Math.random() * 9999);
+        counter++;
+        if (counter > 20) { // Stop animation after 2 seconds roughly
+            clearInterval(interval);
+            finalizeDraw();
+        }
+    }, 100);
+
+    async function finalizeDraw() {
+        try {
+            const response = await api.drawWinner(currentDrawEventId);
+            if (response.success) {
+                drawAnimation.style.display = 'none';
+                winnerReveal.style.display = 'block';
+
+                document.getElementById('wName').textContent = response.winner.name;
+                document.getElementById('wTicket').textContent = response.winner.ticketId;
+                document.getElementById('wPhone').textContent = response.winner.phoneMasked;
+
+                btnStartDraw.innerHTML = 'Sorteo Finalizado';
+                await fetchAndRenderEvents();
+            } else {
+                alert(response.message);
+                drawModal.classList.remove('active');
+            }
+        } catch (error) {
+            alert('Error al realizar sorteo: ' + error.message);
+            btnStartDraw.disabled = false;
+        }
+    }
+}
+
+// ...
+
+// ===================================
+// Event Listeners (Updated)
+// ===================================
+function setupEventListeners() {
+    // ... (Previous listeners)
+
+    // Events Section Listeners
+    if (btnAddEvent) btnAddEvent.addEventListener('click', () => openEventAdminModal());
+    if (btnCancelEvent) btnCancelEvent.addEventListener('click', closeEventAdminModal);
+    if (eventAdminModalClose) eventAdminModalClose.addEventListener('click', closeEventAdminModal);
+
+    if (eventAdminForm) {
+        eventAdminForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const data = {
+                title: document.getElementById('eTitle').value,
+                description: document.getElementById('eDescription').value,
+                prize: document.getElementById('ePrize').value,
+                endDate: document.getElementById('eEndDate').value,
+                isActive: document.getElementById('eIsActive').checked
+            };
+            saveEvent(data);
+        });
+    }
+
+    if (adminEventsGrid) {
+        adminEventsGrid.addEventListener('click', (e) => {
+            if (e.target.classList.contains('btn-edit')) {
+                const card = e.target.closest('.event-card');
+                openEventAdminModal(card.dataset.id);
+            }
+            if (e.target.classList.contains('btn-delete')) {
+                const card = e.target.closest('.event-card');
+                openDeleteModal(card.dataset.id, 'event', card.dataset.name);
+            }
+        });
+    }
+
+    // Draw Modal
+    if (drawModalClose) drawModalClose.addEventListener('click', () => drawModal.classList.remove('active'));
+    if (btnStartDraw) btnStartDraw.addEventListener('click', performDraw);
+
+    // Delete Action Update
+    if (btnConfirmDelete) btnConfirmDelete.addEventListener('click', deleteItemAction);
+}
+
+// Update deleteItemAction to handle events
+async function deleteItemAction() {
+    if (!deletingId) return;
+    try {
+        let res;
+        if (deletingType === 'product') res = await api.deleteProduct(deletingId);
+        else if (deletingType === 'project') res = await api.deleteProject(deletingId);
+        else if (deletingType === 'testimonial') res = await api.deleteTestimonial(deletingId);
+        else if (deletingType === 'event') res = await api.deleteEvent(deletingId); // New!
+
+        if (res.success) {
+            setTimeout(async () => {
+                if (deletingType === 'product') await fetchAndRenderProducts();
+                else if (deletingType === 'project') await fetchAndRenderProjects();
+                else if (deletingType === 'testimonial') await fetchAndRenderTestimonials();
+                else if (deletingType === 'event') await fetchAndRenderEvents(); // New!
+                alert('Eliminado con éxito');
+            }, 500);
+        }
+    } catch (error) {
+        alert('Error al eliminar: ' + error.message);
+    }
+    closeDeleteModal();
+}
 
 // Global helper for event delegation
 function getTargetData(e, className) {
@@ -69,12 +357,6 @@ const btnLogout = document.getElementById('btnLogout');
 const btnAddProduct = document.getElementById('btnAddProduct');
 const btnAddProject = document.getElementById('btnAddProject');
 const btnAddTestimonial = document.getElementById('btnAddTestimonial');
-
-// Section elements
-const catalogSection = document.getElementById('catalogSection');
-const portfolioSection = document.getElementById('portfolioSection');
-const testimonialsSection = document.getElementById('testimonialsSection');
-const navItems = document.querySelectorAll('.nav-item');
 
 // Modal elements
 const productModal = document.getElementById('productModal');

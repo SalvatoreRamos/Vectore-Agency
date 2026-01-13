@@ -39,7 +39,7 @@
             <form class="login-form" id="loginForm">
                 <div class="form-group">
                     <label for="loginEmail">Correo Electrónico</label>
-                    <input type="email" id="loginEmail" name="email" placeholder="asramos2004@gmail.com" required>
+                    <input type="email" id="loginEmail" name="email" placeholder="••••••••" required>
                 </div>
                 <div class="form-group">
                     <label for="loginPassword">Contraseña</label>
@@ -91,6 +91,13 @@
                         </polygon>
                     </svg>
                     Clientes Destacados
+                </a>
+                <a href="#" class="nav-item" data-section="events">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                    Eventos/Sorteos
                 </a>
                 <a href="index.html" class="nav-item">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -363,6 +370,106 @@
                     <button type="submit" class="btn btn-primary">Guardar Cliente</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+
+    <!-- ==========================
+         EVENTS SECTION 
+         ========================== -->
+    <section class="content-section" id="eventsSection" style="display: none;">
+        <div class="section-header">
+            <div>
+                <h2>Eventos y Sorteos</h2>
+                <p>Gestiona campañas temporales y elige ganadores</p>
+            </div>
+            <button class="btn btn-primary" id="btnAddEvent">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                Nuevo Evento
+            </button>
+        </div>
+
+        <!-- Lista de Eventos -->
+        <div class="events-grid" id="adminEventsGrid">
+            <!-- Event Cards Loaded Dynamically -->
+        </div>
+    </section>
+
+    <!-- Modal: Crear/Editar Evento -->
+    <div class="modal" id="eventAdminModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalEventTitle">Nuevo Evento</h3>
+                <button class="modal-close" id="eventAdminModalClose">&times;</button>
+            </div>
+            <form id="eventAdminForm">
+                <input type="hidden" id="eventId">
+
+                <div class="form-group">
+                    <label>Título del Evento</label>
+                    <input type="text" id="eTitle" required placeholder="Ej: Sorteo San Valentín">
+                </div>
+
+                <div class="form-group">
+                    <label>Descripción Corta</label>
+                    <textarea id="eDescription" required rows="2" placeholder="Participa y gana..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Premio</label>
+                    <input type="text" id="ePrize" required placeholder="Ej: 500 Tarjetas Personales">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Fecha Fin (Sorteo)</label>
+                        <input type="datetime-local" id="eEndDate" required>
+                    </div>
+                    <div class="form-group checkbox-wrapper">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="eIsActive">
+                            <span class="custom-checkbox"></span>
+                            Activar Evento Ahora
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="btnCancelEvent">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Evento</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Realizar Sorteo (Ruleta) -->
+    <div class="modal" id="drawModal">
+        <div class="modal-content center-content">
+            <div class="modal-header">
+                <h3>Realizar Sorteo</h3>
+                <button class="modal-close" id="drawModalClose">&times;</button>
+            </div>
+
+            <div class="draw-container">
+                <div class="draw-animation" id="drawAnimation">
+                    <h2 class="draw-counter">...</h2>
+                </div>
+
+                <div class="winner-reveal" id="winnerReveal" style="display: none;">
+                    <div class="winner-trophy">🏆</div>
+                    <h3>¡Tenemos Ganador!</h3>
+                    <div class="winner-card">
+                        <p class="winner-name" id="wName">-</p>
+                        <p class="winner-ticket" id="wTicket">-</p>
+                        <p class="winner-phone" id="wPhone">-</p>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary btn-lg" id="btnStartDraw">🎁 ¡Girar Ruleta!</button>
+            </div>
         </div>
     </div>
 
