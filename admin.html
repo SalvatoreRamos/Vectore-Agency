@@ -119,22 +119,22 @@
 
         <!-- Main Content -->
         <main class="admin-main">
-            <header class="admin-header">
-                <div class="header-left">
-                    <h1>Gestión del Catálogo</h1>
-                    <p>Administra tus productos digitales y físicos</p>
-                </div>
-                <button class="btn btn-primary" id="btnAddProduct">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                    Agregar Producto
-                </button>
-            </header>
-
             <!-- Catalog Section -->
             <div id="catalogSection">
+                <header class="admin-header">
+                    <div class="header-left">
+                        <h1>Gestión del Catálogo</h1>
+                        <p>Administra tus productos digitales y físicos</p>
+                    </div>
+                    <button class="btn btn-primary" id="btnAddProduct">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Agregar Producto
+                    </button>
+                </header>
+
                 <div class="admin-stats">
                     <div class="stat-card">
                         <div class="stat-icon digital">📦</div>
@@ -231,6 +231,31 @@
                     </div>
                 </div>
             </div>
+
+            <!-- ==========================
+                 EVENTS SECTION 
+                 ========================== -->
+            <section class="content-section" id="eventsSection" style="display: none;">
+                <div class="section-header">
+                    <div>
+                        <h2>Eventos y Sorteos</h2>
+                        <p>Gestiona campañas temporales y elige ganadores</p>
+                    </div>
+                    <button class="btn btn-primary" id="btnAddEvent">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Nuevo Evento
+                    </button>
+                </div>
+
+                <!-- Lista de Eventos -->
+                <div class="events-grid" id="adminEventsGrid">
+                    <!-- Event Cards Loaded Dynamically -->
+                </div>
+            </section>
         </main>
     </div>
 
@@ -374,29 +399,7 @@
     </div>
 
 
-    <!-- ==========================
-         EVENTS SECTION 
-         ========================== -->
-    <section class="content-section" id="eventsSection" style="display: none;">
-        <div class="section-header">
-            <div>
-                <h2>Eventos y Sorteos</h2>
-                <p>Gestiona campañas temporales y elige ganadores</p>
-            </div>
-            <button class="btn btn-primary" id="btnAddEvent">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
-                Nuevo Evento
-            </button>
-        </div>
 
-        <!-- Lista de Eventos -->
-        <div class="events-grid" id="adminEventsGrid">
-            <!-- Event Cards Loaded Dynamically -->
-        </div>
-    </section>
 
     <!-- Modal: Crear/Editar Evento -->
     <div class="modal" id="eventAdminModal">
