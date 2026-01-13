@@ -29,10 +29,25 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-      "script-src": ["'self'", "'unsafe-inline'", "https://accounts.google.com/gsi/client"],
+      "script-src": [
+        "'self'",
+        "'unsafe-inline'",
+        "https://www.googletagmanager.com",
+        "https://www.google-analytics.com",
+        "https://accounts.google.com/gsi/client"
+      ],
       "frame-src": ["'self'", "https://accounts.google.com/"],
-      "connect-src": ["'self'", "https://accounts.google.com/gsi/"],
-      "img-src": ["'self'", "data:", "https:", "http:", "blob:"]
+      "connect-src": [
+        "'self'",
+        "https://www.googletagmanager.com",
+        "https://www.google-analytics.com",
+        "https://accounts.google.com/gsi/",
+        "https://api.cloudinary.com",
+        "https://vectore-agency.onrender.com",
+        "https://agenciavectore.com",
+        "https://www.agenciavectore.com"
+      ],
+      "img-src": ["'self'", "data:", "https:", "http:", "blob:", "https://www.google-analytics.com", "https://www.googletagmanager.com"]
     },
   },
   crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" },
