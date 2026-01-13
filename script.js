@@ -63,27 +63,63 @@ function renderPortfolioItems(projects) {
     setupMarqueeInteraction(marquee);
 }
 
-// Pause marquee on user interaction (touch/scroll), resume after inactivity
+// Pause marquee on user interaction and enable manual scroll
 function setupMarqueeInteraction(marquee) {
     const container = marquee.closest('.portfolio-marquee-container');
     if (!container) return;
 
     let resumeTimeout = null;
+    let isDown = false;
+    let startX;
+    let scrollLeft;
 
     function pauseMarquee() {
-        marquee.style.animationPlayState = 'paused';
+        marquee.classList.add('paused');
         clearTimeout(resumeTimeout);
         resumeTimeout = setTimeout(() => {
-            marquee.style.animationPlayState = 'running';
+            marquee.classList.remove('paused');
         }, 3000); // Resume after 3 seconds of no interaction
     }
 
-    // Touch events for mobile
+    // Mouse wheel -> horizontal scroll
+    container.addEventListener('wheel', (e) => {
+        if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+            e.preventDefault();
+            container.scrollLeft += e.deltaY;
+        }
+        pauseMarquee();
+    }, { passive: false });
+
+    // Mouse drag scrolling (desktop)
+    container.addEventListener('mousedown', (e) => {
+        isDown = true;
+        container.style.cursor = 'grabbing';
+        startX = e.pageX - container.offsetLeft;
+        scrollLeft = container.scrollLeft;
+        pauseMarquee();
+    });
+
+    container.addEventListener('mouseleave', () => {
+        isDown = false;
+        container.style.cursor = 'grab';
+    });
+
+    container.addEventListener('mouseup', () => {
+        isDown = false;
+        container.style.cursor = 'grab';
+    });
+
+    container.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - container.offsetLeft;
+        const walk = (x - startX) * 2; // Scroll speed multiplier
+        container.scrollLeft = scrollLeft - walk;
+    });
+
+    // Touch events for mobile (native scroll works, just pause animation)
     container.addEventListener('touchstart', pauseMarquee, { passive: true });
     container.addEventListener('touchmove', pauseMarquee, { passive: true });
-
-    // Wheel/scroll events for desktop
-    container.addEventListener('wheel', pauseMarquee, { passive: true });
 }
 
 function openProjectModal(project) {

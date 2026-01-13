@@ -1553,9 +1553,26 @@ body:hover .custom-cursor-dot {
 
 .portfolio-marquee-container {
     width: 100%;
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
     position: relative;
     padding: 40px 0;
+    cursor: grab;
+    -webkit-overflow-scrolling: touch;
+    /* Smooth scroll on iOS */
+    scrollbar-width: none;
+    /* Hide scrollbar Firefox */
+    -ms-overflow-style: none;
+    /* Hide scrollbar IE/Edge */
+}
+
+.portfolio-marquee-container::-webkit-scrollbar {
+    display: none;
+    /* Hide scrollbar Chrome/Safari */
+}
+
+.portfolio-marquee-container:active {
+    cursor: grabbing;
 }
 
 .portfolio-marquee {
@@ -1564,6 +1581,11 @@ body:hover .custom-cursor-dot {
     animation: marquee 60s linear infinite;
     gap: 30px;
     padding: 0 15px;
+    width: max-content;
+}
+
+.portfolio-marquee.paused {
+    animation-play-state: paused;
 }
 
 .portfolio-marquee:hover {
