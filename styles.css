@@ -509,63 +509,7 @@ body {
     }
 }
 
-/* Custom Cursor */
-.custom-cursor,
-.custom-cursor-dot {
-    pointer-events: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    border-radius: 50%;
-    z-index: 10000;
-    transition: transform 0.1s ease-out, opacity 0.3s ease;
-    opacity: 0;
-}
 
-.custom-cursor {
-    width: 40px;
-    height: 40px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    margin-left: -20px;
-    margin-top: -20px;
-    transition: width 0.3s, height 0.3s, background 0.3s, border-color 0.3s, opacity 0.3s;
-}
-
-.custom-cursor-dot {
-    width: 6px;
-    height: 6px;
-    background: var(--primary);
-    margin-left: -3px;
-    margin-top: -3px;
-}
-
-body:hover .custom-cursor,
-body:hover .custom-cursor-dot {
-    opacity: 1;
-}
-
-/* Cursor States */
-.custom-cursor.active {
-    width: 60px;
-    height: 60px;
-    background: rgba(134, 85, 255, 0.1);
-    border-color: var(--primary);
-    margin-left: -30px;
-    margin-top: -30px;
-}
-
-.custom-cursor-dot.active {
-    transform: scale(2);
-    background: var(--white);
-}
-
-@media (max-width: 1024px) {
-
-    .custom-cursor,
-    .custom-cursor-dot {
-        display: none;
-    }
-}
 
 /* ===================================
    Global Styles
