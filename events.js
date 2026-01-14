@@ -25,6 +25,15 @@ async function initEventManager() {
         if (data.success && data.active && data.data) {
             activeEvent = data.data;
             setupEventModule();
+
+            // Initialize global confetti canvas
+            const canvas = document.getElementById('globalConfetti');
+            if (canvas) {
+                window.myConfetti = confetti.create(canvas, {
+                    resize: true,
+                    useWorker: true
+                });
+            }
         }
     } catch (error) {
         console.log('No active events currently.');
@@ -182,7 +191,10 @@ function startEventTimer(endDateStr) {
 
 // Real Confetti Effect
 function triggerConfetti(intense = false) {
-    if (typeof confetti !== 'function') {
+    // Use our custom instance if available, otherwise fallback (though fallback might be behind modal)
+    const fire = window.myConfetti || confetti;
+
+    if (typeof fire !== 'function') {
         console.log('Confetti library not loaded yet');
         return;
     }
@@ -193,7 +205,7 @@ function triggerConfetti(intense = false) {
         const end = Date.now() + duration;
 
         (function frame() {
-            confetti({
+            fire({
                 particleCount: 5,
                 angle: 60,
                 spread: 55,
@@ -201,7 +213,7 @@ function triggerConfetti(intense = false) {
                 colors: ['#8655FF', '#160F50', '#ffffff'],
                 zIndex: 999999
             });
-            confetti({
+            fire({
                 particleCount: 5,
                 angle: 120,
                 spread: 55,
@@ -216,7 +228,7 @@ function triggerConfetti(intense = false) {
         }());
     } else {
         // Single burst
-        confetti({
+        fire({
             particleCount: 100,
             spread: 70,
             origin: { y: 0.6 },
