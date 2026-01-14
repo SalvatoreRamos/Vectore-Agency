@@ -48,6 +48,57 @@ body {
     color: var(--dark);
     line-height: 1.6;
     overflow-x: hidden;
+    cursor: none;
+    /* Hide default cursor for custom cursor experience */
+}
+
+/* Custom Cursor Styles */
+.custom-cursor {
+    width: 40px;
+    height: 40px;
+    border: 2px solid var(--primary);
+    border-radius: 50%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.1s ease-out, width 0.3s, height 0.3s, background 0.3s;
+    transform: translate(-50%, -50%);
+    display: none;
+}
+
+.custom-cursor-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--primary);
+    border-radius: 50%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    display: none;
+}
+
+@media (min-width: 1024px) {
+
+    .custom-cursor,
+    .custom-cursor-dot {
+        display: block;
+    }
+}
+
+.custom-cursor.active {
+    width: 60px;
+    height: 60px;
+    background: rgba(134, 85, 255, 0.1);
+    border-color: var(--primary-light);
+}
+
+.custom-cursor-dot.active {
+    transform: translate(-50%, -50%) scale(1.5);
 }
 
 .container {

@@ -680,7 +680,8 @@ async function performDraw() {
                         particleCount: 150,
                         spread: 70,
                         origin: { y: 0.6 },
-                        colors: ['#8655FF', '#160F50', '#ffffff']
+                        colors: ['#8655FF', '#160F50', '#ffffff'],
+                        zIndex: 10001
                     });
                 }
 
