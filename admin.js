@@ -798,18 +798,7 @@ function updateStats() {
     }
 }
 
-function switchSection(section) {
-    activeSection = section;
-    navItems.forEach(item => {
-        item.classList.toggle('active', item.dataset.section === section);
-    });
 
-    catalogSection.style.display = section === 'catalog' ? 'block' : 'none';
-    portfolioSection.style.display = section === 'portfolio' ? 'block' : 'none';
-    if (testimonialsSection) {
-        testimonialsSection.style.display = section === 'testimonials' ? 'block' : 'none';
-    }
-}
 
 // ===================================
 // Modal Functions
