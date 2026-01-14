@@ -117,7 +117,7 @@ router.post('/:id/join', async (req, res) => {
 // Get All Events
 router.get('/', authenticate, isAdmin, async (req, res) => {
     try {
-        const events = await Event.find().sort('-createdAt');
+        const events = await Event.find().sort('-createdAt').populate('winner');
         res.json({ success: true, data: events });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });

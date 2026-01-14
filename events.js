@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 const EVENT_CONFIG = {
-    scrollTrigger: 0.75, // Show at 75% scroll
-    timeTrigger: 30000,  // Or after 30 seconds
+    scrollTrigger: 0.1,  // Show at 10% scroll
+    timeTrigger: 3000,   // Or after 3 seconds
     apiActive: '/api/events/active',
     apiJoin: (id) => `/api/events/${id}/join`
 };
