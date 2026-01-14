@@ -423,6 +423,7 @@ function renderEvents() {
                 <div class=\"admin-product-actions\">
                     <button class=\"btn-edit\">Editar</button>
                     ${!event.winner && event.isActive ? `<button class=\"btn-draw\" onclick=\"openDrawModal('${event._id}')\">🎲 Sortear</button>` : ''}
+                    <button class=\"btn-participants\" onclick=\"openParticipantsModal('${event._id}')\">👥 Ver Participantes</button>
                     <button class=\"btn-delete\">Eliminar</button>
                 </div>
             </div>
@@ -679,6 +680,46 @@ async function performDraw() {
     }
 }
 
+
+// Participants Modal
+window.openParticipantsModal = async function (id) {
+    const event = events.find(e => e._id === id);
+    if (!event) return;
+
+    const modal = document.getElementById('participantsModal');
+    const list = document.getElementById('participantsList');
+    const title = document.getElementById('participantsTitle');
+
+    title.textContent = `Participantes: ${event.title}`;
+    list.innerHTML = '<li class=\"participant-item\">Cargando...</li>';
+    modal.classList.add('active');
+
+    try {
+        const res = await api.request(`/events/${id}`);
+        const freshEvent = res.data;
+        const participants = freshEvent.participants || [];
+
+        if (participants.length === 0) {
+            list.innerHTML = '<li class=\"no-participants\">No hay participantes registrados aún.</li>';
+        } else {
+            list.innerHTML = participants.map(p => `
+                <li class=\"participant-item\">
+                    <div class=\"p-info\">
+                        <span class=\"p-name\">${p.name}</span>
+                        <span class=\"p-ticket\">Ticket: ${p.ticketId}</span>
+                    </div>
+                    <a href=\"https://wa.me/51${p.phone}\" target=\"_blank\" class=\"btn btn-primary btn-sm btn-wa-direct\" style=\"background:#25d366; border:none;\">
+                        WhatsApp
+                    </a>
+                </li>
+            `).join('');
+        }
+    } catch (error) {
+        list.innerHTML = '<li class=\"error\">Error al cargar participantes.</li>';
+    }
+}
+
+
 // ===================================
 // Event Listeners
 // ===================================
@@ -745,6 +786,11 @@ function setupEventListeners() {
     if (deleteModalClose) deleteModalClose.addEventListener('click', closeDeleteModal);
     if (btnCancelDelete) btnCancelDelete.addEventListener('click', closeDeleteModal);
     if (drawModalClose) drawModalClose.addEventListener('click', () => drawModal.classList.remove('active'));
+    if (document.getElementById('participantsModalClose')) {
+        document.getElementById('participantsModalClose').addEventListener('click', () => {
+            document.getElementById('participantsModal').classList.remove('active');
+        });
+    }
 
     // Confirmations
     if (btnConfirmDelete) btnConfirmDelete.addEventListener('click', deleteItemAction);

@@ -720,9 +720,64 @@
     color: #1a1548;
 }
 
-/* ===================================
-   Checkout Page Styles
-   =================================== */
+/* Participants List Styles */
+.participants-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.participant-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #f1f5f9;
+    transition: background 0.2s;
+}
+
+.participant-item:hover {
+    background: #f8fafc;
+}
+
+.p-info {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.p-name {
+    font-weight: 700;
+    color: #1e293b;
+    font-size: 1rem;
+}
+
+.p-ticket {
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.btn-wa-direct {
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s;
+}
+
+.btn-wa-direct:hover {
+    transform: translateY(-2px);
+}
+
+.no-participants {
+    padding: 40px;
+    color: #94a3b8;
+    text-align: center;
+}
+
 .checkout-page {
     min-height: 100vh;
     background: var(--gray-100);

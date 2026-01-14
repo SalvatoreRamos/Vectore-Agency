@@ -180,9 +180,45 @@ function startEventTimer(endDateStr) {
     setInterval(update, 60000); // 1 minute update is enough for UI
 }
 
-// Simple Confetti (Canvas)
+// Real Confetti Effect
 function triggerConfetti(intense = false) {
-    // Basic confetti implementation or load library
-    // For now, we will assume this function executes a visual effect
-    console.log('Confetti pop! 🎉');
+    if (typeof confetti !== 'function') {
+        console.log('Confetti library not loaded yet');
+        return;
+    }
+
+    if (intense) {
+        // Celebration blast
+        const duration = 3 * 1000;
+        const end = Date.now() + duration;
+
+        (function frame() {
+            confetti({
+                particleCount: 5,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 },
+                colors: ['#8655FF', '#160F50', '#ffffff']
+            });
+            confetti({
+                particleCount: 5,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 },
+                colors: ['#8655FF', '#160F50', '#ffffff']
+            });
+
+            if (Date.now() < end) {
+                requestAnimationFrame(frame);
+            }
+        }());
+    } else {
+        // Single burst
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#8655FF', '#160F50', '#ffffff']
+        });
+    }
 }
