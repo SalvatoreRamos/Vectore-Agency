@@ -413,6 +413,14 @@ const filterBtns = document.querySelectorAll('.filter-btn');
 // Initialize
 // ===================================
 async function init() {
+    // Hide preloader
+    const preloader = document.getElementById('preloader');
+    if (preloader) {
+        setTimeout(() => {
+            preloader.classList.add('hidden');
+        }, 800);
+    }
+
     // Check if we have a token (simple check, validation happens on API call)
     if (api.token) {
         try {
@@ -1144,21 +1152,4 @@ window.openAddProjectModal = openAddProjectModal;
 window.switchSection = switchSection;
 
 // Initialize on load
-// Initialize on load
-function init() {
-    // Hide preloader
-    const preloader = document.getElementById('preloader');
-    if (preloader) {
-        setTimeout(() => {
-            preloader.classList.add('hidden');
-        }, 500);
-    }
-
-    // Check auth
-    checkAuth();
-
-    // Setup listeners
-    setupEventListeners();
-}
-
 init();
