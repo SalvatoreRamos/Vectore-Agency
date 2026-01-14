@@ -719,12 +719,12 @@ window.openParticipantsModal = async function (id) {
     modal.classList.add('active');
 
     try {
-        const res = await api.request(`/events/${id}`);
+        // Use the correct endpoint for participants
+        const res = await api.request(`/events/${id}/stats`);
         console.log('Participants fetch res:', res);
 
-        // Handle cases where data might be nested or direct
-        const freshEvent = res.data || res;
-        const participants = freshEvent.participants || [];
+        // API returns: { success: true, total: X, recent: [...] }
+        const participants = res.recent || [];
 
         if (participants.length === 0) {
             list.innerHTML = '<li class=\"no-participants\">No hay participantes registrados aún.</li>';
