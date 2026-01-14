@@ -33,10 +33,12 @@ app.use(helmet({
       "script-src": [
         "'self'",
         "'unsafe-inline'",
+        "blob:",
         "https://www.googletagmanager.com",
         "https://www.google-analytics.com",
         "https://accounts.google.com/gsi/client"
       ],
+      "worker-src": ["'self'", "blob:"],
       "frame-src": ["'self'", "https://accounts.google.com/"],
       "connect-src": [
         "'self'",

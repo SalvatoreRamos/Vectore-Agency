@@ -86,7 +86,8 @@ body {
 
     .custom-cursor,
     .custom-cursor-dot {
-        display: block;
+        display: block !important;
+        opacity: 1 !important;
     }
 }
 
