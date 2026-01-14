@@ -119,6 +119,15 @@
 
         <!-- Main Content -->
         <main class="admin-main">
+            <!-- Mobile Toggle -->
+            <button id="mobileMenuToggle" class="mobile-toggle">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+
             <!-- Catalog Section -->
             <div id="catalogSection">
                 <header class="admin-header">
@@ -413,7 +422,7 @@
                 <h3 id="modalEventTitle">Nuevo Evento</h3>
                 <button class="modal-close" id="eventAdminModalClose">&times;</button>
             </div>
-            <form id="eventAdminForm">
+            <form class="modal-form" id="eventAdminForm">
                 <input type="hidden" id="eventId">
 
                 <div class="form-group">

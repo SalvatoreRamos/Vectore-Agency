@@ -688,8 +688,20 @@ function setupEventListeners() {
         item.addEventListener('click', (e) => {
             e.preventDefault();
             switchSection(item.dataset.section);
+            // Hide sidebar on mobile after clicking
+            if (window.innerWidth <= 768) {
+                adminDashboard.classList.remove('sidebar-open');
+            }
         });
     });
+
+    // Mobile Menu Toggle
+    const mobileToggle = document.getElementById('mobileMenuToggle');
+    if (mobileToggle) {
+        mobileToggle.addEventListener('click', () => {
+            adminDashboard.classList.toggle('sidebar-open');
+        });
+    }
 
     // Login
     if (loginForm) {
@@ -803,6 +815,10 @@ function setupEventListeners() {
     if (adminTestimonialsGrid) adminTestimonialsGrid.addEventListener('click', (e) => {
         const d = getTargetData(e, '.btn-edit'); if (d) openEditTestimonialModal(d.id);
         const del = getTargetData(e, '.btn-delete'); if (del) openDeleteModal(del.id, 'testimonial', del.name);
+    });
+    if (adminEventsGrid) adminEventsGrid.addEventListener('click', (e) => {
+        const d = getTargetData(e, '.btn-edit'); if (d) openEventAdminModal(d.id);
+        const del = getTargetData(e, '.btn-delete'); if (del) openDeleteModal(del.id, 'event', del.name);
     });
 
     // File Uploads
