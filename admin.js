@@ -754,6 +754,7 @@ function setupEventListeners() {
     // Navigation
     navItems.forEach(item => {
         item.addEventListener('click', (e) => {
+            if (item.getAttribute('href') === 'index.html') return;
             e.preventDefault();
             switchSection(item.dataset.section);
             // Hide sidebar on mobile after clicking
