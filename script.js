@@ -408,11 +408,23 @@ const cursor = document.getElementById('cursor');
 const cursorDot = document.getElementById('cursorDot');
 
 document.addEventListener('mousemove', (e) => {
+    // Show normal cursor if inside event modal
+    if (e.target.closest('.event-modal')) {
+        if (cursor) cursor.style.display = 'none';
+        if (cursorDot) cursorDot.style.display = 'none';
+        document.body.style.cursor = 'default';
+        return;
+    } else {
+        if (cursor) cursor.style.display = 'block';
+        if (cursorDot) cursorDot.style.display = 'block';
+        document.body.style.cursor = 'none';
+    }
+
     const posX = e.clientX;
     const posY = e.clientY;
 
-    cursor.style.transform = `translate3d(${posX}px, ${posY}px, 0)`;
-    cursorDot.style.transform = `translate3d(${posX}px, ${posY}px, 0)`;
+    if (cursor) cursor.style.transform = `translate3d(${posX}px, ${posY}px, 0)`;
+    if (cursorDot) cursorDot.style.transform = `translate3d(${posX}px, ${posY}px, 0)`;
 });
 
 // Cursor Hover Effects (Event Delegation for dynamic elements)
