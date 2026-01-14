@@ -408,7 +408,7 @@ const cursor = document.getElementById('cursor');
 const cursorDot = document.getElementById('cursorDot');
 
 document.addEventListener('mousemove', (e) => {
-    if (window.innerWidth < 1024) return;
+    if (window.innerWidth < 768) return; // Enabled for tablets and desktop
 
     // Show normal cursor if inside event modal
     if (e.target.closest('.event-modal')) {

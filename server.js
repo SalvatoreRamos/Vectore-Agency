@@ -30,6 +30,7 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+      "default-src": ["'self'", "https:", "http:", "data:", "blob:"],
       "script-src": [
         "'self'",
         "'unsafe-inline'",
