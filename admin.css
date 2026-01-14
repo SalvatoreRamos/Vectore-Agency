@@ -371,7 +371,9 @@
 }
 
 .btn-edit,
-.btn-delete {
+.btn-delete,
+.btn-draw,
+.btn-participants {
     flex: 1;
     padding: 10px;
     border: none;
@@ -384,14 +386,17 @@
     justify-content: center;
     gap: 6px;
     transition: var(--transition);
+    white-space: nowrap;
 }
 
-.btn-edit {
+.btn-edit,
+.btn-draw {
     background: rgba(134, 85, 255, 0.1);
     color: var(--primary);
 }
 
-.btn-edit:hover {
+.btn-edit:hover,
+.btn-draw:hover {
     background: var(--primary);
     color: var(--white);
 }
@@ -406,8 +411,20 @@
     color: var(--white);
 }
 
+.btn-participants {
+    background: rgba(22, 15, 80, 0.1);
+    color: var(--dark);
+}
+
+.btn-participants:hover {
+    background: var(--dark);
+    color: var(--white);
+}
+
 .btn-edit svg,
-.btn-delete svg {
+.btn-delete svg,
+.btn-draw svg,
+.btn-participants svg {
     width: 16px;
     height: 16px;
 }
@@ -613,17 +630,30 @@
         display: flex;
         position: fixed;
         top: 20px;
-        left: 20px;
-        z-index: 2500;
-        background: var(--white);
-        border: 1px solid var(--gray-200);
-        width: 44px;
-        height: 44px;
+        right: 20px;
+        /* Changed to right to avoid overlap with sidebar if it opens */
+        z-index: 4000;
+        /* Higher than sidebar (3000) */
+        background: var(--primary);
+        /* Use primary color to be more visible */
+        border: none;
+        width: 50px;
+        height: 50px;
         align-items: center;
         justify-content: center;
-        border-radius: var(--radius-md);
-        box-shadow: var(--shadow-sm);
+        border-radius: 50%;
+        /* Circular for better look */
+        box-shadow: 0 4px 12px rgba(134, 85, 255, 0.3);
         cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .mobile-toggle svg {
+        color: var(--white);
+    }
+
+    .mobile-toggle:active {
+        transform: scale(0.9);
     }
 
     .admin-header {

@@ -421,10 +421,10 @@ function renderEvents() {
                 <p><strong>Fin:</strong> ${new Date(event.endDate).toLocaleDateString()}</p>
                 ${event.winner ? `<p class=\"winner-badge\" style=\"background:#ffd70033; color:#b8860b; padding:5px; border-radius:4px; margin-top:5px;\">🏆 Ganador: ${event.winner.name}</p>` : ''}
                 <div class=\"admin-product-actions\">
-                    <button class=\"btn-edit\">Editar</button>
-                    ${!event.winner && event.isActive ? `<button class=\"btn-draw\" onclick=\"openDrawModal('${event._id}')\">🎲 Sortear</button>` : ''}
-                    <button class=\"btn-participants\" onclick=\"openParticipantsModal('${event._id}')\">👥 Ver Participantes</button>
-                    <button class=\"btn-delete\">Eliminar</button>
+                    <button class=\"btn btn-edit\">Editar</button>
+                    ${!event.winner && event.isActive ? `<button class=\"btn btn-draw\">🎲 Sortear</button>` : ''}
+                    <button class=\"btn btn-participants\">👥 Participantes</button>
+                    <button class=\"btn btn-delete\">Eliminar</button>
                 </div>
             </div>
         </div>`;
@@ -636,6 +636,7 @@ function closeDeleteModal() {
 }
 
 window.openDrawModal = function (id) {
+    console.log('Opening Draw Modal for:', id);
     currentDrawEventId = id;
     drawModal.classList.add('active');
     drawAnimation.style.display = 'flex';
@@ -683,6 +684,7 @@ async function performDraw() {
 
 // Participants Modal
 window.openParticipantsModal = async function (id) {
+    console.log('Opening Participants for:', id);
     const event = events.find(e => e._id === id);
     if (!event) return;
 
@@ -715,6 +717,7 @@ window.openParticipantsModal = async function (id) {
             `).join('');
         }
     } catch (error) {
+        console.error('Error fetching participants:', error);
         list.innerHTML = '<li class=\"error\">Error al cargar participantes.</li>';
     }
 }
@@ -863,8 +866,10 @@ function setupEventListeners() {
         const del = getTargetData(e, '.btn-delete'); if (del) openDeleteModal(del.id, 'testimonial', del.name);
     });
     if (adminEventsGrid) adminEventsGrid.addEventListener('click', (e) => {
-        const d = getTargetData(e, '.btn-edit'); if (d) openEventAdminModal(d.id);
+        const edit = getTargetData(e, '.btn-edit'); if (edit) openEventAdminModal(edit.id);
         const del = getTargetData(e, '.btn-delete'); if (del) openDeleteModal(del.id, 'event', del.name);
+        const draw = getTargetData(e, '.btn-draw'); if (draw) openDrawModal(draw.id);
+        const part = getTargetData(e, '.btn-participants'); if (part) openParticipantsModal(part.id);
     });
 
     // File Uploads
