@@ -413,8 +413,9 @@ document.addEventListener('mousemove', (e) => {
     const posX = e.clientX;
     const posY = e.clientY;
 
-    if (cursor) cursor.style.transform = `translate3d(${posX}px, ${posY}px, 0)`;
-    if (cursorDot) cursorDot.style.transform = `translate3d(${posX}px, ${posY}px, 0)`;
+    // Al agregar "translate(-50%, -50%)" al final, recuperas el centro
+    if (cursor) cursor.style.transform = `translate3d(${posX}px, ${posY}px, 0) translate(-50%, -50%)`;
+    if (cursorDot) cursorDot.style.transform = `translate3d(${posX}px, ${posY}px, 0) translate(-50%, -50%)`;
 
     // Always hide default cursor on desktop
     document.body.style.cursor = 'none';
