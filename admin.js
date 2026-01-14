@@ -673,6 +673,17 @@ async function performDraw() {
                 document.getElementById('wName').textContent = response.winner.name;
                 document.getElementById('wTicket').textContent = response.winner.ticketId;
                 document.getElementById('wPhone').textContent = response.winner.phoneMasked;
+
+                // Celebrate!
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 150,
+                        spread: 70,
+                        origin: { y: 0.6 },
+                        colors: ['#8655FF', '#160F50', '#ffffff']
+                    });
+                }
+
                 btnStartDraw.innerHTML = 'Cerrar y Actualizar';
                 btnStartDraw.disabled = false;
                 btnStartDraw.onclick = () => {
