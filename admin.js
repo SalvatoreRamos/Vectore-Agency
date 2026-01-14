@@ -681,7 +681,7 @@ async function performDraw() {
                         spread: 70,
                         origin: { y: 0.6 },
                         colors: ['#8655FF', '#160F50', '#ffffff'],
-                        zIndex: 10001
+                        zIndex: 999999
                     });
                 }
 

@@ -199,7 +199,7 @@ function triggerConfetti(intense = false) {
                 spread: 55,
                 origin: { x: 0 },
                 colors: ['#8655FF', '#160F50', '#ffffff'],
-                zIndex: 10001
+                zIndex: 999999
             });
             confetti({
                 particleCount: 5,
@@ -207,7 +207,7 @@ function triggerConfetti(intense = false) {
                 spread: 55,
                 origin: { x: 1 },
                 colors: ['#8655FF', '#160F50', '#ffffff'],
-                zIndex: 10001
+                zIndex: 999999
             });
 
             if (Date.now() < end) {
@@ -221,7 +221,7 @@ function triggerConfetti(intense = false) {
             spread: 70,
             origin: { y: 0.6 },
             colors: ['#8655FF', '#160F50', '#ffffff'],
-            zIndex: 10001
+            zIndex: 999999
         });
     }
 }
