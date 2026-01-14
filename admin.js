@@ -419,8 +419,12 @@ function renderEvents() {
                 <h3>${event.title}</h3>
                 <p><strong>Premio:</strong> ${event.prize}</p>
                 <p><strong>Fin:</strong> ${new Date(event.endDate).toLocaleDateString()}</p>
-                ${event.winner ? `<p class=\"winner-badge\" style=\"background:#ffd70033; color:#b8860b; padding:5px; border-radius:4px; margin-top:5px;\">🏆 Ganador: ${event.winner.name}</p>` : ''}
-                <div class=\"admin-product-actions\">
+                ${event.winner ? `
+                <div class=\"winner-badge\" style=\"background: #fff9c4; color: #827717; padding: 10px; border-radius: 8px; margin-top: 10px; border: 1px solid #fbc02d; display: flex; align-items: center; gap: 8px;\">
+                    <span>🏆</span>
+                    <span><strong>Ganador:</strong> ${typeof event.winner === 'object' ? event.winner.name : 'Sorteo realizado'}</span>
+                </div>` : ''}
+                <div class=\"admin-product-actions\" style=\"margin-top: 15px; flex-wrap: wrap;\">
                     <button class=\"btn btn-edit\">Editar</button>
                     ${!event.winner && event.isActive ? `<button class=\"btn btn-draw\">🎲 Sortear</button>` : ''}
                     <button class=\"btn btn-participants\">👥 Participantes</button>
@@ -648,6 +652,7 @@ window.openDrawModal = function (id) {
 async function performDraw() {
     if (!currentDrawEventId) return;
     btnStartDraw.disabled = true;
+    btnStartDraw.onclick = null; // Important: Clear previous handlers
     btnStartDraw.innerHTML = 'Girando...';
     let counter = 0;
     const interval = setInterval(() => {
@@ -668,7 +673,12 @@ async function performDraw() {
                 document.getElementById('wName').textContent = response.winner.name;
                 document.getElementById('wTicket').textContent = response.winner.ticketId;
                 document.getElementById('wPhone').textContent = response.winner.phoneMasked;
-                btnStartDraw.innerHTML = 'Sorteo Finalizado';
+                btnStartDraw.innerHTML = 'Cerrar y Actualizar';
+                btnStartDraw.disabled = false;
+                btnStartDraw.onclick = () => {
+                    drawModal.classList.remove('active');
+                    btnStartDraw.onclick = null; // Reset
+                };
                 await fetchAndRenderEvents();
             } else {
                 alert(response.message);
@@ -698,7 +708,10 @@ window.openParticipantsModal = async function (id) {
 
     try {
         const res = await api.request(`/events/${id}`);
-        const freshEvent = res.data;
+        console.log('Participants fetch res:', res);
+
+        // Handle cases where data might be nested or direct
+        const freshEvent = res.data || res;
         const participants = freshEvent.participants || [];
 
         if (participants.length === 0) {
@@ -710,7 +723,7 @@ window.openParticipantsModal = async function (id) {
                         <span class=\"p-name\">${p.name}</span>
                         <span class=\"p-ticket\">Ticket: ${p.ticketId}</span>
                     </div>
-                    <a href=\"https://wa.me/51${p.phone}\" target=\"_blank\" class=\"btn btn-primary btn-sm btn-wa-direct\" style=\"background:#25d366; border:none;\">
+                    <a href=\"https://wa.me/51${p.phone}\" target=\"_blank\" class=\"btn btn-primary btn-sm btn-wa-direct\" style=\"background:#25d366; border:none; color: white !important;\">
                         WhatsApp
                     </a>
                 </li>
@@ -795,9 +808,8 @@ function setupEventListeners() {
         });
     }
 
-    // Confirmations
-    if (btnConfirmDelete) btnConfirmDelete.addEventListener('click', deleteItemAction);
     if (btnStartDraw) btnStartDraw.addEventListener('click', performDraw);
+    if (btnConfirmDelete) btnConfirmDelete.addEventListener('click', deleteItemAction);
 
     // Form Submissions
     if (productForm) productForm.addEventListener('submit', (e) => {

@@ -223,6 +223,72 @@
     margin-bottom: 32px;
 }
 
+/* Draw Modal Enhancements */
+.draw-container {
+    padding: 30px;
+    text-align: center;
+}
+
+.winner-reveal {
+    margin-bottom: 25px;
+    animation: fadeIn 0.5s ease;
+}
+
+.winner-card {
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    padding: 20px;
+    border-radius: 12px;
+    margin: 15px 0;
+}
+
+.winner-name {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 5px;
+}
+
+.winner-ticket {
+    font-family: monospace;
+    font-weight: 600;
+    color: #64748b;
+    background: #e2e8f0;
+    padding: 4px 10px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.winner-phone {
+    display: block;
+    margin-top: 8px;
+    color: #94a3b8;
+    font-size: 0.9rem;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.winner-trophy {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+#btnStartDraw {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1rem;
+}
+
 .stat-card {
     background: var(--white);
     padding: 24px;
@@ -368,6 +434,8 @@
 .admin-product-actions {
     display: flex;
     gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 10px;
 }
 
 .btn-edit,
