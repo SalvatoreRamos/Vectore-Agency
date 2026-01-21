@@ -1,17 +1,17 @@
-# Vectore Agency - Backend API
+# Vectore Agency - Landing Page & Admin API
 
-Backend API para la agencia publicitaria Vectore, construido con Node.js, Express y MongoDB.
+Sitio web oficial de **Vectore**, la agencia publicitaria líder en Pucallpa. Especializada en diseño gráfico, marketing digital, gigantografías, rotulación vehicular y merchandising.
 
 ## 🚀 Características
 
-- **Autenticación JWT** - Sistema seguro de autenticación con tokens
-- **Gestión de Productos** - CRUD completo para productos digitales y físicos
-- **Sistema de Órdenes** - Procesamiento de pedidos con múltiples métodos de pago
-- **Cotizaciones con IA** - Generación automática de cotizaciones usando OpenAI
-- **Pagos Integrados** - Soporte para Stripe (VISA/Mastercard) y PayPal
-- **Panel de Administración** - API para gestión administrativa
-- **Subida de Imágenes** - Sistema de carga de archivos con Multer
-- **Seguridad** - Helmet, rate limiting y validación de datos
+- **Diseño Moderno & Premium** - UI/UX optimizada con dark mode y animaciones fluidas.
+- **Portafolio Dinámico** - Visualización de trabajos realizados con navegación intuitiva.
+- **Catálogo de Servicios** - Exploración detallada de productos digitales y físicos.
+- **Integración con WhatsApp** - Canal directo de atención al cliente para ventas y soporte.
+- **Optimización SEO** - Estructura orientada a palabras clave de servicios publicitarios en Pucallpa.
+- **Sorteos & Eventos** - Sistema integrado para participación en sorteos regionales.
+- **Panel de Administración** - Gestión completa de productos, proyectos y testimonios.
+- **Seguridad & Rendimiento** - Construido con Node.js, Express y MongoDB con mejores prácticas.
 
 ## 📋 Requisitos Previos
 

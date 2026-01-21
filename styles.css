@@ -858,68 +858,7 @@ body {
 
 /* Botón de consulta removido del catálogo por estética */
 
-/* ===================================
-   Quoter Section
-   =================================== */
-.quoter {
-    padding: 120px 0;
-    background: var(--gradient-hero);
-}
-
-.quoter .section-badge {
-    background: rgba(134, 85, 255, 0.2);
-    color: var(--primary-light);
-}
-
-.quoter .section-title {
-    color: var(--white);
-}
-
-.quoter .section-subtitle {
-    color: rgba(255, 255, 255, 0.8);
-}
-
-.quoter-wrapper {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 60px;
-    align-items: center;
-}
-
-.quoter-features {
-    margin-top: 40px;
-}
-
-.quoter-feature {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-    margin-bottom: 24px;
-}
-
-.feature-icon {
-    width: 48px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(134, 85, 255, 0.2);
-    border-radius: var(--radius-md);
-    font-size: 1.4rem;
-    flex-shrink: 0;
-}
-
-.quoter-feature h4 {
-    color: var(--white);
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 4px;
-}
-
-.quoter-feature p {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 0.9rem;
-}
+/* Quoter section removed for cleanup */
 
 /* WhatsApp Section */
 .whatsapp-cta {
@@ -1596,6 +1535,52 @@ body {
 
 .portfolio-marquee.paused {
     animation-play-state: paused;
+}
+
+/* Portfolio Navigation Buttons */
+.portfolio-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--white);
+    display: none;
+    /* Hide by default, show on desktop */
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: var(--transition);
+}
+
+@media (min-width: 768px) {
+    .portfolio-nav-btn {
+        display: flex;
+    }
+}
+
+.portfolio-nav-btn:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.portfolio-nav-btn.prev {
+    left: 30px;
+}
+
+.portfolio-nav-btn.next {
+    right: 30px;
+}
+
+.portfolio-nav-btn svg {
+    width: 24px;
+    height: 24px;
 }
 
 .portfolio-marquee:hover {

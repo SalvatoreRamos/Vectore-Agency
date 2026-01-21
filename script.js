@@ -116,65 +116,36 @@ function setupMarqueeInteraction(marquee) {
     const container = marquee.closest('.portfolio-marquee-container');
     if (!container) return;
 
+    const prevBtn = document.getElementById('portfolioPrev');
+    const nextBtn = document.getElementById('portfolioNext');
+
     let resumeTimeout = null;
-    let isDown = false;
-    let startX;
-    let scrollLeft;
 
     function pauseMarquee() {
         marquee.classList.add('paused');
         clearTimeout(resumeTimeout);
         resumeTimeout = setTimeout(() => {
-            // Only resume if not dragging or being hovered (optional, keeping current logic)
-            if (!isDown) marquee.classList.remove('paused');
-        }, 3000);
+            marquee.classList.remove('paused');
+        }, 5000);
     }
 
-    // Mouse wheel -> horizontal scroll with smoothing
-    container.addEventListener('wheel', (e) => {
-        if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-            e.preventDefault();
-            container.scrollBy({
-                left: e.deltaY * 1.5, // Increased multiplier for better feel
-                behavior: 'smooth'
-            });
-        }
-        pauseMarquee();
-    }, { passive: false });
+    // Arrow navigation
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            container.scrollBy({ left: -400, behavior: 'smooth' });
+            pauseMarquee();
+        });
+    }
 
-    // Mouse drag scrolling (desktop)
-    container.addEventListener('mousedown', (e) => {
-        isDown = true;
-        container.style.cursor = 'grabbing';
-        container.classList.add('grabbing');
-        startX = e.pageX - container.offsetLeft;
-        scrollLeft = container.scrollLeft;
-        pauseMarquee();
-    });
-
-    container.addEventListener('mouseleave', () => {
-        isDown = false;
-        container.style.cursor = 'grab';
-        container.classList.remove('grabbing');
-    });
-
-    container.addEventListener('mouseup', () => {
-        isDown = false;
-        container.style.cursor = 'grab';
-        container.classList.remove('grabbing');
-    });
-
-    container.addEventListener('mousemove', (e) => {
-        if (!isDown) return;
-        e.preventDefault();
-        const x = e.pageX - container.offsetLeft;
-        const walk = (x - startX) * 2;
-        container.scrollLeft = scrollLeft - walk;
-    });
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            container.scrollBy({ left: 400, behavior: 'smooth' });
+            pauseMarquee();
+        });
+    }
 
     // Touch events for mobile
     container.addEventListener('touchstart', pauseMarquee, { passive: true });
-    container.addEventListener('touchmove', pauseMarquee, { passive: true });
 }
 
 function openProjectModal(project) {
@@ -289,7 +260,7 @@ const BACKUP_PRODUCTS = [
         name: 'Gestión de Redes Sociales',
         description: 'Estrategia y creación de contenido mensual para tus canales digitales.',
         category: 'digital',
-        price: 200,
+        price: 300,
         isAvailable: true
     },
     {
@@ -305,7 +276,7 @@ const BACKUP_PRODUCTS = [
         name: 'Personalización de Vehículos',
         description: 'Diseño creativo de wraps y rotulación para flotas comerciales.',
         category: 'digital',
-        price: 200,
+        price: 250,
         isAvailable: true
     },
     {
@@ -313,7 +284,7 @@ const BACKUP_PRODUCTS = [
         name: 'Diseño de Fachada',
         description: 'Propuestas arquitectónicas visuales para el exterior de tu negocio.',
         category: 'digital',
-        price: 300,
+        price: 350,
         isAvailable: true
     },
     {
@@ -321,7 +292,7 @@ const BACKUP_PRODUCTS = [
         name: 'Tarjetas de Presentación',
         description: '500 unidades en papel premium con acabados especiales y diseño incluido.',
         category: 'physical',
-        price: 30,
+        price: 45,
         isAvailable: true
     },
     {
@@ -329,7 +300,7 @@ const BACKUP_PRODUCTS = [
         name: 'Flyers Publicitarios',
         description: 'Mil volantes a full color en alta resolución para promocionar tu negocio.',
         category: 'physical',
-        price: 45,
+        price: 65,
         isAvailable: true
     },
     {
@@ -337,12 +308,12 @@ const BACKUP_PRODUCTS = [
         name: 'Banners y Gigantografías',
         description: 'Impresión en gran formato para máxima visibilidad en exteriores.',
         category: 'physical',
-        price: 55,
+        price: 85,
         isAvailable: true
     }
 ];
 
-// El estado del usuario y carrito ha sido removido para simplificar la experiencia de usuario.
+// Product management
 
 async function loadProducts(retries = 3) {
     const catalogGrid = document.getElementById('catalogGrid');
@@ -448,7 +419,7 @@ function createProductCard(product) {
     const gradient = getGradient(product.category, productId);
 
     const imageContent = product.images && product.images.length > 0 && product.images[0].url
-        ? `<img src="${product.images[0].url}" alt="Catálogo Vectore: ${product.name}" class="product-img-bg" loading="lazy">`
+        ? `<img src="${product.images[0].url}" alt="${product.name}" class="product-img-bg" loading="lazy">`
         : `<div class="product-placeholder" style="background: ${gradient}"><span class="product-icon">${icon}</span></div>`;
 
     const categoryTag = product.category === 'digital'
@@ -464,7 +435,7 @@ function createProductCard(product) {
             <h3>${product.name}</h3>
             <p>${product.description}</p>
             <div class="product-price">
-                <span class="price">Desde $${product.price}</span>
+                <span class="price">Desde S/ ${product.price}</span>
             </div>
         </div>
     `;
@@ -502,8 +473,6 @@ function getGradient(category, id) {
     return gradients[numId % gradients.length];
 }
 
-// La lógica de carrito y notificaciones asociadas ha sido removida.
-
 // ===================================
 // Catalog Filters
 // ===================================
@@ -534,7 +503,7 @@ function initializeCatalogEvents() {
 // ===================================
 // Contact Form
 // ===================================
-// La lógica del formulario de contacto ha sido removida en favor del contacto por WhatsApp.
+// Contact Logic
 
 // ===================================
 // Scroll Reveal Animation
