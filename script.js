@@ -378,15 +378,26 @@ window.addEventListener('load', () => {
 const cursor = document.getElementById('cursor');
 const cursorDot = document.getElementById('cursorDot');
 
+// Custom Cursor & Background Parallax Logic
 document.addEventListener('mousemove', (e) => {
-    if (window.innerWidth < 768) return; // Enabled for tablets and desktop
+    if (window.innerWidth < 768) return;
 
     const posX = e.clientX;
     const posY = e.clientY;
 
-    // Al agregar "translate(-50%, -50%)" al final, recuperas el centro
+    // Cursor movement
     if (cursor) cursor.style.transform = `translate3d(${posX}px, ${posY}px, 0) translate(-50%, -50%)`;
     if (cursorDot) cursorDot.style.transform = `translate3d(${posX}px, ${posY}px, 0) translate(-50%, -50%)`;
+
+    // Background shapes parallax
+    const shapes = document.querySelectorAll('.shape-container');
+    shapes.forEach((shape, index) => {
+        const speed = (index + 1) * 5;
+        const x = (window.innerWidth / 2 - posX) / (30 / speed);
+        const y = (window.innerHeight / 2 - posY) / (30 / speed);
+
+        shape.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    });
 
     // Always hide default cursor on desktop
     document.body.style.cursor = 'none';
