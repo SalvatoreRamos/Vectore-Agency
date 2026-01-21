@@ -389,12 +389,19 @@ document.addEventListener('mousemove', (e) => {
     if (cursor) cursor.style.transform = `translate3d(${posX}px, ${posY}px, 0) translate(-50%, -50%)`;
     if (cursorDot) cursorDot.style.transform = `translate3d(${posX}px, ${posY}px, 0) translate(-50%, -50%)`;
 
-    // Background shapes parallax
+    // Background shapes parallax - Unique movement per layer
     const shapes = document.querySelectorAll('.shape-container');
+    const parallaxFactors = [
+        { x: 0.03, y: 0.03 },   // Layer 1
+        { x: -0.05, y: 0.02 },  // Layer 2 (Faster, inverted X)
+        { x: 0.02, y: -0.04 },  // Layer 3 (Slower, inverted Y)
+        { x: -0.08, y: -0.06 }  // Layer 4 (Fastest, fully inverted)
+    ];
+
     shapes.forEach((shape, index) => {
-        const speed = (index + 1) * 5;
-        const x = (window.innerWidth / 2 - posX) / (30 / speed);
-        const y = (window.innerHeight / 2 - posY) / (30 / speed);
+        const factor = parallaxFactors[index] || { x: 0.02, y: 0.02 };
+        const x = (window.innerWidth / 2 - posX) * factor.x;
+        const y = (window.innerHeight / 2 - posY) * factor.y;
 
         shape.style.transform = `translate3d(${x}px, ${y}px, 0)`;
     });
