@@ -587,7 +587,7 @@ body {
 }
 
 /* ===================================
-   Global Styles
+   Global Styles & Interactions
    =================================== */
 @media (min-width: 1025px) {
 
@@ -596,6 +596,21 @@ body {
     a,
     button {
         cursor: none !important;
+    }
+
+    /* Tilt Effect Base */
+    .service-card,
+    .product-card,
+    .testimonial-card {
+        transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+        transform-style: preserve-3d;
+        perspective: 1000px;
+    }
+
+    /* Magnetic Buttons Base */
+    .btn {
+        transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.3s ease;
+        will-change: transform;
     }
 }
 
