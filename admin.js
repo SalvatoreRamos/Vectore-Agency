@@ -292,7 +292,7 @@ function renderProducts() {
             <div class=\"admin-product-info\">
                 <h3>${product.name}</h3>
                 <p>${product.description}</p>
-                <div class=\"admin-product-price\">Desde $${product.price}</div>
+                <div class=\"admin-product-price\">Desde S/ ${product.price}</div>
                 <div class=\"admin-product-actions\">
                     <button class=\"btn-edit\">Editar</button>
                     <button class=\"btn-delete\">Eliminar</button>
