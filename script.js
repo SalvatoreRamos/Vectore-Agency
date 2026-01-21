@@ -599,13 +599,25 @@ function initTiltEffect() {
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
 
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
+            // Dividir la tarjeta en una rejilla 3x3 para obtener ángulos preestablecidos
+            const zoneX = Math.floor((x / rect.width) * 3);
+            const zoneY = Math.floor((y / rect.height) * 3);
 
-            const rotateX = (y - centerY) / 10;
-            const rotateY = (centerX - x) / 10;
+            // Ángulos fijos y suaves (ajustado para evitar deformación excesiva)
+            let rotX = 0;
+            let rotY = 0;
 
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+            // Mapeo de zonas a ángulos (Arriba: pos, Abajo: neg | Izquierda: neg, Derecha: pos)
+            // Zona Y: 0 (Arriba), 1 (Centro), 2 (Abajo)
+            if (zoneY === 0) rotX = 5;
+            else if (zoneY === 2) rotX = -5;
+
+            // Zona X: 0 (Izquierda), 1 (Centro), 2 (Derecha)
+            if (zoneX === 0) rotY = -5;
+            else if (zoneX === 2) rotY = 5;
+
+            // Aplicamos la transformación con escala reducida (1.02)
+            card.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.02, 1.02, 1.02)`;
         });
 
         card.addEventListener('mouseleave', () => {
