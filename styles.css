@@ -1540,11 +1540,22 @@ body {
     animation-play-state: paused;
 }
 
-/* Portfolio Navigation Buttons */
+/* Portfolio Navigation Controls */
+.portfolio-nav-controls {
+    display: none;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 50px;
+}
+
+@media (min-width: 768px) {
+    .portfolio-nav-controls {
+        display: flex;
+    }
+}
+
 .portfolio-nav-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+    position: relative;
     width: 60px;
     height: 60px;
     border-radius: 50%;
@@ -1552,8 +1563,7 @@ body {
     color: var(--white);
     border: none;
     box-shadow: 0 4px 20px rgba(134, 85, 255, 0.4);
-    display: none;
-    /* Hide by default, show on desktop */
+    display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
@@ -1561,25 +1571,12 @@ body {
     transition: var(--transition);
 }
 
-@media (min-width: 768px) {
-    .portfolio-nav-btn {
-        display: flex;
-    }
-}
-
 .portfolio-nav-btn:hover {
     background: var(--primary-dark);
-    transform: translateY(-50%) scale(1.15);
+    transform: scale(1.15);
     box-shadow: 0 8px 30px rgba(134, 85, 255, 0.6);
 }
 
-.portfolio-nav-btn.prev {
-    left: 20px;
-}
-
-.portfolio-nav-btn.next {
-    right: 20px;
-}
 
 .portfolio-nav-btn svg {
     width: 24px;
