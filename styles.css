@@ -1498,28 +1498,25 @@ body {
     background: var(--bg-light);
 }
 
+.portfolio-carousel-wrapper {
+    position: relative;
+    width: 100%;
+    margin: 40px 0;
+}
+
 .portfolio-marquee-container {
     width: 100%;
     overflow-x: auto;
     overflow-y: hidden;
-    position: relative;
-    padding: 40px 0;
     cursor: grab;
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
-    scroll-snap-type: none;
-    /* Aseguramos que no haya snapping */
     scrollbar-width: none;
     -ms-overflow-style: none;
 }
 
 .portfolio-marquee-container::-webkit-scrollbar {
     display: none;
-    /* Hide scrollbar Chrome/Safari */
-}
-
-.portfolio-marquee-container:active {
-    cursor: grabbing;
 }
 
 .portfolio-marquee {
@@ -1530,7 +1527,13 @@ body {
     padding: 0 15px;
     width: max-content;
     will-change: transform;
-    /* Hint to browser for smoother animation */
+}
+
+@media (min-width: 1025px) {
+    .portfolio-marquee {
+        animation: none;
+        /* Disable auto-scroll on desktop */
+    }
 }
 
 .portfolio-marquee.paused {
@@ -1542,13 +1545,13 @@ body {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: var(--primary);
     color: var(--white);
+    border: none;
+    box-shadow: 0 4px 20px rgba(134, 85, 255, 0.4);
     display: none;
     /* Hide by default, show on desktop */
     align-items: center;
@@ -1565,17 +1568,17 @@ body {
 }
 
 .portfolio-nav-btn:hover {
-    background: var(--primary);
-    border-color: var(--primary);
-    transform: translateY(-50%) scale(1.1);
+    background: var(--primary-dark);
+    transform: translateY(-50%) scale(1.15);
+    box-shadow: 0 8px 30px rgba(134, 85, 255, 0.6);
 }
 
 .portfolio-nav-btn.prev {
-    left: 30px;
+    left: 20px;
 }
 
 .portfolio-nav-btn.next {
-    right: 30px;
+    right: 20px;
 }
 
 .portfolio-nav-btn svg {
