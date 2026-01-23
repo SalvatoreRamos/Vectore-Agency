@@ -900,23 +900,29 @@ function setupEventListeners() {
     // File Uploads
     if (productFile) productFile.addEventListener('change', async (e) => {
         const f = e.target.files[0]; if (!f) return;
-        productImageInput.value = 'Subiendo...';
-        const res = await api.uploadImage(f);
-        if (res.success) productImageInput.value = res.data.url;
-        else {
-            alert('Error subiendo imagen');
+        try {
+            productImageInput.value = 'Subiendo...';
+            const res = await api.uploadImage(f);
+            if (res.success) productImageInput.value = res.data.url;
+            else throw new Error(res.message);
+        } catch (error) {
+            alert('Error subiendo imagen: ' + error.message);
             productImageInput.value = '';
+            productFile.value = '';
         }
     });
 
     if (pThumbFile) pThumbFile.addEventListener('change', async (e) => {
         const f = e.target.files[0]; if (!f) return;
-        pThumbnailInput.value = 'Subiendo...';
-        const res = await api.uploadImage(f);
-        if (res.success) pThumbnailInput.value = res.data.url;
-        else {
-            alert('Error subiendo miniatura');
+        try {
+            pThumbnailInput.value = 'Subiendo...';
+            const res = await api.uploadImage(f);
+            if (res.success) pThumbnailInput.value = res.data.url;
+            else throw new Error(res.message);
+        } catch (error) {
+            alert('Error subiendo miniatura: ' + error.message);
             pThumbnailInput.value = '';
+            pThumbFile.value = '';
         }
     });
 
@@ -932,23 +938,26 @@ function setupEventListeners() {
                 const urls = res.data.map(img => img.url).join(', ');
                 pImageGalleryInput.value = originalValue ? `${originalValue}, ${urls}` : urls;
             } else {
-                alert('Error subiendo imágenes a la galería');
-                pImageGalleryInput.value = originalValue;
+                throw new Error(res.message);
             }
         } catch (error) {
-            alert('Error: ' + error.message);
+            alert('Error subiendo imágenes a la galería: ' + error.message);
             pImageGalleryInput.value = originalValue;
+            pGalleryFiles.value = '';
         }
     });
 
     if (tPhotoFile) tPhotoFile.addEventListener('change', async (e) => {
         const f = e.target.files[0]; if (!f) return;
-        tPhotoInput.value = 'Subiendo...';
-        const res = await api.uploadImage(f);
-        if (res.success) tPhotoInput.value = res.data.url;
-        else {
-            alert('Error subiendo foto');
+        try {
+            tPhotoInput.value = 'Subiendo...';
+            const res = await api.uploadImage(f);
+            if (res.success) tPhotoInput.value = res.data.url;
+            else throw new Error(res.message);
+        } catch (error) {
+            alert('Error subiendo foto: ' + error.message);
             tPhotoInput.value = '';
+            tPhotoFile.value = '';
         }
     });
 }

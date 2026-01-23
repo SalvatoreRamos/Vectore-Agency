@@ -24,7 +24,7 @@ const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
         folder: 'vectore-agency',
-        allowed_formats: ['jpg', 'png', 'jpeg', 'gif', 'webp'],
+        allowed_formats: ['jpg', 'png', 'jpeg', 'gif', 'webp', 'avif'],
         transformation: [{ width: 1000, crop: 'limit' }]
     }
 });
