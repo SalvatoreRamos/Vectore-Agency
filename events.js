@@ -7,8 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 const EVENT_CONFIG = {
-    scrollTrigger: 0.1,  // Show at 10% scroll
-    timeTrigger: 3000,   // Or after 3 seconds
+    timeTrigger: 30000,  // Show exactly after 30 seconds
     apiActive: '/api/events/active',
     apiJoin: (id) => `/api/events/${id}/join`
 };
@@ -74,17 +73,7 @@ function setupEventModule() {
 }
 
 function setupTriggers(balloon) {
-    // 1. Scroll Trigger
-    window.addEventListener('scroll', () => {
-        if (hasShownBalloon) return;
-
-        const scrollPercent = (window.scrollY + window.innerHeight) / document.body.offsetHeight;
-        if (scrollPercent > EVENT_CONFIG.scrollTrigger) {
-            showBalloon();
-        }
-    });
-
-    // 2. Time Trigger
+    // Only Time Trigger (30 seconds)
     setTimeout(() => {
         if (!hasShownBalloon) showBalloon();
     }, EVENT_CONFIG.timeTrigger);
