@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initAnimatedCounters();
     initTiltEffect();
     initMagneticButtons();
+    initHeroTypingEffect();
 });
 
 // ===================================
@@ -379,36 +380,77 @@ window.addEventListener('load', () => {
 const cursor = document.getElementById('cursor');
 const cursorDot = document.getElementById('cursorDot');
 
-// Custom Cursor & Background Parallax Logic
+// Custom Cursor, Parallax Tracking & Smoothing
+let mouseX = window.innerWidth / 2;
+let mouseY = window.innerHeight / 2;
+let targetX = mouseX;
+let targetY = mouseY;
+
 document.addEventListener('mousemove', (e) => {
-    if (window.innerWidth < 768) return;
+    targetX = e.clientX;
+    targetY = e.clientY;
+});
 
-    const posX = e.clientX;
-    const posY = e.clientY;
+function animateParallax() {
+    // Faster interpolation for better responsiveness
+    const easing = 0.15;
+    const parallaxEasing = 0.08; // Keep parallax a bit smoother
 
-    // Cursor movement
-    if (cursor) cursor.style.transform = `translate3d(${posX}px, ${posY}px, 0) translate(-50%, -50%)`;
-    if (cursorDot) cursorDot.style.transform = `translate3d(${posX}px, ${posY}px, 0) translate(-50%, -50%)`;
+    mouseX += (targetX - mouseX) * easing;
+    mouseY += (targetY - mouseY) * easing;
 
-    // Background shapes parallax - Unique movement per layer
-    const shapes = document.querySelectorAll('.shape-container');
-    const parallaxFactors = [
-        { x: 0.03, y: 0.03 },   // Layer 1
-        { x: -0.05, y: 0.02 },  // Layer 2 (Faster, inverted X)
-        { x: 0.02, y: -0.04 },  // Layer 3 (Slower, inverted Y)
-        { x: -0.08, y: -0.06 }  // Layer 4 (Fastest, fully inverted)
-    ];
+    if (window.innerWidth >= 768) {
+        // Cursor dot follows instantly for immediate feedback, small ring follows with easing
+        if (cursor) cursor.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
+        if (cursorDot) cursorDot.style.transform = `translate3d(${targetX}px, ${targetY}px, 0) translate(-50%, -50%)`;
 
-    shapes.forEach((shape, index) => {
-        const factor = parallaxFactors[index] || { x: 0.02, y: 0.02 };
-        const x = (window.innerWidth / 2 - posX) * factor.x;
-        const y = (window.innerHeight / 2 - posY) * factor.y;
+        // Background shapes parallax
+        const shapes = document.querySelectorAll('.shape-container');
+        const parallaxFactors = [
+            { x: 0.03, y: 0.03 },
+            { x: -0.05, y: 0.02 },
+            { x: 0.02, y: -0.04 },
+            { x: -0.08, y: -0.06 }
+        ];
 
-        shape.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-    });
+        shapes.forEach((shape, index) => {
+            const factor = parallaxFactors[index] || { x: 0.02, y: 0.02 };
+            // Parallax uses smoothed mouseX/Y but with its own extra "laziness"
+            const x = (window.innerWidth / 2 - mouseX) * factor.x;
+            const y = (window.innerHeight / 2 - mouseY) * factor.y;
+            shape.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+        });
 
-    // Always hide default cursor on desktop
-    document.body.style.cursor = 'none';
+        // Hero title parallax (Individual lines)
+        const titleLines = document.querySelectorAll('.title-line');
+        if (titleLines.length > 0) {
+            const rect = document.querySelector('.hero').getBoundingClientRect();
+            const relX = mouseX - rect.left;
+            const relY = mouseY - rect.top;
+
+            const zoneX = (relX / rect.width) - 0.5;
+            const zoneY = (relY / rect.height) - 0.5;
+
+            titleLines.forEach((line, index) => {
+                const factor = (index + 1) * 20;
+                const tx = zoneX * factor;
+                const ty = zoneY * factor;
+                line.style.transform = `translate3d(${tx}px, ${ty}px, 0)`;
+            });
+        }
+    }
+
+    requestAnimationFrame(animateParallax);
+}
+
+// Start animation loop
+animateParallax();
+
+// Always hide default cursor on desktop
+document.addEventListener('mousemove', () => {
+    if (window.innerWidth >= 768) {
+        document.body.style.cursor = 'none';
+    }
 });
 
 // Cursor Hover Effects (Event Delegation for dynamic elements)
@@ -644,4 +686,32 @@ function initMagneticButtons() {
             btn.style.transform = `translate(0, 0)`;
         });
     });
+}
+
+function initHeroTypingEffect() {
+    const subtitle = document.querySelector('.hero-subtitle');
+    if (!subtitle) return;
+
+    const originalText = "Somos expertos en diseño gráfico, impresión de alta calidad y marketing digital. Llevamos tu marca al siguiente nivel con soluciones creativas que impactan.";
+
+    // Cleanup: Ensure the element is absolutely empty before typing
+    subtitle.innerHTML = '';
+    subtitle.textContent = '';
+
+    let i = 0;
+    const speed = 25;
+
+    function type() {
+        if (i < originalText.length) {
+            // Using textContent is safer for sequential typing
+            subtitle.textContent += originalText.charAt(i);
+            i++;
+            setTimeout(type, speed);
+        }
+    }
+
+    setTimeout(() => {
+        subtitle.style.opacity = '1';
+        type();
+    }, 1500);
 }
