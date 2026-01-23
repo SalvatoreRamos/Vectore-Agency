@@ -308,9 +308,25 @@ const BACKUP_PRODUCTS = [
     {
         _id: 'bkup-9',
         name: 'Banners y Gigantografías',
-        description: 'Impresión en gran formato para máxima visibilidad en exteriores.',
+        description: 'Impresión en gran formato en alta resolución para máxima visibilidad en exteriores Pucallpa.',
         category: 'physical',
         price: 85,
+        isAvailable: true
+    },
+    {
+        _id: 'bkup-10',
+        name: 'Stickers y Etiquetas',
+        description: 'Stickers personalizados troquelados en vinil adhesivo, ideales para branding de productos.',
+        category: 'physical',
+        price: 35,
+        isAvailable: true
+    },
+    {
+        _id: 'bkup-11',
+        name: 'Vinilos y Rotulación',
+        description: 'Vinilos decorativos y publicitarios para locales comerciales y oficinas en Pucallpa.',
+        category: 'physical',
+        price: 120,
         isAvailable: true
     }
 ];
@@ -692,7 +708,7 @@ function initHeroTypingEffect() {
     const subtitle = document.querySelector('.hero-subtitle');
     if (!subtitle) return;
 
-    const originalText = "Somos expertos en diseño gráfico, impresión de alta calidad y marketing digital. Llevamos tu marca al siguiente nivel con soluciones creativas que impactan.";
+    const originalText = "Expertos en diseño gráfico, impresiones de alta calidad, stickers y diseño web en Pucallpa. Llevamos tu marca al siguiente nivel con soluciones creativas que impactan.";
 
     // Cleanup: Ensure the element is absolutely empty before typing
     subtitle.innerHTML = '';
