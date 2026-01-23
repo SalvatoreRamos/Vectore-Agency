@@ -903,8 +903,54 @@ function setupEventListeners() {
         productImageInput.value = 'Subiendo...';
         const res = await api.uploadImage(f);
         if (res.success) productImageInput.value = res.data.url;
+        else {
+            alert('Error subiendo imagen');
+            productImageInput.value = '';
+        }
     });
-    // Add similar for other files if needed...
+
+    if (pThumbFile) pThumbFile.addEventListener('change', async (e) => {
+        const f = e.target.files[0]; if (!f) return;
+        pThumbnailInput.value = 'Subiendo...';
+        const res = await api.uploadImage(f);
+        if (res.success) pThumbnailInput.value = res.data.url;
+        else {
+            alert('Error subiendo miniatura');
+            pThumbnailInput.value = '';
+        }
+    });
+
+    if (pGalleryFiles) pGalleryFiles.addEventListener('change', async (e) => {
+        const files = e.target.files; if (files.length === 0) return;
+        const originalValue = pImageGalleryInput.value;
+        const subiendoStr = originalValue ? `${originalValue}, Subiendo...` : 'Subiendo...';
+        pImageGalleryInput.value = subiendoStr;
+
+        try {
+            const res = await api.uploadImages(files);
+            if (res.success) {
+                const urls = res.data.map(img => img.url).join(', ');
+                pImageGalleryInput.value = originalValue ? `${originalValue}, ${urls}` : urls;
+            } else {
+                alert('Error subiendo imágenes a la galería');
+                pImageGalleryInput.value = originalValue;
+            }
+        } catch (error) {
+            alert('Error: ' + error.message);
+            pImageGalleryInput.value = originalValue;
+        }
+    });
+
+    if (tPhotoFile) tPhotoFile.addEventListener('change', async (e) => {
+        const f = e.target.files[0]; if (!f) return;
+        tPhotoInput.value = 'Subiendo...';
+        const res = await api.uploadImage(f);
+        if (res.success) tPhotoInput.value = res.data.url;
+        else {
+            alert('Error subiendo foto');
+            tPhotoInput.value = '';
+        }
+    });
 }
 
 // Cursor
