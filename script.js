@@ -15,6 +15,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     initTiltEffect();
     initMagneticButtons();
     initHeroTypingEffect();
+
+    // Prevent right click on protected images
+    document.addEventListener('contextmenu', (e) => {
+        if (e.target.classList.contains('product-protection-overlay') || e.target.classList.contains('portfolio-overlay')) {
+            e.preventDefault();
+        }
+    });
 });
 
 // ===================================
@@ -170,11 +177,17 @@ function openProjectModal(project) {
             <p>${project.description}</p>
         </div>
 
-        <img src="${project.thumbnail}" alt="${project.title}" class="project-main-image" onerror="this.src='https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg'">
+        <div class="project-image-wrapper">
+            <img src="${project.thumbnail}" alt="${project.title}" class="project-main-image" onerror="this.src='https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg'">
+            <div class="product-protection-overlay"></div>
+        </div>
 
         <div class="project-gallery">
             ${(project.images || []).map(img => `
-                <img src="${img.url}" alt="Galería: ${project.title}" loading="lazy" onerror="this.style.display='none'">
+                <div class="project-image-wrapper">
+                    <img src="${img.url}" alt="Galería: ${project.title}" loading="lazy" onerror="this.style.display='none'">
+                    <div class="product-protection-overlay"></div>
+                </div>
             `).join('')}
         </div>
 
@@ -506,6 +519,7 @@ function createProductCard(product) {
     div.innerHTML = `
         <div class="product-image">
             ${imageContent}
+            <div class="product-protection-overlay"></div>
             ${categoryTag}
         </div>
         <div class="product-info">

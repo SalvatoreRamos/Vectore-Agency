@@ -132,6 +132,13 @@ async function init() {
     }
 
     setupEventListeners();
+
+    // Prevent right click on protected images
+    document.addEventListener('contextmenu', (e) => {
+        if (e.target.classList.contains('product-protection-overlay')) {
+            e.preventDefault();
+        }
+    });
 }
 
 // ===================================
@@ -287,6 +294,7 @@ function renderProducts() {
         <div class=\"admin-product-card\" data-id=\"${productId}\" data-name=\"${product.name}\">
             <div class=\"admin-product-image\" style=\"background: ${getGradient(product.category, productId)}\">
                 ${imageContent}
+                <div class="product-protection-overlay"></div>
                 <span class=\"category-badge ${product.category}\">${product.category === 'digital' ? 'Digital' : 'Físico'}</span>
             </div>
             <div class=\"admin-product-info\">
@@ -328,6 +336,7 @@ function renderProjects() {
         <div class=\"admin-product-card\" data-id=\"${projectId}\" data-name=\"${project.title}\">
             <div class=\"admin-product-image\">
                 <img src=\"${project.thumbnail}\" alt=\"${project.title}\" onerror=\"this.src='https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg'\">
+                <div class="product-protection-overlay"></div>
                 <span class=\"category-badge digital\">${project.category}</span>
             </div>
             <div class=\"admin-product-info\">
@@ -370,8 +379,9 @@ function renderTestimonials() {
         card.dataset.id = t._id;
         card.dataset.name = t.clientName;
         card.innerHTML = `
-            <div class=\"admin-product-image\">
-                <img src=\"${t.photo}\" alt=\"${t.clientName}\" onerror=\"this.src='https://via.placeholder.com/300x200?text=Sin+Foto'\">
+            <div class="admin-product-image">
+                <img src="${t.photo}" alt="${t.clientName}" onerror="this.src='https://via.placeholder.com/300x200?text=Sin+Foto'">
+                <div class="product-protection-overlay"></div>
             </div>
             <div class=\"admin-product-info\">
                 <h3>${t.clientName}</h3>
@@ -832,8 +842,10 @@ function setupEventListeners() {
             name: document.getElementById('productName').value,
             description: document.getElementById('productDescription').value,
             category: cat === 'fisico' ? 'physical' : cat,
+            subcategory: cat === 'fisico' ? 'Impresión' : 'Diseño', // Default subcategories
             price: parseInt(document.getElementById('productPrice').value),
-            images: document.getElementById('productImage').value ? [{ url: document.getElementById('productImage').value }] : []
+            icon: document.getElementById('productIcon').value || '🎨',
+            images: document.getElementById('productImage').value ? [{ url: document.getElementById('productImage').value, isPrimary: true }] : []
         };
         if (editingProductId) updateProduct(editingProductId, data);
         else addProduct(data);
