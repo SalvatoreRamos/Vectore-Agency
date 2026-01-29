@@ -254,45 +254,6 @@ body {
     will-change: transform;
 }
 
-.shape-1 {
-    width: 600px;
-    height: 600px;
-    background: var(--primary);
-    top: -200px;
-    right: -100px;
-    animation: float-1 30s infinite linear;
-}
-
-.shape-2 {
-    width: 450px;
-    height: 450px;
-    background: var(--primary-light);
-    bottom: -150px;
-    left: -100px;
-    animation: float-2 25s infinite linear;
-    animation-delay: -7s;
-}
-
-.shape-3 {
-    width: 350px;
-    height: 350px;
-    background: var(--primary-dark);
-    top: 15%;
-    left: 15%;
-    animation: float-3 35s infinite linear;
-    animation-delay: -12s;
-}
-
-.shape-4 {
-    width: 400px;
-    height: 400px;
-    background: #5a35cc;
-    bottom: 10%;
-    right: 10%;
-    animation: float-4 28s infinite linear;
-    animation-delay: -18s;
-}
-
 @keyframes float-1 {
     0% {
         transform: translate(0, 0) rotate(0deg) scale(1);
@@ -365,55 +326,59 @@ body {
     }
 }
 
-/* Fireflies Styles */
-.firefly {
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    background: #FFD700;
-    border-radius: 50%;
-    filter: blur(1px);
-    box-shadow: 0 0 10px #FFD700, 0 0 20px #FFA500;
-    pointer-events: none;
-    z-index: 1;
-    opacity: 0;
-}
-
-@keyframes fly {
-    0% {
-        transform: translate(0, 0);
-    }
-
-    25% {
-        transform: translate(30px, -40px);
-    }
-
-    50% {
-        transform: translate(-20px, -80px);
-    }
-
-    75% {
-        transform: translate(-50px, -30px);
-    }
-
-    100% {
-        transform: translate(0, 0);
-    }
-}
-
-@keyframes twinkle {
+@keyframes twinkle-shape {
 
     0%,
     100% {
-        opacity: 0;
-        transform: scale(0.5);
+        opacity: 0.15;
+        transform: scale(0.95);
     }
 
     50% {
-        opacity: 0.8;
-        transform: scale(1.2);
+        opacity: 0.45;
+        transform: scale(1.05);
     }
 }
+
+.shape-1 {
+    width: 600px;
+    height: 600px;
+    background: var(--primary);
+    top: -200px;
+    right: -100px;
+    animation: float-1 30s infinite linear, twinkle-shape 12s infinite ease-in-out;
+}
+
+.shape-2 {
+    width: 450px;
+    height: 450px;
+    background: var(--primary-light);
+    bottom: -150px;
+    left: -100px;
+    animation: float-2 25s infinite linear, twinkle-shape 15s infinite ease-in-out;
+    animation-delay: -7s, -2s;
+}
+
+.shape-3 {
+    width: 350px;
+    height: 350px;
+    background: var(--primary-dark);
+    top: 15%;
+    left: 15%;
+    animation: float-3 35s infinite linear, twinkle-shape 18s infinite ease-in-out;
+    animation-delay: -12s, -5s;
+}
+
+.shape-4 {
+    width: 400px;
+    height: 400px;
+    background: #5a35cc;
+    bottom: 10%;
+    right: 10%;
+    animation: float-4 28s infinite linear, twinkle-shape 20s infinite ease-in-out;
+    animation-delay: -18s, -8s;
+}
+
 
 .hero-content {
     position: relative;

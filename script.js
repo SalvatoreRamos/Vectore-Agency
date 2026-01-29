@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     initTiltEffect();
     initMagneticButtons();
     initHeroTypingEffect();
-    initFireflies();
 
     // Prevent right click on protected images
     document.addEventListener('contextmenu', (e) => {
@@ -745,34 +744,4 @@ function initHeroTypingEffect() {
         subtitle.style.opacity = '1';
         type();
     }, 1500);
-}
-
-function initFireflies() {
-    const heroBg = document.querySelector('.hero-bg');
-    if (!heroBg) return;
-
-    const firefliesCount = 25;
-    for (let i = 0; i < firefliesCount; i++) {
-        const firefly = document.createElement('div');
-        firefly.className = 'firefly';
-
-        // Random position
-        const top = Math.random() * 100;
-        const left = Math.random() * 100;
-
-        // Random animation duration and delay
-        const flyDuration = 20 + Math.random() * 30; // 20-50s
-        const twinkleDuration = 4 + Math.random() * 6; // 4-10s
-        const delay = Math.random() * 20;
-
-        firefly.style.top = `${top}%`;
-        firefly.style.left = `${left}%`;
-        firefly.style.animation = `
-            fly ${flyDuration}s infinite ease-in-out alternate,
-            twinkle ${twinkleDuration}s infinite ease-in-out alternate
-        `;
-        firefly.style.animationDelay = `${delay}s, ${delay * 0.5}s`;
-
-        heroBg.appendChild(firefly);
-    }
 }
