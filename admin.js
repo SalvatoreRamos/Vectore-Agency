@@ -338,7 +338,7 @@ function renderProjects() {
         <div class="admin-product-card" data-id="${projectId}" data-name="${project.title}">
             <div class="admin-product-image">
                 ${isVideo ?
-                `<video src="${project.thumbnail}" muted style="width:100%; height:100%; object-fit:cover;"></video>` :
+                `<video src="${project.thumbnail}" autoplay loop muted playsinline style="width:100%; height:100%; object-fit:cover;" onloadedmetadata="this.play()"></video>` :
                 `<img src="${project.thumbnail}" alt="${project.title}" onerror="this.src='https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg'">`
             }
                 <div class="product-protection-overlay"></div>

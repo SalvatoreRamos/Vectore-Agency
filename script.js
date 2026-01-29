@@ -108,7 +108,7 @@ function renderPortfolioItems(projects) {
 
         item.innerHTML = `
             ${isVideo ?
-                `<video src="${project.thumbnail}" autoplay loop muted playsinline class="portfolio-video-bg"></video>` :
+                `<video src="${project.thumbnail}" autoplay loop muted playsinline class="portfolio-video-bg" onloadedmetadata="this.play()"></video>` :
                 `<img src="${project.thumbnail}" alt="Proyecto Vectore: ${project.title}" loading="lazy" onerror="this.src='https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg'">`
             }
             <div class="portfolio-overlay">
@@ -186,7 +186,7 @@ function openProjectModal(project) {
 
             <div class="project-image-wrapper">
                 ${isMainVideo ?
-            `<video src="${project.thumbnail}" controls autoplay loop muted playsinline class="project-main-image"></video>` :
+            `<video src="${project.thumbnail}" controls autoplay loop muted playsinline class="project-main-image" onloadedmetadata="this.play()"></video>` :
             `<img src="${project.thumbnail}" alt="${project.title}" class="project-main-image" onerror="this.src='https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg'">`
         }
                 <div class="product-protection-overlay"></div>
