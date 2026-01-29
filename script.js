@@ -216,13 +216,39 @@ function openProjectModal(project) {
 
     modal.classList.add('active');
     document.body.style.overflow = 'hidden'; // Prevent scroll
+
+    // Reset scroll to top
+    const container = modal.querySelector('.project-modal-container');
+    if (container) container.scrollTop = 0;
+
+    // Handle back button (History API)
+    if (!window.location.hash.includes('modal')) {
+        history.pushState({ modalOpen: true }, '', '#modal');
+    }
 }
 
 function closeProjectModalFunc() {
     const modal = document.getElementById('projectModal');
+    if (!modal || !modal.classList.contains('active')) return;
+
     modal.classList.remove('active');
     document.body.style.overflow = '';
+
+    // If we closed via UI (not back button), and hash is #modal, go back
+    if (window.location.hash === '#modal') {
+        history.back();
+    }
 }
+
+// Window popstate for Android back button and browser navigation
+window.addEventListener('popstate', (event) => {
+    const modal = document.getElementById('projectModal');
+    if (modal && modal.classList.contains('active')) {
+        // Close without calling history.back() again
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+});
 
 // Modal event listeners
 document.addEventListener('DOMContentLoaded', () => {
