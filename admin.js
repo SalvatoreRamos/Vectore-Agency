@@ -332,19 +332,25 @@ function renderProjects() {
 
     adminProjectsGrid.innerHTML = projects.map(project => {
         const projectId = project._id || project.id;
+        const isVideo = project.thumbnail && project.thumbnail.match(/\.(mp4|webm|ogg|mov)$/i);
+
         return `
-        <div class=\"admin-product-card\" data-id=\"${projectId}\" data-name=\"${project.title}\">
-            <div class=\"admin-product-image\">
-                <img src=\"${project.thumbnail}\" alt=\"${project.title}\" onerror=\"this.src='https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg'\">
+        <div class="admin-product-card" data-id="${projectId}" data-name="${project.title}">
+            <div class="admin-product-image">
+                ${isVideo ?
+                `<video src="${project.thumbnail}" muted style="width:100%; height:100%; object-fit:cover;"></video>` :
+                `<img src="${project.thumbnail}" alt="${project.title}" onerror="this.src='https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg'">`
+            }
                 <div class="product-protection-overlay"></div>
-                <span class=\"category-badge digital\">${project.category}</span>
+                <span class="category-badge digital">${project.category}</span>
+                ${isVideo ? `<span class="video-badge" style="position:absolute; top:10px; left:10px; background:rgba(0,0,0,0.7); color:white; padding:2px 8px; border-radius:4px; font-size:10px;">VIDEO</span>` : ''}
             </div>
-            <div class=\"admin-product-info\">
+            <div class="admin-product-info">
                 <h3>${project.title}</h3>
                 <p><strong>Cliente:</strong> ${project.client}</p>
-                <div class=\"admin-product-actions\">
-                    <button class=\"btn-edit\">Editar</button>
-                    <button class=\"btn-delete\">Eliminar</button>
+                <div class="admin-product-actions">
+                    <button class="btn-edit">Editar</button>
+                    <button class="btn-delete">Eliminar</button>
                 </div>
             </div>
         </div>`;
@@ -932,7 +938,7 @@ function setupEventListeners() {
             if (res.success) pThumbnailInput.value = res.data.url;
             else throw new Error(res.message);
         } catch (error) {
-            alert('Error subiendo miniatura: ' + error.message);
+            alert('Error subiendo miniatura o video: ' + error.message);
             pThumbnailInput.value = '';
             pThumbFile.value = '';
         }

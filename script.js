@@ -104,8 +104,13 @@ function renderPortfolioItems(projects) {
     projects.forEach(project => {
         const item = document.createElement('div');
         item.className = 'portfolio-item';
+        const isVideo = project.thumbnail && (project.thumbnail.match(/\.(mp4|webm|ogg|mov)$|^data:video/i));
+
         item.innerHTML = `
-            <img src="${project.thumbnail}" alt="Proyecto Vectore: ${project.title}" loading="lazy" onerror="this.src='https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg'">
+            ${isVideo ?
+                `<video src="${project.thumbnail}" autoplay loop muted playsinline class="portfolio-video-bg"></video>` :
+                `<img src="${project.thumbnail}" alt="Proyecto Vectore: ${project.title}" loading="lazy" onerror="this.src='https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg'">`
+            }
             <div class="portfolio-overlay">
                 <span class="portfolio-category">${project.category}</span>
                 <h3 class="portfolio-title">${project.title}</h3>
@@ -162,34 +167,45 @@ function openProjectModal(project) {
     const content = document.getElementById('projectModalContent');
 
     // Behance-style template
+    const isMainVideo = project.thumbnail && (project.thumbnail.match(/\.(mp4|webm|ogg|mov)$|^data:video/i));
+
     content.innerHTML = `
-        <div class="project-header">
-            <span class="section-badge">${project.category}</span>
-            <h1>${project.title}</h1>
-            <div class="project-meta">
-                <span><strong>Cliente</strong> ${project.client}</span>
-                <span><strong>Fecha</strong> ${new Date(project.date || Date.now()).toLocaleDateString()}</span>
-                <span><strong>Servicio</strong> ${project.category}</span>
-            </div>
-        </div>
-
-        <div class="project-description">
-            <p>${project.description}</p>
-        </div>
-
-        <div class="project-image-wrapper">
-            <img src="${project.thumbnail}" alt="${project.title}" class="project-main-image" onerror="this.src='https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg'">
-            <div class="product-protection-overlay"></div>
-        </div>
-
-        <div class="project-gallery">
-            ${(project.images || []).map(img => `
-                <div class="project-image-wrapper">
-                    <img src="${img.url}" alt="Galería: ${project.title}" loading="lazy" onerror="this.style.display='none'">
-                    <div class="product-protection-overlay"></div>
+            <div class="project-header">
+                <span class="section-badge">${project.category}</span>
+                <h1>${project.title}</h1>
+                <div class="project-meta">
+                    <span><strong>Cliente</strong> ${project.client}</span>
+                    <span><strong>Fecha</strong> ${new Date(project.date || Date.now()).toLocaleDateString()}</span>
+                    <span><strong>Servicio</strong> ${project.category}</span>
                 </div>
-            `).join('')}
-        </div>
+            </div>
+
+            <div class="project-description">
+                <p>${project.description}</p>
+            </div>
+
+            <div class="project-image-wrapper">
+                ${isMainVideo ?
+            `<video src="${project.thumbnail}" controls autoplay loop muted playsinline class="project-main-image"></video>` :
+            `<img src="${project.thumbnail}" alt="${project.title}" class="project-main-image" onerror="this.src='https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg'">`
+        }
+                <div class="product-protection-overlay"></div>
+            </div>
+
+            <div class="project-gallery">
+                ${(project.images || []).map(img => {
+            const isGalleryVideo = img.url && (img.url.match(/\.(mp4|webm|ogg|mov)$|^data:video/i));
+            return `
+                        <div class="project-image-wrapper">
+                            ${isGalleryVideo ?
+                    `<video src="${img.url}" controls autoplay loop muted playsinline class="gallery-video"></video>` :
+                    `<img src="${img.url}" alt="Galería: ${project.title}" loading="lazy" onerror="this.style.display='none'">`
+                }
+                            <div class="product-protection-overlay"></div>
+                        </div>
+                    `;
+        }).join('')}
+            </div>
 
         <div class="project-footer">
             <h2>¿Te gusta lo que ves?</h2>

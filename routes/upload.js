@@ -34,20 +34,20 @@ try {
         cloudinary: cloudinary,
         params: {
             folder: 'vectore-agency',
-            allowed_formats: ['jpg', 'png', 'jpeg', 'gif', 'webp', 'avif'],
-            transformation: [{ width: 1000, crop: 'limit' }]
+            allowed_formats: ['jpg', 'png', 'jpeg', 'gif', 'webp', 'avif', 'mp4', 'mov', 'webm', 'avi', 'ogg'],
+            resource_type: 'auto', // Important for video support
+            transformation: [{ width: 1280, crop: 'limit' }]
         }
     });
 } catch (error) {
     console.error('❌ Error initializing Cloudinary storage:', error.message);
-    // Fallback or just let it be null (will fail on upload)
     storage = null;
 }
 
 const upload = multer({
     storage: storage,
     limits: {
-        fileSize: 5 * 1024 * 1024 // 5MB max
+        fileSize: 100 * 1024 * 1024 // Increased to 100MB for video support
     }
 });
 
