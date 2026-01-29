@@ -88,9 +88,9 @@ async function loadProjects() {
                 { title: 'Nebula Coffee', client: 'Nebula', category: 'Packaging', thumbnail: 'https://images.pexels.com/photos/4264049/pexels-photo-4264049.jpeg', description: 'Diseño de empaques premium para café de especialidad.' },
                 { title: 'Urban Flota', client: 'Urban Express', category: 'Vehicle Wrap', thumbnail: 'https://images.pexels.com/photos/3853338/pexels-photo-3853338.jpeg', description: 'Rotulación integral de flota vehicular logística.' }
             ];
-            renderPortfolioItems([...dummyProjects, ...dummyProjects]); // Duplicate for smooth loop
+            renderPortfolioItems(dummyProjects);
         } else {
-            renderPortfolioItems([...projects, ...projects]);
+            renderPortfolioItems(projects);
         }
     } catch (error) {
         console.error('Error loading projects:', error);

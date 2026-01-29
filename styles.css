@@ -1650,18 +1650,11 @@ body {
 .portfolio-marquee {
     display: flex;
     white-space: nowrap;
-    animation: marquee 60s linear infinite;
+    /* animation: marquee 60s linear infinite; - Disabled to avoid repeats */
     gap: 30px;
     padding: 0 15px;
     width: max-content;
     will-change: transform;
-}
-
-@media (min-width: 1025px) {
-    .portfolio-marquee {
-        animation: none;
-        /* Disable auto-scroll on desktop */
-    }
 }
 
 .portfolio-marquee.paused {
