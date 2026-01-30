@@ -108,7 +108,7 @@ function renderPortfolioItems(projects) {
 
         item.innerHTML = `
             ${isVideo ?
-                `<video src="${project.thumbnail}" autoplay loop muted playsinline class="portfolio-video-bg" onloadedmetadata="this.play()"></video>` :
+                `<video src="${project.thumbnail}" autoplay loop muted playsinline class="portfolio-video-bg" onloadedmetadata="this.play()" onended="this.play()"></video>` :
                 `<img src="${project.thumbnail}" alt="Proyecto Vectore: ${project.title}" loading="lazy" onerror="this.src='https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg'">`
             }
             <div class="portfolio-overlay">
@@ -186,7 +186,7 @@ function openProjectModal(project) {
 
             <div class="project-image-wrapper">
                 ${isMainVideo ?
-            `<video src="${project.thumbnail}" controls autoplay loop muted playsinline class="project-main-image" onloadedmetadata="this.play()"></video>` :
+            `<video src="${project.thumbnail}" controls autoplay loop muted playsinline class="project-main-image" onloadedmetadata="this.play()" onended="this.play()"></video>` :
             `<img src="${project.thumbnail}" alt="${project.title}" class="project-main-image" onerror="this.src='https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg'">`
         }
                 <div class="product-protection-overlay"></div>
@@ -198,7 +198,7 @@ function openProjectModal(project) {
             return `
                         <div class="project-image-wrapper">
                             ${isGalleryVideo ?
-                    `<video src="${img.url}" controls autoplay loop muted playsinline class="gallery-video"></video>` :
+                    `<video src="${img.url}" controls autoplay loop muted playsinline class="gallery-video" onloadedmetadata="this.play()" onended="this.play()"></video>` :
                     `<img src="${img.url}" alt="Galería: ${project.title}" loading="lazy" onerror="this.style.display='none'">`
                 }
                             <div class="product-protection-overlay"></div>
