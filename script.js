@@ -10,14 +10,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     loadProjects();
     loadTestimonials();
 
-    // Global listener to force video looping if 'loop' attribute fails
-    document.addEventListener('ended', function (e) {
-        if (e.target.tagName === 'VIDEO') {
-            e.target.currentTime = 0;
-            e.target.play().catch(err => console.log("Auto-play blocked after loop:", err));
-        }
-    }, true);
-
     // Init dynamic interactions
     initAnimatedCounters();
     initTiltEffect();
@@ -120,7 +112,7 @@ function renderPortfolioItems(projects) {
 
         item.innerHTML = `
             ${isVideo ?
-                `<video src="${project.thumbnail}" autoplay loop muted playsinline class="portfolio-video-bg" onloadedmetadata="this.play()" onended="this.currentTime=0; this.play()"></video>` :
+                `<video src="${project.thumbnail}" autoplay loop muted playsinline class="portfolio-video-bg"></video>` :
                 `<img src="${project.thumbnail}" alt="Proyecto Vectore: ${project.title}" loading="lazy" onerror="this.src='https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg'">`
             }
             <div class="portfolio-overlay">
@@ -201,7 +193,7 @@ function openProjectModal(project) {
 
             <div class="project-image-wrapper">
                 ${isMainVideo ?
-            `<video src="${project.thumbnail}" controls autoplay loop muted playsinline class="project-main-image" onloadedmetadata="this.play()" onended="this.currentTime=0; this.play()"></video>` :
+            `<video src="${project.thumbnail}" controls autoplay loop muted playsinline class="project-main-image"></video>` :
             `<img src="${project.thumbnail}" alt="${project.title}" class="project-main-image" onerror="this.src='https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg'">`
         }
                 <div class="product-protection-overlay"></div>
@@ -216,7 +208,7 @@ function openProjectModal(project) {
             return `
                         <div class="project-image-wrapper">
                             ${isGalleryVideo ?
-                    `<video src="${img.url}" controls autoplay loop muted playsinline class="gallery-video" onloadedmetadata="this.play()" onended="this.currentTime=0; this.play()"></video>` :
+                    `<video src="${img.url}" controls autoplay loop muted playsinline class="gallery-video"></video>` :
                     `<img src="${img.url}" alt="Galería: ${project.title}" loading="lazy" onerror="this.style.display='none'">`
                 }
                             <div class="product-protection-overlay"></div>
