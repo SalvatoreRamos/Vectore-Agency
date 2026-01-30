@@ -10,6 +10,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     loadProjects();
     loadTestimonials();
 
+    // Global listener to force video looping if 'loop' attribute fails
+    document.addEventListener('ended', function (e) {
+        if (e.target.tagName === 'VIDEO') {
+            e.target.currentTime = 0;
+            e.target.play().catch(err => console.log("Auto-play blocked after loop:", err));
+        }
+    }, true);
+
     // Init dynamic interactions
     initAnimatedCounters();
     initTiltEffect();
@@ -104,11 +112,15 @@ function renderPortfolioItems(projects) {
     projects.forEach(project => {
         const item = document.createElement('div');
         item.className = 'portfolio-item';
-        const isVideo = project.thumbnail && (project.thumbnail.match(/\.(mp4|webm|ogg|mov)$|^data:video/i));
+        // Improved detection for Cloudinary videos and various formats
+        const isVideo = project.thumbnail && (
+            project.thumbnail.match(/\.(mp4|webm|ogg|mov|avi|flv|wmv)$|^data:video/i) ||
+            project.thumbnail.includes('/video/upload/')
+        );
 
         item.innerHTML = `
             ${isVideo ?
-                `<video src="${project.thumbnail}" autoplay loop muted playsinline class="portfolio-video-bg" onloadedmetadata="this.play()" onended="this.play()"></video>` :
+                `<video src="${project.thumbnail}" autoplay loop muted playsinline class="portfolio-video-bg" onloadedmetadata="this.play()" onended="this.currentTime=0; this.play()"></video>` :
                 `<img src="${project.thumbnail}" alt="Proyecto Vectore: ${project.title}" loading="lazy" onerror="this.src='https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg'">`
             }
             <div class="portfolio-overlay">
@@ -167,7 +179,10 @@ function openProjectModal(project) {
     const content = document.getElementById('projectModalContent');
 
     // Behance-style template
-    const isMainVideo = project.thumbnail && (project.thumbnail.match(/\.(mp4|webm|ogg|mov)$|^data:video/i));
+    const isMainVideo = project.thumbnail && (
+        project.thumbnail.match(/\.(mp4|webm|ogg|mov|avi|flv|wmv)$|^data:video/i) ||
+        project.thumbnail.includes('/video/upload/')
+    );
 
     content.innerHTML = `
             <div class="project-header">
@@ -186,7 +201,7 @@ function openProjectModal(project) {
 
             <div class="project-image-wrapper">
                 ${isMainVideo ?
-            `<video src="${project.thumbnail}" controls autoplay loop muted playsinline class="project-main-image" onloadedmetadata="this.play()" onended="this.play()"></video>` :
+            `<video src="${project.thumbnail}" controls autoplay loop muted playsinline class="project-main-image" onloadedmetadata="this.play()" onended="this.currentTime=0; this.play()"></video>` :
             `<img src="${project.thumbnail}" alt="${project.title}" class="project-main-image" onerror="this.src='https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg'">`
         }
                 <div class="product-protection-overlay"></div>
@@ -194,11 +209,14 @@ function openProjectModal(project) {
 
             <div class="project-gallery">
                 ${(project.images || []).map(img => {
-            const isGalleryVideo = img.url && (img.url.match(/\.(mp4|webm|ogg|mov)$|^data:video/i));
+            const isGalleryVideo = img.url && (
+                img.url.match(/\.(mp4|webm|ogg|mov|avi|flv|wmv)$|^data:video/i) ||
+                img.url.includes('/video/upload/')
+            );
             return `
                         <div class="project-image-wrapper">
                             ${isGalleryVideo ?
-                    `<video src="${img.url}" controls autoplay loop muted playsinline class="gallery-video" onloadedmetadata="this.play()" onended="this.play()"></video>` :
+                    `<video src="${img.url}" controls autoplay loop muted playsinline class="gallery-video" onloadedmetadata="this.play()" onended="this.currentTime=0; this.play()"></video>` :
                     `<img src="${img.url}" alt="Galería: ${project.title}" loading="lazy" onerror="this.style.display='none'">`
                 }
                             <div class="product-protection-overlay"></div>

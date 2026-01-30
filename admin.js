@@ -332,13 +332,16 @@ function renderProjects() {
 
     adminProjectsGrid.innerHTML = projects.map(project => {
         const projectId = project._id || project.id;
-        const isVideo = project.thumbnail && project.thumbnail.match(/\.(mp4|webm|ogg|mov)$/i);
+        const isVideo = project.thumbnail && (
+            project.thumbnail.match(/\.(mp4|webm|ogg|mov|avi|flv|wmv)$/i) ||
+            project.thumbnail.includes('/video/upload/')
+        );
 
         return `
         <div class="admin-product-card" data-id="${projectId}" data-name="${project.title}">
             <div class="admin-product-image">
                 ${isVideo ?
-                `<video src="${project.thumbnail}" autoplay loop muted playsinline style="width:100%; height:100%; object-fit:cover;" onloadedmetadata="this.play()" onended="this.play()"></video>` :
+                `<video src="${project.thumbnail}" autoplay loop muted playsinline style="width:100%; height:100%; object-fit:cover;" onloadedmetadata="this.play()" onended="this.currentTime=0; this.play()"></video>` :
                 `<img src="${project.thumbnail}" alt="${project.title}" onerror="this.src='https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg'">`
             }
                 <div class="product-protection-overlay"></div>
