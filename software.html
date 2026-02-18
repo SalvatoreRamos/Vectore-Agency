@@ -127,9 +127,39 @@
         }
 
         .checklist li::before {
-            content: '✓';
             color: var(--primary);
             font-weight: bold;
+        }
+
+        /* Gallery Styles */
+        .software-gallery {
+            padding: 100px 0;
+            background: #0a0a0c;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 50px;
+        }
+
+        .gallery-item {
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.02);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
         }
     </style>
 </head>
@@ -219,36 +249,55 @@
 
             <div class="feature-grid">
                 <!-- Ventas -->
+                <!-- Ventas -->
                 <div class="feature-box">
-                    <div class="feature-icon">💰</div>
+                    <div class="feature-icon" id="icon-sales">💰</div>
                     <h3>Recepción Inteligente</h3>
                     <p style="color: rgba(255,255,255,0.6);">Cotiza en segundos. Ingresa medidas y material, y el
                         sistema calcula el precio y genera la orden.</p>
                 </div>
 
                 <!-- Diseño -->
+                <!-- Diseño -->
                 <div class="feature-box">
-                    <div class="feature-icon">🎨</div>
+                    <div class="feature-icon" id="icon-design">🎨</div>
                     <h3>Panel de Diseño</h3>
                     <p style="color: rgba(255,255,255,0.6);">Organiza la cola de arte. Envía links de aprobación por
                         WhatsApp y recibe el "OK" del cliente automáticamente.</p>
                 </div>
 
                 <!-- Producción -->
+                <!-- Producción -->
                 <div class="feature-box">
-                    <div class="feature-icon">🖨️</div>
+                    <div class="feature-icon" id="icon-print">🖨️</div>
                     <h3>Cola de Impresión</h3>
                     <p style="color: rgba(255,255,255,0.6);">Descarga archivos finales directos al RIP. Sin WeTransfer
                         ni USBs perdidos.</p>
                 </div>
 
                 <!-- Instalación -->
+                <!-- Instalación -->
                 <div class="feature-box">
-                    <div class="feature-icon">🛠️</div>
+                    <div class="feature-icon" id="icon-install">🛠️</div>
                     <h3>App de Instalación</h3>
                     <p style="color: rgba(255,255,255,0.6);">El instalador ve la ruta en su móvil, hace checklist de
                         salida y toma foto de conformidad.</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="software-gallery" id="gallery-section" style="display: none;">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Galería</span>
+                <h2 class="section-title" style="color: white;">Explora la Interfaz</h2>
+                <p class="section-subtitle" style="color: rgba(255,255,255,0.6);">Capturas reales de Vectore Flow en
+                    acción.</p>
+            </div>
+            <div class="gallery-grid" id="softwareGalleryGrid">
+                <!-- Dynamically loaded -->
             </div>
         </div>
     </section>
@@ -455,12 +504,42 @@
                         }
                     }
 
-                    // 2. Feature Images (Future Implementation)
-                    // You can add logic here to populate other sections dynamically
+                    // 2. Feature Icons/Images
+                    const updateIcon = (id, keywords) => {
+                        const iconAsset = assets.find(a =>
+                            a.section === 'features' &&
+                            keywords.some(k => a.title.toLowerCase().includes(k))
+                        );
+                        if (iconAsset && iconAsset.url) {
+                            const el = document.getElementById(id);
+                            if (el) {
+                                el.innerHTML = `<img src="${iconAsset.url}" alt="${iconAsset.title}" style="width: 50px; height: 50px; object-fit: contain;">`;
+                            }
+                        }
+                    };
+
+                    updateIcon('icon-sales', ['recepcion', 'ventas', 'sales', 'money']);
+                    updateIcon('icon-design', ['diseño', 'design', 'art']);
+                    updateIcon('icon-print', ['impresion', 'print', 'cola']);
+                    updateIcon('icon-install', ['instalacion', 'install', 'tools']);
+
+                    // 3. Gallery
+                    const galleryAssets = assets.filter(a => a.section === 'gallery' || a.section === 'galería');
+                    if (galleryAssets.length > 0) {
+                        const gallerySection = document.getElementById('gallery-section');
+                        const galleryGrid = document.getElementById('softwareGalleryGrid');
+                        if (gallerySection && galleryGrid) {
+                            gallerySection.style.display = 'block';
+                            galleryGrid.innerHTML = galleryAssets.map(asset => `
+                                <div class="gallery-item">
+                                    <img src="${asset.url}" alt="${asset.title}" loading="lazy">
+                                </div>
+                            `).join('');
+                        }
+                    }
                 }
             } catch (error) {
                 console.error('Error loading assets:', error);
-                // Keep default placeholder if error
             }
         }
 
