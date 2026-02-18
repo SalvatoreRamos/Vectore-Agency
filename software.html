@@ -189,8 +189,9 @@
             </div>
 
             <!-- App Visualization -->
-            <div class="mockup-container">
-                <div
+            <div class="mockup-container" id="heroMockupContainer">
+                <!-- Validated Placeholder -->
+                <div class="app-mockup"
                     style="background: #1E1E24; height: 500px; width: 100%; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.1);">
                     <div style="text-align: center; opacity: 0.5;">
                         <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -199,7 +200,7 @@
                             <line x1="3" y1="9" x2="21" y2="9" />
                             <line x1="9" y1="21" x2="9" y2="9" />
                         </svg>
-                        <p>Interfaz de Vectore Flow</p>
+                        <p>Cargando vista previa...</p>
                     </div>
                 </div>
             </div>
@@ -429,6 +430,44 @@
                 });
             });
         }
+
+        // ===================================
+        // Dynamic Asset Loading
+        // ===================================
+        const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:3000/api' : '/api';
+
+        async function loadSoftwareAssets() {
+            try {
+                const response = await fetch(`${API_URL}/software`);
+                const data = await response.json();
+
+                if (data.success && data.data) {
+                    const assets = data.data;
+
+                    // 1. Hero Mockup
+                    const heroAsset = assets.find(a => a.section === 'hero' || a.section === 'mockup');
+                    if (heroAsset) {
+                        const container = document.getElementById('heroMockupContainer');
+                        if (container) {
+                            container.innerHTML = `
+                                <img src="${heroAsset.url}" alt="${heroAsset.title}" class="app-mockup" style="width: 100%; height: auto; display: block;">
+                            `;
+                        }
+                    }
+
+                    // 2. Feature Images (Future Implementation)
+                    // You can add logic here to populate other sections dynamically
+                }
+            } catch (error) {
+                console.error('Error loading assets:', error);
+                // Keep default placeholder if error
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSoftwareAssets();
+        });
     </script>
 </body>
 
