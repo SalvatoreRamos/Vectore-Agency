@@ -4,8 +4,11 @@
 let products = [];
 let projects = [];
 let testimonials = [];
+
 let events = [];
+let flowAssets = [];
 let activeSection = 'catalog';
+
 let editingProductId = null;
 let editingProjectId = null;
 let editingTestimonialId = null;
@@ -27,13 +30,17 @@ const btnLogout = document.getElementById('btnLogout');
 const catalogSection = document.getElementById('catalogSection');
 const portfolioSection = document.getElementById('portfolioSection');
 const testimonialsSection = document.getElementById('testimonialsSection');
+
 const eventsSection = document.getElementById('eventsSection');
+const flowSection = document.getElementById('flowSection');
 
 // Action Buttons
 const btnAddProduct = document.getElementById('btnAddProduct');
 const btnAddProject = document.getElementById('btnAddProject');
 const btnAddTestimonial = document.getElementById('btnAddTestimonial');
+
 const btnAddEvent = document.getElementById('btnAddEvent');
+const btnAddFlow = document.getElementById('btnAddFlow');
 
 // Modals
 const productModal = document.getElementById('productModal');
@@ -41,7 +48,9 @@ const projectFormModal = document.getElementById('projectFormModal');
 const testimonialModal = document.getElementById('testimonialModal');
 const eventAdminModal = document.getElementById('eventAdminModal');
 const deleteModal = document.getElementById('deleteModal');
+
 const drawModal = document.getElementById('drawModal');
+const flowModal = document.getElementById('flowModal');
 
 // Forms
 const productForm = document.getElementById('productForm');
@@ -59,7 +68,9 @@ const deleteItemName = document.getElementById('deleteItemName');
 const adminProductsGrid = document.getElementById('adminProductsGrid');
 const adminProjectsGrid = document.getElementById('adminProjectsGrid');
 const adminTestimonialsGrid = document.getElementById('adminTestimonialsGrid');
+
 const adminEventsGrid = document.getElementById('adminEventsGrid');
+const adminFlowGrid = document.getElementById('adminFlowGrid');
 
 // Stats
 const totalProductsEl = document.getElementById('totalProducts');
@@ -80,7 +91,9 @@ const tPhotoInput = document.getElementById('tPhoto');
 const productFile = document.getElementById('productFile');
 const pThumbFile = document.getElementById('pThumbFile');
 const pGalleryFiles = document.getElementById('pGalleryFiles');
+
 const tPhotoFile = document.getElementById('tPhotoFile');
+const fFile = document.getElementById('fFile');
 
 // Close Buttons
 const modalClose = document.getElementById('modalClose');
@@ -89,12 +102,15 @@ const testimonialModalClose = document.getElementById('testimonialModalClose');
 const eventAdminModalClose = document.getElementById('eventAdminModalClose');
 const deleteModalClose = document.getElementById('deleteModalClose');
 const drawModalClose = document.getElementById('drawModalClose');
+const flowModalClose = document.getElementById('flowModalClose');
 
 const btnCancelProduct = document.getElementById('btnCancelProduct');
 const btnCancelProject = document.getElementById('btnCancelProject');
 const btnCancelTestimonial = document.getElementById('btnCancelTestimonial');
 const btnCancelEvent = document.getElementById('btnCancelEvent');
+const btnCancelFlow = document.getElementById('btnCancelFlow');
 const btnCancelDelete = document.getElementById('btnCancelDelete');
+
 
 // Other
 const btnConfirmDelete = document.getElementById('btnConfirmDelete');
@@ -203,7 +219,10 @@ async function showDashboard() {
         fetchAndRenderProducts(),
         fetchAndRenderProjects(),
         fetchAndRenderTestimonials(),
-        fetchAndRenderEvents()
+        fetchAndRenderProjects(),
+        fetchAndRenderTestimonials(),
+        fetchAndRenderEvents(),
+        fetchAndRenderFlowAssets()
     ]);
 }
 
@@ -241,7 +260,9 @@ function switchSection(section) {
     if (catalogSection) catalogSection.style.display = section === 'catalog' ? 'block' : 'none';
     if (portfolioSection) portfolioSection.style.display = section === 'portfolio' ? 'block' : 'none';
     if (testimonialsSection) testimonialsSection.style.display = section === 'testimonials' ? 'block' : 'none';
+    if (testimonialsSection) testimonialsSection.style.display = section === 'testimonials' ? 'block' : 'none';
     if (eventsSection) eventsSection.style.display = section === 'events' ? 'block' : 'none';
+    if (flowSection) flowSection.style.display = section === 'flow' ? 'block' : 'none';
 }
 
 // ===================================
@@ -517,6 +538,16 @@ async function saveEvent(eventData) {
     }
 }
 
+async function saveFlowAsset(data) {
+    try {
+        await api.createSoftwareAsset(data);
+        await fetchAndRenderFlowAssets();
+        closeFlowModal();
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
+}
+
 async function deleteItemAction() {
     if (!deletingId) return;
     try {
@@ -525,6 +556,7 @@ async function deleteItemAction() {
         else if (deletingType === 'project') res = await api.deleteProject(deletingId);
         else if (deletingType === 'testimonial') res = await api.deleteTestimonial(deletingId);
         else if (deletingType === 'event') res = await api.deleteEvent(deletingId);
+        else if (deletingType === 'flow') res = await api.deleteSoftwareAsset(deletingId);
 
         if (res.success) {
             setTimeout(async () => {
@@ -532,6 +564,7 @@ async function deleteItemAction() {
                 else if (deletingType === 'project') await fetchAndRenderProjects();
                 else if (deletingType === 'testimonial') await fetchAndRenderTestimonials();
                 else if (deletingType === 'event') await fetchAndRenderEvents();
+                else if (deletingType === 'flow') await fetchAndRenderFlowAssets();
                 alert('Eliminado con éxito');
             }, 500);
         }
@@ -645,6 +678,16 @@ function openEventAdminModal(id = null) {
 function closeEventAdminModal() {
     eventAdminModal.classList.remove('active');
     editingEventId = null;
+}
+
+function openFlowModal() {
+    const form = document.getElementById('flowForm');
+    if (form) form.reset();
+    flowModal.classList.add('active');
+}
+
+function closeFlowModal() {
+    flowModal.classList.remove('active');
 }
 
 function openDeleteModal(id, type, name) {
@@ -820,7 +863,9 @@ function setupEventListeners() {
     if (btnAddProduct) btnAddProduct.addEventListener('click', openAddModal);
     if (btnAddProject) btnAddProject.addEventListener('click', openAddProjectModal);
     if (btnAddTestimonial) btnAddTestimonial.addEventListener('click', openAddTestimonialModal);
+
     if (btnAddEvent) btnAddEvent.addEventListener('click', () => openEventAdminModal());
+    if (btnAddFlow) btnAddFlow.addEventListener('click', openFlowModal);
 
     // Modals
     if (modalClose) modalClose.addEventListener('click', closeProductModal);
@@ -830,7 +875,10 @@ function setupEventListeners() {
     if (testimonialModalClose) testimonialModalClose.addEventListener('click', closeTestimonialModal);
     if (btnCancelTestimonial) btnCancelTestimonial.addEventListener('click', closeTestimonialModal);
     if (eventAdminModalClose) eventAdminModalClose.addEventListener('click', closeEventAdminModal);
+
     if (btnCancelEvent) btnCancelEvent.addEventListener('click', closeEventAdminModal);
+    if (flowModalClose) flowModalClose.addEventListener('click', closeFlowModal);
+    if (btnCancelFlow) btnCancelFlow.addEventListener('click', closeFlowModal);
     if (deleteModalClose) deleteModalClose.addEventListener('click', closeDeleteModal);
     if (btnCancelDelete) btnCancelDelete.addEventListener('click', closeDeleteModal);
     if (drawModalClose) drawModalClose.addEventListener('click', () => drawModal.classList.remove('active'));
@@ -898,6 +946,18 @@ function setupEventListeners() {
         saveEvent(data);
     });
 
+    if (document.getElementById('flowForm')) {
+        document.getElementById('flowForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const data = {
+                title: document.getElementById('fTitle').value,
+                section: document.getElementById('fSection').value,
+                url: document.getElementById('fUrl').value
+            };
+            saveFlowAsset(data);
+        });
+    }
+
     // Delegations
     if (adminProductsGrid) adminProductsGrid.addEventListener('click', (e) => {
         const d = getTargetData(e, '.btn-edit'); if (d) openEditModal(d.id);
@@ -916,6 +976,9 @@ function setupEventListeners() {
         const del = getTargetData(e, '.btn-delete'); if (del) openDeleteModal(del.id, 'event', del.name);
         const draw = getTargetData(e, '.btn-draw'); if (draw) openDrawModal(draw.id);
         const part = getTargetData(e, '.btn-participants'); if (part) openParticipantsModal(part.id);
+    });
+    if (adminFlowGrid) adminFlowGrid.addEventListener('click', (e) => {
+        const del = getTargetData(e, '.btn-delete'); if (del) openDeleteModal(del.id, 'flow', del.name);
     });
 
     // File Uploads
@@ -979,6 +1042,20 @@ function setupEventListeners() {
             alert('Error subiendo foto: ' + error.message);
             tPhotoInput.value = '';
             tPhotoFile.value = '';
+        }
+    });
+
+    if (fFile) fFile.addEventListener('change', async (e) => {
+        const f = e.target.files[0]; if (!f) return;
+        try {
+            document.getElementById('fUrl').value = 'Subiendo...';
+            const res = await api.uploadImage(f);
+            if (res.success) document.getElementById('fUrl').value = res.data.url;
+            else throw new Error(res.message);
+        } catch (error) {
+            alert('Error subiendo imagen flow: ' + error.message);
+            document.getElementById('fUrl').value = '';
+            fFile.value = '';
         }
     });
 }

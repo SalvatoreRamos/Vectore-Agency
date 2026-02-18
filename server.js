@@ -14,6 +14,7 @@ import uploadRoutes from './routes/upload.js';
 import projectRoutes from './routes/projects.js';
 import testimonialRoutes from './routes/testimonials.js';
 import eventRoutes from './routes/events.js';
+import softwareRoutes from './routes/software.js';
 
 // Load environment variables
 dotenv.config();
@@ -94,6 +95,7 @@ app.use('/api/projects', projectRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/testimonials', testimonialRoutes);
 app.use('/api/events', eventRoutes);
+app.use('/api/software', softwareRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

@@ -260,6 +260,29 @@ class VectoreAPI {
             headers: this.getHeaders()
         });
     }
+
+    // ===================================
+    // VECTORE FLOW (SOFTWARE) ENDPOINTS
+    // ===================================
+    async getSoftwareAssets() {
+        return this.request('/software');
+    }
+
+    async createSoftwareAsset(assetData) {
+        return this.request('/software', {
+            method: 'POST',
+            body: JSON.stringify(assetData),
+            headers: this.getHeaders()
+        });
+    }
+
+    async deleteSoftwareAsset(id) {
+        return this.request(`/software/${id}`, {
+            method: 'DELETE',
+            headers: this.getHeaders()
+        });
+    }
+
 }
 
 // Create a global instance

@@ -106,6 +106,14 @@
                     </svg>
                     Eventos/Sorteos
                 </a>
+                <a href="#" class="nav-item" data-section="flow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                        </path>
+                    </svg>
+                    Vectore Flow
+                </a>
                 <a href="index.html" class="nav-item">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
@@ -265,6 +273,32 @@
                     <!-- Lista de Eventos -->
                     <div class="products-grid" id="adminEventsGrid">
                         <!-- Event Cards Loaded Dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==========================
+                 VECTORE FLOW SECTION 
+                 ========================== -->
+            <div id="flowSection" style="display: none;">
+                <header class="admin-header">
+                    <div class="header-left">
+                        <h1>Vectore Flow</h1>
+                        <p>Gestiona los recursos e imágenes para Vectore Flow</p>
+                    </div>
+                    <button class="btn btn-primary" id="btnAddFlow">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Subir Imagen
+                    </button>
+                </header>
+
+                <div class="admin-section">
+                    <div class="products-grid" id="adminFlowGrid">
+                        <!-- Flow Assets Loaded Dynamically -->
                     </div>
                 </div>
             </div>
@@ -504,6 +538,44 @@
                 <button class="btn btn-secondary" id="btnCancelDelete">Cancelar</button>
                 <button class="btn btn-danger" id="btnConfirmDelete">Eliminar</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal: Vectore Flow (Upload) -->
+    <div class="modal" id="flowModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="flowModalTitle">Subir Imagen Flow</h3>
+                <button class="modal-close" id="flowModalClose">&times;</button>
+            </div>
+            <form class="modal-form" id="flowForm">
+                <input type="hidden" id="flowId">
+                <div class="form-group">
+                    <label>Título / Referencia</label>
+                    <input type="text" id="fTitle" required placeholder="Ej: Mockup Hero">
+                </div>
+                <div class="form-group">
+                    <label>Sección</label>
+                    <select id="fSection" required>
+                        <option value="general">General</option>
+                        <option value="hero">Hero</option>
+                        <option value="features">Features</option>
+                        <option value="gallery">Galería</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Imagen</label>
+                    <div class="file-upload-area">
+                        <input type="file" id="fFile" accept="image/*" class="form-control">
+                        <small class="form-hint">O pega un enlace:</small>
+                        <input type="url" id="fUrl" placeholder="https://...">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="btnCancelFlow">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
         </div>
     </div>
 
