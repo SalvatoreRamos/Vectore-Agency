@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initTiltEffect();
     initMagneticButtons();
     initHeroTypingEffect();
+    loadFlowTeaser();
 
     // Prevent right click on protected images
     document.addEventListener('contextmenu', (e) => {
@@ -796,4 +797,42 @@ function initHeroTypingEffect() {
         subtitle.style.opacity = '1';
         type();
     }, 1500);
+}
+
+// ===================================
+// Vectore Flow Teaser Logic
+// ===================================
+async function loadFlowTeaser() {
+    const previewContainer = document.getElementById('indexFlowPreview');
+    if (!previewContainer) return;
+
+    try {
+        // We can use the api client if available globally, or fetch directly
+        // Assuming api object is available from api-client.js
+        if (typeof api !== 'undefined') {
+            const response = await api.getSoftwareAssets();
+            const assets = response.data || [];
+
+            // Find hero or mockup image, prioritising 'hero', then 'mockup', then just the first one
+            const heroAsset = assets.find(a => a.section === 'hero') ||
+                assets.find(a => a.section === 'mockup') ||
+                assets[0];
+
+            if (heroAsset) {
+                // Clear placeholder
+                previewContainer.innerHTML = '';
+
+                const img = document.createElement('img');
+                img.src = heroAsset.url;
+                img.alt = heroAsset.title;
+                img.style.width = '100%';
+                img.style.height = 'auto';
+                img.style.display = 'block';
+
+                previewContainer.appendChild(img);
+            }
+        }
+    } catch (error) {
+        console.error('Error loading Flow teaser:', error);
+    }
 }

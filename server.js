@@ -106,6 +106,11 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Specific Pages
+app.get('/software', (req, res) => {
+  res.sendFile(path.join(__dirname, 'software.html'));
+});
+
 // Serve index.html for any other route (SPA support)
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
