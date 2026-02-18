@@ -803,36 +803,68 @@ function initHeroTypingEffect() {
 // Vectore Flow Teaser Logic
 // ===================================
 async function loadFlowTeaser() {
+    console.log('loadFlowTeaser: Starting...');
     const previewContainer = document.getElementById('indexFlowPreview');
-    if (!previewContainer) return;
+    if (!previewContainer) {
+        console.warn('loadFlowTeaser: Container #indexFlowPreview not found');
+        return;
+    }
 
     try {
-        // We can use the api client if available globally, or fetch directly
-        // Assuming api object is available from api-client.js
-        if (typeof api !== 'undefined') {
-            const response = await api.getSoftwareAssets();
-            const assets = response.data || [];
+        if (typeof api === 'undefined') {
+            console.error('loadFlowTeaser: API client not loaded');
+            previewContainer.innerHTML = '<p style="padding:20px; color:red;">Error: API no disponible</p>';
+            return;
+        }
 
-            // Find hero or mockup image, prioritising 'hero', then 'mockup', then just the first one
-            const heroAsset = assets.find(a => a.section === 'hero') ||
-                assets.find(a => a.section === 'mockup') ||
-                assets[0];
+        console.log('loadFlowTeaser: Fetching assets...');
+        const response = await api.getSoftwareAssets();
+        console.log('loadFlowTeaser: API Response', response);
 
-            if (heroAsset) {
-                // Clear placeholder
-                previewContainer.innerHTML = '';
+        const assets = response.data || [];
 
-                const img = document.createElement('img');
-                img.src = heroAsset.url;
-                img.alt = heroAsset.title;
-                img.style.width = '100%';
-                img.style.height = 'auto';
-                img.style.display = 'block';
+        if (assets.length === 0) {
+            console.warn('loadFlowTeaser: No assets found');
+            previewContainer.innerHTML = `
+                <div style="aspect-ratio: 16/9; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: rgba(255,255,255,0.5); padding: 20px; text-align: center;">
+                    <p>Próximamente</p>
+                    <small>Sube una imagen desde el Admin Panel</small>
+                </div>
+            `;
+            return;
+        }
 
-                previewContainer.appendChild(img);
-            }
+        // Find best match: Hero > Mockup > Any
+        let heroAsset = assets.find(a => a.section && a.section.toLowerCase() === 'hero');
+        if (!heroAsset) heroAsset = assets.find(a => a.section && a.section.toLowerCase() === 'mockup');
+        if (!heroAsset) heroAsset = assets[0];
+
+        if (heroAsset) {
+            console.log('loadFlowTeaser: Displaying asset', heroAsset);
+            // Clear placeholder
+            previewContainer.innerHTML = '';
+
+            const img = document.createElement('img');
+            img.src = heroAsset.url;
+            img.alt = heroAsset.title;
+            img.style.width = '100%';
+            img.style.height = 'auto'; // Maintain aspect ratio
+            img.style.display = 'block';
+            img.loading = 'lazy';
+
+            // Handle image load error
+            img.onerror = () => {
+                console.error('loadFlowTeaser: Failed to load image URL', heroAsset.url);
+                previewContainer.innerHTML = '<p style="padding:20px;">Error al cargar la imagen</p>';
+            };
+
+            previewContainer.appendChild(img);
         }
     } catch (error) {
-        console.error('Error loading Flow teaser:', error);
+        console.error('loadFlowTeaser: Error', error);
+        previewContainer.innerHTML = '<p style="padding:20px; color:rgba(255,255,255,0.5);">No se pudo cargar la vista previa</p>';
     }
 }
+
+// Global debug
+window.loadFlowTeaser = loadFlowTeaser;
