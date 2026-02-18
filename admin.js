@@ -471,6 +471,64 @@ function renderEvents() {
                     <button class=\"btn btn-delete\">Eliminar</button>
                 </div>
             </div>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+async function fetchAndRenderFlowAssets() {
+    try {
+        const flowGrid = document.getElementById('adminFlowGrid');
+        if (!flowGrid) return;
+
+        flowGrid.innerHTML = '<div class="loader">Loading...</div>';
+        const response = await api.getSoftwareAssets();
+
+        if (response.success) {
+            flowAssets = response.data || [];
+            renderFlowAssets();
+        } else {
+            flowGrid.innerHTML = 'Error loading assets';
+        }
+    } catch (error) {
+        console.error('Error fetching flow assets:', error);
+        const flowGrid = document.getElementById('adminFlowGrid');
+        if (flowGrid) flowGrid.innerHTML = 'Error loading assets';
+    }
+}
+
+function renderFlowAssets() {
+    const flowGrid = document.getElementById('adminFlowGrid');
+    if (!flowGrid) return;
+
+    if (flowAssets.length === 0) {
+        flowGrid.innerHTML = '<p class="no-products">No hay imágenes en Flow.</p>';
+        return;
+    }
+
+    flowGrid.innerHTML = flowAssets.map(asset => {
+        // Use either _id or id depending on what backend sends
+        const assetId = asset._id || asset.id;
+
+        // Ensure image URL is valid
+        const imgUrl = asset.url || 'https://via.placeholder.com/300x200?text=No+Image';
+
+        return `
+        <div class="admin-product-card flow-card" data-id="${assetId}" data-name="${asset.title}">
+            <div class="admin-product-image">
+                <img src="${imgUrl}" alt="${asset.title}" onerror="this.src='https://via.placeholder.com/300x200?text=Error'">
+                <div class="product-protection-overlay"></div>
+                <span class="category-badge digital" style="background: #8655FF;">${asset.section || 'General'}</span>
+            </div>
+            <div class="admin-product-info">
+                <h3 style="margin-bottom: 5px;">${asset.title}</h3>
+                <p style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 10px;">${asset.section}</p>
+                <div class="admin-product-actions">
+                     <button class="btn-edit" onclick="navigator.clipboard.writeText('${imgUrl}').then(() => alert('URL copiada'))">Copiar URL</button>
+                    <button class="btn-delete">Eliminar</button>
+                </div>
+            </div>
         </div>`;
     }).join('');
 }
