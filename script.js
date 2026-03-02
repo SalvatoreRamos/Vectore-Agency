@@ -585,7 +585,7 @@ function createProductCard(product) {
                 <span class="price">Desde S/ ${product.price}</span>
             </div>
             <div class="product-buttons">
-                <button class="btn-add-cart" onclick="addToCart({id:'${productId}',name:'${product.name.replace(/'/g, "\\'")}',price:${product.price},category:'${product.category}',image:'${product.images && product.images[0] ? product.images[0].url : ''}'})" aria-label="Agregar al carrito">
+                <button class="btn-add-cart" data-product-id="${productId}" data-product-name="${product.name}" data-product-price="${product.price}" data-product-category="${product.category}" data-product-image="${product.images && product.images[0] ? product.images[0].url : ''}" aria-label="Agregar al carrito">
                     🛒 Agregar
                 </button>
                 <a href="${whatsappLink}" target="_blank" rel="noopener noreferrer" class="btn-buy" aria-label="Cotizar ${product.name}">
