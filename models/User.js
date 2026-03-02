@@ -33,6 +33,10 @@ const userSchema = new mongoose.Schema({
         enum: ['admin', 'user'],
         default: 'user'
     },
+    avatar: {
+        type: String,
+        default: ''
+    },
     isActive: {
         type: Boolean,
         default: true

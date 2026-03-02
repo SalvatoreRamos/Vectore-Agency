@@ -123,4 +123,68 @@ router.get('/me', authenticate, async (req, res) => {
     }
 });
 
+// @route   POST /api/auth/google
+// @desc    Login/Register via Google Sign-In
+// @access  Public
+router.post('/google', async (req, res) => {
+    try {
+        const { credential } = req.body;
+
+        if (!credential) {
+            return res.status(400).json({ success: false, message: 'Google credential is required' });
+        }
+
+        // Verify Google ID token
+        const ticket = await client.verifyIdToken({
+            idToken: credential,
+            audience: process.env.GOOGLE_CLIENT_ID
+        });
+
+        const payload = ticket.getPayload();
+        const { sub: googleId, email, name, picture } = payload;
+
+        // Find or create user
+        let user = await User.findOne({ $or: [{ googleId }, { email }] });
+
+        if (!user) {
+            user = new User({
+                googleId,
+                email,
+                name,
+                avatar: picture,
+                role: 'user',
+                isActive: true
+            });
+            await user.save();
+        } else {
+            // Update Google info if needed
+            if (!user.googleId) user.googleId = googleId;
+            if (picture) user.avatar = picture;
+            user.lastLogin = new Date();
+            await user.save();
+        }
+
+        const token = generateToken(user._id);
+
+        res.json({
+            success: true,
+            token,
+            user: {
+                id: user._id,
+                email: user.email,
+                name: user.name,
+                avatar: user.avatar || picture,
+                role: user.role
+            }
+        });
+    } catch (error) {
+        console.error('Google auth error:', error);
+        res.status(401).json({
+            success: false,
+            message: 'Error al autenticar con Google',
+            error: error.message
+        });
+    }
+});
+
 export default router;
