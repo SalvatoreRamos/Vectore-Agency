@@ -131,6 +131,13 @@ async function handleGoogleResponse(response) {
             renderUserUI();
             closeAuthModal();
             showToast('¡Bienvenido, ' + data.user.name + '!');
+
+            // Add pending cart product if user was trying to add before login
+            if (window._pendingCartProduct) {
+                var pending = window._pendingCartProduct;
+                window._pendingCartProduct = null;
+                setTimeout(function () { addToCart(pending); }, 500);
+            }
         } else {
             console.error('Google auth failed:', JSON.stringify(data));
             var errDetail = data.error ? (data.message + ': ' + data.error) : data.message;
@@ -259,6 +266,14 @@ function saveCart() {
 }
 
 function addToCart(product) {
+    // Require login first
+    if (!currentUser) {
+        // Save pending product to add after login
+        window._pendingCartProduct = product;
+        openAuthModal();
+        return;
+    }
+
     const existing = cart.find(item => item.id === product.id);
     if (existing) {
         existing.qty += 1;
