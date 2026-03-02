@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Libro de Reclamaciones | Vectore</title>
+    <meta name="description"
+        content="Libro de Reclamaciones virtual de Vectore, conforme a la Ley N° 29571 y los lineamientos de INDECOPI.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="legal.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <span class="logo-icon">✦</span>
+                Vectore
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="/" class="nav-link">Inicio</a></li>
+                <li><a href="/#servicios" class="nav-link">Servicios</a></li>
+                <li><a href="/#catalogo" class="nav-link">Catálogo</a></li>
+                <li><a href="/#contacto" class="nav-link">Contacto</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="legal-page libro-reclamaciones-page">
+        <div class="container">
+            <div class="legal-header">
+                <span class="section-badge">INDECOPI</span>
+                <h1>📋 Libro de Reclamaciones</h1>
+                <p class="legal-updated">Conforme a la Ley N° 29571 — Código de Protección y Defensa del Consumidor</p>
+            </div>
+
+            <div class="provider-info">
+                <h3>Datos del Proveedor</h3>
+                <div class="provider-grid">
+                    <div>
+                        <strong>Razón Social:</strong>
+                        <span>Vectore — Agencia Publicitaria</span>
+                    </div>
+                    <div>
+                        <strong>RUC:</strong>
+                        <span>1072114420</span>
+                    </div>
+                    <div>
+                        <strong>Dirección:</strong>
+                        <span>Jr. Tarapacá 390, Callería, Pucallpa, Ucayali, Perú</span>
+                    </div>
+                    <div>
+                        <strong>Teléfono:</strong>
+                        <span>+51 950 699 910</span>
+                    </div>
+                    <div>
+                        <strong>Correo:</strong>
+                        <span>agenciavectore@gmail.com</span>
+                    </div>
+                </div>
+            </div>
+
+            <form id="complaintForm" class="complaint-form">
+                <!-- Section 1: Consumer Data -->
+                <fieldset>
+                    <legend>1. Datos del Consumidor</legend>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="consumerName">Nombres y Apellidos *</label>
+                            <input type="text" id="consumerName" name="consumerName" required
+                                placeholder="Ingrese su nombre completo">
+                        </div>
+                        <div class="form-group">
+                            <label for="consumerDocType">Tipo de Documento *</label>
+                            <select id="consumerDocType" name="consumerDocType" required>
+                                <option value="">Seleccionar</option>
+                                <option value="DNI">DNI</option>
+                                <option value="CE">Carné de Extranjería</option>
+                                <option value="Pasaporte">Pasaporte</option>
+                                <option value="RUC">RUC</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="consumerDocNumber">Número de Documento *</label>
+                            <input type="text" id="consumerDocNumber" name="consumerDocNumber" required
+                                placeholder="Ej: 12345678">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="consumerEmail">Correo Electrónico *</label>
+                            <input type="email" id="consumerEmail" name="consumerEmail" required
+                                placeholder="correo@ejemplo.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="consumerPhone">Teléfono / Celular *</label>
+                            <input type="tel" id="consumerPhone" name="consumerPhone" required
+                                placeholder="Ej: 999888777">
+                        </div>
+                        <div class="form-group">
+                            <label for="consumerAddress">Domicilio</label>
+                            <input type="text" id="consumerAddress" name="consumerAddress"
+                                placeholder="Dirección del consumidor">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="isMinor">¿El reclamo es a nombre de un menor de edad?</label>
+                            <select id="isMinor" name="isMinor">
+                                <option value="no">No</option>
+                                <option value="si">Sí</option>
+                            </select>
+                        </div>
+                        <div class="form-group minor-fields" id="minorFields" style="display: none;">
+                            <label for="parentName">Nombre del padre/madre/tutor</label>
+                            <input type="text" id="parentName" name="parentName" placeholder="Nombre del apoderado">
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Section 2: Product/Service Info -->
+                <fieldset>
+                    <legend>2. Identificación del Bien Contratado</legend>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="productType">Tipo *</label>
+                            <select id="productType" name="productType" required>
+                                <option value="">Seleccionar</option>
+                                <option value="Producto">Producto</option>
+                                <option value="Servicio">Servicio</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="productDescription">Descripción del Producto o Servicio *</label>
+                            <input type="text" id="productDescription" name="productDescription" required
+                                placeholder="Ej: Diseño de logo, impresión de stickers, etc.">
+                        </div>
+                        <div class="form-group">
+                            <label for="orderAmount">Monto Reclamado (S/)</label>
+                            <input type="number" id="orderAmount" name="orderAmount" step="0.01" min="0"
+                                placeholder="0.00">
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Section 3: Complaint Details -->
+                <fieldset>
+                    <legend>3. Detalle de la Reclamación</legend>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="complaintType">Tipo *</label>
+                            <select id="complaintType" name="complaintType" required>
+                                <option value="">Seleccionar</option>
+                                <option value="Reclamo">Reclamo (disconformidad con el producto o servicio)</option>
+                                <option value="Queja">Queja (malestar respecto a la atención al público)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="complaintDetail">Descripción detallada *</label>
+                        <textarea id="complaintDetail" name="complaintDetail" rows="5" required
+                            placeholder="Describa con detalle su reclamo o queja. Incluya fechas, montos y cualquier información relevante."></textarea>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="consumerRequest">Pedido del Consumidor *</label>
+                        <textarea id="consumerRequest" name="consumerRequest" rows="3" required
+                            placeholder="¿Qué solución espera recibir?"></textarea>
+                    </div>
+                </fieldset>
+
+                <!-- Consent -->
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="acceptTerms" required>
+                    <label for="acceptTerms">Declaro que la información proporcionada es veraz y acepto los <a
+                            href="/terminos" target="_blank">Términos y Condiciones</a> y la <a
+                            href="/politica-devoluciones" target="_blank">Política de Devoluciones</a>. *</label>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-block" id="submitComplaint">
+                        <span>Enviar Reclamación</span>
+                    </button>
+                </div>
+
+                <p class="legal-note">
+                    <strong>Nota:</strong> El proveedor deberá dar respuesta al reclamo o queja en un plazo no mayor a
+                    30 días calendario, conforme establece el artículo 24.1 del Código de Protección y Defensa del
+                    Consumidor (Ley N° 29571). La formulación del reclamo no impide acudir a otras vías de solución de
+                    controversias ni es requisito previo para la interposición de una denuncia ante INDECOPI.
+                </p>
+            </form>
+
+            <!-- Success State -->
+            <div id="complaintSuccess" class="complaint-success" style="display: none;">
+                <div class="success-card">
+                    <div class="success-icon">✅</div>
+                    <h2>Reclamación Registrada</h2>
+                    <p>Tu reclamación ha sido registrada correctamente.</p>
+                    <div class="complaint-ticket">
+                        <span class="ticket-label">NÚMERO DE RECLAMO</span>
+                        <div class="ticket-number" id="complaintTicketId">REC-000</div>
+                    </div>
+                    <p class="ticket-note">Guarda este número para dar seguimiento. Recibirás respuesta en un plazo
+                        máximo de 30 días calendario al correo electrónico proporcionado.</p>
+                    <a href="/" class="btn btn-primary">Volver al inicio</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>© 2026 Vectore | Pucallpa, Ucayali. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="api-client.js"></script>
+    <script>
+        // Minor fields toggle
+        document.getElementById('isMinor').addEventListener('change', (e) => {
+            document.getElementById('minorFields').style.display = e.target.value === 'si' ? 'block' : 'none';
+        });
+
+        // Form submission
+        document.getElementById('complaintForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitComplaint');
+            btn.disabled = true;
+            btn.innerHTML = '<span>Enviando...</span>';
+
+            const formData = {
+                consumer: {
+                    name: document.getElementById('consumerName').value,
+                    docType: document.getElementById('consumerDocType').value,
+                    docNumber: document.getElementById('consumerDocNumber').value,
+                    email: document.getElementById('consumerEmail').value,
+                    phone: document.getElementById('consumerPhone').value,
+                    address: document.getElementById('consumerAddress').value || '',
+                    isMinor: document.getElementById('isMinor').value === 'si',
+                    parentName: document.getElementById('parentName').value || ''
+                },
+                product: {
+                    type: document.getElementById('productType').value,
+                    description: document.getElementById('productDescription').value,
+                    amount: parseFloat(document.getElementById('orderAmount').value) || 0
+                },
+                complaint: {
+                    type: document.getElementById('complaintType').value,
+                    detail: document.getElementById('complaintDetail').value,
+                    consumerRequest: document.getElementById('consumerRequest').value
+                }
+            };
+
+            try {
+                const response = await fetch('/api/complaints', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('complaintForm').style.display = 'none';
+                    document.getElementById('complaintSuccess').style.display = 'block';
+                    document.getElementById('complaintTicketId').textContent = data.data.complaintNumber;
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    throw new Error(data.message || 'Error al enviar la reclamación');
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+                btn.disabled = false;
+                btn.innerHTML = '<span>Enviar Reclamación</span>';
+            }
+        });
+    </script>
+</body>
+
+</html>

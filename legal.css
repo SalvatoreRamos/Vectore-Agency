@@ -1,0 +1,445 @@
+/* ===================================
+   Legal Pages Styles
+   =================================== */
+
+.legal-page {
+    padding-top: 120px;
+    padding-bottom: 60px;
+    min-height: 80vh;
+    background: var(--bg-primary, #0a0a0f);
+    color: var(--text-primary, #e8e8ed);
+}
+
+.legal-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.legal-header h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin: 15px 0 10px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.legal-updated {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.85rem;
+}
+
+/* Legal Content */
+.legal-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.legal-content section {
+    margin-bottom: 40px;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.legal-content section:hover {
+    border-color: rgba(102, 126, 234, 0.2);
+}
+
+.legal-content h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #667eea;
+}
+
+.legal-content h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin: 20px 0 10px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.legal-content p {
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.75);
+    margin-bottom: 12px;
+}
+
+.legal-content ul,
+.legal-content ol {
+    padding-left: 25px;
+    margin: 12px 0;
+}
+
+.legal-content li {
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 8px;
+}
+
+.legal-content a {
+    color: #667eea;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.legal-content a:hover {
+    color: #8899ff;
+}
+
+.contact-legal {
+    background: rgba(102, 126, 234, 0.08);
+    border: 1px solid rgba(102, 126, 234, 0.15);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 15px;
+}
+
+.contact-legal p {
+    margin-bottom: 6px;
+}
+
+/* Legal Navigation */
+.legal-nav {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 50px;
+    flex-wrap: wrap;
+}
+
+.legal-note {
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.45);
+    line-height: 1.6;
+    margin-top: 25px;
+    padding: 15px;
+    border-left: 3px solid rgba(102, 126, 234, 0.3);
+}
+
+/* ===================================
+   Libro de Reclamaciones Form
+   =================================== */
+
+.provider-info {
+    max-width: 800px;
+    margin: 0 auto 40px;
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+}
+
+.provider-info h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.provider-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+}
+
+.provider-grid div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.provider-grid strong {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.provider-grid span {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.92rem;
+}
+
+/* Complaint Form */
+.complaint-form {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.complaint-form fieldset {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 25px;
+    margin-bottom: 25px;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.complaint-form legend {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #667eea;
+    padding: 0 12px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 10px;
+}
+
+.complaint-form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.complaint-form .form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.complaint-form label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.complaint-form input,
+.complaint-form select,
+.complaint-form textarea {
+    padding: 12px 15px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.92rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.complaint-form input:focus,
+.complaint-form select:focus,
+.complaint-form textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+.complaint-form input::placeholder,
+.complaint-form textarea::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.complaint-form select option {
+    background: #1a1a2e;
+    color: #fff;
+}
+
+.complaint-form .checkbox-group {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.complaint-form .checkbox-group input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-top: 2px;
+    flex-shrink: 0;
+    accent-color: #667eea;
+}
+
+.complaint-form .checkbox-group label {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.complaint-form .checkbox-group a {
+    color: #667eea;
+    text-decoration: underline;
+}
+
+.form-actions {
+    margin-top: 20px;
+}
+
+.btn-block {
+    width: 100%;
+    padding: 16px;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+/* Complaint Success */
+.complaint-success {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.success-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 50px 30px;
+}
+
+.success-card .success-icon {
+    font-size: 4rem;
+    margin-bottom: 15px;
+}
+
+.success-card h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+.success-card p {
+    color: rgba(255, 255, 255, 0.65);
+    margin-bottom: 25px;
+}
+
+.complaint-ticket {
+    background: rgba(102, 126, 234, 0.1);
+    border: 2px dashed rgba(102, 126, 234, 0.3);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 25px auto;
+    max-width: 300px;
+}
+
+.complaint-ticket .ticket-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.5);
+    display: block;
+    margin-bottom: 8px;
+}
+
+.complaint-ticket .ticket-number {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #667eea;
+}
+
+.ticket-note {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 25px;
+}
+
+/* ===================================
+   Contact Info Section Styles
+   =================================== */
+
+.contact-info-section {
+    padding: 80px 0;
+    background: rgba(255, 255, 255, 0.01);
+}
+
+.contact-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+    margin-top: 40px;
+}
+
+.contact-info-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    padding: 30px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.contact-info-card:hover {
+    border-color: rgba(102, 126, 234, 0.3);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.contact-info-icon {
+    width: 55px;
+    height: 55px;
+    margin: 0 auto 15px;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15));
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contact-info-icon svg {
+    width: 26px;
+    height: 26px;
+    stroke: #667eea;
+}
+
+.contact-info-card h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.contact-info-card a,
+.contact-info-card p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.92rem;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    line-height: 1.5;
+}
+
+.contact-info-card a:hover {
+    color: #667eea;
+}
+
+/* Libro de Reclamaciones Footer Link */
+.libro-reclamaciones-link {
+    font-weight: 500 !important;
+}
+
+/* ===================================
+   Responsive
+   =================================== */
+
+@media (max-width: 768px) {
+    .legal-header h1 {
+        font-size: 1.8rem;
+    }
+
+    .legal-content section {
+        padding: 20px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .provider-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .legal-nav {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .contact-info-grid {
+        grid-template-columns: 1fr;
+    }
+}

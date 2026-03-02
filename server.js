@@ -15,6 +15,7 @@ import projectRoutes from './routes/projects.js';
 import testimonialRoutes from './routes/testimonials.js';
 import eventRoutes from './routes/events.js';
 import softwareRoutes from './routes/software.js';
+import complaintRoutes from './routes/complaints.js';
 
 // Load environment variables
 dotenv.config();
@@ -96,6 +97,7 @@ app.use('/api/upload', uploadRoutes);
 app.use('/api/testimonials', testimonialRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/software', softwareRoutes);
+app.use('/api/complaints', complaintRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -109,6 +111,19 @@ app.get('/api/health', (req, res) => {
 // Specific Pages
 app.get('/software', (req, res) => {
   res.sendFile(path.join(__dirname, 'software.html'));
+});
+
+// Legal Pages
+app.get('/terminos', (req, res) => {
+  res.sendFile(path.join(__dirname, 'terminos.html'));
+});
+
+app.get('/politica-devoluciones', (req, res) => {
+  res.sendFile(path.join(__dirname, 'politica-devoluciones.html'));
+});
+
+app.get('/libro-reclamaciones', (req, res) => {
+  res.sendFile(path.join(__dirname, 'libro-reclamaciones.html'));
 });
 
 // Serve index.html for any other route (SPA support)
