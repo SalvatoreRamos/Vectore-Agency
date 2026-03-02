@@ -141,33 +141,25 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: var(--white);
     text-decoration: none;
     transition: var(--transition);
 }
 
-.navbar.scrolled .logo {
-    color: var(--dark);
+/* Logo image: white on dark bg, original colors on white bg */
+.logo-img {
+    height: 32px;
+    width: auto;
+    filter: brightness(0) invert(1);
+    transition: filter 0.3s ease;
 }
 
-.logo-icon {
-    font-size: 1.8rem;
-    color: var(--primary);
-    animation: pulse 2s infinite;
+.navbar.scrolled .logo-img {
+    filter: none;
 }
 
-@keyframes pulse {
-
-    0%,
-    100% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.1);
-    }
+/* Footer logo stays white (dark background) */
+.footer-logo-img {
+    filter: brightness(0) invert(1) !important;
 }
 
 .nav-menu {
@@ -537,8 +529,8 @@ body {
 }
 
 .preloader-logo {
-    font-size: 4rem;
-    color: var(--white);
+    width: 80px;
+    height: auto;
     animation: pulseLogo 2s infinite ease-in-out;
 }
 
