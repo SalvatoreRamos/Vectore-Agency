@@ -16,6 +16,7 @@ import testimonialRoutes from './routes/testimonials.js';
 import eventRoutes from './routes/events.js';
 import softwareRoutes from './routes/software.js';
 import complaintRoutes from './routes/complaints.js';
+import notificationRoutes from './routes/notifications.js';
 
 // Load environment variables
 dotenv.config();
@@ -106,6 +107,7 @@ app.use('/api/testimonials', testimonialRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/software', softwareRoutes);
 app.use('/api/complaints', complaintRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

@@ -114,6 +114,13 @@
                     </svg>
                     Vectore Flow
                 </a>
+                <a href="#" class="nav-item" data-section="notifications">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                    </svg>
+                    Notificaciones
+                </a>
                 <a href="index.html" class="nav-item">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
@@ -302,6 +309,67 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Notifications Section -->
+            <div id="notificationsSection" style="display: none;">
+                <header class="admin-header">
+                    <div class="header-left">
+                        <h1>Notificaciones</h1>
+                        <p>Envía ofertas y notifica ganadores de sorteos</p>
+                    </div>
+                </header>
+
+                <div class="admin-section">
+                    <div class="section-header">
+                        <h2>Enviar Nueva Notificación</h2>
+                    </div>
+                    <form class="notif-admin-form" id="adminNotifForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="notifType">Tipo</label>
+                                <select id="notifType">
+                                    <option value="offer">🏷️ Oferta</option>
+                                    <option value="winner">🏆 Ganador Sorteo</option>
+                                    <option value="general">📢 Aviso General</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="notifTarget">Destinatario</label>
+                                <select id="notifTarget">
+                                    <option value="all">Todos los usuarios</option>
+                                    <option value="specific">Usuario específico</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" id="notifEmailGroup" style="display: none;">
+                            <label for="notifEmail">Correo del usuario</label>
+                            <input type="email" id="notifEmail" placeholder="usuario@gmail.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="notifTitle">Título</label>
+                            <input type="text" id="notifTitle" required placeholder="Ej: ¡50% de descuento!">
+                        </div>
+                        <div class="form-group">
+                            <label for="notifMessage">Mensaje</label>
+                            <textarea id="notifMessage" required rows="3"
+                                placeholder="Describe la oferta o notificación..."></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">📤 Enviar Notificación</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="admin-section">
+                    <div class="section-header">
+                        <h2>Historial de Notificaciones</h2>
+                    </div>
+                    <div class="products-grid" id="adminNotifsGrid">
+                        <!-- Notifications loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+
         </main>
     </div>
 

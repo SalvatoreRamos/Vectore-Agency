@@ -33,6 +33,7 @@ const testimonialsSection = document.getElementById('testimonialsSection');
 
 const eventsSection = document.getElementById('eventsSection');
 const flowSection = document.getElementById('flowSection');
+const notificationsSection = document.getElementById('notificationsSection');
 
 // Action Buttons
 const btnAddProduct = document.getElementById('btnAddProduct');
@@ -263,6 +264,10 @@ function switchSection(section) {
     if (testimonialsSection) testimonialsSection.style.display = section === 'testimonials' ? 'block' : 'none';
     if (eventsSection) eventsSection.style.display = section === 'events' ? 'block' : 'none';
     if (flowSection) flowSection.style.display = section === 'flow' ? 'block' : 'none';
+    if (notificationsSection) notificationsSection.style.display = section === 'notifications' ? 'block' : 'none';
+
+    // Load notifications when switching to that section
+    if (section === 'notifications') fetchAndRenderAdminNotifs();
 }
 
 // ===================================
@@ -1125,4 +1130,144 @@ document.addEventListener('mousemove', (e) => {
 });
 
 window.switchSection = switchSection;
+
+// ===================================
+// Admin Notifications
+// ===================================
+const adminNotifForm = document.getElementById('adminNotifForm');
+const notifTarget = document.getElementById('notifTarget');
+const notifEmailGroup = document.getElementById('notifEmailGroup');
+const adminNotifsGrid = document.getElementById('adminNotifsGrid');
+
+// Show/hide email field based on target selection
+if (notifTarget) {
+    notifTarget.addEventListener('change', () => {
+        if (notifEmailGroup) {
+            notifEmailGroup.style.display = notifTarget.value === 'specific' ? 'block' : 'none';
+        }
+    });
+}
+
+// Submit form to create notification
+if (adminNotifForm) {
+    adminNotifForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const data = {
+            title: document.getElementById('notifTitle').value,
+            message: document.getElementById('notifMessage').value,
+            type: document.getElementById('notifType').value,
+            target: notifTarget.value
+        };
+
+        if (notifTarget.value === 'specific') {
+            data.targetEmail = document.getElementById('notifEmail').value;
+            if (!data.targetEmail) {
+                alert('Por favor ingresa el correo del usuario');
+                return;
+            }
+        }
+
+        try {
+            const res = await fetch('/api/notifications', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${api.token}`
+                },
+                body: JSON.stringify(data)
+            });
+            const result = await res.json();
+
+            if (result.success) {
+                alert('✅ Notificación enviada');
+                adminNotifForm.reset();
+                if (notifEmailGroup) notifEmailGroup.style.display = 'none';
+                fetchAndRenderAdminNotifs();
+            } else {
+                alert('Error: ' + (result.message || 'No se pudo enviar'));
+            }
+        } catch (error) {
+            alert('Error de conexión: ' + error.message);
+        }
+    });
+}
+
+async function fetchAndRenderAdminNotifs() {
+    if (!adminNotifsGrid) return;
+    adminNotifsGrid.innerHTML = '<div class="loader">Cargando...</div>';
+
+    try {
+        const res = await fetch('/api/notifications/admin', {
+            headers: { 'Authorization': `Bearer ${api.token}` }
+        });
+        const data = await res.json();
+
+        if (data.success && data.notifications.length > 0) {
+            const typeIcons = { offer: '🏷️', winner: '🏆', general: '📢' };
+            const typeLabels = { offer: 'Oferta', winner: 'Ganador', general: 'Aviso' };
+
+            adminNotifsGrid.innerHTML = data.notifications.map(n => {
+                const icon = typeIcons[n.type] || '📢';
+                const label = typeLabels[n.type] || 'Aviso';
+                const date = new Date(n.createdAt).toLocaleDateString('es-PE', {
+                    day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+                });
+                const target = n.target === 'all' ? 'Todos' :
+                    (n.targetUsers && n.targetUsers.length > 0 ?
+                        n.targetUsers.map(u => u.email || u.name || 'Usuario').join(', ') : 'Específico');
+                const readCount = n.readBy ? n.readBy.length : 0;
+
+                return `
+                <div class="admin-product-card" data-id="${n._id}" data-name="${n.title}">
+                    <div class="admin-product-image" style="background: ${n.type === 'offer' ? 'linear-gradient(135deg, #25D366, #128C7E)' : n.type === 'winner' ? 'linear-gradient(135deg, #FFD700, #FF8C00)' : 'linear-gradient(135deg, #8655FF, #5a35cc)'}; display: flex; align-items: center; justify-content: center; font-size: 2.5rem;">
+                        ${icon}
+                    </div>
+                    <div class="admin-product-info">
+                        <h3>${n.title}</h3>
+                        <p>${n.message.substring(0, 80)}${n.message.length > 80 ? '...' : ''}</p>
+                        <p style="font-size: 0.78rem; color: #888; margin-top: 6px;">
+                            <strong>${label}</strong> · ${target} · ${date} · 👁 ${readCount} leídas
+                        </p>
+                        <div class="admin-product-actions" style="margin-top: 10px;">
+                            <button class="btn-delete">Eliminar</button>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        } else {
+            adminNotifsGrid.innerHTML = '<p class="no-products">No hay notificaciones enviadas.</p>';
+        }
+    } catch (error) {
+        adminNotifsGrid.innerHTML = '<p class="no-products">Error al cargar notificaciones.</p>';
+    }
+}
+
+// Handle delete click on notification cards
+if (adminNotifsGrid) {
+    adminNotifsGrid.addEventListener('click', async (e) => {
+        const deleteBtn = e.target.closest('.btn-delete');
+        if (!deleteBtn) return;
+        const card = deleteBtn.closest('.admin-product-card');
+        if (!card) return;
+        const id = card.dataset.id;
+        if (!confirm('¿Eliminar esta notificación?')) return;
+
+        try {
+            const res = await fetch(`/api/notifications/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${api.token}` }
+            });
+            const result = await res.json();
+            if (result.success) {
+                fetchAndRenderAdminNotifs();
+            } else {
+                alert('Error: ' + result.message);
+            }
+        } catch (error) {
+            alert('Error: ' + error.message);
+        }
+    });
+}
+
 init();

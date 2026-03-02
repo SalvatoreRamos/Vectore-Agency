@@ -642,4 +642,240 @@
         margin: 20px;
         padding: 30px 20px;
     }
+
+    .notif-panel {
+        right: -10px;
+        width: 320px;
+    }
+}
+
+/* ===================================
+   Notification Bell & Panel
+   =================================== */
+.notif-wrapper {
+    position: relative;
+}
+
+.notif-btn {
+    position: relative;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(8px);
+}
+
+.notif-btn:hover {
+    background: var(--primary, #8655FF);
+    border-color: var(--primary, #8655FF);
+    transform: translateY(-1px);
+}
+
+.navbar.scrolled .notif-btn {
+    background: rgba(134, 85, 255, 0.08);
+    border-color: rgba(134, 85, 255, 0.2);
+    color: var(--dark, #160F50);
+}
+
+.navbar.scrolled .notif-btn:hover {
+    background: var(--primary, #8655FF);
+    color: #fff;
+}
+
+.notif-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    min-width: 18px;
+    height: 18px;
+    background: #dc3545;
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Notification Panel */
+.notif-panel {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    width: 360px;
+    max-height: 440px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 12px 50px rgba(0, 0, 0, 0.18);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: all 0.25s ease;
+    z-index: 1001;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.notif-panel.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.notif-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.notif-panel-header h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--dark, #160F50);
+}
+
+.notif-read-all {
+    background: none;
+    border: none;
+    color: var(--primary, #8655FF);
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: opacity 0.2s;
+}
+
+.notif-read-all:hover {
+    opacity: 0.7;
+}
+
+.notif-list {
+    flex: 1;
+    overflow-y: auto;
+    max-height: 360px;
+}
+
+.notif-empty {
+    text-align: center;
+    color: #aaa;
+    padding: 40px 20px;
+    font-size: 0.9rem;
+}
+
+/* Notification Item */
+.notif-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    cursor: pointer;
+    transition: background 0.2s ease;
+    position: relative;
+}
+
+.notif-item:hover {
+    background: rgba(134, 85, 255, 0.04);
+}
+
+.notif-item.notif-read {
+    opacity: 0.55;
+}
+
+.notif-icon {
+    font-size: 1.4rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.notif-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.notif-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.notif-content strong {
+    font-size: 0.88rem;
+    color: var(--dark, #160F50);
+}
+
+.notif-content p {
+    font-size: 0.82rem;
+    color: #666;
+    line-height: 1.4;
+    margin-bottom: 4px;
+}
+
+.notif-content time {
+    font-size: 0.72rem;
+    color: #aaa;
+}
+
+/* Type Tags */
+.notif-tag {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 20px;
+    letter-spacing: 0.3px;
+    flex-shrink: 0;
+}
+
+.notif-tag-offer {
+    background: rgba(37, 211, 102, 0.12);
+    color: #25D366;
+}
+
+.notif-tag-winner {
+    background: rgba(255, 193, 7, 0.15);
+    color: #d4a106;
+}
+
+.notif-tag-general {
+    background: rgba(134, 85, 255, 0.1);
+    color: var(--primary, #8655FF);
+}
+
+/* Unread Dot */
+.notif-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--primary, #8655FF);
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 6px;
+    animation: notifPulse 2s infinite;
+}
+
+@keyframes notifPulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.4;
+    }
 }

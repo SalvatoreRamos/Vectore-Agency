@@ -10,6 +10,7 @@ const GOOGLE_CLIENT_ID = '433259886019-haiklq9fuqr673839bq03p97jmnlnvtt.apps.goo
 // ===================================
 let currentUser = null;
 let cart = [];
+let notifications = [];
 
 // ===================================
 // Init
@@ -88,6 +89,25 @@ function initGlobalDelegation() {
         const checkoutBtn = e.target.closest('.btn-checkout');
         if (checkoutBtn) { checkout(); return; }
 
+        // Notifications
+        const notifBtn = e.target.closest('.notif-btn');
+        if (notifBtn) { toggleNotifications(); return; }
+
+        const notifClose = e.target.closest('.notif-close');
+        if (notifClose) { toggleNotifications(); return; }
+
+        const readAllBtn = e.target.closest('.notif-read-all');
+        if (readAllBtn) { markAllNotificationsRead(); return; }
+
+        const notifItem = e.target.closest('.notif-item:not(.notif-read)');
+        if (notifItem && notifItem.dataset.notifId) { markNotificationRead(notifItem.dataset.notifId); return; }
+
+        // Close panels when clicking outside
+        if (!e.target.closest('.notif-wrapper')) {
+            var notifPanel = document.getElementById('notifPanel');
+            if (notifPanel) notifPanel.classList.remove('active');
+        }
+
         // Close user dropdown when clicking outside
         if (!e.target.closest('.user-menu')) {
             const dropdown = document.getElementById('userDropdown');
@@ -155,6 +175,7 @@ function loadSession() {
     if (token && user) {
         currentUser = JSON.parse(user);
         renderUserUI();
+        fetchNotifications();
     }
 }
 
@@ -330,6 +351,19 @@ function initCartUI() {
     rightArea.className = 'nav-right';
     rightArea.innerHTML =
         '<div id="authArea"></div>' +
+        '<div class="notif-wrapper">' +
+        '<button class="notif-btn" aria-label="Notificaciones">' +
+        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>' +
+        '<span class="notif-badge" id="notifBadge"></span>' +
+        '</button>' +
+        '<div class="notif-panel" id="notifPanel">' +
+        '<div class="notif-panel-header">' +
+        '<h4>Notificaciones</h4>' +
+        '<button class="notif-read-all" aria-label="Marcar todas como leidas">Marcar leídas</button>' +
+        '</div>' +
+        '<div class="notif-list" id="notifList"><p class="notif-empty">Sin notificaciones</p></div>' +
+        '</div>' +
+        '</div>' +
         '<button class="cart-btn" aria-label="Carrito">' +
         '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
         '<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>' +
@@ -487,3 +521,131 @@ function showToast(message, type) {
         setTimeout(function () { toast.remove(); }, 300);
     }, 3000);
 }
+
+// ===================================
+// Notifications System
+// ===================================
+function toggleNotifications() {
+    if (!currentUser) {
+        openAuthModal();
+        return;
+    }
+    var panel = document.getElementById('notifPanel');
+    if (panel) {
+        panel.classList.toggle('active');
+        if (panel.classList.contains('active')) {
+            fetchNotifications();
+        }
+    }
+}
+
+function fetchNotifications() {
+    var token = localStorage.getItem('vectore_token');
+    if (!token) return;
+
+    fetch('/api/notifications', {
+        headers: { 'Authorization': 'Bearer ' + token }
+    })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+            if (data.success) {
+                notifications = data.notifications;
+                renderNotifications();
+                updateNotifBadge(data.unreadCount);
+            }
+        })
+        .catch(function (err) { console.error('Fetch notifications error:', err); });
+}
+
+function renderNotifications() {
+    var list = document.getElementById('notifList');
+    if (!list) return;
+
+    if (notifications.length === 0) {
+        list.innerHTML = '<p class="notif-empty">No tienes notificaciones</p>';
+        return;
+    }
+
+    var typeIcons = {
+        offer: '🏷️',
+        winner: '🏆',
+        general: '📢'
+    };
+
+    var typeLabels = {
+        offer: 'Oferta',
+        winner: '¡Ganador!',
+        general: 'Aviso'
+    };
+
+    var html = '';
+    notifications.forEach(function (n) {
+        var icon = typeIcons[n.type] || '📢';
+        var label = typeLabels[n.type] || 'Aviso';
+        var readClass = n.isRead ? 'notif-read' : '';
+        var date = new Date(n.createdAt);
+        var timeAgo = getTimeAgo(date);
+
+        html +=
+            '<div class="notif-item ' + readClass + ' notif-type-' + n.type + '" data-notif-id="' + n._id + '">' +
+            '<div class="notif-icon">' + icon + '</div>' +
+            '<div class="notif-content">' +
+            '<div class="notif-title-row">' +
+            '<strong>' + n.title + '</strong>' +
+            '<span class="notif-tag notif-tag-' + n.type + '">' + label + '</span>' +
+            '</div>' +
+            '<p>' + n.message + '</p>' +
+            '<time>' + timeAgo + '</time>' +
+            '</div>' +
+            (n.isRead ? '' : '<span class="notif-dot"></span>') +
+            '</div>';
+    });
+    list.innerHTML = html;
+}
+
+function updateNotifBadge(count) {
+    var badge = document.getElementById('notifBadge');
+    if (badge) {
+        badge.textContent = count;
+        badge.style.display = count > 0 ? 'flex' : 'none';
+    }
+}
+
+function markNotificationRead(id) {
+    var token = localStorage.getItem('vectore_token');
+    if (!token) return;
+
+    fetch('/api/notifications/' + id + '/read', {
+        method: 'PUT',
+        headers: { 'Authorization': 'Bearer ' + token }
+    })
+        .then(function () { fetchNotifications(); })
+        .catch(function (err) { console.error('Mark read error:', err); });
+}
+
+function markAllNotificationsRead() {
+    var token = localStorage.getItem('vectore_token');
+    if (!token) return;
+
+    fetch('/api/notifications/read-all', {
+        method: 'PUT',
+        headers: { 'Authorization': 'Bearer ' + token }
+    })
+        .then(function () { fetchNotifications(); })
+        .catch(function (err) { console.error('Mark all read error:', err); });
+}
+
+function getTimeAgo(date) {
+    var now = new Date();
+    var diff = Math.floor((now - date) / 1000);
+    if (diff < 60) return 'Ahora';
+    if (diff < 3600) return Math.floor(diff / 60) + ' min';
+    if (diff < 86400) return Math.floor(diff / 3600) + 'h';
+    if (diff < 604800) return Math.floor(diff / 86400) + 'd';
+    return date.toLocaleDateString('es-PE', { day: 'numeric', month: 'short' });
+}
+
+// Auto-fetch notifications every 60s if logged in
+setInterval(function () {
+    if (currentUser) fetchNotifications();
+}, 60000);
