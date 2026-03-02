@@ -159,8 +159,25 @@ app.use((req, res) => {
 
 // Database connection
 mongoose.connect(process.env.MONGODB_URI)
-  .then(() => {
+  .then(async () => {
     console.log('✅ Connected to MongoDB');
+
+    // Drop stale indexes that conflict with current schema
+    try {
+      const db = mongoose.connection.db;
+      const usersCollection = db.collection('users');
+      const indexes = await usersCollection.indexes();
+      const staleIndexes = ['username_1'];
+      for (const idx of indexes) {
+        if (staleIndexes.includes(idx.name)) {
+          await usersCollection.dropIndex(idx.name);
+          console.log('🧹 Dropped stale index:', idx.name);
+        }
+      }
+    } catch (e) {
+      // Ignore if index doesn't exist
+      console.log('Index cleanup skipped:', e.message);
+    }
 
     // Start server
     app.listen(PORT, () => {
