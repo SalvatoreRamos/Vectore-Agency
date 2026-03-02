@@ -132,7 +132,8 @@ async function handleGoogleResponse(response) {
             closeAuthModal();
             showToast('¡Bienvenido, ' + data.user.name + '!');
         } else {
-            showToast('Error al iniciar sesión', 'error');
+            console.error('Google auth failed:', data);
+            showToast(data.message || 'Error al iniciar sesión', 'error');
         }
     } catch (error) {
         console.error('Google auth error:', error);

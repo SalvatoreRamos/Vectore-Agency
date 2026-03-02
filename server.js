@@ -39,7 +39,15 @@ app.use(helmet({
         "blob:",
         "https://www.googletagmanager.com",
         "https://www.google-analytics.com",
-        "https://accounts.google.com/gsi/client"
+        "https://accounts.google.com/gsi/client",
+        "https://accounts.google.com/gsi/"
+      ],
+      "script-src-attr": ["'unsafe-inline'"],
+      "style-src": [
+        "'self'",
+        "'unsafe-inline'",
+        "https://accounts.google.com/gsi/style",
+        "https://fonts.googleapis.com"
       ],
       "worker-src": ["'self'", "blob:"],
       "frame-src": ["'self'", "https://accounts.google.com/"],
@@ -53,7 +61,7 @@ app.use(helmet({
         "https://agenciavectore.com",
         "https://www.agenciavectore.com"
       ],
-      "img-src": ["'self'", "data:", "https:", "http:", "blob:", "https://www.google-analytics.com", "https://www.googletagmanager.com"]
+      "img-src": ["'self'", "data:", "https:", "http:", "blob:", "https://www.google-analytics.com", "https://www.googletagmanager.com", "https://lh3.googleusercontent.com"]
     },
   },
   crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" },
