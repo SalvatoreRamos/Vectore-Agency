@@ -824,6 +824,8 @@ body {
     overflow: hidden;
     box-shadow: var(--shadow-sm);
     transition: var(--transition);
+    display: flex;
+    flex-direction: column;
 }
 
 .product-card:hover {
@@ -944,6 +946,9 @@ body {
 
 .product-info {
     padding: 24px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 }
 
 .product-info h3 {
@@ -964,6 +969,7 @@ body {
     justify-content: center;
     padding-top: 15px;
     border-top: 1px solid rgba(0, 0, 0, 0.05);
+    margin-top: auto;
 }
 
 .price {
