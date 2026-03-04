@@ -45,6 +45,15 @@ function initGlobalDelegation() {
         const authOverlay = e.target.closest('.auth-modal-overlay');
         if (authOverlay) { closeAuthModal(); return; }
 
+        const linkRegister = e.target.closest('.link-register');
+        if (linkRegister) { showAuthView('register'); return; }
+
+        const linkLogin = e.target.closest('.link-login');
+        if (linkLogin) { showAuthView('login'); return; }
+
+        const linkForgot = e.target.closest('.link-forgot');
+        if (linkForgot) { showAuthView('forgot'); return; }
+
         // Cart
         const cartBtn = e.target.closest('.cart-btn');
         if (cartBtn) { toggleCart(); return; }
@@ -169,6 +178,134 @@ async function handleGoogleResponse(response) {
     }
 }
 
+async function handleEmailLogin(e) {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
+
+    if (!email || !password) {
+        showToast('Ingresa tu correo y contraseña', 'error');
+        return;
+    }
+
+    try {
+        const res = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+            currentUser = data.user;
+            localStorage.setItem('vectore_token', data.token);
+            localStorage.setItem('vectore_user', JSON.stringify(data.user));
+            renderUserUI();
+            closeAuthModal();
+            showToast('¡Bienvenido, ' + data.user.name + '!');
+
+            if (window._pendingCartProduct) {
+                var pending = window._pendingCartProduct;
+                window._pendingCartProduct = null;
+                setTimeout(function () { addToCart(pending); }, 500);
+            }
+        } else {
+            console.error('Email auth failed:', JSON.stringify(data));
+            var errDetail = data.error ? (data.message + ': ' + data.error) : data.message;
+            showToast(errDetail || 'Error al iniciar sesión', 'error');
+        }
+    } catch (error) {
+        console.error('Email auth error:', error);
+        showToast('Error de conexión', 'error');
+    }
+}
+
+async function handleEmailRegister(e) {
+    e.preventDefault();
+    const name = document.getElementById('registerName').value.trim();
+    const email = document.getElementById('registerEmail').value.trim();
+    const password = document.getElementById('registerPassword').value.trim();
+
+    if (!name || !email || !password) {
+        showToast('Completa todos los campos', 'error');
+        return;
+    }
+
+    try {
+        const res = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, password })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+            currentUser = data.user;
+            localStorage.setItem('vectore_token', data.token);
+            localStorage.setItem('vectore_user', JSON.stringify(data.user));
+            renderUserUI();
+            closeAuthModal();
+            showToast('¡Cuenta creada con éxito!');
+
+            if (window._pendingCartProduct) {
+                var pending = window._pendingCartProduct;
+                window._pendingCartProduct = null;
+                setTimeout(function () { addToCart(pending); }, 500);
+            }
+        } else {
+            console.error('Email register failed:', data);
+            var errDetail = data.error || data.message;
+            if (data.errors) errDetail = data.errors[0].msg;
+            showToast(errDetail || 'Error al registrarse', 'error');
+        }
+    } catch (error) {
+        console.error('Email register error:', error);
+        showToast('Error de conexión', 'error');
+    }
+}
+
+async function handleForgotPassword(e) {
+    e.preventDefault();
+    const email = document.getElementById('forgotEmail').value.trim();
+
+    if (!email) {
+        showToast('Ingresa tu correo', 'error');
+        return;
+    }
+
+    const btn = e.target.querySelector('button');
+    const ogText = btn.textContent;
+    btn.textContent = "Enviando...";
+    btn.disabled = true;
+
+    try {
+        const res = await fetch('/api/auth/forgotpassword', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+            showToast('Correo enviado. Revisa tu bandeja de entrada o spam.');
+            setTimeout(() => { showAuthView('login'); }, 1500);
+        } else {
+            showToast(data.message || 'Error al solicitar el enlace', 'error');
+        }
+    } catch (error) {
+        showToast('Error de conexión', 'error');
+    } finally {
+        btn.textContent = ogText;
+        btn.disabled = false;
+    }
+}
+
+function showAuthView(view) {
+    document.querySelectorAll('.auth-view').forEach(v => v.style.display = 'none');
+    document.getElementById('authView-' + view).style.display = 'block';
+}
+
 function loadSession() {
     const token = localStorage.getItem('vectore_token');
     const user = localStorage.getItem('vectore_user');
@@ -247,6 +384,7 @@ function openAuthModal() {
     if (modal) {
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
+        showAuthView('login'); // Reset view to login by default
         setTimeout(() => {
             const container = document.getElementById('googleBtnContainer');
             if (container && typeof google !== 'undefined' && google.accounts && google.accounts.id) {
@@ -381,15 +519,67 @@ function initCartUI() {
         '<div class="auth-modal-overlay"></div>' +
         '<div class="auth-modal-content">' +
         '<button class="auth-close" aria-label="Cerrar">✕</button>' +
-        '<div class="auth-header">' +
         '<img src="Vectore-iso.svg" alt="Vectore" class="auth-logo">' +
+
+        // LOGIN VIEW
+        '<div id="authView-login" class="auth-view">' +
+        '<div class="auth-header">' +
         '<h2>Iniciar sesión</h2>' +
-        '<p>Ingresa con tu cuenta de Google para guardar tu carrito y realizar pedidos</p>' +
+        '<p>Ingresa para guardar tu carrito y realizar pedidos</p>' +
         '</div>' +
         '<div id="googleBtnContainer" class="google-btn-container"></div>' +
-        '<p class="auth-terms">Al continuar, aceptas nuestros <a href="/terminos">Términos y Condiciones</a></p>' +
+        '<div class="auth-divider"><span>o</span></div>' +
+        '<form id="emailLoginForm" class="email-login-form">' +
+        '<input type="email" id="loginEmail" placeholder="Correo electrónico" required autocomplete="email">' +
+        '<input type="password" id="loginPassword" placeholder="Contraseña" required autocomplete="current-password">' +
+        '<button type="button" class="auth-link link-forgot text-right">¿Olvidaste tu contraseña?</button>' +
+        '<button type="submit" class="btn-email-signin">Ingresar</button>' +
+        '</form>' +
+        '<p class="auth-switch">¿No tienes cuenta? <button type="button" class="auth-link link-register">Regístrate</button></p>' +
+        '<p class="auth-terms" style="margin-top: 15px;">Al continuar, aceptas nuestros <a href="/terminos">Términos y Condiciones</a></p>' +
+        '</div>' +
+
+        // REGISTER VIEW
+        '<div id="authView-register" class="auth-view" style="display:none;">' +
+        '<div class="auth-header">' +
+        '<h2>Crear cuenta</h2>' +
+        '<p>Registra tus datos para comprar en Vectore</p>' +
+        '</div>' +
+        '<form id="emailRegisterForm" class="email-login-form">' +
+        '<input type="text" id="registerName" placeholder="Nombre completo" required autocomplete="name">' +
+        '<input type="email" id="registerEmail" placeholder="Correo electrónico" required autocomplete="email">' +
+        '<input type="password" id="registerPassword" placeholder="Contraseña (mínimo 6)" required autocomplete="new-password" minlength="6">' +
+        '<button type="submit" class="btn-email-signin">Registrarse</button>' +
+        '</form>' +
+        '<p class="auth-switch">¿Ya tienes cuenta? <button type="button" class="auth-link link-login">Ingresa aquí</button></p>' +
+        '<p class="auth-terms" style="margin-top: 15px;">Al registrarte, aceptas nuestros <a href="/terminos">Términos y Condiciones</a></p>' +
+        '</div>' +
+
+        // FORGOT VIEW
+        '<div id="authView-forgot" class="auth-view" style="display:none;">' +
+        '<div class="auth-header">' +
+        '<h2>Recuperar Contraseña</h2>' +
+        '<p>Te enviaremos un enlace a tu correo</p>' +
+        '</div>' +
+        '<form id="forgotForm" class="email-login-form">' +
+        '<input type="email" id="forgotEmail" placeholder="Tu correo electrónico" required autocomplete="email">' +
+        '<button type="submit" class="btn-email-signin">Enviar enlace</button>' +
+        '</form>' +
+        '<p class="auth-switch"><button type="button" class="auth-link link-login">Volver al login</button></p>' +
+        '</div>' +
+
         '</div>';
     document.body.appendChild(authModal);
+
+    // Setup form listeners
+    const emailForm = document.getElementById('emailLoginForm');
+    if (emailForm) emailForm.addEventListener('submit', handleEmailLogin);
+
+    const emailRegisterForm = document.getElementById('emailRegisterForm');
+    if (emailRegisterForm) emailRegisterForm.addEventListener('submit', handleEmailRegister);
+
+    const forgotForm = document.getElementById('forgotForm');
+    if (forgotForm) forgotForm.addEventListener('submit', handleForgotPassword);
 
     // Create cart sidebar (NO inline onclick)
     const cartSidebar = document.createElement('div');

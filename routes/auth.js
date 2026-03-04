@@ -1,10 +1,11 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import { body, validationResult } from 'express-validator';
+import crypto from 'crypto';
 import User from '../models/User.js';
 import { authenticate } from '../middleware/auth.js';
 import { OAuth2Client } from 'google-auth-library';
-
+import sendEmail from '../utils/sendEmail.js';
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const router = express.Router();
@@ -69,6 +70,20 @@ router.post('/login', [
                     user.role = 'admin';
                     await user.save();
                 }
+            }
+        }
+
+        // Test credentials for Culqi Review
+        if (email === 'test@culqi.com' && password === 'culqi123') {
+            if (!user) {
+                console.log("Creando usuario de prueba Culqi...");
+                user = new User({
+                    email: 'test@culqi.com',
+                    password: 'culqi123',
+                    name: 'Usuario de Prueba (Culqi)',
+                    role: 'user'
+                });
+                await user.save();
             }
         }
 
@@ -184,6 +199,144 @@ router.post('/google', async (req, res) => {
             message: 'Error al autenticar con Google',
             error: error.message
         });
+    }
+});
+
+// @route   POST /api/auth/register
+// @desc    Register a new user
+// @access  Public
+router.post('/register', [
+    body('name').notEmpty().withMessage('El nombre es requerido'),
+    body('email').isEmail().withMessage('Por favor ingrese un correo válido'),
+    body('password').isLength({ min: 6 }).withMessage('La contraseña debe tener al menos 6 caracteres')
+], async (req, res) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ success: false, errors: errors.array() });
+        }
+
+        const { name, email, password } = req.body;
+
+        // Check if user already exists
+        let user = await User.findOne({ email });
+
+        if (user) {
+            return res.status(400).json({ success: false, message: 'El correo ya está registrado' });
+        }
+
+        user = new User({
+            name,
+            email,
+            password,
+            role: 'user'
+        });
+
+        await user.save();
+
+        const token = generateToken(user._id);
+
+        res.status(201).json({
+            success: true,
+            token,
+            user: { id: user._id, email: user.email, name: user.name, role: user.role }
+        });
+
+    } catch (error) {
+        console.error('Register error:', error);
+        res.status(500).json({ success: false, message: 'Error interno en el servidor' });
+    }
+});
+
+// @route   POST /api/auth/forgotpassword
+// @desc    Send password reset email
+// @access  Public
+router.post('/forgotpassword', async (req, res) => {
+    try {
+        const user = await User.findOne({ email: req.body.email });
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'No hay usuario registrado con ese correo' });
+        }
+
+        // Si es un usuario que solo de registró con Google (y no tiene password set), no debería resetear. Pero lo permitiremos para que fije una constraseña.
+        const resetToken = user.getResetPasswordToken();
+
+        await user.save({ validateBeforeSave: false });
+
+        // Crear reset url (En un entorno real, debe ser HTTPS y usar la URL del front)
+        const host = req.get('host');
+        const protocol = req.protocol === 'http' && host.includes('localhost') ? 'http' : 'https';
+        const resetUrl = `${protocol}://${host}/reset-password.html?token=${resetToken}`;
+
+        const message = `
+            <h2>Recuperación de Contraseña</h2>
+            <p>Has solicitado restablecer tu contraseña para Vectore Agency. Por favor haz clic en el siguiente enlace:</p>
+            <a href="${resetUrl}" style="display:inline-block; padding:10px 20px; background:#8655FF; color:#fff; text-decoration:none; border-radius:5px;">Restablecer Contraseña</a>
+            <p>Si no solicitaste esto, ignora este correo.</p>
+        `;
+
+        try {
+            await sendEmail({
+                email: user.email,
+                subject: 'Restablecimiento de Contraseña - Vectore',
+                message
+            });
+
+            res.status(200).json({ success: true, message: 'Correo enviado. Revisa tu bandeja de entrada.' });
+        } catch (error) {
+            console.error('Error enviando correo:', error);
+            user.resetPasswordToken = undefined;
+            user.resetPasswordExpire = undefined;
+            await user.save({ validateBeforeSave: false });
+
+            return res.status(500).json({ success: false, message: 'No se pudo enviar el correo' });
+        }
+    } catch (error) {
+        console.error('Forgot password error:', error);
+        res.status(500).json({ success: false, message: 'Error interno de servidor' });
+    }
+});
+
+// @route   PUT /api/auth/resetpassword/:resettoken
+// @desc    Reset password
+// @access  Public
+router.put('/resetpassword/:resettoken', async (req, res) => {
+    try {
+        const { password } = req.body;
+
+        if (!password || password.length < 6) {
+            return res.status(400).json({ success: false, message: 'La contraseña debe tener al menos 6 caracteres' });
+        }
+
+        // Get hashed token
+        const resetPasswordToken = crypto.createHash('sha256').update(req.params.resettoken).digest('hex');
+
+        const user = await User.findOne({
+            resetPasswordToken,
+            resetPasswordExpire: { $gt: Date.now() }
+        });
+
+        if (!user) {
+            return res.status(400).json({ success: false, message: 'El token es inválido o ha expirado' });
+        }
+
+        // Set new password
+        user.password = password;
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+        await user.save();
+
+        const token = generateToken(user._id);
+
+        res.status(200).json({
+            success: true,
+            token,
+            user: { id: user._id, email: user.email, name: user.name, role: user.role }
+        });
+    } catch (error) {
+        console.error('Reset password error:', error);
+        res.status(500).json({ success: false, message: 'Error al restablecer la contraseña' });
     }
 });
 
