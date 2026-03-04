@@ -279,7 +279,7 @@ function switchSection(section) {
 function updateStats() {
     if (totalProductsEl) totalProductsEl.textContent = products.length;
     if (digitalProductsEl) digitalProductsEl.textContent = products.filter(p => p.category === 'digital').length;
-    if (physicalProductsEl) physicalProductsEl.textContent = products.filter(p => p.category === 'physical').length;
+    if (physicalProductsEl) physicalProductsEl.textContent = products.filter(p => p.category !== 'digital').length;
     if (totalProjectsEl) totalProjectsEl.textContent = projects.length;
     if (document.getElementById('totalTestimonials')) {
         document.getElementById('totalTestimonials').textContent = testimonials.length;
@@ -302,37 +302,51 @@ async function fetchAndRenderProducts() {
 function renderProducts() {
     if (!adminProductsGrid) return;
     const filter = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
-    const mappedFilter = filter === 'fisico' ? 'physical' : filter;
 
-    const filteredProducts = mappedFilter === 'all'
+    const filteredProducts = filter === 'all'
         ? products
-        : products.filter(p => p.category === mappedFilter);
+        : products.filter(p => p.category === filter);
 
     if (filteredProducts.length === 0) {
-        adminProductsGrid.innerHTML = '<div class=\"no-products\">No se encontraron productos</div>';
+        adminProductsGrid.innerHTML = '<div class="no-products">No se encontraron productos</div>';
         return;
     }
 
     adminProductsGrid.innerHTML = filteredProducts.map(product => {
         const productId = product._id || product.id;
         const imageContent = product.images && product.images.length > 0 && product.images[0].url
-            ? `<img src=\"${product.images[0].url}\" alt=\"${product.name}\">`
+            ? `<img src="${product.images[0].url}" alt="${product.name}">`
             : `<span>${getProductIcon(product)}</span>`;
 
+        // Format price and unit
+        const priceDisplay = (product.unit && product.unit !== 'unidad')
+            ? `S/ ${product.price} / ${product.unit}`
+            : `Desde S/ ${product.price}`;
+
+        // Format labels
+        const categoryMap = {
+            'diseno': '🎨 Diseño', 'impresion': '🖨️ Impresión',
+            'packaging': '📦 Packaging', 'senalizacion': '🔧 Señalización',
+            'vinilo': '🚗 Vinilo', 'digital': '💻 Digital', 'espacios': '🏠 Espacios'
+        };
+        const catLabel = categoryMap[product.category] || product.category;
+
         return `
-        <div class=\"admin-product-card\" data-id=\"${productId}\" data-name=\"${product.name}\">
-            <div class=\"admin-product-image\" style=\"background: ${getGradient(product.category, productId)}\">
+        <div class="admin-product-card" data-id="${productId}" data-name="${product.name}">
+            <div class="admin-product-image" style="background: ${getGradient(product.category, productId)}">
                 ${imageContent}
                 <div class="product-protection-overlay"></div>
-                <span class=\"category-badge ${product.category}\">${product.category === 'digital' ? 'Digital' : 'Físico'}</span>
+                ${product.material ? `<span class="category-badge" style="background: rgba(0,0,0,0.6); top: 10px; left: 10px; position: absolute;">${product.material}</span>` : ''}
             </div>
-            <div class=\"admin-product-info\">
+            <div class="admin-product-info">
                 <h3>${product.name}</h3>
+                <p style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 5px;">${catLabel} • ${product.subcategory || ''}</p>
                 <p>${product.description}</p>
-                <div class=\"admin-product-price\">Desde S/ ${product.price}</div>
-                <div class=\"admin-product-actions\">
-                    <button class=\"btn-edit\">Editar</button>
-                    <button class=\"btn-delete\">Eliminar</button>
+                ${product.deliveryTime ? `<p style="font-size: 0.8rem; color: #888; margin-top: 5px;">⏳ ${product.deliveryTime}</p>` : ''}
+                <div class="admin-product-price">${priceDisplay}</div>
+                <div class="admin-product-actions">
+                    <button class="btn-edit">Editar</button>
+                    <button class="btn-delete">Eliminar</button>
                 </div>
             </div>
         </div>`;
@@ -657,9 +671,16 @@ function openEditModal(id) {
     modalTitle.textContent = 'Editar Producto';
     document.getElementById('productId').value = product._id || product.id;
     document.getElementById('productName').value = product.name;
-    document.getElementById('productCategory').value = product.category === 'physical' ? 'fisico' : product.category;
+    document.getElementById('productCategory').value = product.category;
+    document.getElementById('productSubcategory').value = product.subcategory || '';
     document.getElementById('productPrice').value = product.price;
+    document.getElementById('productUnit').value = product.unit || 'unidad';
+    document.getElementById('productDeliveryTime').value = product.deliveryTime || '';
+    document.getElementById('productMaterial').value = product.material || '';
+    document.getElementById('productDimensions').value = product.dimensions || '';
+    document.getElementById('productMinQuantity').value = product.minQuantity || 1;
     document.getElementById('productDescription').value = product.description;
+    document.getElementById('productIcon').value = product.icon || '🎨';
     document.getElementById('productImage').value = (product.images && product.images.length > 0) ? product.images[0].url : '';
     productModal.classList.add('active');
 }
@@ -964,9 +985,14 @@ function setupEventListeners() {
         const data = {
             name: document.getElementById('productName').value,
             description: document.getElementById('productDescription').value,
-            category: cat === 'fisico' ? 'physical' : cat,
-            subcategory: cat === 'fisico' ? 'Impresión' : 'Diseño', // Default subcategories
-            price: parseInt(document.getElementById('productPrice').value),
+            category: cat,
+            subcategory: document.getElementById('productSubcategory').value || 'General',
+            price: parseInt(document.getElementById('productPrice').value) || 0,
+            unit: document.getElementById('productUnit').value || 'unidad',
+            deliveryTime: document.getElementById('productDeliveryTime').value || '',
+            material: document.getElementById('productMaterial').value || '',
+            dimensions: document.getElementById('productDimensions').value || '',
+            minQuantity: parseInt(document.getElementById('productMinQuantity').value) || 1,
             icon: document.getElementById('productIcon').value || '🎨',
             images: document.getElementById('productImage').value ? [{ url: document.getElementById('productImage').value, isPrimary: true }] : []
         };

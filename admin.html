@@ -195,8 +195,13 @@
                         <h2>Productos</h2>
                         <div class="filter-buttons">
                             <button class="filter-btn active" data-filter="all">Todos</button>
-                            <button class="filter-btn" data-filter="digital">Digitales</button>
-                            <button class="filter-btn" data-filter="fisico">Físicos</button>
+                            <button class="filter-btn" data-filter="diseno">🎨 Diseño</button>
+                            <button class="filter-btn" data-filter="impresion">🖨️ Impresión</button>
+                            <button class="filter-btn" data-filter="packaging">📦 Packaging</button>
+                            <button class="filter-btn" data-filter="senalizacion">🔧 Señalización</button>
+                            <button class="filter-btn" data-filter="vinilo">🚗 Vinilo</button>
+                            <button class="filter-btn" data-filter="digital">💻 Digital</button>
+                            <button class="filter-btn" data-filter="espacios">🏠 Espacios</button>
                         </div>
                     </div>
                     <div class="products-grid" id="adminProductsGrid">
@@ -462,13 +467,48 @@
                     <div class="form-group">
                         <label for="productCategory">Categoría</label>
                         <select id="productCategory" required>
-                            <option value="digital">Digital</option>
-                            <option value="fisico">Físico</option>
+                            <option value="diseno">🎨 Diseño Gráfico</option>
+                            <option value="impresion">🖨️ Impresión</option>
+                            <option value="packaging">📦 Packaging</option>
+                            <option value="senalizacion">🔧 Señalización</option>
+                            <option value="vinilo">🚗 Vinilos y Rotulación</option>
+                            <option value="digital">💻 Digital</option>
+                            <option value="espacios">🏠 Espacios</option>
                         </select>
                     </div>
                     <div class="form-group">
+                        <label for="productSubcategory">Subcategoría</label>
+                        <input type="text" id="productSubcategory" required placeholder="Ej: Branding">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
                         <label for="productPrice">Precio Base (S/)</label>
                         <input type="number" id="productPrice" required min="0" placeholder="150">
+                    </div>
+                    <div class="form-group">
+                        <label for="productUnit">Unidad</label>
+                        <input type="text" id="productUnit" placeholder="Ej: unidad, m², paquete" value="unidad">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productDeliveryTime">Tiempo de Entrega</label>
+                        <input type="text" id="productDeliveryTime" placeholder="Ej: 3-5 días">
+                    </div>
+                    <div class="form-group">
+                        <label for="productMaterial">Material / Formato</label>
+                        <input type="text" id="productMaterial" placeholder="Ej: Vinil autoadhesivo, Digital">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productDimensions">Dimensiones</label>
+                        <input type="text" id="productDimensions" placeholder="Ej: A4, Personalizable">
+                    </div>
+                    <div class="form-group">
+                        <label for="productMinQuantity">Cantidad Mínima</label>
+                        <input type="number" id="productMinQuantity" min="1" value="1">
                     </div>
                 </div>
                 <div class="form-group">

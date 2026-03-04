@@ -305,96 +305,15 @@ navMenu.querySelectorAll('.nav-link').forEach(link => {
 // ===================================
 const productCatalog = {};
 
-// Productos estáticos de respaldo por si la API está vacía o tiene pocos productos
 const BACKUP_PRODUCTS = [
-    {
-        _id: 'bkup-1',
-        name: 'Diseño de Logo Premium',
-        description: 'Identidad visual única para tu marca con entrega de archivos editables y manual de uso.',
-        category: 'digital',
-        price: 150,
-        isAvailable: true
-    },
-    {
-        _id: 'bkup-2',
-        name: 'Diseño Web Profesional',
-        description: 'Sitios web modernos, responsivos y optimizados para SEO y conversión.',
-        category: 'digital',
-        price: 450,
-        isAvailable: true
-    },
-    {
-        _id: 'bkup-3',
-        name: 'Gestión de Redes Sociales',
-        description: 'Estrategia y creación de contenido mensual para tus canales digitales.',
-        category: 'digital',
-        price: 300,
-        isAvailable: true
-    },
-    {
-        _id: 'bkup-4',
-        name: 'Diseño de Interiores',
-        description: 'Planificación y visualización 3D profesional para transformar tus espacios.',
-        category: 'digital',
-        price: 500,
-        isAvailable: true
-    },
-    {
-        _id: 'bkup-5',
-        name: 'Personalización de Vehículos',
-        description: 'Diseño creativo de wraps y rotulación para flotas comerciales.',
-        category: 'digital',
-        price: 250,
-        isAvailable: true
-    },
-    {
-        _id: 'bkup-6',
-        name: 'Diseño de Fachada',
-        description: 'Propuestas arquitectónicas visuales para el exterior de tu negocio.',
-        category: 'digital',
-        price: 350,
-        isAvailable: true
-    },
-    {
-        _id: 'bkup-7',
-        name: 'Tarjetas de Presentación',
-        description: '500 unidades en papel premium con acabados especiales y diseño incluido.',
-        category: 'physical',
-        price: 45,
-        isAvailable: true
-    },
-    {
-        _id: 'bkup-8',
-        name: 'Flyers Publicitarios',
-        description: 'Mil volantes a full color en alta resolución para promocionar tu negocio.',
-        category: 'physical',
-        price: 65,
-        isAvailable: true
-    },
-    {
-        _id: 'bkup-9',
-        name: 'Banners y Gigantografías',
-        description: 'Impresión en gran formato en alta resolución para máxima visibilidad en exteriores Pucallpa.',
-        category: 'physical',
-        price: 85,
-        isAvailable: true
-    },
-    {
-        _id: 'bkup-10',
-        name: 'Stickers y Etiquetas',
-        description: 'Stickers personalizados troquelados en vinil adhesivo, ideales para branding de productos.',
-        category: 'physical',
-        price: 35,
-        isAvailable: true
-    },
-    {
-        _id: 'bkup-11',
-        name: 'Vinilos y Rotulación',
-        description: 'Vinilos decorativos y publicitarios para locales comerciales y oficinas en Pucallpa.',
-        category: 'physical',
-        price: 120,
-        isAvailable: true
-    }
+    { _id: 'bkup-1', name: 'Diseño de Logo Premium', description: 'Identidad visual única para tu marca con archivos editables.', category: 'diseno', price: 150, deliveryTime: '3-5 días', material: 'AI, PSD, PDF', unit: 'unidad', isAvailable: true },
+    { _id: 'bkup-2', name: 'Gigantografía / Banner', description: 'Impresión en gran formato sobre banner de alta resolución.', category: 'impresion', price: 18, deliveryTime: '24 horas', material: 'Banner 13oz', unit: 'm²', isAvailable: true },
+    { _id: 'bkup-3', name: 'Stickers Troquelados', description: 'Stickers personalizados con corte de forma en vinil adhesivo.', category: 'impresion', price: 35, deliveryTime: '24 horas', material: 'Vinil adhesivo', unit: 'plancha', isAvailable: true },
+    { _id: 'bkup-4', name: 'Letrero Luminoso LED', description: 'Letrero con iluminación LED para fachadas con acabado premium.', category: 'senalizacion', price: 350, deliveryTime: '5-7 días', material: 'Acrílico + LED', unit: 'm²', isAvailable: true },
+    { _id: 'bkup-5', name: 'Vinil Vehicular Parcial', description: 'Rotulación parcial de vehículos con vinil de alta adherencia.', category: 'vinilo', price: 300, deliveryTime: '3-5 días', material: 'Vinil autoadhesivo', unit: 'unidad', isAvailable: true },
+    { _id: 'bkup-6', name: 'Diseño Web Landing Page', description: 'Página web moderna y responsiva, optimizada para conversiones.', category: 'digital', price: 800, deliveryTime: '7-10 días', material: 'HTML/CSS/JS', unit: 'unidad', isAvailable: true },
+    { _id: 'bkup-7', name: 'Etiquetas Personalizadas', description: 'Diseño e impresión de etiquetas adhesivas para productos.', category: 'packaging', price: 90, deliveryTime: '3-4 días', material: 'Vinil / Couché', unit: 'millar', isAvailable: true },
+    { _id: 'bkup-8', name: 'Stand para Ferias', description: 'Diseño y montaje de stand promocional con estructura e iluminación.', category: 'espacios', price: 800, deliveryTime: '7-10 días', material: 'MDF, vinil', unit: 'unidad', isAvailable: true }
 ];
 
 // Product management
@@ -565,11 +484,27 @@ function createProductCard(product) {
         ? `<img src="${product.images[0].url}" alt="${product.name}" class="product-img-bg" loading="lazy">`
         : `<div class="product-placeholder" style="background: ${gradient}"><span class="product-icon">${icon}</span></div>`;
 
-    const categoryTag = product.category === 'digital'
-        ? '<span class="product-tag">Digital</span>'
-        : '<span class="product-tag physical">Físico</span>';
+    const CATEGORY_LABELS = {
+        diseno: 'Diseño', impresion: 'Impresión', packaging: 'Packaging',
+        senalizacion: 'Señalización', vinilo: 'Vinilos', digital: 'Digital', espacios: 'Espacios'
+    };
+    const catLabel = CATEGORY_LABELS[product.category] || product.category;
+    const categoryTag = `<span class="product-tag cat-${product.category}">${catLabel}</span>`;
 
-    const whatsappMsg = encodeURIComponent(`¡Hola! Me interesa el producto/servicio: *${product.name}* (S/ ${product.price}). ¿Podrían darme más información?`);
+    // Meta tags (delivery time + material)
+    let metaHtml = '';
+    if (product.deliveryTime || product.material) {
+        metaHtml = '<div class="product-meta">';
+        if (product.deliveryTime) metaHtml += `<span class="product-meta-tag">⏱ ${product.deliveryTime}</span>`;
+        if (product.material) metaHtml += `<span class="product-meta-tag">📐 ${product.material}</span>`;
+        metaHtml += '</div>';
+    }
+
+    // Price with unit
+    const unit = product.unit && product.unit !== 'unidad' ? ` /${product.unit}` : '';
+    const priceText = `S/ ${product.price}${unit}`;
+
+    const whatsappMsg = encodeURIComponent(`¡Hola! Me interesa el producto/servicio: *${product.name}* (${priceText}). ¿Podrían darme más información?`);
     const whatsappLink = `https://wa.me/51950699910?text=${whatsappMsg}`;
 
     div.innerHTML = `
@@ -581,8 +516,9 @@ function createProductCard(product) {
         <div class="product-info">
             <h3>${product.name}</h3>
             <p>${product.description}</p>
+            ${metaHtml}
             <div class="product-price">
-                <span class="price">Desde S/ ${product.price}</span>
+                <span class="price">${priceText}</span>
             </div>
             <div class="product-buttons">
                 <button class="btn-add-cart" data-product-id="${productId}" data-product-name="${product.name}" data-product-price="${product.price}" data-product-category="${product.category}" data-product-image="${product.images && product.images[0] ? product.images[0].url : ''}" aria-label="Agregar al carrito">
@@ -601,32 +537,31 @@ function createProductCard(product) {
 
 function getProductIcon(product) {
     if (product.icon) return product.icon;
-    const name = product.name ? product.name.toLowerCase() : '';
+    const cat = product.category || '';
+    const name = (product.name || '').toLowerCase();
+    const icons = {
+        diseno: '🎨', impresion: '🖨️', packaging: '📦',
+        senalizacion: '🔧', vinilo: '🚗', digital: '💻', espacios: '🏠'
+    };
+    if (icons[cat]) return icons[cat];
     if (name.includes('logo')) return '🎨';
     if (name.includes('web')) return '💻';
-    if (name.includes('redes')) return '📱';
-    if (name.includes('video')) return '🎬';
-    if (name.includes('tarjeta')) return '💳';
-    if (name.includes('flyer')) return '📄';
-    return product.category === 'digital' ? '✨' : '📦';
+    return '✨';
 }
 
 function getGradient(category, id) {
     const numId = typeof id === 'string' ? id.charCodeAt(id.length - 1) : 0;
-    const gradients = category === 'digital' ? [
-        'linear-gradient(135deg, #8655FF 0%, #a67fff 100%)',
-        'linear-gradient(135deg, #5a35cc 0%, #8655FF 100%)',
-        'linear-gradient(135deg, #a67fff 0%, #c9b3ff 100%)',
-        'linear-gradient(135deg, #160F50 0%, #2a1f6b 100%)',
-        'linear-gradient(135deg, #6b3fd9 0%, #8655FF 100%)'
-    ] : [
-        'linear-gradient(135deg, #160F50 0%, #8655FF 100%)',
-        'linear-gradient(135deg, #2a1f6b 0%, #5a35cc 100%)',
-        'linear-gradient(135deg, #8655FF 0%, #160F50 100%)',
-        'linear-gradient(135deg, #5a35cc 0%, #a67fff 100%)',
-        'linear-gradient(135deg, #a67fff 0%, #8655FF 100%)'
-    ];
-    return gradients[numId % gradients.length];
+    const palettes = {
+        diseno: ['linear-gradient(135deg, #C83C82 0%, #e06aaa 100%)', 'linear-gradient(135deg, #a02768 0%, #C83C82 100%)'],
+        impresion: ['linear-gradient(135deg, #160F50 0%, #2a1f6b 100%)', 'linear-gradient(135deg, #2a1f6b 0%, #5a35cc 100%)'],
+        packaging: ['linear-gradient(135deg, #b47832 0%, #d4a04a 100%)', 'linear-gradient(135deg, #8a5a1e 0%, #b47832 100%)'],
+        senalizacion: ['linear-gradient(135deg, #323232 0%, #555 100%)', 'linear-gradient(135deg, #444 0%, #666 100%)'],
+        vinilo: ['linear-gradient(135deg, #1e78b4 0%, #4da6e0 100%)', 'linear-gradient(135deg, #155a8a 0%, #1e78b4 100%)'],
+        digital: ['linear-gradient(135deg, #8655FF 0%, #a67fff 100%)', 'linear-gradient(135deg, #5a35cc 0%, #8655FF 100%)'],
+        espacios: ['linear-gradient(135deg, #227850 0%, #3aad70 100%)', 'linear-gradient(135deg, #1a5a3c 0%, #227850 100%)']
+    };
+    const g = palettes[category] || palettes.digital;
+    return g[numId % g.length];
 }
 
 // ===================================

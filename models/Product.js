@@ -13,7 +13,7 @@ const productSchema = new mongoose.Schema({
     category: {
         type: String,
         required: [true, 'Category is required'],
-        enum: ['digital', 'physical'],
+        enum: ['diseno', 'impresion', 'packaging', 'senalizacion', 'vinilo', 'digital', 'espacios'],
         default: 'digital'
     },
     subcategory: {
@@ -24,6 +24,26 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: [true, 'Price is required'],
         min: [0, 'Price cannot be negative']
+    },
+    deliveryTime: {
+        type: String,
+        default: ''
+    },
+    material: {
+        type: String,
+        default: ''
+    },
+    unit: {
+        type: String,
+        default: 'unidad'
+    },
+    minQuantity: {
+        type: Number,
+        default: 1
+    },
+    dimensions: {
+        type: String,
+        default: ''
     },
     images: [{
         url: {

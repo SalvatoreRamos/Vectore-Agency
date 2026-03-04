@@ -783,22 +783,31 @@ body {
 
 .catalog-filters {
     display: flex;
-    justify-content: center;
-    gap: 12px;
+    justify-content: flex-start;
+    gap: 10px;
     margin-bottom: 48px;
-    flex-wrap: wrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
 }
 
 .filter-btn {
-    padding: 12px 28px;
+    padding: 10px 22px;
     background: var(--white);
     border: 2px solid var(--gray-200);
     border-radius: var(--radius-xl);
-    font-size: 0.95rem;
+    font-size: 0.88rem;
     font-weight: 600;
     color: var(--dark);
     cursor: pointer;
     transition: var(--transition);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.catalog-filters::-webkit-scrollbar {
+    display: none;
 }
 
 .filter-btn:hover {
@@ -940,8 +949,32 @@ body {
     backdrop-filter: blur(10px);
 }
 
-.product-tag.physical {
-    background: rgba(22, 15, 80, 0.9);
+.product-tag.cat-impresion {
+    background: rgba(22, 15, 80, 0.85);
+}
+
+.product-tag.cat-packaging {
+    background: rgba(180, 120, 50, 0.85);
+}
+
+.product-tag.cat-senalizacion {
+    background: rgba(50, 50, 50, 0.85);
+}
+
+.product-tag.cat-vinilo {
+    background: rgba(30, 120, 180, 0.85);
+}
+
+.product-tag.cat-digital {
+    background: rgba(134, 85, 255, 0.9);
+}
+
+.product-tag.cat-espacios {
+    background: rgba(34, 120, 80, 0.85);
+}
+
+.product-tag.cat-diseno {
+    background: rgba(200, 60, 130, 0.85);
 }
 
 .product-info {
@@ -966,10 +999,30 @@ body {
 .product-price {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     padding-top: 15px;
     border-top: 1px solid rgba(0, 0, 0, 0.05);
     margin-top: auto;
+}
+
+.product-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+}
+
+.product-meta-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    background: rgba(134, 85, 255, 0.06);
+    border: 1px solid rgba(134, 85, 255, 0.12);
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--gray-600);
 }
 
 .price {
@@ -1548,12 +1601,13 @@ body {
     }
 
     .catalog-filters {
-        flex-direction: column;
-        align-items: center;
+        flex-direction: row;
+        width: 100%;
+        margin-bottom: 20px;
     }
 
     .filter-btn {
-        width: 100%;
+        width: auto;
     }
 
     .contact-form {
@@ -2096,4 +2150,47 @@ body {
     .testimonial-card {
         border-radius: 30px;
     }
+}
+
+/* Scrollable Catalog Filters */
+.catalog-filters {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE/Edge */
+    -webkit-overflow-scrolling: touch;
+}
+
+.catalog-filters::-webkit-scrollbar {
+    display: none;
+    /* Chrome/Safari */
+}
+
+.filter-btn {
+    white-space: nowrap;
+    padding: 10px 20px;
+    border: 1px solid rgba(134, 85, 255, 0.3);
+    background: transparent;
+    border-radius: 30px;
+    color: var(--dark);
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+    background: rgba(134, 85, 255, 0.1);
+}
+
+.filter-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    box-shadow: 0 4px 15px rgba(134, 85, 255, 0.4);
 }
