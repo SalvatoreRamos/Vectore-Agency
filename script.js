@@ -68,6 +68,9 @@ function renderTestimonials(testimonials) {
             </div>
         </div>
     `).join('');
+
+    // Forzar revelado inmediato post-carga asíncrona
+    setTimeout(() => { if (typeof revealOnScroll === 'function') revealOnScroll(); }, 100);
 }
 
 // ===================================
@@ -128,6 +131,9 @@ function renderPortfolioItems(projects) {
 
     // Setup touch/scroll pause behavior
     setupMarqueeInteraction(marquee);
+
+    // Forzar revelado inmediato post-carga asíncrona
+    setTimeout(() => { if (typeof revealOnScroll === 'function') revealOnScroll(); }, 100);
 }
 
 // Pause marquee on user interaction and enable manual scroll
@@ -347,6 +353,9 @@ async function loadProducts(retries = 3) {
 
         // Initialize events
         initializeCatalogEvents();
+
+        // Forzar revelado inmediato post-carga asíncrona
+        setTimeout(() => { if (typeof revealOnScroll === 'function') revealOnScroll(); }, 100);
 
     } catch (error) {
         console.error('Error loading products:', error);
