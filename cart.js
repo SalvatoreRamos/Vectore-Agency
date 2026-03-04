@@ -241,9 +241,9 @@ async function handleEmailRegister(e) {
         const data = await res.json();
 
         if (data.success) {
-            // Registration requires email verification now - don't auto-login
-            closeAuthModal();
-            showToast(data.message || '¡Revisa tu correo para verificar tu cuenta!');
+            // Document that registration requires email verification
+            showAuthView('verify');
+            document.getElementById('verifyEmailSpan').textContent = email;
         } else {
             console.error('Email register failed:', data);
             var errDetail = data.error || data.message;
@@ -557,6 +557,18 @@ function initCartUI() {
         '<button type="submit" class="btn-email-signin">Enviar enlace</button>' +
         '</form>' +
         '<p class="auth-switch"><button type="button" class="auth-link link-login">Volver al login</button></p>' +
+        '</div>' +
+
+        // VERIFY VIEW
+        '<div id="authView-verify" class="auth-view" style="display:none; text-align:center;">' +
+        '<div class="auth-header">' +
+        '<div style="font-size: 3rem; margin-bottom: 20px;">📩</div>' +
+        '<h2>¡Verifica tu cuenta!</h2>' +
+        '<p style="margin-top:20px; font-size: 1.1rem; line-height: 1.6;">Hemos enviado un enlace de confirmación a:<br><strong id="verifyEmailSpan" style="color: var(--primary);"></strong></p>' +
+        '<p style="margin-top:20px; font-size: 0.95rem; color: #64748b;">Por favor, revisa tu bandeja de entrada o carpeta de spam y haz clic en el enlace para activar tu cuenta.</p>' +
+        '</div>' +
+        '<button type="button" class="btn-email-signin" onclick="closeAuthModal()" style="margin-top: 20px;">Entendido</button>' +
+        '<p class="auth-switch" style="margin-top: 20px;"><button type="button" class="auth-link link-login">Ya verifiqué mi cuenta</button></p>' +
         '</div>' +
 
         '</div>';
