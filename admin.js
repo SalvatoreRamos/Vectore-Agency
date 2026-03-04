@@ -34,6 +34,7 @@ const testimonialsSection = document.getElementById('testimonialsSection');
 const eventsSection = document.getElementById('eventsSection');
 const flowSection = document.getElementById('flowSection');
 const notificationsSection = document.getElementById('notificationsSection');
+const usersSection = document.getElementById('usersSection');
 
 // Action Buttons
 const btnAddProduct = document.getElementById('btnAddProduct');
@@ -265,9 +266,11 @@ function switchSection(section) {
     if (eventsSection) eventsSection.style.display = section === 'events' ? 'block' : 'none';
     if (flowSection) flowSection.style.display = section === 'flow' ? 'block' : 'none';
     if (notificationsSection) notificationsSection.style.display = section === 'notifications' ? 'block' : 'none';
+    if (usersSection) usersSection.style.display = section === 'users' ? 'block' : 'none';
 
-    // Load notifications when switching to that section
+    // Load data when switching to specific sections
     if (section === 'notifications') fetchAndRenderAdminNotifs();
+    if (section === 'users') fetchAndRenderUsers();
 }
 
 // ===================================
@@ -1271,3 +1274,181 @@ if (adminNotifsGrid) {
 }
 
 init();
+
+// ===================================
+// Users Management
+// ===================================
+let allUsers = [];
+let userFilterActive = 'all';
+
+async function fetchAndRenderUsers() {
+    const tbody = document.getElementById('usersTableBody');
+    if (!tbody) return;
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:20px;">Cargando usuarios...</td></tr>';
+
+    try {
+        const res = await fetch('/api/users', {
+            headers: { 'Authorization': `Bearer ${api.token}` }
+        });
+        const data = await res.json();
+
+        if (data.success) {
+            allUsers = data.users || [];
+
+            // Update stats
+            const totalEl = document.getElementById('totalUsers');
+            const verifiedEl = document.getElementById('verifiedUsers');
+            const pendingEl = document.getElementById('pendingUsers');
+            if (totalEl) totalEl.textContent = data.stats.total;
+            if (verifiedEl) verifiedEl.textContent = data.stats.verified;
+            if (pendingEl) pendingEl.textContent = data.stats.pending;
+
+            renderUsersTable();
+        } else {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Error al cargar usuarios</td></tr>';
+        }
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Error de conexión</td></tr>';
+    }
+}
+
+function renderUsersTable() {
+    const tbody = document.getElementById('usersTableBody');
+    if (!tbody) return;
+
+    let filtered = allUsers;
+    if (userFilterActive === 'verified') filtered = allUsers.filter(u => u.isVerified);
+    if (userFilterActive === 'pending') filtered = allUsers.filter(u => !u.isVerified);
+
+    if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:20px; color:#999;">No hay usuarios en esta categoría</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = filtered.map(user => {
+        const initials = (user.name || 'U').split(' ').map(w => w[0]).join('').toUpperCase().substring(0, 2);
+        const avatarHtml = user.avatar
+            ? `<img src="${user.avatar}" style="width:32px;height:32px;border-radius:50%;object-fit:cover;" alt="">`
+            : `<div class="user-avatar-small">${initials}</div>`;
+
+        const roleBadge = user.role === 'admin'
+            ? '<span class="badge badge-admin">Admin</span>'
+            : '<span class="badge badge-user">Usuario</span>';
+
+        const verifiedBadge = user.isVerified
+            ? '<span class="badge badge-verified">✓ Verificado</span>'
+            : '<span class="badge badge-pending">⏳ Pendiente</span>';
+
+        const activeBadge = user.isActive
+            ? '<span class="badge badge-active">Activo</span>'
+            : '<span class="badge badge-inactive">Inactivo</span>';
+
+        const createdDate = user.createdAt
+            ? new Date(user.createdAt).toLocaleDateString('es-PE', { day: 'numeric', month: 'short', year: 'numeric' })
+            : '-';
+
+        const isAdminUser = user.role === 'admin';
+
+        return `
+        <tr data-user-id="${user._id}">
+            <td>
+                <div class="user-name-cell">
+                    ${avatarHtml}
+                    <span>${user.name || 'Sin nombre'}</span>
+                </div>
+            </td>
+            <td>${user.email}</td>
+            <td>${roleBadge}</td>
+            <td>${verifiedBadge}</td>
+            <td>${activeBadge}</td>
+            <td>${createdDate}</td>
+            <td>
+                <div class="user-actions">
+                    <button class="btn-verify" data-action="verify" title="${user.isVerified ? 'Quitar verificación' : 'Verificar'}">
+                        ${user.isVerified ? '✗' : '✓'}
+                    </button>
+                    <button class="btn-toggle-active" data-action="toggle-active" title="${user.isActive ? 'Desactivar' : 'Activar'}">
+                        ${user.isActive ? '🔒' : '🔓'}
+                    </button>
+                    ${!isAdminUser ? `<button class="btn-delete-user" data-action="delete" title="Eliminar">🗑</button>` : ''}
+                </div>
+            </td>
+        </tr>`;
+    }).join('');
+}
+
+// User filter buttons
+document.querySelectorAll('[data-user-filter]').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-user-filter]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        userFilterActive = btn.dataset.userFilter;
+        renderUsersTable();
+    });
+});
+
+// User action clicks
+const usersTableBody = document.getElementById('usersTableBody');
+if (usersTableBody) {
+    usersTableBody.addEventListener('click', async (e) => {
+        const btn = e.target.closest('button[data-action]');
+        if (!btn) return;
+        const row = btn.closest('tr');
+        if (!row) return;
+        const userId = row.dataset.userId;
+        const action = btn.dataset.action;
+
+        if (action === 'verify') {
+            try {
+                const res = await fetch(`/api/users/${userId}/verify`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${api.token}` }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    fetchAndRenderUsers();
+                } else {
+                    alert(data.message);
+                }
+            } catch (err) {
+                alert('Error: ' + err.message);
+            }
+        }
+
+        if (action === 'toggle-active') {
+            try {
+                const res = await fetch(`/api/users/${userId}/toggle-active`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${api.token}` }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    fetchAndRenderUsers();
+                } else {
+                    alert(data.message);
+                }
+            } catch (err) {
+                alert('Error: ' + err.message);
+            }
+        }
+
+        if (action === 'delete') {
+            if (!confirm('¿Estás seguro de que deseas eliminar este usuario? Esta acción no se puede deshacer.')) return;
+            try {
+                const res = await fetch(`/api/users/${userId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${api.token}` }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    fetchAndRenderUsers();
+                } else {
+                    alert(data.message);
+                }
+            } catch (err) {
+                alert('Error: ' + err.message);
+            }
+        }
+    });
+}

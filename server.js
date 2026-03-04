@@ -17,6 +17,7 @@ import eventRoutes from './routes/events.js';
 import softwareRoutes from './routes/software.js';
 import complaintRoutes from './routes/complaints.js';
 import notificationRoutes from './routes/notifications.js';
+import userRoutes from './routes/users.js';
 
 // Load environment variables
 dotenv.config();
@@ -108,6 +109,7 @@ app.use('/api/events', eventRoutes);
 app.use('/api/software', softwareRoutes);
 app.use('/api/complaints', complaintRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/users', userRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

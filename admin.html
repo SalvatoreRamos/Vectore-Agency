@@ -121,6 +121,15 @@
                     </svg>
                     Notificaciones
                 </a>
+                <a href="#" class="nav-item" data-section="users">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    Usuarios
+                </a>
                 <a href="index.html" class="nav-item">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
@@ -366,6 +375,69 @@
                     </div>
                     <div class="products-grid" id="adminNotifsGrid">
                         <!-- Notifications loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Section -->
+            <div id="usersSection" style="display: none;">
+                <header class="admin-header">
+                    <div class="header-left">
+                        <h1>Gestión de Usuarios</h1>
+                        <p>Administra cuentas, verificación y acceso</p>
+                    </div>
+                </header>
+
+                <div class="admin-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon digital">👥</div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="totalUsers">0</span>
+                            <span class="stat-label">Total Usuarios</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon digital">✅</div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="verifiedUsers">0</span>
+                            <span class="stat-label">Verificados</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon physical">⏳</div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="pendingUsers">0</span>
+                            <span class="stat-label">Pendientes</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-section">
+                    <div class="section-header">
+                        <h2>Lista de Usuarios</h2>
+                        <div class="filter-buttons">
+                            <button class="filter-btn active" data-user-filter="all">Todos</button>
+                            <button class="filter-btn" data-user-filter="verified">Verificados</button>
+                            <button class="filter-btn" data-user-filter="pending">Pendientes</button>
+                        </div>
+                    </div>
+                    <div class="users-table-wrapper">
+                        <table class="users-table" id="usersTable">
+                            <thead>
+                                <tr>
+                                    <th>Usuario</th>
+                                    <th>Email</th>
+                                    <th>Rol</th>
+                                    <th>Verificado</th>
+                                    <th>Estado</th>
+                                    <th>Registro</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <!-- Users loaded dynamically -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

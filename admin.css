@@ -1085,3 +1085,158 @@
     visibility: hidden;
     pointer-events: none;
 }
+
+/* ===================================
+   Users Table
+   =================================== */
+.users-table-wrapper {
+    overflow-x: auto;
+    margin-top: 16px;
+}
+
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.users-table th,
+.users-table td {
+    padding: 14px 16px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.users-table thead th {
+    background: var(--gray-100, #f8f9fc);
+    font-weight: 700;
+    color: var(--dark, #160F50);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--gray-200, #e2e8f0);
+}
+
+.users-table tbody tr {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    transition: background 0.2s;
+}
+
+.users-table tbody tr:hover {
+    background: rgba(134, 85, 255, 0.03);
+}
+
+.users-table .user-name-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.users-table .user-avatar-small {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--primary, #8655FF);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+}
+
+.users-table .badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.badge-admin {
+    background: rgba(134, 85, 255, 0.12);
+    color: var(--primary, #8655FF);
+}
+
+.badge-user {
+    background: rgba(100, 116, 139, 0.1);
+    color: #64748b;
+}
+
+.badge-verified {
+    background: rgba(34, 197, 94, 0.1);
+    color: #16a34a;
+}
+
+.badge-pending {
+    background: rgba(245, 158, 11, 0.1);
+    color: #d97706;
+}
+
+.badge-active {
+    background: rgba(34, 197, 94, 0.1);
+    color: #16a34a;
+}
+
+.badge-inactive {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.users-table .user-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.users-table .user-actions button {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+}
+
+.btn-verify {
+    background: rgba(34, 197, 94, 0.1);
+    color: #16a34a;
+}
+
+.btn-verify:hover {
+    background: #16a34a;
+    color: #fff;
+}
+
+.btn-toggle-active {
+    background: rgba(245, 158, 11, 0.1);
+    color: #d97706;
+}
+
+.btn-toggle-active:hover {
+    background: #d97706;
+    color: #fff;
+}
+
+.btn-delete-user {
+    background: rgba(239, 68, 68, 0.08);
+    color: #ef4444;
+}
+
+.btn-delete-user:hover {
+    background: #ef4444;
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .users-table {
+        font-size: 0.8rem;
+    }
+
+    .users-table th,
+    .users-table td {
+        padding: 10px 8px;
+    }
+}
