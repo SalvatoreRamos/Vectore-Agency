@@ -241,18 +241,9 @@ async function handleEmailRegister(e) {
         const data = await res.json();
 
         if (data.success) {
-            currentUser = data.user;
-            localStorage.setItem('vectore_token', data.token);
-            localStorage.setItem('vectore_user', JSON.stringify(data.user));
-            renderUserUI();
+            // Registration requires email verification now - don't auto-login
             closeAuthModal();
-            showToast('¡Cuenta creada con éxito!');
-
-            if (window._pendingCartProduct) {
-                var pending = window._pendingCartProduct;
-                window._pendingCartProduct = null;
-                setTimeout(function () { addToCart(pending); }, 500);
-            }
+            showToast(data.message || '¡Revisa tu correo para verificar tu cuenta!');
         } else {
             console.error('Email register failed:', data);
             var errDetail = data.error || data.message;

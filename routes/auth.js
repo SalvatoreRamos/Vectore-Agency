@@ -50,11 +50,11 @@ router.post('/login', [
                     email: envEmail,
                     password: envPass,
                     name: 'Administrator',
-                    role: 'admin'
+                    role: 'admin',
+                    isVerified: true
                 });
                 await user.save();
             } else {
-                // Defensive check to avoid Bcrypt error if password is missing in DB
                 let isMatch = false;
                 if (user.password) {
                     try {
@@ -63,11 +63,14 @@ router.post('/login', [
                         console.log("Bcrypt comparison failed, syncing...");
                     }
                 }
-
                 if (!isMatch) {
                     console.log("Password mismatch or missing in DB, syncing with .env...");
                     user.password = password;
                     user.role = 'admin';
+                    user.isVerified = true;
+                    await user.save();
+                } else if (!user.isVerified) {
+                    user.isVerified = true;
                     await user.save();
                 }
             }
@@ -81,7 +84,8 @@ router.post('/login', [
                     email: 'test@culqi.com',
                     password: 'culqi123',
                     name: 'Usuario de Prueba (Culqi)',
-                    role: 'user'
+                    role: 'user',
+                    isVerified: true
                 });
                 await user.save();
             }
@@ -95,7 +99,17 @@ router.post('/login', [
             return res.status(401).json({ success: false, message: 'La cuenta está desactivada' });
         }
 
-        // Final check with error protection
+        // Handle verification: admins, Google users, and Culqi test are auto-verified
+        if (!user.isVerified) {
+            if (user.googleId || user.email === envEmail || user.email === 'test@culqi.com') {
+                user.isVerified = true;
+                await user.save();
+            } else {
+                return res.status(401).json({ success: false, message: 'Por favor verifica tu correo antes de iniciar sesión. Revisa tu bandeja de entrada.' });
+            }
+        }
+
+        // Final password check with error protection
         try {
             if (!user.password) throw new Error("Missing password in DB");
             const isMatch = await user.comparePassword(password);
@@ -168,7 +182,8 @@ router.post('/google', async (req, res) => {
                 name,
                 avatar: picture,
                 role: 'user',
-                isActive: true
+                isActive: true,
+                isVerified: true
             });
             await user.save();
         } else {
@@ -229,22 +244,86 @@ router.post('/register', [
             name,
             email,
             password,
-            role: 'user'
+            role: 'user',
+            isVerified: false
         });
 
+        const verificationToken = user.getVerificationToken();
         await user.save();
 
-        const token = generateToken(user._id);
+        const host = req.get('host');
+        const protocol = req.protocol === 'http' && host.includes('localhost') ? 'http' : 'https';
+        const verifyUrl = `${protocol}://${host}/api/auth/verifyemail/${verificationToken}`;
 
-        res.status(201).json({
-            success: true,
-            token,
-            user: { id: user._id, email: user.email, name: user.name, role: user.role }
-        });
+        const message = `
+            <div style="font-family: Arial, sans-serif; padding: 20px;">
+                <h2 style="color: #160F50;">Verifica tu cuenta en Vectore</h2>
+                <p>Hola ${name}, gracias por registrarte en nuestra agencia digital.</p>
+                <p>Por favor haz clic en el siguiente botón para verificar tu correo y poder iniciar sesión:</p>
+                <a href="${verifyUrl}" style="display:inline-block; margin: 15px 0; padding:12px 24px; background:#8655FF; color:#fff; text-decoration:none; border-radius:8px; font-weight: bold;">Verificar mi correo</a>
+                <p style="color: #666; font-size: 12px; margin-top: 20px;">Si no fuiste tú, simplemente ignora este correo.</p>
+            </div>
+        `;
+
+        try {
+            await sendEmail({
+                email: user.email,
+                subject: 'Verifica tu correo electrónico - Vectore',
+                message
+            });
+
+            res.status(201).json({
+                success: true,
+                message: 'Cuenta creada exitosamente. Se ha enviado un correo con el enlace de verificación.'
+            });
+        } catch (error) {
+            console.error('Error enviando correo de verificación:', error);
+            await user.deleteOne(); // Borrar el usuario si no se puede enviar el email
+            return res.status(500).json({ success: false, message: 'No se pudo enviar el correo de verificación. Inténtalo de nuevo más tarde.' });
+        }
 
     } catch (error) {
         console.error('Register error:', error);
         res.status(500).json({ success: false, message: 'Error interno en el servidor' });
+    }
+});
+
+// @route   GET /api/auth/verifyemail/:token
+// @desc    Verify user email
+// @access  Public
+router.get('/verifyemail/:token', async (req, res) => {
+    try {
+        const emailVerificationToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
+        const user = await User.findOne({ emailVerificationToken });
+
+        if (!user) {
+            return res.status(400).send(`
+                <html>
+                    <body style="font-family: Arial, sans-serif; text-align: center; padding: 50px;">
+                        <h2 style="color: #dc3545;">Enlace inválido o expirado</h2>
+                        <p>El enlace de verificación no es válido o ya fue utilizado.</p>
+                        <a href="/" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background: #8655FF; color: white; text-decoration: none; border-radius: 5px;">Ir al inicio</a>
+                    </body>
+                </html>
+            `);
+        }
+
+        user.isVerified = true;
+        user.emailVerificationToken = undefined;
+        await user.save();
+
+        res.status(200).send(`
+            <html>
+                <body style="font-family: Arial, sans-serif; text-align: center; padding: 50px;">
+                    <h2 style="color: #25D366;">¡Cuenta verificada exitosamente!</h2>
+                    <p>Tu correo ha sido verificado. Ya puedes iniciar sesión y continuar con tus compras o solicitudes.</p>
+                    <a href="/" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background: #8655FF; color: white; text-decoration: none; border-radius: 5px;">Ir a la tienda</a>
+                </body>
+            </html>
+        `);
+    } catch (error) {
+        console.error('Verify error:', error);
+        res.status(500).send('Error interno en el servidor');
     }
 });
 
