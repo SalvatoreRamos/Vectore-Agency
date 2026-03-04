@@ -39,8 +39,14 @@ const sendEmail = async (options) => {
         });
     }
 
+    const fallBackEmail = process.env.EMAIL_USER || 'noreply@vectore.com';
+    // If they set FROM_EMAIL to an invalid string like a URL (no @ symbol), fallback.
+    const fromEmailToUse = (process.env.FROM_EMAIL && process.env.FROM_EMAIL.includes('@'))
+        ? process.env.FROM_EMAIL
+        : fallBackEmail;
+
     const message = {
-        from: `${process.env.FROM_NAME || 'Vectore'} <${process.env.FROM_EMAIL || 'noreply@vectore.com'}>`,
+        from: `${process.env.FROM_NAME || 'Vectore'} <${fromEmailToUse}>`,
         to: options.email,
         subject: options.subject,
         html: options.message,
@@ -48,7 +54,8 @@ const sendEmail = async (options) => {
 
     const info = await transporter.sendMail(message);
 
-    if (!process.env.SMTP_HOST) {
+    // If using ethereal fallback (not gmail/smtp), show link
+    if (!process.env.EMAIL_USER) {
         console.log("Correo de prueba enviado. URL para verlo: %s", nodemailer.getTestMessageUrl(info));
         options.testUrl = nodemailer.getTestMessageUrl(info);
     }
