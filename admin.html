@@ -130,6 +130,14 @@
                     </svg>
                     Usuarios
                 </a>
+                <a href="#" class="nav-item" data-section="orders">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <path d="M16 10a4 4 0 0 1-8 0" />
+                    </svg>
+                    Pedidos
+                </a>
                 <a href="index.html" class="nav-item">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
@@ -444,6 +452,79 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+
+            <!-- Orders Section -->
+            <div id="ordersSection" style="display: none;">
+                <header class="admin-header">
+                    <div class="header-left">
+                        <h1>Gestión de Pedidos</h1>
+                        <p>Control de ventas y pagos con Culqi</p>
+                    </div>
+                </header>
+
+                <div class="admin-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon digital">🛒</div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="totalOrders">0</span>
+                            <span class="stat-label">Total Pedidos</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon digital">💰</div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="totalRevenue">S/ 0</span>
+                            <span class="stat-label">Ingresos Totales</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon physical">✅</div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="paidOrders">0</span>
+                            <span class="stat-label">Pagados</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon physical">⏳</div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="pendingOrders">0</span>
+                            <span class="stat-label">Pendientes</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-section">
+                    <div class="section-header">
+                        <h2>Lista de Pedidos</h2>
+                        <div class="filter-buttons">
+                            <button class="filter-btn active" data-order-filter="all">Todos</button>
+                            <button class="filter-btn" data-order-filter="paid">✅ Pagados</button>
+                            <button class="filter-btn" data-order-filter="pending">⏳ Pendientes</button>
+                            <button class="filter-btn" data-order-filter="failed">❌ Fallidos</button>
+                            <button class="filter-btn" data-order-filter="shipped">🚚 Enviados</button>
+                        </div>
+                    </div>
+                    <div class="users-table-wrapper">
+                        <table class="users-table" id="ordersTable">
+                            <thead>
+                                <tr>
+                                    <th>Nº Pedido</th>
+                                    <th>Cliente</th>
+                                    <th>Total</th>
+                                    <th>Método</th>
+                                    <th>Estado</th>
+                                    <th>Fecha</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ordersTableBody">
+                                <!-- Orders loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="orders-pagination" id="ordersPagination"></div>
                 </div>
             </div>
 

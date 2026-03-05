@@ -18,6 +18,7 @@ import softwareRoutes from './routes/software.js';
 import complaintRoutes from './routes/complaints.js';
 import notificationRoutes from './routes/notifications.js';
 import userRoutes from './routes/users.js';
+import paymentRoutes from './routes/payments.js';
 
 // Load environment variables
 dotenv.config();
@@ -42,7 +43,10 @@ app.use(helmet({
         "https://www.googletagmanager.com",
         "https://www.google-analytics.com",
         "https://accounts.google.com/gsi/client",
-        "https://accounts.google.com/gsi/"
+        "https://accounts.google.com/gsi/",
+        "https://checkout.culqi.com",
+        "https://js.culqi.com",
+        "https://3ds.culqi.com"
       ],
       "script-src-attr": ["'unsafe-inline'"],
       "style-src": [
@@ -52,7 +56,7 @@ app.use(helmet({
         "https://fonts.googleapis.com"
       ],
       "worker-src": ["'self'", "blob:"],
-      "frame-src": ["'self'", "https://accounts.google.com/"],
+      "frame-src": ["'self'", "https://accounts.google.com/", "https://checkout.culqi.com", "https://3ds.culqi.com"],
       "connect-src": [
         "'self'",
         "https://www.googletagmanager.com",
@@ -61,7 +65,10 @@ app.use(helmet({
         "https://api.cloudinary.com",
         "https://vectore-agency.onrender.com",
         "https://agenciavectore.com",
-        "https://www.agenciavectore.com"
+        "https://www.agenciavectore.com",
+        "https://api.culqi.com",
+        "https://checkout.culqi.com",
+        "https://3ds.culqi.com"
       ],
       "img-src": ["'self'", "data:", "https:", "http:", "blob:", "https://www.google-analytics.com", "https://www.googletagmanager.com", "https://lh3.googleusercontent.com"]
     },
@@ -110,6 +117,7 @@ app.use('/api/software', softwareRoutes);
 app.use('/api/complaints', complaintRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/payments', paymentRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -121,6 +129,10 @@ app.get('/api/health', (req, res) => {
 });
 
 // Specific Pages
+app.get('/checkout', (req, res) => {
+  res.sendFile(path.join(__dirname, 'checkout.html'));
+});
+
 app.get('/software', (req, res) => {
   res.sendFile(path.join(__dirname, 'software.html'));
 });

@@ -621,7 +621,6 @@
 .btn-checkout {
     width: 100%;
     padding: 14px 24px;
-    background: #25D366;
     color: #fff;
     border: none;
     border-radius: 14px;
@@ -634,13 +633,41 @@
     justify-content: center;
     gap: 10px;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25);
 }
 
-.btn-checkout:hover {
-    background: #22c35e;
+.btn-checkout-primary {
+    background: var(--primary, #8655FF);
+    box-shadow: 0 4px 12px rgba(134, 85, 255, 0.25);
+}
+
+.btn-checkout-primary:hover {
+    background: var(--primary-dark, #6b3fd9);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.35);
+    box-shadow: 0 6px 20px rgba(134, 85, 255, 0.35);
+}
+
+.btn-checkout-whatsapp {
+    width: 100%;
+    padding: 10px 16px;
+    background: transparent;
+    color: #25D366;
+    border: 1px solid rgba(37, 211, 102, 0.3);
+    border-radius: 10px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    margin-top: 8px;
+}
+
+.btn-checkout-whatsapp:hover {
+    background: rgba(37, 211, 102, 0.08);
+    border-color: #25D366;
 }
 
 /* "Add to Cart" Button (product cards) */

@@ -35,6 +35,10 @@ const eventsSection = document.getElementById('eventsSection');
 const flowSection = document.getElementById('flowSection');
 const notificationsSection = document.getElementById('notificationsSection');
 const usersSection = document.getElementById('usersSection');
+const ordersSection = document.getElementById('ordersSection');
+
+let adminOrders = [];
+let ordersFilter = 'all';
 
 // Action Buttons
 const btnAddProduct = document.getElementById('btnAddProduct');
@@ -262,15 +266,16 @@ function switchSection(section) {
     if (catalogSection) catalogSection.style.display = section === 'catalog' ? 'block' : 'none';
     if (portfolioSection) portfolioSection.style.display = section === 'portfolio' ? 'block' : 'none';
     if (testimonialsSection) testimonialsSection.style.display = section === 'testimonials' ? 'block' : 'none';
-    if (testimonialsSection) testimonialsSection.style.display = section === 'testimonials' ? 'block' : 'none';
     if (eventsSection) eventsSection.style.display = section === 'events' ? 'block' : 'none';
     if (flowSection) flowSection.style.display = section === 'flow' ? 'block' : 'none';
     if (notificationsSection) notificationsSection.style.display = section === 'notifications' ? 'block' : 'none';
     if (usersSection) usersSection.style.display = section === 'users' ? 'block' : 'none';
+    if (ordersSection) ordersSection.style.display = section === 'orders' ? 'block' : 'none';
 
     // Load data when switching to specific sections
     if (section === 'notifications') fetchAndRenderAdminNotifs();
     if (section === 'users') fetchAndRenderUsers();
+    if (section === 'orders') fetchAndRenderOrders();
 }
 
 // ===================================
@@ -1478,3 +1483,161 @@ if (usersTableBody) {
         }
     });
 }
+
+// ===================================
+// Orders Management
+// ===================================
+async function fetchAndRenderOrders() {
+    const ordersTableBody = document.getElementById('ordersTableBody');
+    if (!ordersTableBody) return;
+
+    ordersTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem;">Cargando pedidos...</td></tr>';
+
+    try {
+        const res = await fetch('/api/payments/admin/orders', {
+            headers: { 'Authorization': `Bearer ${api.token}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+            adminOrders = data.data || [];
+            renderOrders();
+            updateOrderStats();
+        } else {
+            ordersTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem; color: #ef4444;">Error al cargar pedidos</td></tr>';
+        }
+    } catch (error) {
+        console.error('Error fetching orders:', error);
+        ordersTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem; color: #ef4444;">Error de conexión</td></tr>';
+    }
+}
+
+function updateOrderStats() {
+    const totalOrdersEl = document.getElementById('totalOrders');
+    const totalRevenueEl = document.getElementById('totalRevenue');
+    const paidOrdersEl = document.getElementById('paidOrders');
+    const pendingOrdersEl = document.getElementById('pendingOrders');
+
+    if (totalOrdersEl) totalOrdersEl.textContent = adminOrders.length;
+
+    const paidList = adminOrders.filter(o => o.paymentStatus === 'paid' || o.paymentStatus === 'completed');
+    if (paidOrdersEl) paidOrdersEl.textContent = paidList.length;
+
+    const pendingList = adminOrders.filter(o => o.paymentStatus === 'pending');
+    if (pendingOrdersEl) pendingOrdersEl.textContent = pendingList.length;
+
+    const totalRevenue = paidList.reduce((sum, o) => sum + (o.totalAmount || 0), 0);
+    if (totalRevenueEl) totalRevenueEl.textContent = `S/ ${(totalRevenue / 100).toFixed(2)}`;
+}
+
+function renderOrders() {
+    const ordersTableBody = document.getElementById('ordersTableBody');
+    if (!ordersTableBody) return;
+
+    let filtered = adminOrders;
+    if (ordersFilter !== 'all') {
+        if (ordersFilter === 'paid') {
+            filtered = adminOrders.filter(o => o.paymentStatus === 'paid' || o.paymentStatus === 'completed');
+        } else if (ordersFilter === 'pending') {
+            filtered = adminOrders.filter(o => o.paymentStatus === 'pending');
+        } else if (ordersFilter === 'failed') {
+            filtered = adminOrders.filter(o => o.paymentStatus === 'failed' || o.paymentStatus === 'denied');
+        } else if (ordersFilter === 'shipped') {
+            filtered = adminOrders.filter(o => o.status === 'shipped' || o.status === 'delivered');
+        }
+    }
+
+    if (filtered.length === 0) {
+        ordersTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem; color: #6c757d;">No hay pedidos con este filtro</td></tr>';
+        return;
+    }
+
+    const statusLabels = {
+        'pending': { label: 'Pendiente', color: '#f59e0b', bg: '#fffbeb' },
+        'paid': { label: 'Pagado', color: '#10b981', bg: '#ecfdf5' },
+        'completed': { label: 'Completado', color: '#10b981', bg: '#ecfdf5' },
+        'failed': { label: 'Fallido', color: '#ef4444', bg: '#fef2f2' },
+        'denied': { label: 'Rechazado', color: '#ef4444', bg: '#fef2f2' },
+        'refunded': { label: 'Reembolsado', color: '#6366f1', bg: '#eef2ff' }
+    };
+
+    ordersTableBody.innerHTML = filtered.map(order => {
+        const payStatus = statusLabels[order.paymentStatus] || statusLabels['pending'];
+        const methodIcon = order.paymentMethod === 'card' ? '💳' : order.paymentMethod === 'whatsapp' ? '💬' : '🔄';
+        const date = new Date(order.createdAt).toLocaleDateString('es-PE', {
+            day: '2-digit', month: 'short', year: 'numeric'
+        });
+        const total = ((order.totalAmount || 0) / 100).toFixed(2);
+        const customerName = order.customer?.name || order.customer?.email || 'N/A';
+
+        return `
+        <tr>
+            <td><strong style="color: #8655FF;">${order.orderNumber || order._id.substring(0, 8)}</strong></td>
+            <td>
+                <div style="display: flex; flex-direction: column;">
+                    <span style="font-weight: 600;">${customerName}</span>
+                    <small style="color: #6c757d;">${order.customer?.email || ''}</small>
+                </div>
+            </td>
+            <td><strong>S/ ${total}</strong></td>
+            <td>${methodIcon} ${order.paymentMethod || 'N/A'}</td>
+            <td>
+                <span style="padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; background: ${payStatus.bg}; color: ${payStatus.color};">
+                    ${payStatus.label}
+                </span>
+            </td>
+            <td style="font-size: 0.85rem; color: #6c757d;">${date}</td>
+            <td>
+                <select class="order-status-select" data-order-id="${order._id}" style="padding: 4px 8px; border: 1px solid #dee2e6; border-radius: 6px; font-size: 0.8rem; cursor: pointer;">
+                    <option value="processing" ${order.status === 'processing' ? 'selected' : ''}>📦 Procesando</option>
+                    <option value="confirmed" ${order.status === 'confirmed' ? 'selected' : ''}>✅ Confirmado</option>
+                    <option value="shipped" ${order.status === 'shipped' ? 'selected' : ''}>🚚 Enviado</option>
+                    <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>📬 Entregado</option>
+                    <option value="cancelled" ${order.status === 'cancelled' ? 'selected' : ''}>❌ Cancelado</option>
+                </select>
+            </td>
+        </tr>`;
+    }).join('');
+}
+
+// Order filter buttons
+document.addEventListener('click', function (e) {
+    const filterBtn = e.target.closest('[data-order-filter]');
+    if (!filterBtn) return;
+
+    document.querySelectorAll('[data-order-filter]').forEach(btn => btn.classList.remove('active'));
+    filterBtn.classList.add('active');
+
+    ordersFilter = filterBtn.dataset.orderFilter;
+    renderOrders();
+});
+
+// Order status change handler
+document.addEventListener('change', async function (e) {
+    if (!e.target.classList.contains('order-status-select')) return;
+
+    const orderId = e.target.dataset.orderId;
+    const newStatus = e.target.value;
+
+    try {
+        const res = await fetch(`/api/payments/admin/orders/${orderId}/status`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${api.token}`
+            },
+            body: JSON.stringify({ status: newStatus })
+        });
+        const data = await res.json();
+        if (data.success) {
+            const order = adminOrders.find(o => o._id === orderId);
+            if (order) order.status = newStatus;
+            alert('Estado actualizado correctamente');
+        } else {
+            alert('Error: ' + (data.message || 'No se pudo actualizar'));
+            fetchAndRenderOrders();
+        }
+    } catch (err) {
+        alert('Error de conexión: ' + err.message);
+        fetchAndRenderOrders();
+    }
+});
