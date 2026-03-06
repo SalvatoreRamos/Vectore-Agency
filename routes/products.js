@@ -98,7 +98,7 @@ router.get('/:id', async (req, res) => {
 router.post('/', [authenticate, isAdmin], [
     body('name').notEmpty().withMessage('Product name is required'),
     body('description').notEmpty().withMessage('Description is required'),
-    body('category').isIn(['digital', 'physical']).withMessage('Invalid category'),
+    body('category').isIn(['diseno', 'impresion', 'packaging', 'senalizacion', 'vinilo', 'digital', 'espacios']).withMessage('Invalid category'),
     body('subcategory').notEmpty().withMessage('Subcategory is required'),
     body('price').isNumeric().withMessage('Price must be a number')
 ], async (req, res) => {

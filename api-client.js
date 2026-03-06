@@ -59,7 +59,13 @@ class VectoreAPI {
             const data = await response.json();
 
             if (!response.ok) {
-                const errorMsg = data.message + (data.error ? ` (${data.error})` : '');
+                let messages = [];
+                if (data.message) messages.push(data.message);
+                if (data.error) messages.push(data.error);
+                if (data.errors && Array.isArray(data.errors)) {
+                    messages.push(data.errors.map(e => e.msg || e.message || 'Validation error').join(', '));
+                }
+                const errorMsg = messages.join(' - ');
                 throw new Error(errorMsg || 'Request failed');
             }
 
