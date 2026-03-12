@@ -19,6 +19,7 @@ import complaintRoutes from './routes/complaints.js';
 import notificationRoutes from './routes/notifications.js';
 import userRoutes from './routes/users.js';
 import paymentRoutes from './routes/payments.js';
+import internalEmailRoutes from './routes/internal-email.js';
 
 // Load environment variables
 dotenv.config();
@@ -118,6 +119,7 @@ app.use('/api/complaints', complaintRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/internal', internalEmailRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
