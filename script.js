@@ -489,9 +489,21 @@ function createProductCard(product) {
     const productId = product._id || product.id;
     const gradient = getGradient(product.category, productId);
 
-    const imageContent = product.images && product.images.length > 0 && product.images[0].url
-        ? `<img src="${product.images[0].url}" alt="${product.name}" class="product-img-bg" loading="lazy">`
+    const hasImage = product.images && product.images.length > 0 && product.images[0].url;
+    const imageUrl = hasImage ? product.images[0].url : '';
+    const imageContent = hasImage
+        ? `<img src="${imageUrl}" alt="${product.name}" class="product-img-bg" loading="lazy">`
         : `<div class="product-placeholder" style="background: ${gradient}"><span class="product-icon">${icon}</span></div>`;
+
+    const zoomElements = hasImage ? `
+        <button class="btn-zoom-image" aria-label="Ampliar imagen" onclick="openZoomModal('${imageUrl}')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+        </button>
+        <div class="hover-zoom-preview">
+            <img src="${imageUrl}" alt="${product.name} Zoom" loading="lazy">
+            <div class="product-protection-overlay"></div>
+        </div>
+    ` : '';
 
     const CATEGORY_LABELS = {
         diseno: 'Diseño', impresion: 'Impresión', packaging: 'Packaging',
@@ -519,6 +531,7 @@ function createProductCard(product) {
     div.innerHTML = `
         <div class="product-image">
             ${imageContent}
+            ${zoomElements}
             <div class="product-protection-overlay"></div>
             ${categoryTag}
         </div>
@@ -822,5 +835,37 @@ async function loadFlowTeaser() {
     }
 }
 
-// Global debug
 window.loadFlowTeaser = loadFlowTeaser;
+
+// ===================================
+// Image Zoom Logic
+// ===================================
+function openZoomModal(imageUrl) {
+    const modal = document.getElementById('zoomModal');
+    const img = document.getElementById('zoomModalImg');
+    if (modal && img) {
+        img.src = imageUrl;
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const closeBtn = document.getElementById('closeZoomModal');
+    const overlay = document.querySelector('.zoom-modal-overlay');
+    
+    function closeZoomModalFunc() {
+        const modal = document.getElementById('zoomModal');
+        if (modal && modal.classList.contains('active')) {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            setTimeout(() => {
+                const img = document.getElementById('zoomModalImg');
+                if (img) img.src = '';
+            }, 300);
+        }
+    }
+
+    if (closeBtn) closeBtn.addEventListener('click', closeZoomModalFunc);
+    if (overlay) overlay.addEventListener('click', closeZoomModalFunc);
+});

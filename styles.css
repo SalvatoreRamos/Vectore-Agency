@@ -827,11 +827,17 @@ body {
     gap: 24px;
 }
 
+.product-image {
+    position: relative;
+    height: 200px;
+    /* allow overflow on hover for the tooltip */
+    transition: overflow 0s;
+}
+
 .product-card {
     background: var(--white);
     border-radius: var(--radius-lg);
-    overflow: hidden;
-    box-shadow: var(--shadow-sm);
+    /* border-radius overflow clip logic */
     transition: var(--transition);
     display: flex;
     flex-direction: column;
@@ -840,16 +846,143 @@ body {
 .product-card:hover {
     transform: translateY(-5px);
     box-shadow: var(--shadow-lg);
+    z-index: 10;
+}
+
+.product-img-bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition);
+    border-top-left-radius: var(--radius-lg);
+    border-top-right-radius: var(--radius-lg);
+}
+
+/* Hover preview window (Desktop) */
+.hover-zoom-preview {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 105%;
+    width: 300px;
+    height: 300px;
+    background: var(--white);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    z-index: 999;
+}
+
+.hover-zoom-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+@media (min-width: 1025px) {
+    .product-image:hover .hover-zoom-preview {
+        display: block;
+    }
+    .product-card:hover, .product-card:hover .product-image {
+        overflow: visible;
+    }
+}
+
+/* Mobile Zoom Button */
+.btn-zoom-image {
+    display: none;
+}
+
+@media (max-width: 1024px) {
+    .btn-zoom-image {
+        display: flex;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 36px;
+        height: 36px;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 50%;
+        align-items: center;
+        justify-content: center;
+        z-index: 20;
+        cursor: pointer;
+        color: var(--dark);
+        box-shadow: var(--shadow-sm);
+    }
 }
 
 .product-card.hidden {
     display: none;
 }
 
-.product-image {
+/* ===================================
+   Zoom Modal Styles
+   =================================== */
+.zoom-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.zoom-modal.active {
+    visibility: visible;
+    opacity: 1;
+}
+
+.zoom-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(5px);
+}
+
+.zoom-modal-container {
     position: relative;
-    height: 200px;
-    overflow: hidden;
+    max-width: 90vw;
+    max-height: 90vh;
+    z-index: 2;
+}
+
+.zoom-modal-container img {
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+    border-radius: var(--radius-md);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+
+.zoom-modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 10;
+    transition: background 0.3s;
+}
+
+.zoom-modal-close:hover {
+    background: rgba(255, 255, 255, 0.3);
 }
 
 .product-placeholder {
