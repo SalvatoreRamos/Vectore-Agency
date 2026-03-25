@@ -497,12 +497,8 @@ function createProductCard(product) {
 
     const zoomElements = hasImage ? `
         <button class="btn-zoom-image" aria-label="Ampliar imagen" onclick="openZoomModal('${imageUrl}')">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
         </button>
-        <div class="hover-zoom-preview">
-            <img src="${imageUrl}" alt="${product.name} Zoom" loading="lazy">
-            <div class="product-protection-overlay"></div>
-        </div>
     ` : '';
 
     const CATEGORY_LABELS = {
