@@ -358,28 +358,32 @@
 /* Products Grid in Admin */
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 24px;
 }
 
 .admin-product-card {
-    background: var(--gray-100);
-    border-radius: var(--radius-md);
+    background: var(--white, #fff);
+    border-radius: 16px;
     overflow: hidden;
     transition: var(--transition);
+    border: 1px solid #e8e8f0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .admin-product-card:hover {
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 8px 24px rgba(134, 85, 255, 0.1);
+    transform: translateY(-2px);
 }
 
 .admin-product-image {
-    height: 140px;
+    height: 160px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 3rem;
     position: relative;
+    overflow: hidden;
 }
 
 .admin-product-image img {
@@ -390,15 +394,14 @@
 
 .admin-product-image .category-badge {
     position: absolute;
-    top: 8px;
-    right: 8px;
-    padding: 4px 10px;
+    top: 10px;
+    right: 10px;
+    padding: 4px 12px;
     font-size: 0.7rem;
     font-weight: 600;
     border-radius: var(--radius-xl);
     color: var(--white);
     z-index: 6;
-    /* Stay above overlay */
 }
 
 .product-protection-overlay {
@@ -421,7 +424,7 @@
 }
 
 .admin-product-info {
-    padding: 16px;
+    padding: 16px 18px;
 }
 
 .admin-product-info h3 {
@@ -434,7 +437,7 @@
 .admin-product-info p {
     color: var(--gray-600);
     font-size: 0.85rem;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 
 .admin-product-price {
@@ -448,7 +451,9 @@
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
-    margin-top: 10px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #f0f0f5;
 }
 
 .btn-edit,
