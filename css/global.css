@@ -378,7 +378,7 @@ img {
 }
 
 [data-theme="light"] .preloader-logo {
-    filter: brightness(0.3) saturate(2);
+    filter: invert(1) hue-rotate(180deg);
 }
 
 [data-theme="light"] .preloader-bar {
