@@ -372,6 +372,23 @@ img {
     100% { left: 100%; }
 }
 
+/* Preloader Light Mode */
+[data-theme="light"] .preloader {
+    background: #FFFFFF;
+}
+
+[data-theme="light"] .preloader-logo {
+    filter: brightness(0.3) saturate(2);
+}
+
+[data-theme="light"] .preloader-bar {
+    background: #E5E5ED;
+}
+
+[data-theme="light"] .preloader-bar::after {
+    background: var(--accent-primary);
+}
+
 /* === Custom Cursor === */
 .cursor-ring {
     width: 40px;
