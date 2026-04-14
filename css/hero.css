@@ -204,6 +204,7 @@
 [data-theme="light"] .spline-frame--light {
     opacity: 1 !important;
     pointer-events: auto !important;
+    mix-blend-mode: multiply; /* Fixes baked-in background color edges */
 }
 
 /* Spline fallback (glassmorphism logo) */
