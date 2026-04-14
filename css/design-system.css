@@ -6,17 +6,17 @@
 /* === Core Theme Tokens === */
 :root {
     /* ---- Surface Colors (Dark-first) ---- */
-    --bg-primary: #07070C;
-    --bg-secondary: #0E0E16;
-    --bg-tertiary: #15151F;
-    --bg-elevated: #1C1C28;
-    --bg-surface: #222230;
+    --bg-primary: rgb(17, 0, 58);
+    --bg-secondary: rgba(17, 0, 58, 0.95);
+    --bg-tertiary: rgba(24, 5, 75, 1);
+    --bg-elevated: rgba(30, 8, 85, 1);
+    --bg-surface: rgba(35, 10, 95, 1);
 
     /* ---- Glass / Frosted Surfaces ---- */
-    --glass-bg: rgba(255, 255, 255, 0.02);
-    --glass-bg-hover: rgba(255, 255, 255, 0.05);
-    --glass-border: rgba(255, 255, 255, 0.06);
-    --glass-border-hover: rgba(255, 255, 255, 0.12);
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-bg-hover: rgba(255, 255, 255, 0.06);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-border-hover: rgba(255, 255, 255, 0.15);
     --glass-blur: 24px;
 
     /* ---- Accent: Vectore Purple Spectrum ---- */

@@ -289,3 +289,39 @@
         width: 85vw;
     }
 }
+
+/* ============================================
+   LIGHT MODE OVERRIDES
+   ============================================ */
+[data-theme="light"] .portfolio-scroll__item {
+    background: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    border-radius: var(--radius-xl);
+}
+
+[data-theme="light"] .portfolio-scroll__item:hover {
+    box-shadow: 0 8px 30px rgba(112, 64, 224, 0.12);
+}
+
+[data-theme="light"] .portfolio-nav__btn {
+    background: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: #1A1A2E;
+}
+
+[data-theme="light"] .portfolio-nav__btn:hover {
+    background: rgba(112, 64, 224, 0.06);
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+}
+
+[data-theme="light"] .case-card {
+    background: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .case-card:hover {
+    box-shadow: 0 8px 30px rgba(112, 64, 224, 0.1);
+}
