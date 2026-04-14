@@ -122,7 +122,7 @@ app.use(express.urlencoded({ extended: true }));
 // Static Files
 // ===================================
 // New organized assets (CSS, JS, images)
-app.use('/css', express.static(path.join(__dirname, 'css'), { maxAge: '7d' }));
+app.use('/css', express.static(path.join(__dirname, 'css'), { maxAge: '1h' }));
 app.use('/js', express.static(path.join(__dirname, 'js'), { maxAge: '7d' }));
 app.use('/assets', express.static(path.join(__dirname, 'public/assets'), { maxAge: '1y', immutable: true }));
 
