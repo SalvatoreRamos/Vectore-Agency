@@ -1,7 +1,10 @@
 User-agent: *
 Allow: /
+Allow: /es/
 Disallow: /admin.html
 Disallow: /admin.js
+Disallow: /admin.css
 Disallow: /api/
+Disallow: /uploads/
 
 Sitemap: https://agenciavectore.com/sitemap.xml

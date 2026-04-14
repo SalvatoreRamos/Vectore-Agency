@@ -20,6 +20,10 @@ import notificationRoutes from './routes/notifications.js';
 import userRoutes from './routes/users.js';
 import paymentRoutes from './routes/payments.js';
 import internalEmailRoutes from './routes/internal-email.js';
+import contactFormRoutes from './routes/contact-form.js';
+
+// Import subdomain middleware
+import { subdomainMiddleware } from './middleware/i18n.js';
 
 // Load environment variables
 dotenv.config();
@@ -40,6 +44,8 @@ app.use(helmet({
       "script-src": [
         "'self'",
         "'unsafe-inline'",
+        "'unsafe-eval'",
+        "'wasm-unsafe-eval'",
         "blob:",
         "https://www.googletagmanager.com",
         "https://www.google-analytics.com",
@@ -47,7 +53,12 @@ app.use(helmet({
         "https://accounts.google.com/gsi/",
         "https://checkout.culqi.com",
         "https://js.culqi.com",
-        "https://3ds.culqi.com"
+        "https://3ds.culqi.com",
+        "https://my.spline.design",
+        "https://prod.spline.design",
+        "https://cdn.spline.design",
+        "https://default.spline.design",
+        "https://unpkg.com"
       ],
       "script-src-attr": ["'unsafe-inline'"],
       "style-src": [
@@ -57,7 +68,7 @@ app.use(helmet({
         "https://fonts.googleapis.com"
       ],
       "worker-src": ["'self'", "blob:"],
-      "frame-src": ["'self'", "https://accounts.google.com/", "https://checkout.culqi.com", "https://3ds.culqi.com"],
+      "frame-src": ["'self'", "https://accounts.google.com/", "https://checkout.culqi.com", "https://3ds.culqi.com", "https://my.spline.design", "https://prod.spline.design", "https://cdn.spline.design"],
       "connect-src": [
         "'self'",
         "https://www.googletagmanager.com",
@@ -69,7 +80,11 @@ app.use(helmet({
         "https://www.agenciavectore.com",
         "https://api.culqi.com",
         "https://checkout.culqi.com",
-        "https://3ds.culqi.com"
+        "https://3ds.culqi.com",
+        "https://my.spline.design",
+        "https://prod.spline.design",
+        "https://cdn.spline.design",
+        "https://unpkg.com"
       ],
       "img-src": ["'self'", "data:", "https:", "http:", "blob:", "https://www.google-analytics.com", "https://www.googletagmanager.com", "https://lh3.googleusercontent.com"]
     },
@@ -103,11 +118,24 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files (Frontend)
-app.use(express.static(__dirname));
+// ===================================
+// Static Files
+// ===================================
+// New organized assets (CSS, JS, images)
+app.use('/css', express.static(path.join(__dirname, 'css'), { maxAge: '7d' }));
+app.use('/js', express.static(path.join(__dirname, 'js'), { maxAge: '7d' }));
+app.use('/assets', express.static(path.join(__dirname, 'public/assets'), { maxAge: '1y', immutable: true }));
+
+// Legacy static files (existing root files: SVGs, favicon, etc.)
+app.use(express.static(__dirname, {
+  // Don't serve index.html from root — we handle routing explicitly
+  index: false
+}));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// ===================================
 // API Routes
+// ===================================
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/projects', projectRoutes);
@@ -120,6 +148,7 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/internal', internalEmailRoutes);
+app.use('/api/contact', contactFormRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -130,16 +159,44 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Specific Pages
+// ===================================
+// Subdomain Middleware (must be after API routes)
+// Detects pe.agenciavectore.com vs agenciavectore.com
+// ===================================
+app.use(subdomainMiddleware);
+
+// ===================================
+// Page Routes — Subdomain-based
+// ===================================
+
+// Home
+app.get('/', (req, res) => {
+  if (req.site === 'pe') {
+    // Peru: serve the existing light-mode tienda
+    return res.sendFile(path.join(__dirname, 'index.html'));
+  }
+  // Global: serve the new premium EN landing
+  res.sendFile(path.join(__dirname, 'views/en/index.html'));
+});
+
+// Software / Vectore Flow
+app.get('/software', (req, res) => {
+  if (req.site === 'pe') {
+    return res.sendFile(path.join(__dirname, 'software.html'));
+  }
+  const enPath = path.join(__dirname, 'views/en/software.html');
+  const legacyPath = path.join(__dirname, 'software.html');
+  res.sendFile(enPath, (err) => {
+    if (err) res.sendFile(legacyPath);
+  });
+});
+
+// Checkout (Peru only)
 app.get('/checkout', (req, res) => {
   res.sendFile(path.join(__dirname, 'checkout.html'));
 });
 
-app.get('/software', (req, res) => {
-  res.sendFile(path.join(__dirname, 'software.html'));
-});
-
-// Legal Pages
+// Legal Pages (Peru)
 app.get('/terminos', (req, res) => {
   res.sendFile(path.join(__dirname, 'terminos.html'));
 });
@@ -152,9 +209,16 @@ app.get('/libro-reclamaciones', (req, res) => {
   res.sendFile(path.join(__dirname, 'libro-reclamaciones.html'));
 });
 
-// Serve index.html for any other route (SPA support)
+// ===================================
+// Catch-all: Serve site-appropriate page
+// ===================================
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  if (req.site === 'pe') {
+    // Peru: serve the existing index.html for any unknown route
+    return res.sendFile(path.join(__dirname, 'index.html'));
+  }
+  // Global: serve premium EN landing
+  res.sendFile(path.join(__dirname, 'views/en/index.html'));
 });
 
 // Error handling middleware

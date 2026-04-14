@@ -1,0 +1,322 @@
+/* ============================================
+   VECTORE GLOBAL — Design System Tokens
+   Premium Dark-Mode-First Design Language
+   ============================================ */
+
+/* === Core Theme Tokens === */
+:root {
+    /* ---- Surface Colors (Dark-first) ---- */
+    --bg-primary: #07070C;
+    --bg-secondary: #0E0E16;
+    --bg-tertiary: #15151F;
+    --bg-elevated: #1C1C28;
+    --bg-surface: #222230;
+
+    /* ---- Glass / Frosted Surfaces ---- */
+    --glass-bg: rgba(255, 255, 255, 0.02);
+    --glass-bg-hover: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.06);
+    --glass-border-hover: rgba(255, 255, 255, 0.12);
+    --glass-blur: 24px;
+
+    /* ---- Accent: Vectore Purple Spectrum ---- */
+    --accent-primary: #8655FF;
+    --accent-hover: #9B70FF;
+    --accent-glow: #A67FFF;
+    --accent-neon: #B794FF;
+    --accent-muted: rgba(134, 85, 255, 0.15);
+    --accent-subtle: rgba(134, 85, 255, 0.08);
+
+    /* Gradient Accents */
+    --gradient-primary: linear-gradient(135deg, #8655FF 0%, #A67FFF 100%);
+    --gradient-hero: radial-gradient(ellipse at 30% 40%, rgba(134, 85, 255, 0.12) 0%, transparent 60%);
+    --gradient-card: radial-gradient(ellipse at 50% 0%, rgba(134, 85, 255, 0.06) 0%, transparent 70%);
+    --gradient-glow: radial-gradient(circle, rgba(134, 85, 255, 0.3) 0%, transparent 70%);
+    --gradient-border: linear-gradient(135deg, rgba(134, 85, 255, 0.3), rgba(134, 85, 255, 0.05));
+
+    /* ---- Text Colors ---- */
+    --text-primary: #F2F2F7;
+    --text-secondary: rgba(242, 242, 247, 0.6);
+    --text-tertiary: rgba(242, 242, 247, 0.35);
+    --text-accent: var(--accent-glow);
+    --text-on-accent: #FFFFFF;
+
+    /* ---- Semantic Colors ---- */
+    --success: #34D399;
+    --warning: #FBBF24;
+    --error: #F87171;
+    --info: #60A5FA;
+
+    /* ============================================
+       TYPOGRAPHY
+       Inter — Self-hosted for performance
+       ============================================ */
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+
+    /* Font sizes — Fluid clamp scale */
+    --text-xs: clamp(0.7rem, 0.65rem + 0.25vw, 0.8rem);
+    --text-sm: clamp(0.8rem, 0.75rem + 0.25vw, 0.875rem);
+    --text-base: clamp(0.9rem, 0.85rem + 0.25vw, 1rem);
+    --text-lg: clamp(1rem, 0.9rem + 0.5vw, 1.15rem);
+    --text-xl: clamp(1.15rem, 1rem + 0.75vw, 1.35rem);
+    --text-2xl: clamp(1.5rem, 1.2rem + 1.5vw, 2rem);
+    --text-3xl: clamp(2rem, 1.5rem + 2.5vw, 3rem);
+    --text-4xl: clamp(2.5rem, 1.8rem + 3.5vw, 4rem);
+    --text-5xl: clamp(3rem, 2rem + 5vw, 5.5rem);
+
+    /* Font weights */
+    --font-light: 300;
+    --font-regular: 400;
+    --font-medium: 500;
+    --font-semibold: 600;
+    --font-bold: 700;
+    --font-extrabold: 800;
+    --font-black: 900;
+
+    /* Letter spacing */
+    --tracking-tighter: -0.04em;
+    --tracking-tight: -0.02em;
+    --tracking-normal: 0;
+    --tracking-wide: 0.04em;
+    --tracking-wider: 0.08em;
+    --tracking-widest: 0.12em;
+
+    /* Line heights */
+    --leading-none: 1;
+    --leading-tight: 1.1;
+    --leading-snug: 1.25;
+    --leading-normal: 1.5;
+    --leading-relaxed: 1.65;
+
+    /* ============================================
+       SPACING
+       ============================================ */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-10: 40px;
+    --space-12: 48px;
+    --space-16: 64px;
+    --space-20: 80px;
+    --space-24: 96px;
+    --space-32: 128px;
+
+    /* Section padding */
+    --section-padding: clamp(80px, 10vw, 160px);
+
+    /* Container */
+    --container-max: 1200px;
+    --container-padding: clamp(20px, 4vw, 40px);
+
+    /* ============================================
+       BORDERS & RADII
+       ============================================ */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-xl: 28px;
+    --radius-2xl: 40px;
+    --radius-pill: 999px;
+    --radius-circle: 50%;
+
+    /* ============================================
+       SHADOWS & GLOWS
+       ============================================ */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 16px 64px rgba(0, 0, 0, 0.6);
+
+    --glow-sm: 0 0 15px rgba(134, 85, 255, 0.15);
+    --glow-md: 0 0 30px rgba(134, 85, 255, 0.2);
+    --glow-lg: 0 4px 50px rgba(134, 85, 255, 0.25);
+    --glow-xl: 0 8px 80px rgba(134, 85, 255, 0.3);
+
+    /* ============================================
+       MOTION / EASING
+       ============================================ */
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+    --duration-instant: 100ms;
+    --duration-fast: 200ms;
+    --duration-normal: 350ms;
+    --duration-slow: 600ms;
+    --duration-slower: 1000ms;
+
+    /* ============================================
+       Z-INDEX SCALE
+       ============================================ */
+    --z-base: 1;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-navbar: 500;
+    --z-modal-backdrop: 900;
+    --z-modal: 1000;
+    --z-cursor: 9999;
+    --z-preloader: 10000;
+}
+
+/* ============================================
+   LIGHT MODE OVERRIDE
+   Activated via data-theme="light" on <html>
+   or via prefers-color-scheme if no manual selection
+   ============================================ */
+
+[data-theme="light"] {
+    /* Surfaces */
+    --bg-primary: #FAFAFA;
+    --bg-secondary: #FFFFFF;
+    --bg-tertiary: #F3F3F8;
+    --bg-elevated: #EEEEF4;
+    --bg-surface: #E5E5ED;
+
+    /* Glass */
+    --glass-bg: rgba(0, 0, 0, 0.02);
+    --glass-bg-hover: rgba(0, 0, 0, 0.04);
+    --glass-border: rgba(0, 0, 0, 0.08);
+    --glass-border-hover: rgba(0, 0, 0, 0.15);
+
+    /* Accent: deeper purple for contrast on white */
+    --accent-primary: #7040E0;
+    --accent-hover: #8455F0;
+    --accent-glow: #7040E0;
+    --accent-neon: #6030CC;
+    --accent-muted: rgba(112, 64, 224, 0.12);
+    --accent-subtle: rgba(112, 64, 224, 0.06);
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #7040E0 0%, #9060FF 100%);
+    --gradient-hero: radial-gradient(ellipse at 30% 40%, rgba(112, 64, 224, 0.06) 0%, transparent 60%);
+    --gradient-card: radial-gradient(ellipse at 50% 0%, rgba(112, 64, 224, 0.04) 0%, transparent 70%);
+    --gradient-glow: radial-gradient(circle, rgba(112, 64, 224, 0.15) 0%, transparent 70%);
+
+    /* Text */
+    --text-primary: #1A1A2E;
+    --text-secondary: rgba(26, 26, 46, 0.65);
+    --text-tertiary: rgba(26, 26, 46, 0.4);
+    --text-accent: var(--accent-primary);
+
+    /* Shadows (non-glow, natural) */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 16px 64px rgba(0, 0, 0, 0.12);
+
+    --glow-sm: 0 0 15px rgba(112, 64, 224, 0.08);
+    --glow-md: 0 0 30px rgba(112, 64, 224, 0.1);
+    --glow-lg: 0 4px 50px rgba(112, 64, 224, 0.12);
+    --glow-xl: 0 8px 80px rgba(112, 64, 224, 0.15);
+}
+
+/* Respect system preference when no manual override is stored */
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+        --bg-primary: #FAFAFA;
+        --bg-secondary: #FFFFFF;
+        --bg-tertiary: #F3F3F8;
+        --bg-elevated: #EEEEF4;
+        --bg-surface: #E5E5ED;
+        --glass-bg: rgba(0, 0, 0, 0.02);
+        --glass-bg-hover: rgba(0, 0, 0, 0.04);
+        --glass-border: rgba(0, 0, 0, 0.08);
+        --glass-border-hover: rgba(0, 0, 0, 0.15);
+        --accent-primary: #7040E0;
+        --accent-hover: #8455F0;
+        --accent-glow: #7040E0;
+        --accent-neon: #6030CC;
+        --accent-muted: rgba(112, 64, 224, 0.12);
+        --accent-subtle: rgba(112, 64, 224, 0.06);
+        --gradient-primary: linear-gradient(135deg, #7040E0 0%, #9060FF 100%);
+        --gradient-hero: radial-gradient(ellipse at 30% 40%, rgba(112, 64, 224, 0.06) 0%, transparent 60%);
+        --gradient-card: radial-gradient(ellipse at 50% 0%, rgba(112, 64, 224, 0.04) 0%, transparent 70%);
+        --gradient-glow: radial-gradient(circle, rgba(112, 64, 224, 0.15) 0%, transparent 70%);
+        --text-primary: #1A1A2E;
+        --text-secondary: rgba(26, 26, 46, 0.65);
+        --text-tertiary: rgba(26, 26, 46, 0.4);
+        --text-accent: var(--accent-primary);
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+        --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+        --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.1);
+        --shadow-xl: 0 16px 64px rgba(0, 0, 0, 0.12);
+        --glow-sm: 0 0 15px rgba(112, 64, 224, 0.08);
+        --glow-md: 0 0 30px rgba(112, 64, 224, 0.1);
+        --glow-lg: 0 4px 50px rgba(112, 64, 224, 0.12);
+        --glow-xl: 0 8px 80px rgba(112, 64, 224, 0.15);
+    }
+}
+
+/* === Theme Toggle Button === */
+.theme-toggle {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-circle);
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: all var(--duration-fast) var(--ease-smooth);
+    margin-left: var(--space-2);
+    flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+    color: var(--accent-primary);
+    border-color: var(--accent-muted);
+    background: var(--accent-subtle);
+}
+
+.theme-toggle svg {
+    width: 18px;
+    height: 18px;
+    transition: transform var(--duration-normal) var(--ease-spring);
+}
+
+.theme-toggle:hover svg {
+    transform: rotate(15deg) scale(1.1);
+}
+
+/* Show/hide sun/moon based on theme */
+.theme-toggle .icon-sun { display: none; }
+.theme-toggle .icon-moon { display: block; }
+
+[data-theme="light"] .theme-toggle .icon-sun { display: block; }
+[data-theme="light"] .theme-toggle .icon-moon { display: none; }
+
+/* Logo inversion for light mode */
+[data-theme="light"] .logo-img {
+    filter: none !important;
+}
+
+/* Light mode scrollbar */
+[data-theme="light"] ::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+}
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+    background: var(--bg-surface);
+}
+
+/* Light mode grid overlay */
+[data-theme="light"] .hero__grid {
+    background-image:
+        linear-gradient(rgba(112, 64, 224, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(112, 64, 224, 0.04) 1px, transparent 1px);
+}
+
+/* Light mode cursor */
+[data-theme="light"] .cursor-ring {
+    border-color: var(--accent-primary);
+    mix-blend-mode: normal;
+}
+[data-theme="light"] .cursor-dot {
+    background: var(--accent-primary);
+}

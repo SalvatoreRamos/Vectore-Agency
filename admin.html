@@ -233,6 +233,11 @@
                 <div class="admin-section">
                     <div class="section-header">
                         <h2>Proyectos en Portafolio</h2>
+                        <div class="filter-buttons">
+                            <button class="filter-btn active" data-project-filter="all">Todos</button>
+                            <button class="filter-btn" data-project-filter="local">🇵🇪 Perú (Local)</button>
+                            <button class="filter-btn" data-project-filter="global">🌍 Internacional</button>
+                        </div>
                         <button class="btn btn-primary" id="btnAddProject">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -637,6 +642,13 @@
                     <div class="form-group">
                         <label for="pCategory">Categoría</label>
                         <input type="text" id="pCategory" required placeholder="Ej: Branding">
+                    </div>
+                    <div class="form-group">
+                        <label for="pScope">Sección / Web</label>
+                        <select id="pScope" required>
+                            <option value="local">Perú (Local)</option>
+                            <option value="global">Internacional (Global)</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">

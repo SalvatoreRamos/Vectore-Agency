@@ -1,9 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+    <!-- English (Default / Global) -->
     <url>
         <loc>https://agenciavectore.com/</loc>
-        <lastmod>2026-01-09</lastmod>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agenciavectore.com/" />
+        <xhtml:link rel="alternate" hreflang="es-PE" href="https://pe.agenciavectore.com/" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://agenciavectore.com/" />
+        <lastmod>2026-04-13</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
+    </url>
+
+    <url>
+        <loc>https://agenciavectore.com/software</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agenciavectore.com/software" />
+        <xhtml:link rel="alternate" hreflang="es-PE" href="https://pe.agenciavectore.com/software" />
+        <lastmod>2026-04-13</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <!-- Peru (pe.agenciavectore.com) -->
+    <url>
+        <loc>https://pe.agenciavectore.com/</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agenciavectore.com/" />
+        <xhtml:link rel="alternate" hreflang="es-PE" href="https://pe.agenciavectore.com/" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://agenciavectore.com/" />
+        <lastmod>2026-04-13</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <url>
+        <loc>https://pe.agenciavectore.com/software</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://agenciavectore.com/software" />
+        <xhtml:link rel="alternate" hreflang="es-PE" href="https://pe.agenciavectore.com/software" />
+        <lastmod>2026-04-13</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- Legal Pages (Peru only) -->
+    <url>
+        <loc>https://pe.agenciavectore.com/terminos</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.3</priority>
+    </url>
+
+    <url>
+        <loc>https://pe.agenciavectore.com/politica-devoluciones</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.3</priority>
+    </url>
+
+    <url>
+        <loc>https://pe.agenciavectore.com/libro-reclamaciones</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.3</priority>
     </url>
 </urlset>

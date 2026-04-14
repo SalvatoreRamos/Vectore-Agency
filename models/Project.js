@@ -37,6 +37,11 @@ const projectSchema = new mongoose.Schema({
     isFeatured: {
         type: Boolean,
         default: false
+    },
+    scope: {
+        type: String,
+        enum: ['local', 'global'],
+        default: 'local'
     }
 }, {
     timestamps: true

@@ -373,17 +373,26 @@ async function fetchAndRenderProjects() {
 
 function renderProjects() {
     if (!adminProjectsGrid) return;
-    if (projects.length === 0) {
-        adminProjectsGrid.innerHTML = '<div class=\"no-products\">No hay proyectos en el portafolio</div>';
+    
+    // Add global project filter variable if not defined
+    if (typeof window.projectFilter === 'undefined') window.projectFilter = 'all';
+    
+    const filteredProjects = window.projectFilter === 'all' 
+        ? projects 
+        : projects.filter(p => p.scope === window.projectFilter);
+
+    if (filteredProjects.length === 0) {
+        adminProjectsGrid.innerHTML = '<div class=\"no-products\">No hay proyectos en el portafolio para este filtro</div>';
         return;
     }
 
-    adminProjectsGrid.innerHTML = projects.map(project => {
+    adminProjectsGrid.innerHTML = filteredProjects.map(project => {
         const projectId = project._id || project.id;
         const isVideo = project.thumbnail && (
             project.thumbnail.match(/\.(mp4|webm|ogg|mov|avi|flv|wmv)$/i) ||
             project.thumbnail.includes('/video/upload/')
         );
+        const scopeLabel = project.scope === 'global' ? '🌍 Global' : '🇵🇪 Local';
 
         return `
         <div class="admin-product-card" data-id="${projectId}" data-name="${project.title}">
@@ -393,7 +402,8 @@ function renderProjects() {
                 `<img src="${project.thumbnail}" alt="${project.title}" onerror="this.src='https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg'">`
             }
                 <div class="product-protection-overlay"></div>
-                <span class="category-badge digital">${project.category}</span>
+                <span class="category-badge digital" style="top: 10px; right: 10px;">${scopeLabel}</span>
+                <span class="category-badge digital" style="bottom: 10px; right: 10px;">${project.category}</span>
                 ${isVideo ? `<span class="video-badge" style="position:absolute; top:10px; left:10px; background:rgba(0,0,0,0.7); color:white; padding:2px 8px; border-radius:4px; font-size:10px;">VIDEO</span>` : ''}
             </div>
             <div class="admin-product-info">
@@ -711,6 +721,7 @@ function openEditProjectModal(id) {
     document.getElementById('pTitle').value = project.title;
     document.getElementById('pClient').value = project.client;
     document.getElementById('pCategory').value = project.category;
+    document.getElementById('pScope').value = project.scope || 'local';
     document.getElementById('pDescription').value = project.description;
     document.getElementById('pThumbnail').value = project.thumbnail;
     const galleryUrls = (project.images || []).map(img => img.url).join(', ');
@@ -1013,6 +1024,7 @@ function setupEventListeners() {
             title: document.getElementById('pTitle').value,
             client: document.getElementById('pClient').value,
             category: document.getElementById('pCategory').value,
+            scope: document.getElementById('pScope').value,
             description: document.getElementById('pDescription').value,
             thumbnail: document.getElementById('pThumbnail').value,
             images: gal.split(',').map(u => ({ url: u.trim() })).filter(u => u.url)
@@ -1609,6 +1621,18 @@ document.addEventListener('click', function (e) {
 
     ordersFilter = filterBtn.dataset.orderFilter;
     renderOrders();
+});
+
+// Project filter buttons
+document.addEventListener('click', function (e) {
+    const filterBtn = e.target.closest('[data-project-filter]');
+    if (!filterBtn) return;
+
+    document.querySelectorAll('[data-project-filter]').forEach(btn => btn.classList.remove('active'));
+    filterBtn.classList.add('active');
+
+    window.projectFilter = filterBtn.dataset.projectFilter;
+    renderProjects();
 });
 
 // Order status change handler
