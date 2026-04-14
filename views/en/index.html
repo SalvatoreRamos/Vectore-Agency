@@ -677,22 +677,59 @@
                     ? `http://${window.location.hostname}${port}/api` 
                     : '/api';
                 
-                const res = await fetch(`${API_URL}/software`);
-                const data = await res.json();
-                
-                if (data.success && data.data) {
-                    const heroAsset = data.data.find(a => a.section === 'hero' || a.section === 'mockup');
-                    if (heroAsset && heroAsset.url) {
-                        const container = document.getElementById('vectoreFlowPreviewContainer');
-                        if (container) {
-                            container.innerHTML = `
-                                <img src="${heroAsset.url}" alt="Vectore Flow Preview" style="width: 100%; height: 100%; object-fit: cover; display: block;" loading="lazy">
-                            `;
+                // Fetch Software Assets
+                fetch(`${API_URL}/software`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success && data.data) {
+                            const heroAsset = data.data.find(a => a.section === 'hero' || a.section === 'mockup');
+                            if (heroAsset && heroAsset.url) {
+                                const container = document.getElementById('vectoreFlowPreviewContainer');
+                                if (container) {
+                                    container.innerHTML = `
+                                        <img src="${heroAsset.url}" alt="Vectore Flow Preview" style="width: 100%; height: 100%; object-fit: cover; display: block;" loading="lazy">
+                                    `;
+                                }
+                            }
                         }
-                    }
-                }
+                    }).catch(console.error);
+
+                // Fetch Portfolio Projects
+                fetch(`${API_URL}/projects`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success && data.data && data.data.length > 0) {
+                            const portfolioTrack = document.getElementById('portfolioTrack');
+                            if (portfolioTrack) {
+                                // Filter exactly global OR all projects (fallback to global mostly)
+                                const projects = data.data.filter(p => p.scope === 'global' || !p.scope).slice(0, 8); // Max 8 for horizontal flow
+                                if (projects.length > 0) {
+                                    portfolioTrack.innerHTML = projects.map(p => {
+                                        const isVideo = p.thumbnail && (p.thumbnail.match(/\.(mp4|webm|ogg|mov|avi|flv|wmv)$/i) || p.thumbnail.includes('/video/upload/'));
+                                        const mediaHtml = isVideo 
+                                            ? `<video src="${p.thumbnail}" autoplay loop muted playsinline style="width:100%; height:100%; object-fit:cover;"></video>`
+                                            : `<img src="${p.thumbnail}" alt="${p.title}" loading="lazy">`;
+                                            
+                                        return `
+                                        <div class="portfolio-scroll__item reveal--scale">
+                                            <div class="portfolio-scroll__image">
+                                                ${mediaHtml}
+                                            </div>
+                                            <div class="portfolio-scroll__overlay">
+                                                <span class="portfolio-scroll__category">${p.category}</span>
+                                                <h3 class="portfolio-scroll__title">${p.title}</h3>
+                                                <span class="portfolio-scroll__client">${p.client}</span>
+                                            </div>
+                                        </div>
+                                        `;
+                                    }).join('');
+                                }
+                            }
+                        }
+                    }).catch(console.error);
+                
             } catch (error) {
-                console.error('Error fetching admin software asset:', error);
+                console.error('Error in dynamic loaders:', error);
             }
         });
     </script>

@@ -153,12 +153,14 @@
     left: 0;
     right: 0;
     padding: var(--space-8) var(--space-6);
-    background: linear-gradient(0deg, rgba(7, 7, 12, 0.9) 0%, transparent 100%);
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.4) 60%, transparent 100%);
+    display: flex;
+    flex-direction: column;
 }
 
 .portfolio-scroll__category {
     font-size: var(--text-xs);
-    color: var(--accent-glow);
+    color: #B794FF; /* Always neon purple */
     text-transform: uppercase;
     letter-spacing: var(--tracking-wider);
     font-weight: var(--font-semibold);
@@ -168,12 +170,13 @@
 .portfolio-scroll__title {
     font-size: var(--text-2xl);
     font-weight: var(--font-bold);
-    color: var(--text-primary);
+    color: #FFFFFF; /* Always white */
+    line-height: 1.2;
 }
 
 .portfolio-scroll__client {
     font-size: var(--text-sm);
-    color: var(--text-secondary);
+    color: rgba(255, 255, 255, 0.7); /* Always light grey */
     margin-top: var(--space-1);
 }
 
