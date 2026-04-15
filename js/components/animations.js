@@ -250,19 +250,23 @@ export function initMobileNav() {
     function openMenu() {
         if (menu.classList.contains('active')) return;
         
+        // Push state BEFORE updating UI to ensure back button works
+        try {
+            if (!history.state || history.state.menuOpen !== true) {
+                history.pushState({ menuOpen: true }, '');
+            }
+        } catch (e) {
+            console.warn('History API not supported or blocked');
+        }
+
         toggle.classList.add('active');
         menu.classList.add('active');
         overlay.classList.add('active');
         document.body.style.overflow = 'hidden';
-        
-        // Push state ONLY if it doesn't already exist to avoid loops
-        if (!history.state || !history.state.menuOpen) {
-            history.pushState({ menuOpen: true }, '');
-        }
     }
 
     toggle.addEventListener('click', (e) => {
-        e.preventDefault();
+        if (e) e.preventDefault();
         if (menu.classList.contains('active')) {
             history.back();
         } else {
@@ -272,22 +276,31 @@ export function initMobileNav() {
 
     if (closeBtn) {
         closeBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            history.back();
+            if (e) e.preventDefault();
+            // If we have a menu state, go back. Otherwise just close.
+            if (history.state && history.state.menuOpen === true) {
+                history.back();
+            } else {
+                closeMenu();
+            }
         });
     }
 
     overlay.addEventListener('click', (e) => {
-        e.preventDefault();
-        history.back();
+        if (e) e.preventDefault();
+        if (history.state && history.state.menuOpen === true) {
+            history.back();
+        } else {
+            closeMenu();
+        }
     });
 
     // Close on link click
     menu.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', () => {
             closeMenu();
-            // Consume the state if it exists
-            if (history.state && history.state.menuOpen) {
+            // Try to pop the history state silently
+            if (history.state && history.state.menuOpen === true) {
                 history.back();
             }
         });
@@ -295,6 +308,7 @@ export function initMobileNav() {
 
     // Handle back button
     window.addEventListener('popstate', (event) => {
+        // ALWAYS close menu on popstate if it's active, regardless of state content
         if (menu.classList.contains('active')) {
             closeMenu();
         }
