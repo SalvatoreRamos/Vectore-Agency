@@ -67,7 +67,7 @@
     top: 0;
     left: 0;
     right: 0;
-    z-index: var(--z-navbar);
+    z-index: 1100;
     padding: var(--space-4) 0;
     transition:
         background var(--duration-normal) var(--ease-smooth),
@@ -244,13 +244,13 @@
         height: 100vh;
         flex-direction: column;
         justify-content: center;
-        background: var(--bg-secondary);
+        background: var(--bg-tertiary);
         padding: var(--space-20) var(--space-8);
         gap: var(--space-4);
         transition: right var(--duration-normal) var(--ease-out-expo);
         border-left: 1px solid var(--glass-border);
         box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
-        z-index: calc(var(--z-navbar) + 2);
+        z-index: 1001;
     }
 
     .nav-menu.active {
@@ -280,7 +280,7 @@
     inset: 0;
     background: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(4px);
-    z-index: calc(var(--z-navbar) + 1);
+    z-index: 1000;
     opacity: 0;
     pointer-events: none;
     transition: opacity var(--duration-normal) var(--ease-smooth);
@@ -299,18 +299,29 @@
 .nav-menu__close {
     display: none;
     position: absolute;
-    top: var(--space-4);
-    right: var(--space-4);
-    background: none;
-    border: none;
-    color: var(--text-secondary);
+    top: 20px;
+    right: 20px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-circle);
+    color: var(--text-primary);
     cursor: pointer;
-    padding: var(--space-2);
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--duration-fast);
 }
 
-@media (max-width: 768px) {
+.nav-menu__close:hover {
+    background: var(--glass-bg-hover);
+    transform: rotate(90deg);
+}
+
+@media (min-width: 769px) {
     .nav-menu__close {
-        display: block;
+        display: none !important;
     }
 }
 

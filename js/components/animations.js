@@ -248,16 +248,21 @@ export function initMobileNav() {
     }
 
     function openMenu() {
+        if (menu.classList.contains('active')) return;
+        
         toggle.classList.add('active');
         menu.classList.add('active');
         overlay.classList.add('active');
         document.body.style.overflow = 'hidden';
         
-        // Push state to handle back button
-        history.pushState({ menuOpen: true }, '');
+        // Push state ONLY if it doesn't already exist to avoid loops
+        if (!history.state || !history.state.menuOpen) {
+            history.pushState({ menuOpen: true }, '');
+        }
     }
 
-    toggle.addEventListener('click', () => {
+    toggle.addEventListener('click', (e) => {
+        e.preventDefault();
         if (menu.classList.contains('active')) {
             history.back();
         } else {
@@ -266,30 +271,24 @@ export function initMobileNav() {
     });
 
     if (closeBtn) {
-        closeBtn.addEventListener('click', () => {
-            if (menu.classList.contains('active')) {
-                history.back();
-            }
+        closeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            history.back();
         });
     }
 
-    // Close on overlay click
-    overlay.addEventListener('click', () => {
-        if (menu.classList.contains('active')) {
-            history.back();
-        }
+    overlay.addEventListener('click', (e) => {
+        e.preventDefault();
+        history.back();
     });
 
     // Close on link click
     menu.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', () => {
-            if (menu.classList.contains('active')) {
-                // If we are at the pinned state, pop it silently.
-                if (history.state && history.state.menuOpen) {
-                    history.back();
-                } else {
-                    closeMenu();
-                }
+            closeMenu();
+            // Consume the state if it exists
+            if (history.state && history.state.menuOpen) {
+                history.back();
             }
         });
     });
@@ -297,10 +296,7 @@ export function initMobileNav() {
     // Handle back button
     window.addEventListener('popstate', (event) => {
         if (menu.classList.contains('active')) {
-            toggle.classList.remove('active');
-            menu.classList.remove('active');
-            overlay.classList.remove('active');
-            document.body.style.overflow = '';
+            closeMenu();
         }
     });
 }
