@@ -237,16 +237,50 @@ export function initMobileNav() {
     const menu = document.getElementById('navMenu');
     if (!toggle || !menu) return;
 
+    function closeMenu() {
+        toggle.classList.remove('active');
+        menu.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    function openMenu() {
+        toggle.classList.add('active');
+        menu.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        
+        // Push state to handle back button
+        history.pushState({ menuOpen: true }, '');
+    }
+
     toggle.addEventListener('click', () => {
-        toggle.classList.toggle('active');
-        menu.classList.toggle('active');
+        if (menu.classList.contains('active')) {
+            history.back(); // Closing via toggle also goes back in history
+        } else {
+            openMenu();
+        }
     });
 
     // Close on link click
     menu.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', () => {
+            if (menu.classList.contains('active')) {
+                closeMenu();
+                // If we are at the pinned state, pop it silently or just let it be.
+                // Best practice: if we closed it manually, we should "consume" the back state.
+                if (history.state && history.state.menuOpen) {
+                    history.back();
+                }
+            }
+        });
+    });
+
+    // Handle back button
+    window.addEventListener('popstate', (event) => {
+        if (menu.classList.contains('active')) {
+            // Close without pushing/popping history since we are already in popstate
             toggle.classList.remove('active');
             menu.classList.remove('active');
-        });
+            document.body.style.overflow = '';
+        }
     });
 }
