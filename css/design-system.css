@@ -195,7 +195,7 @@
     --gradient-primary: linear-gradient(135deg, #7040E0 0%, #9060FF 100%);
     --gradient-hero: radial-gradient(ellipse at 30% 40%, rgba(112, 64, 224, 0.06) 0%, transparent 60%);
     --gradient-card: radial-gradient(ellipse at 50% 0%, rgba(112, 64, 224, 0.04) 0%, transparent 70%);
-    --gradient-glow: radial-gradient(circle, rgba(112, 64, 224, 0.15) 0%, transparent 70%);
+    --gradient-glow: radial-gradient(circle, rgba(112, 64, 224, 0.1) 0%, transparent 70%);
 
     /* Text */
     --text-primary: #1A1A2E;
@@ -209,10 +209,11 @@
     --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.1);
     --shadow-xl: 0 16px 64px rgba(0, 0, 0, 0.12);
 
-    --glow-sm: 0 0 15px rgba(112, 64, 224, 0.08);
-    --glow-md: 0 0 30px rgba(112, 64, 224, 0.1);
-    --glow-lg: 0 4px 50px rgba(112, 64, 224, 0.12);
-    --glow-xl: 0 8px 80px rgba(112, 64, 224, 0.15);
+    /* Disable purple glows in light mode */
+    --glow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --glow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --glow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
+    --glow-xl: 0 16px 48px rgba(0, 0, 0, 0.12);
 }
 
 /* Respect system preference when no manual override is stored */

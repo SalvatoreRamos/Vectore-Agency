@@ -240,16 +240,17 @@
         top: 0;
         right: -100%;
         width: 100%;
-        max-width: 320px;
+        max-width: 260px;
         height: 100vh;
         flex-direction: column;
         justify-content: center;
-        background: var(--bg-tertiary);
+        background: var(--bg-secondary);
         padding: var(--space-20) var(--space-8);
         gap: var(--space-4);
         transition: right var(--duration-normal) var(--ease-out-expo);
         border-left: 1px solid var(--glass-border);
-        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
+        z-index: calc(var(--z-navbar) + 2);
     }
 
     .nav-menu.active {
@@ -273,13 +274,44 @@
     }
 }
 
-/* === Floating Orbs (Decorative) === */
-.floating-orb {
-    position: absolute;
-    border-radius: var(--radius-circle);
-    filter: blur(80px);
+/* === Nav Overlay === */
+.nav-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: calc(var(--z-navbar) + 1);
+    opacity: 0;
     pointer-events: none;
-    will-change: transform;
+    transition: opacity var(--duration-normal) var(--ease-smooth);
+}
+
+.nav-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+[data-theme="light"] .nav-overlay {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+/* === Mobile Close Button (Inside menu) === */
+.nav-menu__close {
+    display: none;
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: var(--space-2);
+}
+
+@media (max-width: 768px) {
+    .nav-menu__close {
+        display: block;
+    }
 }
 
 /* === Marquee (Infinite Scroll) === */

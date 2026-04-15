@@ -235,17 +235,22 @@ export function initNavbarScroll() {
 export function initMobileNav() {
     const toggle = document.getElementById('navToggle');
     const menu = document.getElementById('navMenu');
-    if (!toggle || !menu) return;
+    const overlay = document.getElementById('navOverlay');
+    const closeBtn = document.getElementById('navMenuClose');
+
+    if (!toggle || !menu || !overlay) return;
 
     function closeMenu() {
         toggle.classList.remove('active');
         menu.classList.remove('active');
+        overlay.classList.remove('active');
         document.body.style.overflow = '';
     }
 
     function openMenu() {
         toggle.classList.add('active');
         menu.classList.add('active');
+        overlay.classList.add('active');
         document.body.style.overflow = 'hidden';
         
         // Push state to handle back button
@@ -254,9 +259,24 @@ export function initMobileNav() {
 
     toggle.addEventListener('click', () => {
         if (menu.classList.contains('active')) {
-            history.back(); // Closing via toggle also goes back in history
+            history.back();
         } else {
             openMenu();
+        }
+    });
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            if (menu.classList.contains('active')) {
+                history.back();
+            }
+        });
+    }
+
+    // Close on overlay click
+    overlay.addEventListener('click', () => {
+        if (menu.classList.contains('active')) {
+            history.back();
         }
     });
 
@@ -264,11 +284,11 @@ export function initMobileNav() {
     menu.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', () => {
             if (menu.classList.contains('active')) {
-                closeMenu();
-                // If we are at the pinned state, pop it silently or just let it be.
-                // Best practice: if we closed it manually, we should "consume" the back state.
+                // If we are at the pinned state, pop it silently.
                 if (history.state && history.state.menuOpen) {
                     history.back();
+                } else {
+                    closeMenu();
                 }
             }
         });
@@ -277,9 +297,9 @@ export function initMobileNav() {
     // Handle back button
     window.addEventListener('popstate', (event) => {
         if (menu.classList.contains('active')) {
-            // Close without pushing/popping history since we are already in popstate
             toggle.classList.remove('active');
             menu.classList.remove('active');
+            overlay.classList.remove('active');
             document.body.style.overflow = '';
         }
     });

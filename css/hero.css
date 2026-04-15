@@ -421,3 +421,14 @@
         display: none;
     }
 }
+
+/* === Light Mode Mobile Shape Overrides === */
+[data-theme="light"] .floating-shape {
+    background: #E0E0E0 !important;
+    opacity: 0.15;
+}
+
+[data-theme="light"] .shape-1 { background: #E0E0E0 !important; }
+[data-theme="light"] .shape-2 { background: #D5D5D5 !important; }
+[data-theme="light"] .shape-3 { background: #EAEAEA !important; }
+[data-theme="light"] .shape-4 { background: #F0F0F0 !important; }
