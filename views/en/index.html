@@ -49,13 +49,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="/css/design-system.css?v=20">
-    <link rel="stylesheet" href="/css/global.css?v=20">
-    <link rel="stylesheet" href="/css/hero.css?v=20">
-    <link rel="stylesheet" href="/css/components.css?v=20">
-    <link rel="stylesheet" href="/css/services.css?v=20">
-    <link rel="stylesheet" href="/css/portfolio.css?v=20">
-    <link rel="stylesheet" href="/css/contact.css?v=20">
+    <link rel="stylesheet" href="/css/design-system.css?v=21">
+    <link rel="stylesheet" href="/css/global.css?v=21">
+    <link rel="stylesheet" href="/css/hero.css?v=21">
+    <link rel="stylesheet" href="/css/components.css?v=21">
+    <link rel="stylesheet" href="/css/services.css?v=21">
+    <link rel="stylesheet" href="/css/portfolio.css?v=21">
+    <link rel="stylesheet" href="/css/contact.css?v=21">
 
     <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
@@ -117,27 +117,27 @@
     </div>
 
     <!-- Navigation -->
-    <div class="nav-overlay" id="navOverlay"></div>
+    <div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
     <nav class="navbar" id="navbar">
         <div class="nav-container">
             <a href="/" class="logo">
                 <img src="/Vectore-logo.svg" alt="Vectore Studio" class="logo-img">
             </a>
-            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+            <button class="nav-toggle" id="navToggle" type="button" aria-label="Open navigation menu" aria-controls="navMenu" aria-expanded="false">
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
-            <ul class="nav-menu" id="navMenu">
-                <button class="nav-menu__close" id="navMenuClose" aria-label="Close menu">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            <ul class="nav-menu" id="navMenu" aria-hidden="true">
+                <button class="nav-menu__close" id="navMenuClose" type="button" aria-label="Close menu">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
                 </button>
                 <li><a href="#services" class="nav-link">Services</a></li>
                 <li><a href="#work" class="nav-link">Work</a></li>
                 <li><a href="#flow" class="nav-link">Flow</a></li>
                 <li><a href="#contact" class="nav-link">Contact</a></li>
                 <li>
-                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle theme">
                         <!-- Moon icon (shown in dark mode) -->
                         <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
                         <!-- Sun icon (shown in light mode) -->
@@ -687,7 +687,7 @@
     <div class="cursor-dot" id="cursorDot"></div>
 
     <!-- Scripts -->
-    <script type="module" src="/js/core/app.js?v=20"></script>
+    <script type="module" src="/js/core/app.js?v=21"></script>
 
     <!-- External dynamic assets loader -->
     <script>

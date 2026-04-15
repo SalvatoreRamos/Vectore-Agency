@@ -237,38 +237,78 @@ export function initMobileNav() {
     const menu = document.getElementById('navMenu');
     const overlay = document.getElementById('navOverlay');
     const closeBtn = document.getElementById('navMenuClose');
+    const navLinks = menu?.querySelectorAll('.nav-link') || [];
+    const MENU_HISTORY_KEY = 'mobileNavOpen';
 
     if (!toggle || !menu || !overlay) return;
 
-    function closeMenu() {
-        toggle.classList.remove('active');
-        menu.classList.remove('active');
-        overlay.classList.remove('active');
-        document.body.style.overflow = '';
+    function getCurrentHistoryState() {
+        return history.state && typeof history.state === 'object' ? history.state : {};
     }
 
-    function openMenu() {
+    function isMenuHistoryState(state = history.state) {
+        return Boolean(state && state[MENU_HISTORY_KEY] === true);
+    }
+
+    function applyMenuState(isOpen, { restoreFocus = false } = {}) {
+        toggle.classList.toggle('active', isOpen);
+        toggle.setAttribute('aria-expanded', String(isOpen));
+        toggle.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+        menu.classList.toggle('active', isOpen);
+        menu.setAttribute('aria-hidden', String(!isOpen));
+        overlay.classList.toggle('active', isOpen);
+        overlay.setAttribute('aria-hidden', String(!isOpen));
+        document.documentElement.classList.toggle('nav-open', isOpen);
+        document.body.classList.toggle('nav-open', isOpen);
+
+        if (isOpen) {
+            closeBtn?.focus({ preventScroll: true });
+        } else if (restoreFocus) {
+            toggle.focus({ preventScroll: true });
+        }
+    }
+
+    function openMenu({ fromHistory = false } = {}) {
         if (menu.classList.contains('active')) return;
-        
-        // Push state BEFORE updating UI to ensure back button works
-        try {
-            if (!history.state || history.state.menuOpen !== true) {
-                history.pushState({ menuOpen: true }, '');
+
+        if (!fromHistory) {
+            try {
+                history.pushState({ ...getCurrentHistoryState(), [MENU_HISTORY_KEY]: true }, '');
+            } catch (error) {
+                console.warn('History API not supported or blocked', error);
             }
-        } catch (e) {
-            console.warn('History API not supported or blocked');
         }
 
-        toggle.classList.add('active');
-        menu.classList.add('active');
-        overlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
+        applyMenuState(true);
+    }
+
+    function closeMenu({ restoreFocus = false } = {}) {
+        if (!menu.classList.contains('active') && !document.body.classList.contains('nav-open')) return;
+
+        applyMenuState(false, { restoreFocus });
+    }
+
+    function requestMenuClose({ restoreFocus = true } = {}) {
+        if (!menu.classList.contains('active')) return;
+
+        if (isMenuHistoryState()) {
+            try {
+                history.back();
+                return;
+            } catch (error) {
+                console.warn('Unable to sync mobile nav with browser history', error);
+            }
+        }
+
+        closeMenu({ restoreFocus });
     }
 
     toggle.addEventListener('click', (e) => {
-        if (e) e.preventDefault();
+        e.preventDefault();
+        e.stopPropagation();
+
         if (menu.classList.contains('active')) {
-            history.back();
+            requestMenuClose();
         } else {
             openMenu();
         }
@@ -276,41 +316,49 @@ export function initMobileNav() {
 
     if (closeBtn) {
         closeBtn.addEventListener('click', (e) => {
-            if (e) e.preventDefault();
-            // If we have a menu state, go back. Otherwise just close.
-            if (history.state && history.state.menuOpen === true) {
-                history.back();
-            } else {
-                closeMenu();
-            }
+            e.preventDefault();
+            e.stopPropagation();
+            requestMenuClose();
         });
     }
 
-    overlay.addEventListener('click', (e) => {
-        if (e) e.preventDefault();
-        if (history.state && history.state.menuOpen === true) {
-            history.back();
-        } else {
-            closeMenu();
-        }
+    document.addEventListener('pointerdown', (event) => {
+        if (!menu.classList.contains('active')) return;
+
+        const target = event.target;
+        if (!(target instanceof Node)) return;
+        if (menu.contains(target) || toggle.contains(target)) return;
+
+        requestMenuClose({ restoreFocus: false });
+    }, true);
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key !== 'Escape' || !menu.classList.contains('active')) return;
+
+        event.preventDefault();
+        requestMenuClose();
     });
 
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768 && menu.classList.contains('active')) {
+            requestMenuClose({ restoreFocus: false });
+        }
+    }, { passive: true });
+
     // Close on link click
-    menu.querySelectorAll('.nav-link').forEach(link => {
+    navLinks.forEach(link => {
         link.addEventListener('click', () => {
-            closeMenu();
-            // Try to pop the history state silently
-            if (history.state && history.state.menuOpen === true) {
-                history.back();
-            }
+            requestMenuClose({ restoreFocus: false });
         });
     });
 
     // Handle back button
     window.addEventListener('popstate', (event) => {
-        // ALWAYS close menu on popstate if it's active, regardless of state content
-        if (menu.classList.contains('active')) {
-            closeMenu();
+        if (isMenuHistoryState(event.state)) {
+            openMenu({ fromHistory: true });
+            return;
         }
+
+        closeMenu({ restoreFocus: menu.classList.contains('active') });
     });
 }

@@ -4,7 +4,7 @@
 // ============================================
 
 import { initCursor } from '../components/cursor.js';
-import { initScrollReveal, initCounters, initTiltEffect, initMagneticButtons, initParallaxOrbs, initSmoothScroll, initNavbarScroll, initMobileNav } from '../components/animations.js';
+import { initScrollReveal, initCounters, initTiltEffect, initMagneticButtons, initParallaxOrbs, initSmoothScroll, initNavbarScroll, initMobileNav } from '../components/animations.js?v=21';
 import { initSplineViewer } from '../components/spline-viewer.js';
 import { initSmartForm } from '../components/forms.js';
 import { initThemeToggle } from '../components/theme-toggle.js';
