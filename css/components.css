@@ -163,6 +163,15 @@
     color: #fff;
     text-decoration: underline;
     font-weight: var(--font-bold);
+    white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+    .geo-banner {
+        font-size: 11px;
+        padding: var(--space-2);
+        gap: var(--space-2);
+    }
 }
 
 .geo-banner__close {
@@ -230,23 +239,37 @@
         position: fixed;
         top: 0;
         right: -100%;
-        width: 280px;
+        width: 100%;
+        max-width: 320px;
         height: 100vh;
         flex-direction: column;
-        background: var(--bg-secondary);
-        padding: 80px var(--space-8) var(--space-8);
-        gap: var(--space-2);
+        justify-content: center;
+        background: var(--bg-tertiary);
+        padding: var(--space-20) var(--space-8);
+        gap: var(--space-4);
         transition: right var(--duration-normal) var(--ease-out-expo);
         border-left: 1px solid var(--glass-border);
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);
     }
 
     .nav-menu.active {
         right: 0;
     }
 
+    .nav-menu li {
+        width: 100%;
+        text-align: center;
+    }
+
     .nav-link {
-        font-size: var(--text-base);
-        padding: var(--space-3) var(--space-4);
+        font-size: var(--text-lg);
+        padding: var(--space-4);
+        display: block;
+        width: 100%;
+    }
+
+    .theme-toggle {
+        margin: var(--space-6) auto 0;
     }
 }
 
@@ -371,5 +394,36 @@
     .footer-content {
         grid-template-columns: 1fr;
         gap: var(--space-8);
+    }
+}
+
+/* === Flow Section Styles === */
+.flow-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-16);
+    align-items: center;
+}
+
+@media (max-width: 991px) {
+    .flow-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-12);
+        text-align: center;
+    }
+
+    .flow-grid .reveal {
+        order: 2;
+    }
+
+    .flow-grid .reveal--scale {
+        order: 1;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .flow-grid ul {
+        display: inline-block;
+        text-align: left;
     }
 }
