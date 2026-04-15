@@ -291,14 +291,22 @@
 
 /* === Responsive === */
 @media (max-width: 1024px) {
+    .hero {
+        align-items: flex-start;
+        overflow: visible;
+        padding: 128px 0 72px;
+    }
+
     .hero__container {
         grid-template-columns: 1fr;
         text-align: center;
-        gap: var(--space-10);
+        gap: var(--space-8);
+        align-items: start;
     }
 
     .hero__content {
         align-items: center;
+        width: 100%;
     }
 
     .hero__badge {
@@ -315,6 +323,7 @@
 
     .hero__stats {
         justify-content: center;
+        width: 100%;
     }
 
     .hero__spline-container {
@@ -328,14 +337,21 @@
 
 @media (max-width: 640px) {
     .hero {
-        padding: 80px 0 40px;
+        min-height: auto;
+        padding: 132px 0 max(88px, calc(env(safe-area-inset-bottom, 0px) + 64px));
     }
 
     .hero__stats {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: var(--space-6);
+        gap: var(--space-5);
         text-align: center;
+        margin-top: var(--space-6);
+        padding-bottom: var(--space-2);
+    }
+
+    .hero__stat {
+        min-width: 0;
     }
 
     .hero__stat:last-child {
@@ -345,6 +361,11 @@
     
     .hero__stat-number {
         font-size: var(--text-xl);
+        line-height: 1.05;
+    }
+
+    .hero__stat-label {
+        line-height: 1.35;
     }
 
     .hero__spline-container {
