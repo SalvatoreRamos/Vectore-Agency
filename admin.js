@@ -12,6 +12,9 @@ let activeSection = 'catalog';
 let selectedLeadId = null;
 let leadFilter = 'all';
 let leadSearchTerm = '';
+let productSearchTerm = '';
+let projectSearchTerm = '';
+let testimonialSearchTerm = '';
 
 let editingProductId = null;
 let editingProjectId = null;
@@ -89,6 +92,9 @@ const totalProductsEl = document.getElementById('totalProducts');
 const digitalProductsEl = document.getElementById('digitalProducts');
 const physicalProductsEl = document.getElementById('physicalProducts');
 const totalProjectsEl = document.getElementById('totalProjects');
+const localProjectsEl = document.getElementById('localProjects');
+const globalProjectsEl = document.getElementById('globalProjects');
+const videoProjectsEl = document.getElementById('videoProjects');
 const totalLeadsEl = document.getElementById('totalLeads');
 const newLeadsEl = document.getElementById('newLeads');
 const contactedLeadsEl = document.getElementById('contactedLeads');
@@ -97,6 +103,9 @@ const closedLeadsEl = document.getElementById('closedLeads');
 // Navigation & Filters
 let navItems = document.querySelectorAll('.nav-item');
 const productFilterBtns = document.querySelectorAll('[data-filter]');
+const catalogSearchInput = document.getElementById('catalogSearchInput');
+const portfolioSearchInput = document.getElementById('portfolioSearchInput');
+const testimonialSearchInput = document.getElementById('testimonialSearchInput');
 
 // Brief Inbox
 const leadSearchInput = document.getElementById('leadSearchInput');
@@ -121,6 +130,7 @@ const briefPrioritySelect = document.getElementById('briefPrioritySelect');
 const briefNotesInput = document.getElementById('briefNotesInput');
 const briefSaveBtn = document.getElementById('briefSaveBtn');
 const briefMarkUnreadBtn = document.getElementById('briefMarkUnreadBtn');
+const briefCopyEmailBtn = document.getElementById('briefCopyEmailBtn');
 
 // File Inputs & Image URL Fields
 const productImageInput = document.getElementById('productImage');
@@ -411,6 +421,45 @@ function formatLeadShortDate(dateValue) {
         month: 'short',
         year: 'numeric'
     });
+}
+
+async function copyTextToClipboard(text, triggerButton, successLabel = 'Copiado') {
+    if (!text) return;
+
+    const originalText = triggerButton ? triggerButton.textContent : '';
+
+    try {
+        if (navigator.clipboard?.writeText) {
+            await navigator.clipboard.writeText(text);
+        } else {
+            const tempInput = document.createElement('textarea');
+            tempInput.value = text;
+            tempInput.setAttribute('readonly', '');
+            tempInput.style.position = 'absolute';
+            tempInput.style.left = '-9999px';
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+        }
+
+        if (triggerButton) {
+            triggerButton.textContent = successLabel;
+            triggerButton.disabled = true;
+            setTimeout(() => {
+                triggerButton.textContent = originalText;
+                triggerButton.disabled = false;
+            }, 1200);
+        }
+    } catch (error) {
+        console.error('Copy failed:', error);
+        if (triggerButton) {
+            triggerButton.textContent = 'Error';
+            setTimeout(() => {
+                triggerButton.textContent = originalText;
+            }, 1200);
+        }
+    }
 }
 
 function updateLeadStats() {

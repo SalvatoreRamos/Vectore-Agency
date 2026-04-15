@@ -208,8 +208,13 @@
                 </div>
 
                 <div class="admin-section">
-                    <div class="section-header">
-                        <h2>Productos</h2>
+                    <div class="section-header section-header--stack">
+                        <div class="section-header__top">
+                            <h2>Productos</h2>
+                            <div class="admin-toolbar-search">
+                                <input type="search" id="catalogSearchInput" placeholder="Buscar por nombre, categoría o subcategoría">
+                            </div>
+                        </div>
                         <div class="filter-buttons">
                             <button class="filter-btn active" data-filter="all">Todos</button>
                             <button class="filter-btn" data-filter="diseno">🎨 Diseño</button>
@@ -229,7 +234,21 @@
 
             <!-- Portfolio Section -->
             <div id="portfolioSection" style="display: none;">
-                <div class="admin-stats">
+                <header class="admin-header">
+                    <div class="header-left">
+                        <h1>Portafolio</h1>
+                        <p>Curaduría visual de casos locales e internacionales, con mejor lectura editorial para gestión rápida.</p>
+                    </div>
+                    <button class="btn btn-primary" id="btnAddProject">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Agregar Proyecto
+                    </button>
+                </header>
+
+                <div class="admin-stats portfolio-stats-grid">
                     <div class="stat-card">
                         <div class="stat-icon digital">🎨</div>
                         <div class="stat-info">
@@ -237,25 +256,47 @@
                             <span class="stat-label">Total Proyectos</span>
                         </div>
                     </div>
+                    <div class="stat-card">
+                        <div class="stat-icon physical">🇵🇪</div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="localProjects">0</span>
+                            <span class="stat-label">Perú</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon digital">🌍</div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="globalProjects">0</span>
+                            <span class="stat-label">Internacional</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon physical">🎬</div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="videoProjects">0</span>
+                            <span class="stat-label">Con video</span>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="admin-section">
-                    <div class="section-header">
-                        <h2>Proyectos en Portafolio</h2>
+                <div class="admin-section portfolio-section-shell">
+                    <div class="section-header section-header--stack">
+                        <div class="section-header__top">
+                            <div>
+                                <h2>Proyectos en Portafolio</h2>
+                                <p class="section-subcopy">Filtra por alcance y encuentra piezas por cliente, título o categoría.</p>
+                            </div>
+                            <div class="admin-toolbar-search">
+                                <input type="search" id="portfolioSearchInput" placeholder="Buscar proyecto, cliente o categoría">
+                            </div>
+                        </div>
                         <div class="filter-buttons">
                             <button class="filter-btn active" data-project-filter="all">Todos</button>
                             <button class="filter-btn" data-project-filter="local">🇵🇪 Perú (Local)</button>
                             <button class="filter-btn" data-project-filter="global">🌍 Internacional</button>
                         </div>
-                        <button class="btn btn-primary" id="btnAddProject">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                            </svg>
-                            Agregar Proyecto
-                        </button>
                     </div>
-                    <div class="products-grid" id="adminProjectsGrid">
+                    <div class="products-grid products-grid--portfolio" id="adminProjectsGrid">
                         <!-- Projects will be loaded here dynamically -->
                     </div>
                 </div>
@@ -274,15 +315,22 @@
                 </div>
 
                 <div class="admin-section">
-                    <div class="section-header">
-                        <h2>Clientes Destacados</h2>
-                        <button class="btn btn-primary" id="btnAddTestimonial">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                            </svg>
-                            Agregar Cliente
-                        </button>
+                    <div class="section-header section-header--stack">
+                        <div class="section-header__top">
+                            <h2>Clientes Destacados</h2>
+                            <div class="section-header__actions">
+                                <div class="admin-toolbar-search">
+                                    <input type="search" id="testimonialSearchInput" placeholder="Buscar cliente o negocio">
+                                </div>
+                                <button class="btn btn-primary" id="btnAddTestimonial">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    </svg>
+                                    Agregar Cliente
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     <div class="products-grid" id="adminTestimonialsGrid">
                         <!-- Testimonials will be loaded here dynamically -->
@@ -466,7 +514,10 @@
                                     <div class="lead-contact-grid">
                                         <div class="lead-contact-item">
                                             <span>Email</span>
-                                            <a id="briefDetailEmail" href="#">-</a>
+                                            <div class="lead-contact-actions">
+                                                <a id="briefDetailEmail" href="#">-</a>
+                                                <button type="button" class="btn-inline-copy" id="briefCopyEmailBtn">Copiar</button>
+                                            </div>
                                         </div>
                                         <div class="lead-contact-item">
                                             <span>Empresa</span>
