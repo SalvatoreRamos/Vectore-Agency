@@ -114,6 +114,15 @@
                     </svg>
                     Vectore Flow
                 </a>
+                <a href="#" class="nav-item" data-section="briefs">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 5a2 2 0 0 1 2-2h9l5 5v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"></path>
+                        <path d="M14 3v6h6"></path>
+                        <line x1="8" y1="13" x2="16" y2="13"></line>
+                        <line x1="8" y1="17" x2="13" y2="17"></line>
+                    </svg>
+                    Briefs
+                </a>
                 <a href="#" class="nav-item" data-section="notifications">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
@@ -333,6 +342,181 @@
                 <div class="admin-section">
                     <div class="products-grid" id="adminFlowGrid">
                         <!-- Flow Assets Loaded Dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Briefs Section -->
+            <div id="briefsSection" style="display: none;">
+                <header class="admin-header">
+                    <div class="header-left">
+                        <h1>Bandeja de Briefs</h1>
+                        <p>Centraliza los briefs entrantes de la web internacional y gestiona el seguimiento.</p>
+                    </div>
+                </header>
+
+                <div class="admin-stats lead-stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon digital">🧾</div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="totalLeads">0</span>
+                            <span class="stat-label">Total Briefs</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon physical">⏳</div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="newLeads">0</span>
+                            <span class="stat-label">Pendientes</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon digital">💬</div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="contactedLeads">0</span>
+                            <span class="stat-label">Respondidos</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon physical">✅</div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="closedLeads">0</span>
+                            <span class="stat-label">Finalizados</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-section">
+                    <div class="section-header section-header--stack lead-toolbar">
+                        <div>
+                            <h2>Inbox Comercial</h2>
+                            <p class="lead-toolbar__copy">Filtra, prioriza y responde briefs sin depender de correos ni cuentas de cliente.</p>
+                        </div>
+                        <div class="lead-toolbar__controls">
+                            <div class="filter-buttons" id="leadFilters">
+                                <button class="filter-btn active" data-lead-filter="all">Todos</button>
+                                <button class="filter-btn" data-lead-filter="new">Pendientes</button>
+                                <button class="filter-btn" data-lead-filter="contacted">Respondidos</button>
+                                <button class="filter-btn" data-lead-filter="qualified">Calificados</button>
+                                <button class="filter-btn" data-lead-filter="closed">Finalizados</button>
+                            </div>
+                            <div class="lead-search">
+                                <input type="search" id="leadSearchInput" placeholder="Buscar por nombre, email, empresa o servicio">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lead-workspace">
+                        <div class="lead-list-panel">
+                            <div class="lead-list" id="briefsList">
+                                <!-- Brief cards rendered dynamically -->
+                            </div>
+                        </div>
+
+                        <div class="lead-detail-panel">
+                            <div class="lead-detail-empty" id="briefDetailEmpty">
+                                <div class="lead-detail-empty__icon">✦</div>
+                                <h3>Selecciona un brief</h3>
+                                <p>Verás aquí el detalle completo del proyecto, datos de contacto y notas internas del seguimiento.</p>
+                            </div>
+
+                            <div class="lead-detail" id="briefDetailContent" style="display: none;">
+                                <div class="lead-detail__header">
+                                    <div>
+                                        <div class="lead-detail__badges">
+                                            <span class="lead-badge" id="briefDetailStatusBadge">Pendiente</span>
+                                            <span class="lead-badge lead-badge--priority" id="briefDetailPriorityBadge">Media</span>
+                                        </div>
+                                        <h3 id="briefDetailName">Nombre del lead</h3>
+                                        <p id="briefDetailMeta">Empresa · Fecha</p>
+                                    </div>
+                                    <div class="lead-score-pill" id="briefDetailScore">0/100</div>
+                                </div>
+
+                                <div class="lead-summary-grid">
+                                    <div class="lead-summary-card">
+                                        <span class="lead-summary-card__label">Servicio</span>
+                                        <strong id="briefDetailService">-</strong>
+                                    </div>
+                                    <div class="lead-summary-card">
+                                        <span class="lead-summary-card__label">Timeline</span>
+                                        <strong id="briefDetailTimeline">-</strong>
+                                    </div>
+                                    <div class="lead-summary-card">
+                                        <span class="lead-summary-card__label">Presupuesto</span>
+                                        <strong id="briefDetailBudget">-</strong>
+                                    </div>
+                                    <div class="lead-summary-card">
+                                        <span class="lead-summary-card__label">Origen</span>
+                                        <strong id="briefDetailSource">-</strong>
+                                    </div>
+                                </div>
+
+                                <div class="lead-detail-section">
+                                    <div class="section-header">
+                                        <h2>Brief del proyecto</h2>
+                                    </div>
+                                    <p class="lead-description" id="briefDetailDescription">Sin descripción</p>
+                                </div>
+
+                                <div class="lead-detail-section">
+                                    <div class="section-header">
+                                        <h2>Contacto</h2>
+                                    </div>
+                                    <div class="lead-contact-grid">
+                                        <div class="lead-contact-item">
+                                            <span>Email</span>
+                                            <a id="briefDetailEmail" href="#">-</a>
+                                        </div>
+                                        <div class="lead-contact-item">
+                                            <span>Empresa</span>
+                                            <strong id="briefDetailCompany">-</strong>
+                                        </div>
+                                        <div class="lead-contact-item">
+                                            <span>Recibido</span>
+                                            <strong id="briefDetailCreatedAt">-</strong>
+                                        </div>
+                                        <div class="lead-contact-item">
+                                            <span>Último cambio</span>
+                                            <strong id="briefDetailUpdatedAt">-</strong>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="lead-detail-section">
+                                    <div class="section-header">
+                                        <h2>Gestión interna</h2>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="briefStatusSelect">Estado</label>
+                                            <select id="briefStatusSelect">
+                                                <option value="new">Pendiente</option>
+                                                <option value="contacted">Respondido</option>
+                                                <option value="qualified">Calificado</option>
+                                                <option value="closed">Finalizado</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="briefPrioritySelect">Prioridad</label>
+                                            <select id="briefPrioritySelect">
+                                                <option value="low">Baja</option>
+                                                <option value="medium">Media</option>
+                                                <option value="high">Alta</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="briefNotesInput">Notas internas</label>
+                                        <textarea id="briefNotesInput" rows="6" placeholder="Próximos pasos, contexto comercial, decisiones, recordatorios..."></textarea>
+                                    </div>
+                                    <div class="form-actions">
+                                        <button type="button" class="btn btn-secondary" id="briefMarkUnreadBtn">Marcar como no leído</button>
+                                        <button type="button" class="btn btn-primary" id="briefSaveBtn">Guardar gestión</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

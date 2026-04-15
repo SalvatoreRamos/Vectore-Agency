@@ -7,7 +7,11 @@ let testimonials = [];
 
 let events = [];
 let flowAssets = [];
+let leads = [];
 let activeSection = 'catalog';
+let selectedLeadId = null;
+let leadFilter = 'all';
+let leadSearchTerm = '';
 
 let editingProductId = null;
 let editingProjectId = null;
@@ -33,6 +37,7 @@ const testimonialsSection = document.getElementById('testimonialsSection');
 
 const eventsSection = document.getElementById('eventsSection');
 const flowSection = document.getElementById('flowSection');
+const briefsSection = document.getElementById('briefsSection');
 const notificationsSection = document.getElementById('notificationsSection');
 const usersSection = document.getElementById('usersSection');
 const ordersSection = document.getElementById('ordersSection');
@@ -77,16 +82,45 @@ const adminTestimonialsGrid = document.getElementById('adminTestimonialsGrid');
 
 const adminEventsGrid = document.getElementById('adminEventsGrid');
 const adminFlowGrid = document.getElementById('adminFlowGrid');
+const briefsList = document.getElementById('briefsList');
 
 // Stats
 const totalProductsEl = document.getElementById('totalProducts');
 const digitalProductsEl = document.getElementById('digitalProducts');
 const physicalProductsEl = document.getElementById('physicalProducts');
 const totalProjectsEl = document.getElementById('totalProjects');
+const totalLeadsEl = document.getElementById('totalLeads');
+const newLeadsEl = document.getElementById('newLeads');
+const contactedLeadsEl = document.getElementById('contactedLeads');
+const closedLeadsEl = document.getElementById('closedLeads');
 
 // Navigation & Filters
 let navItems = document.querySelectorAll('.nav-item');
-const filterBtns = document.querySelectorAll('.filter-btn');
+const productFilterBtns = document.querySelectorAll('[data-filter]');
+
+// Brief Inbox
+const leadSearchInput = document.getElementById('leadSearchInput');
+const briefDetailEmpty = document.getElementById('briefDetailEmpty');
+const briefDetailContent = document.getElementById('briefDetailContent');
+const briefDetailStatusBadge = document.getElementById('briefDetailStatusBadge');
+const briefDetailPriorityBadge = document.getElementById('briefDetailPriorityBadge');
+const briefDetailName = document.getElementById('briefDetailName');
+const briefDetailMeta = document.getElementById('briefDetailMeta');
+const briefDetailScore = document.getElementById('briefDetailScore');
+const briefDetailService = document.getElementById('briefDetailService');
+const briefDetailTimeline = document.getElementById('briefDetailTimeline');
+const briefDetailBudget = document.getElementById('briefDetailBudget');
+const briefDetailSource = document.getElementById('briefDetailSource');
+const briefDetailDescription = document.getElementById('briefDetailDescription');
+const briefDetailEmail = document.getElementById('briefDetailEmail');
+const briefDetailCompany = document.getElementById('briefDetailCompany');
+const briefDetailCreatedAt = document.getElementById('briefDetailCreatedAt');
+const briefDetailUpdatedAt = document.getElementById('briefDetailUpdatedAt');
+const briefStatusSelect = document.getElementById('briefStatusSelect');
+const briefPrioritySelect = document.getElementById('briefPrioritySelect');
+const briefNotesInput = document.getElementById('briefNotesInput');
+const briefSaveBtn = document.getElementById('briefSaveBtn');
+const briefMarkUnreadBtn = document.getElementById('briefMarkUnreadBtn');
 
 // File Inputs & Image URL Fields
 const productImageInput = document.getElementById('productImage');
@@ -225,10 +259,9 @@ async function showDashboard() {
         fetchAndRenderProducts(),
         fetchAndRenderProjects(),
         fetchAndRenderTestimonials(),
-        fetchAndRenderProjects(),
-        fetchAndRenderTestimonials(),
         fetchAndRenderEvents(),
-        fetchAndRenderFlowAssets()
+        fetchAndRenderFlowAssets(),
+        fetchAndRenderLeads()
     ]);
 }
 
@@ -268,11 +301,13 @@ function switchSection(section) {
     if (testimonialsSection) testimonialsSection.style.display = section === 'testimonials' ? 'block' : 'none';
     if (eventsSection) eventsSection.style.display = section === 'events' ? 'block' : 'none';
     if (flowSection) flowSection.style.display = section === 'flow' ? 'block' : 'none';
+    if (briefsSection) briefsSection.style.display = section === 'briefs' ? 'block' : 'none';
     if (notificationsSection) notificationsSection.style.display = section === 'notifications' ? 'block' : 'none';
     if (usersSection) usersSection.style.display = section === 'users' ? 'block' : 'none';
     if (ordersSection) ordersSection.style.display = section === 'orders' ? 'block' : 'none';
 
     // Load data when switching to specific sections
+    if (section === 'briefs') fetchAndRenderLeads();
     if (section === 'notifications') fetchAndRenderAdminNotifs();
     if (section === 'users') fetchAndRenderUsers();
     if (section === 'orders') fetchAndRenderOrders();
@@ -288,6 +323,331 @@ function updateStats() {
     if (totalProjectsEl) totalProjectsEl.textContent = projects.length;
     if (document.getElementById('totalTestimonials')) {
         document.getElementById('totalTestimonials').textContent = testimonials.length;
+    }
+    updateLeadStats();
+}
+
+const leadStatusMeta = {
+    new: { label: 'Pendiente', tone: 'pending' },
+    contacted: { label: 'Respondido', tone: 'contacted' },
+    qualified: { label: 'Calificado', tone: 'qualified' },
+    closed: { label: 'Finalizado', tone: 'closed' }
+};
+
+const leadPriorityMeta = {
+    low: { label: 'Baja', tone: 'low' },
+    medium: { label: 'Media', tone: 'medium' },
+    high: { label: 'Alta', tone: 'high' }
+};
+
+const leadServiceLabels = {
+    ai_agents: 'AI Agents & Automation',
+    '3d_renders': '3D Renders & Digital Assets',
+    branding: 'Brand Identity & Design',
+    saas: 'SaaS / Web Application',
+    other: 'Other / Not sure yet',
+    '': 'Sin definir'
+};
+
+const leadTimelineLabels = {
+    asap: 'ASAP',
+    '1-2_months': '1-2 meses',
+    '3+_months': '3+ meses',
+    exploring: 'Explorando opciones',
+    '': 'Sin definir'
+};
+
+const leadBudgetLabels = {
+    under_5k: 'Menos de $5,000',
+    '5k-15k': '$5,000 - $15,000',
+    '15k-50k': '$15,000 - $50,000',
+    '50k+': '$50,000+',
+    not_sure: 'No definido',
+    '': 'Sin definir'
+};
+
+function getLeadStatusInfo(status) {
+    return leadStatusMeta[status] || leadStatusMeta.new;
+}
+
+function getLeadPriorityInfo(priority) {
+    return leadPriorityMeta[priority] || leadPriorityMeta.medium;
+}
+
+function getLeadServiceLabel(service) {
+    return leadServiceLabels[service] || service || 'Sin definir';
+}
+
+function getLeadTimelineLabel(timeline) {
+    return leadTimelineLabels[timeline] || timeline || 'Sin definir';
+}
+
+function getLeadBudgetLabel(budget) {
+    return leadBudgetLabels[budget] || budget || 'Sin definir';
+}
+
+function getLeadSourceLabel(source) {
+    return source === 'es' ? 'Peru' : 'Internacional';
+}
+
+function formatLeadDate(dateValue, options = {}) {
+    if (!dateValue) return '-';
+
+    return new Date(dateValue).toLocaleString('es-PE', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        ...options
+    });
+}
+
+function formatLeadShortDate(dateValue) {
+    if (!dateValue) return '-';
+
+    return new Date(dateValue).toLocaleDateString('es-PE', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+    });
+}
+
+function updateLeadStats() {
+    if (totalLeadsEl) totalLeadsEl.textContent = leads.length;
+    if (newLeadsEl) newLeadsEl.textContent = leads.filter(lead => lead.status === 'new').length;
+    if (contactedLeadsEl) contactedLeadsEl.textContent = leads.filter(lead => lead.status === 'contacted').length;
+    if (closedLeadsEl) closedLeadsEl.textContent = leads.filter(lead => lead.status === 'closed').length;
+}
+
+function getFilteredLeads() {
+    const query = leadSearchTerm.trim().toLowerCase();
+    const priorityOrder = { high: 0, medium: 1, low: 2 };
+
+    return [...leads]
+        .filter(lead => leadFilter === 'all' || lead.status === leadFilter)
+        .filter(lead => {
+            if (!query) return true;
+
+            const haystack = [
+                lead.name,
+                lead.email,
+                lead.company,
+                getLeadServiceLabel(lead.service),
+                getLeadBudgetLabel(lead.budget),
+                getLeadTimelineLabel(lead.timeline)
+            ].join(' ').toLowerCase();
+
+            return haystack.includes(query);
+        })
+        .sort((a, b) => {
+            const unreadA = a.readAt ? 1 : 0;
+            const unreadB = b.readAt ? 1 : 0;
+            if (unreadA !== unreadB) return unreadA - unreadB;
+
+            const priorityDiff = (priorityOrder[a.priority] ?? 1) - (priorityOrder[b.priority] ?? 1);
+            if (priorityDiff !== 0) return priorityDiff;
+
+            return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+}
+
+async function fetchAndRenderLeads() {
+    if (!briefsList) return;
+
+    briefsList.innerHTML = '<div class="lead-list__empty">Cargando briefs...</div>';
+
+    try {
+        const response = await api.getLeads();
+        leads = response.data || [];
+
+        if (!selectedLeadId && leads.length > 0) {
+            selectedLeadId = leads[0]._id;
+        }
+
+        if (selectedLeadId && !leads.some(lead => lead._id === selectedLeadId)) {
+            selectedLeadId = leads[0]?._id || null;
+        }
+
+        updateLeadStats();
+        renderLeadList();
+        renderLeadDetail();
+    } catch (error) {
+        console.error('Error fetching briefs:', error);
+        briefsList.innerHTML = '<div class="lead-list__empty">No se pudieron cargar los briefs.</div>';
+        renderLeadDetail();
+    }
+}
+
+function renderLeadList() {
+    if (!briefsList) return;
+
+    const filteredLeads = getFilteredLeads();
+
+    if (filteredLeads.length > 0 && !filteredLeads.some(lead => lead._id === selectedLeadId)) {
+        selectedLeadId = filteredLeads[0]._id;
+    }
+
+    if (filteredLeads.length === 0) {
+        selectedLeadId = null;
+    }
+
+    if (filteredLeads.length === 0) {
+        briefsList.innerHTML = '<div class="lead-list__empty">No hay briefs para este filtro.</div>';
+        return;
+    }
+
+    briefsList.innerHTML = filteredLeads.map(lead => {
+        const statusInfo = getLeadStatusInfo(lead.status);
+        const priorityInfo = getLeadPriorityInfo(lead.priority);
+        const companyOrEmail = lead.company || lead.email;
+        const summary = [getLeadServiceLabel(lead.service), getLeadBudgetLabel(lead.budget), getLeadTimelineLabel(lead.timeline)]
+            .filter(Boolean)
+            .join(' · ');
+
+        return `
+        <article class="lead-card ${selectedLeadId === lead._id ? 'is-selected' : ''} ${!lead.readAt ? 'is-unread' : ''}" data-lead-id="${lead._id}">
+            <div class="lead-card__header">
+                <div>
+                    <h3>${lead.name}</h3>
+                    <p>${companyOrEmail}</p>
+                </div>
+                <span class="lead-badge lead-badge--priority lead-badge--${priorityInfo.tone}">${priorityInfo.label}</span>
+            </div>
+            <div class="lead-card__meta">
+                <span class="lead-badge lead-badge--${statusInfo.tone}">${statusInfo.label}</span>
+                ${!lead.readAt ? '<span class="lead-badge lead-badge--unread">Nuevo</span>' : ''}
+            </div>
+            <p class="lead-card__summary">${summary}</p>
+            <div class="lead-card__footer">
+                <span>${lead.email}</span>
+                <span>${formatLeadShortDate(lead.createdAt)}</span>
+            </div>
+        </article>`;
+    }).join('');
+}
+
+function renderLeadDetail() {
+    const lead = leads.find(item => item._id === selectedLeadId);
+
+    if (!lead || !briefDetailContent || !briefDetailEmpty) {
+        if (briefDetailContent) briefDetailContent.style.display = 'none';
+        if (briefDetailEmpty) briefDetailEmpty.style.display = 'grid';
+        return;
+    }
+
+    const statusInfo = getLeadStatusInfo(lead.status);
+    const priorityInfo = getLeadPriorityInfo(lead.priority);
+
+    briefDetailEmpty.style.display = 'none';
+    briefDetailContent.style.display = 'block';
+
+    briefDetailStatusBadge.textContent = statusInfo.label;
+    briefDetailStatusBadge.className = `lead-badge lead-badge--${statusInfo.tone}`;
+
+    briefDetailPriorityBadge.textContent = `Prioridad ${priorityInfo.label}`;
+    briefDetailPriorityBadge.className = `lead-badge lead-badge--priority lead-badge--${priorityInfo.tone}`;
+
+    briefDetailName.textContent = lead.name;
+    briefDetailMeta.textContent = `${lead.company || 'Sin empresa'} · ${formatLeadDate(lead.createdAt)}`;
+    briefDetailScore.textContent = `${lead.qualificationScore || 0}/100`;
+    briefDetailService.textContent = getLeadServiceLabel(lead.service);
+    briefDetailTimeline.textContent = getLeadTimelineLabel(lead.timeline);
+    briefDetailBudget.textContent = getLeadBudgetLabel(lead.budget);
+    briefDetailSource.textContent = getLeadSourceLabel(lead.source);
+    briefDetailDescription.textContent = lead.description || 'El cliente no dejó un brief detallado.';
+    briefDetailEmail.textContent = lead.email;
+    briefDetailEmail.href = `mailto:${lead.email}`;
+    briefDetailCompany.textContent = lead.company || 'No especificada';
+    briefDetailCreatedAt.textContent = formatLeadDate(lead.createdAt);
+    briefDetailUpdatedAt.textContent = formatLeadDate(lead.lastStatusChangeAt || lead.updatedAt);
+    briefStatusSelect.value = lead.status || 'new';
+    briefPrioritySelect.value = lead.priority || 'medium';
+    briefNotesInput.value = lead.internalNotes || '';
+    briefMarkUnreadBtn.disabled = !lead.readAt;
+}
+
+function updateLeadInState(updatedLead) {
+    const index = leads.findIndex(lead => lead._id === updatedLead._id);
+    if (index === -1) {
+        leads.unshift(updatedLead);
+    } else {
+        leads[index] = updatedLead;
+    }
+
+    updateLeadStats();
+    renderLeadList();
+    renderLeadDetail();
+}
+
+function selectLead(leadId, { markAsRead = true } = {}) {
+    selectedLeadId = leadId;
+    renderLeadList();
+    renderLeadDetail();
+
+    const lead = leads.find(item => item._id === leadId);
+    if (!lead || lead.readAt || !markAsRead) return;
+
+    lead.readAt = new Date().toISOString();
+    renderLeadList();
+    renderLeadDetail();
+
+    api.updateLead(leadId, { markAsRead: true })
+        .then(response => updateLeadInState(response.data))
+        .catch(error => {
+            console.error('Error marking brief as read:', error);
+            lead.readAt = null;
+            renderLeadList();
+            renderLeadDetail();
+        });
+}
+
+async function saveSelectedLeadChanges() {
+    const lead = leads.find(item => item._id === selectedLeadId);
+    if (!lead || !briefSaveBtn) return;
+
+    const originalText = briefSaveBtn.textContent;
+    briefSaveBtn.disabled = true;
+    briefSaveBtn.textContent = 'Guardando...';
+
+    try {
+        const response = await api.updateLead(lead._id, {
+            status: briefStatusSelect.value,
+            priority: briefPrioritySelect.value,
+            internalNotes: briefNotesInput.value
+        });
+
+        updateLeadInState(response.data);
+        briefSaveBtn.textContent = 'Guardado';
+    } catch (error) {
+        console.error('Error saving brief:', error);
+        alert(`No se pudo guardar el brief: ${error.message}`);
+        briefSaveBtn.textContent = originalText;
+    } finally {
+        setTimeout(() => {
+            briefSaveBtn.disabled = false;
+            briefSaveBtn.textContent = originalText;
+        }, 900);
+    }
+}
+
+async function markSelectedLeadAsUnread() {
+    const lead = leads.find(item => item._id === selectedLeadId);
+    if (!lead || !lead.readAt || !briefMarkUnreadBtn) return;
+
+    const originalText = briefMarkUnreadBtn.textContent;
+    briefMarkUnreadBtn.disabled = true;
+    briefMarkUnreadBtn.textContent = 'Actualizando...';
+
+    try {
+        const response = await api.updateLead(lead._id, { markAsUnread: true });
+        updateLeadInState(response.data);
+    } catch (error) {
+        console.error('Error updating unread state:', error);
+        alert(`No se pudo actualizar el estado de lectura: ${error.message}`);
+    } finally {
+        briefMarkUnreadBtn.disabled = false;
+        briefMarkUnreadBtn.textContent = originalText;
     }
 }
 
@@ -306,7 +666,7 @@ async function fetchAndRenderProducts() {
 
 function renderProducts() {
     if (!adminProductsGrid) return;
-    const filter = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
+    const filter = document.querySelector('[data-filter].active')?.dataset.filter || 'all';
 
     const filteredProducts = filter === 'all'
         ? products
@@ -953,14 +1313,49 @@ function setupEventListeners() {
     // Logout
     if (btnLogout) btnLogout.addEventListener('click', logout);
 
-    // Filter
-    filterBtns.forEach(btn => {
+    // Product filter
+    productFilterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            filterBtns.forEach(b => b.classList.remove('active'));
+            productFilterBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             renderProducts();
         });
     });
+
+    // Brief filters
+    document.querySelectorAll('[data-lead-filter]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('[data-lead-filter]').forEach(button => button.classList.remove('active'));
+            btn.classList.add('active');
+            leadFilter = btn.dataset.leadFilter;
+            renderLeadList();
+            renderLeadDetail();
+        });
+    });
+
+    if (leadSearchInput) {
+        leadSearchInput.addEventListener('input', (event) => {
+            leadSearchTerm = event.target.value || '';
+            renderLeadList();
+            renderLeadDetail();
+        });
+    }
+
+    if (briefsList) {
+        briefsList.addEventListener('click', (event) => {
+            const card = event.target.closest('[data-lead-id]');
+            if (!card) return;
+            selectLead(card.dataset.leadId);
+        });
+    }
+
+    if (briefSaveBtn) {
+        briefSaveBtn.addEventListener('click', saveSelectedLeadChanges);
+    }
+
+    if (briefMarkUnreadBtn) {
+        briefMarkUnreadBtn.addEventListener('click', markSelectedLeadAsUnread);
+    }
 
     // Action Buttons
     if (btnAddProduct) btnAddProduct.addEventListener('click', openAddModal);

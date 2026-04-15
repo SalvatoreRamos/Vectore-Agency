@@ -43,10 +43,36 @@ const leadSchema = new mongoose.Schema({
         min: 0,
         max: 100
     },
+    priority: {
+        type: String,
+        enum: ['low', 'medium', 'high'],
+        default: 'medium'
+    },
     status: {
         type: String,
         enum: ['new', 'contacted', 'qualified', 'closed'],
         default: 'new'
+    },
+    internalNotes: {
+        type: String,
+        trim: true,
+        default: ''
+    },
+    readAt: {
+        type: Date,
+        default: null
+    },
+    respondedAt: {
+        type: Date,
+        default: null
+    },
+    closedAt: {
+        type: Date,
+        default: null
+    },
+    lastStatusChangeAt: {
+        type: Date,
+        default: Date.now
     },
     source: {
         type: String,
@@ -96,6 +122,31 @@ leadSchema.pre('save', function (next) {
     score += serviceScores[this.service] || 0;
 
     this.qualificationScore = Math.min(score, 100);
+
+    if (this.isNew && !this.isModified('priority')) {
+        if (this.qualificationScore >= 60) {
+            this.priority = 'high';
+        } else if (this.qualificationScore >= 35) {
+            this.priority = 'medium';
+        } else {
+            this.priority = 'low';
+        }
+    }
+
+    if (this.isModified('status')) {
+        this.lastStatusChangeAt = new Date();
+
+        if (this.status === 'contacted' && !this.respondedAt) {
+            this.respondedAt = new Date();
+        }
+
+        if (this.status === 'closed') {
+            this.closedAt = new Date();
+        } else if (this.closedAt) {
+            this.closedAt = null;
+        }
+    }
+
     next();
 });
 

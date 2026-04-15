@@ -203,6 +203,21 @@ class VectoreAPI {
         });
     }
 
+    // Leads / Brief Inbox
+    async getLeads() {
+        return this.request('/contact/admin/leads', {
+            headers: this.getHeaders()
+        });
+    }
+
+    async updateLead(id, leadData) {
+        return this.request(`/contact/admin/leads/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify(leadData),
+            headers: this.getHeaders()
+        });
+    }
+
     // File Upload
     async uploadImage(file) {
         const formData = new FormData();
