@@ -29,9 +29,11 @@ let deletingType = null; // 'product', 'project', 'testimonial', 'event'
 // Authentication
 const loginScreen = document.getElementById('loginScreen');
 const adminDashboard = document.getElementById('adminDashboard');
+const adminSidebarBackdrop = document.getElementById('adminSidebarBackdrop');
 const loginForm = document.getElementById('loginForm');
 const loginError = document.getElementById('loginError');
 const btnLogout = document.getElementById('btnLogout');
+const mobileMenuToggle = document.getElementById('mobileMenuToggle');
 
 // Sections
 const catalogSection = document.getElementById('catalogSection');
@@ -106,6 +108,7 @@ const productFilterBtns = document.querySelectorAll('[data-filter]');
 const catalogSearchInput = document.getElementById('catalogSearchInput');
 const portfolioSearchInput = document.getElementById('portfolioSearchInput');
 const testimonialSearchInput = document.getElementById('testimonialSearchInput');
+const MOBILE_NAV_BREAKPOINT = 1024;
 
 // Brief Inbox
 const leadSearchInput = document.getElementById('leadSearchInput');
@@ -258,6 +261,7 @@ function getGradient(category, id) {
 // Authentication Logic
 // ===================================
 function showLogin() {
+    closeSidebar();
     if (loginScreen) loginScreen.style.display = 'flex';
     if (adminDashboard) adminDashboard.style.display = 'none';
 }
@@ -265,6 +269,7 @@ function showLogin() {
 async function showDashboard() {
     if (loginScreen) loginScreen.style.display = 'none';
     if (adminDashboard) adminDashboard.style.display = 'flex';
+    closeSidebar();
     await Promise.all([
         fetchAndRenderProducts(),
         fetchAndRenderProjects(),
@@ -294,6 +299,17 @@ function logout() {
     showLogin();
 }
 
+function closeSidebar() {
+    if (adminDashboard) adminDashboard.classList.remove('sidebar-open');
+    document.body.classList.remove('admin-nav-locked');
+}
+
+function toggleSidebar() {
+    if (!adminDashboard) return;
+    const isOpen = adminDashboard.classList.toggle('sidebar-open');
+    document.body.classList.toggle('admin-nav-locked', isOpen);
+}
+
 // ===================================
 // Navigation Logic
 // ===================================
@@ -306,15 +322,15 @@ function switchSection(section) {
     });
 
     // Toggle Visibility
-    if (catalogSection) catalogSection.style.display = section === 'catalog' ? 'block' : 'none';
-    if (portfolioSection) portfolioSection.style.display = section === 'portfolio' ? 'block' : 'none';
-    if (testimonialsSection) testimonialsSection.style.display = section === 'testimonials' ? 'block' : 'none';
-    if (eventsSection) eventsSection.style.display = section === 'events' ? 'block' : 'none';
-    if (flowSection) flowSection.style.display = section === 'flow' ? 'block' : 'none';
-    if (briefsSection) briefsSection.style.display = section === 'briefs' ? 'block' : 'none';
-    if (notificationsSection) notificationsSection.style.display = section === 'notifications' ? 'block' : 'none';
-    if (usersSection) usersSection.style.display = section === 'users' ? 'block' : 'none';
-    if (ordersSection) ordersSection.style.display = section === 'orders' ? 'block' : 'none';
+    if (catalogSection) catalogSection.style.display = section === 'catalog' ? 'grid' : 'none';
+    if (portfolioSection) portfolioSection.style.display = section === 'portfolio' ? 'grid' : 'none';
+    if (testimonialsSection) testimonialsSection.style.display = section === 'testimonials' ? 'grid' : 'none';
+    if (eventsSection) eventsSection.style.display = section === 'events' ? 'grid' : 'none';
+    if (flowSection) flowSection.style.display = section === 'flow' ? 'grid' : 'none';
+    if (briefsSection) briefsSection.style.display = section === 'briefs' ? 'grid' : 'none';
+    if (notificationsSection) notificationsSection.style.display = section === 'notifications' ? 'grid' : 'none';
+    if (usersSection) usersSection.style.display = section === 'users' ? 'grid' : 'none';
+    if (ordersSection) ordersSection.style.display = section === 'orders' ? 'grid' : 'none';
 
     // Load data when switching to specific sections
     if (section === 'briefs') fetchAndRenderLeads();
@@ -760,7 +776,7 @@ function renderProducts() {
         const catLabel = categoryMap[product.category] || product.category;
 
         return `
-        <div class="admin-product-card" data-id="${productId}" data-name="${product.name}">
+        <div class="admin-product-card admin-card--catalog" data-id="${productId}" data-name="${product.name}">
             <div class="admin-product-image" style="background: ${getGradient(product.category, productId)}">
                 ${imageContent}
                 <div class="product-protection-overlay"></div>
@@ -768,9 +784,9 @@ function renderProducts() {
             </div>
             <div class="admin-product-info">
                 <h3>${product.name}</h3>
-                <p style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 5px;">${catLabel} • ${product.subcategory || ''}</p>
-                <p>${product.description}</p>
-                ${product.deliveryTime ? `<p style="font-size: 0.8rem; color: #888; margin-top: 5px;">⏳ ${product.deliveryTime}</p>` : ''}
+                <p class="product-kicker">${catLabel}${product.subcategory ? ` • ${product.subcategory}` : ''}</p>
+                <p class="product-description">${product.description}</p>
+                ${product.deliveryTime ? `<p>⏳ ${product.deliveryTime}</p>` : ''}
                 <div class="admin-product-price">${priceDisplay}</div>
                 <div class="admin-product-actions">
                     <button class="btn-edit">Editar</button>
@@ -830,7 +846,7 @@ function renderProjects() {
         const scopeLabel = project.scope === 'global' ? '🌍 Global' : '🇵🇪 Local';
 
         return `
-        <div class="admin-product-card" data-id="${projectId}" data-name="${project.title}">
+        <div class="admin-product-card admin-card--portfolio" data-id="${projectId}" data-name="${project.title}">
                         <div class="admin-product-image">
                             ${isVideo ?
                             `<video src="${project.thumbnail}" autoplay loop muted playsinline style="width:100%; height:100%; object-fit:cover;"></video>` :
@@ -839,11 +855,12 @@ function renderProjects() {
                             <div class="product-protection-overlay"></div>
                             <span class="category-badge badge-scope">${scopeLabel}</span>
                             <span class="category-badge badge-cat">${project.category}</span>
-                            ${isVideo ? `<span class="video-badge" style="position:absolute; top:10px; left:10px; background:rgba(0,0,0,0.7); color:white; padding:2px 8px; border-radius:4px; font-size:10px;">VIDEO</span>` : ''}
+                            ${isVideo ? `<span class="video-badge">VIDEO</span>` : ''}
                         </div>
             <div class="admin-product-info">
                 <h3>${project.title}</h3>
-                <p><strong>Cliente:</strong> ${project.client}</p>
+                <p class="product-kicker">${project.category || 'Proyecto'}${project.client ? ` • ${project.client}` : ''}</p>
+                <p class="product-description">${project.description || 'Proyecto listo para edición y seguimiento desde el panel.'}</p>
                 <div class="admin-product-actions">
                     <button class="btn-edit">Editar</button>
                     <button class="btn-delete">Eliminar</button>
@@ -888,7 +905,7 @@ function renderTestimonials() {
     adminTestimonialsGrid.innerHTML = '';
     filteredTestimonials.forEach(t => {
         const card = document.createElement('div');
-        card.className = 'admin-product-card';
+        card.className = 'admin-product-card admin-card--testimonial';
         card.dataset.id = t._id;
         card.dataset.name = t.clientName;
         card.innerHTML = `
@@ -900,10 +917,10 @@ function renderTestimonials() {
                 <h3>${t.clientName}</h3>
                 <p class="product-category">${t.businessName}</p>
                 <p class="product-description">"${t.comment.substring(0, 60)}${t.comment.length > 60 ? '...' : ''}"</p>
-            </div>
-            <div class="admin-product-actions">
-                <button class="btn-edit">Editar</button>
-                <button class="btn-delete">Eliminar</button>
+                <div class="admin-product-actions">
+                    <button class="btn-edit">Editar</button>
+                    <button class="btn-delete">Eliminar</button>
+                </div>
             </div>
         `;
         adminTestimonialsGrid.appendChild(card);
@@ -1370,19 +1387,30 @@ function setupEventListeners() {
             e.preventDefault();
             switchSection(item.dataset.section);
             // Hide sidebar on mobile after clicking
-            if (window.innerWidth <= 768) {
-                adminDashboard.classList.remove('sidebar-open');
+            if (window.innerWidth <= MOBILE_NAV_BREAKPOINT) {
+                closeSidebar();
             }
         });
     });
 
     // Mobile Menu Toggle
-    const mobileToggle = document.getElementById('mobileMenuToggle');
-    if (mobileToggle) {
-        mobileToggle.addEventListener('click', () => {
-            adminDashboard.classList.toggle('sidebar-open');
+    if (mobileMenuToggle) {
+        mobileMenuToggle.addEventListener('click', () => {
+            toggleSidebar();
         });
     }
+
+    if (adminSidebarBackdrop) {
+        adminSidebarBackdrop.addEventListener('click', closeSidebar);
+    }
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') closeSidebar();
+    });
+
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > MOBILE_NAV_BREAKPOINT) closeSidebar();
+    });
 
     // Login
     if (loginForm) {
@@ -2180,20 +2208,4 @@ document.addEventListener('change', async function (e) {
         alert('Error de conexión: ' + err.message);
         fetchAndRenderOrders();
     }
-});
-// Mobile admin navigation: ensure the left sidebar toggles on small screens
-document.addEventListener('DOMContentLoaded', () => {
-  const toggles = document.querySelectorAll('.mobile-toggle');
-  const body = document.body;
-  if (toggles.length > 0 && document.querySelector('.admin-sidebar')) {
-    toggles.forEach(toggle => {
-      toggle.addEventListener('click', (e) => {
-        e.preventDefault();
-        body.classList.toggle('sidebar-open');
-      });
-    });
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') body.classList.remove('sidebar-open');
-    });
-  }
 });
