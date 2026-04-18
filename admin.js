@@ -702,7 +702,7 @@ async function markSelectedLeadAsUnread() {
 
 async function fetchAndRenderProducts() {
     try {
-        if (adminProductsGrid) adminProductsGrid.innerHTML = '<div class=\"loader\">Loading...</div>';
+        if (adminProductsGrid) adminProductsGrid.innerHTML = '<div class="loader">Loading...</div>';
         const response = await api.getProducts();
         products = response.data || [];
         renderProducts();
@@ -716,10 +716,24 @@ async function fetchAndRenderProducts() {
 function renderProducts() {
     if (!adminProductsGrid) return;
     const filter = document.querySelector('[data-filter].active')?.dataset.filter || 'all';
+    const query = (productSearchTerm || '').trim().toLowerCase();
 
-    const filteredProducts = filter === 'all'
-        ? products
-        : products.filter(p => p.category === filter);
+    const filteredProducts = products.filter(p => {
+        // Category filter
+        if (filter !== 'all' && p.category !== filter) return false;
+        
+        // Search filter
+        if (!query) return true;
+        const haystack = [
+            p.name,
+            p.category,
+            p.subcategory,
+            p.description,
+            p.material
+        ].join(' ').toLowerCase();
+        
+        return haystack.includes(query);
+    });
 
     if (filteredProducts.length === 0) {
         adminProductsGrid.innerHTML = '<div class="no-products">No se encontraron productos</div>';
@@ -766,7 +780,6 @@ function renderProducts() {
         </div>`;
     }).join('');
 }
-
 async function fetchAndRenderProjects() {
     try {
         if (adminProjectsGrid) adminProjectsGrid.innerHTML = '<div class=\"loader\">Loading...</div>';
@@ -786,12 +799,25 @@ function renderProjects() {
     // Add global project filter variable if not defined
     if (typeof window.projectFilter === 'undefined') window.projectFilter = 'all';
     
-    const filteredProjects = window.projectFilter === 'all' 
-        ? projects 
-        : projects.filter(p => p.scope === window.projectFilter);
+    const query = (projectSearchTerm || '').trim().toLowerCase();
+    const filteredProjects = projects.filter(p => {
+        // Scope filter
+        if (window.projectFilter !== 'all' && p.scope !== window.projectFilter) return false;
+        
+        // Search filter
+        if (!query) return true;
+        const haystack = [
+            p.title,
+            p.client,
+            p.category,
+            p.description
+        ].join(' ').toLowerCase();
+        
+        return haystack.includes(query);
+    });
 
     if (filteredProjects.length === 0) {
-        adminProjectsGrid.innerHTML = '<div class=\"no-products\">No hay proyectos en el portafolio para este filtro</div>';
+        adminProjectsGrid.innerHTML = '<div class="no-products">No hay proyectos en el portafolio para este filtro</div>';
         return;
     }
 
@@ -829,7 +855,7 @@ function renderProjects() {
 
 async function fetchAndRenderTestimonials() {
     try {
-        if (adminTestimonialsGrid) adminTestimonialsGrid.innerHTML = '<div class=\"loader\">Loading...</div>';
+        if (adminTestimonialsGrid) adminTestimonialsGrid.innerHTML = '<div class="loader">Loading...</div>';
         const response = await api.getAllTestimonials();
         testimonials = response.data || [];
         renderTestimonials();
@@ -842,14 +868,25 @@ async function fetchAndRenderTestimonials() {
 
 function renderTestimonials() {
     if (!adminTestimonialsGrid) return;
-    adminTestimonialsGrid.innerHTML = '';
 
-    if (testimonials.length === 0) {
-        adminTestimonialsGrid.innerHTML = '<p style=\"color: var(--text-muted); padding: 2rem;\">No hay clientes destacados aún.</p>';
+    const query = (testimonialSearchTerm || '').trim().toLowerCase();
+    const filteredTestimonials = testimonials.filter(t => {
+        if (!query) return true;
+        const haystack = [
+            t.clientName,
+            t.businessName,
+            t.comment
+        ].join(' ').toLowerCase();
+        return haystack.includes(query);
+    });
+
+    if (filteredTestimonials.length === 0) {
+        adminTestimonialsGrid.innerHTML = '<p style="color: var(--text-muted); padding: 2rem;">No se encontraron clientes destacados.</p>';
         return;
     }
 
-    testimonials.forEach(t => {
+    adminTestimonialsGrid.innerHTML = '';
+    filteredTestimonials.forEach(t => {
         const card = document.createElement('div');
         card.className = 'admin-product-card';
         card.dataset.id = t._id;
@@ -859,14 +896,14 @@ function renderTestimonials() {
                 <img src="${t.photo}" alt="${t.clientName}" onerror="this.src='https://via.placeholder.com/300x200?text=Sin+Foto'">
                 <div class="product-protection-overlay"></div>
             </div>
-            <div class=\"admin-product-info\">
+            <div class="admin-product-info">
                 <h3>${t.clientName}</h3>
-                <p class=\"product-category\">${t.businessName}</p>
-                <p class=\"product-description\">\"${t.comment.substring(0, 60)}${t.comment.length > 60 ? '...' : ''}\"</p>
+                <p class="product-category">${t.businessName}</p>
+                <p class="product-description">"${t.comment.substring(0, 60)}${t.comment.length > 60 ? '...' : ''}"</p>
             </div>
-            <div class=\"admin-product-actions\">
-                <button class=\"btn-edit\">Editar</button>
-                <button class=\"btn-delete\">Eliminar</button>
+            <div class="admin-product-actions">
+                <button class="btn-edit">Editar</button>
+                <button class="btn-delete">Eliminar</button>
             </div>
         `;
         adminTestimonialsGrid.appendChild(card);
@@ -971,7 +1008,7 @@ function renderFlowAssets() {
                 <h3 style="margin-bottom: 5px;">${asset.title}</h3>
                 <p style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 10px;">${asset.section}</p>
                 <div class="admin-product-actions">
-                     <button class="btn-edit" onclick="navigator.clipboard.writeText('${imgUrl}').then(() => alert('URL copiada'))">Copiar URL</button>
+                     <button class="btn-copy-flow-url" data-url="${imgUrl}">Copiar URL</button>
                     <button class="btn-delete">Eliminar</button>
                 </div>
             </div>
@@ -1406,6 +1443,36 @@ function setupEventListeners() {
         briefMarkUnreadBtn.addEventListener('click', markSelectedLeadAsUnread);
     }
 
+    if (briefCopyEmailBtn) {
+        briefCopyEmailBtn.addEventListener('click', () => {
+            const email = briefDetailEmail.textContent;
+            if (email && email !== '-') {
+                copyTextToClipboard(email, briefCopyEmailBtn);
+            }
+        });
+    }
+
+    if (catalogSearchInput) {
+        catalogSearchInput.addEventListener('input', (e) => {
+            productSearchTerm = e.target.value || '';
+            renderProducts();
+        });
+    }
+
+    if (portfolioSearchInput) {
+        portfolioSearchInput.addEventListener('input', (e) => {
+            projectSearchTerm = e.target.value || '';
+            renderProjects();
+        });
+    }
+
+    if (testimonialSearchInput) {
+        testimonialSearchInput.addEventListener('input', (e) => {
+            testimonialSearchTerm = e.target.value || '';
+            renderTestimonials();
+        });
+    }
+
     // Action Buttons
     if (btnAddProduct) btnAddProduct.addEventListener('click', openAddModal);
     if (btnAddProject) btnAddProject.addEventListener('click', openAddProjectModal);
@@ -1532,6 +1599,11 @@ function setupEventListeners() {
     });
     if (adminFlowGrid) adminFlowGrid.addEventListener('click', (e) => {
         const del = getTargetData(e, '.btn-delete'); if (del) openDeleteModal(del.id, 'flow', del.name);
+        const copyBtn = e.target.closest('.btn-copy-flow-url');
+        if (copyBtn) {
+            const url = copyBtn.dataset.url;
+            copyTextToClipboard(url, copyBtn, 'Copiado');
+        }
     });
 
     // File Uploads
