@@ -603,6 +603,10 @@
 }
 
 @media (max-width: 768px) {
+  body.admin-body .btn--primary {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
     .lead-toolbar__controls {
         flex-direction: column;
         align-items: stretch;
@@ -1695,4 +1699,47 @@
     .admin-toolbar-search {
         max-width: none;
     }
+}
+
+/* Mobile enhancements for admin: show sidebar toggle, and compact portfolio overlays */
+@media (max-width: 768px) {
+  .admin-sidebar {
+    position: fixed;
+    left: -320px;
+    top: 0;
+    bottom: 0;
+    width: 320px;
+    background: #141a35;
+    transition: transform 0.3s ease;
+    transform: translateX(-100%);
+    z-index: 1000;
+  }
+  .sidebar-open .admin-sidebar {
+    transform: translateX(0);
+    left: 0;
+  }
+  .admin-main {
+    margin-left: 0;
+  }
+  .mobile-toggle {
+    display: flex !important;
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 1200;
+  }
+  .portfolio-scroll__overlay {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+  /* Shorten portfolio card visuals on mobile */
+  .portfolio-scroll__item {
+    width: 100%;
+  }
+  .portfolio-scroll__image {
+    height: 180px;
+  }
+  .portfolio-scroll__overlay {
+    padding: 8px 12px;
+  }
 }

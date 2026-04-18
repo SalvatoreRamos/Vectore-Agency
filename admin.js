@@ -2181,3 +2181,16 @@ document.addEventListener('change', async function (e) {
         fetchAndRenderOrders();
     }
 });
+// Mobile admin navigation: ensure the left sidebar toggles on small screens
+document.addEventListener('DOMContentLoaded', () => {
+  const toggle = document.querySelector('.mobile-toggle');
+  const body = document.body;
+  if (toggle && document.querySelector('.admin-sidebar')) {
+    toggle.addEventListener('click', () => {
+      body.classList.toggle('sidebar-open');
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') body.classList.remove('sidebar-open');
+    });
+  }
+});
