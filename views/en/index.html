@@ -162,6 +162,17 @@
             <hana-viewer id="splineLight" class="spline-frame spline-frame--light" url="https://prod.spline.design/v56A8ziXxfRqa3zo-rG6/scene.hanacode" style="width: 100%; height: 100%; position: absolute; inset: 0; transition: opacity 0.8s ease; opacity: 0; pointer-events: none;" loading="lazy"></hana-viewer>
         </div>
         
+        <!-- Mobile Lite Hero (mobile optimization) -->
+        <div id="heroLite" class="hero-lite" style="display:none; text-align:center; padding: 40px 16px;">
+            <div class="badge" style="display:inline-block; background: rgba(134,85,255,.22); color:white; padding:6px 12px; border-radius:999px; margin-bottom:12px; font-weight:700; text-transform:uppercase; font-size:12px;">AI-Driven Creative Studio</div>
+            <h1 class="hero-lite__title" style="font-size: 2.6rem; line-height: 1.1; color:white; font-weight:900; margin:8px 0 12px;">We create digital experiences that scale.</h1>
+            <p class="hero-lite__subtitle" style="color:#e5e7eb; max-width:720px; margin:0 auto 20px;">Lightweight hero optimized for mobile: fast, readable, and accessible.</p>
+            <div class="hero__actions" style="display:flex; justify-content:center; gap:12px;">
+                <a href="#contact" class="btn btn--primary btn--lg" style="padding:14px 20px;">Start a Project</a>
+                <a href="#work" class="btn btn--ghost btn--lg" style="padding:14px 20px;">See Our Work</a>
+            </div>
+        </div>
+
         <!-- Script to aggressively remove the Spline/Hana watermark inside Shadow DOM -->
         <script>
             document.addEventListener("DOMContentLoaded", () => {
@@ -177,6 +188,27 @@
                 const interval = setInterval(removeLogo, 500);
                 setTimeout(() => clearInterval(interval), 5000);
             });
+        </script>
+        <!-- Mobile hero lite loader for mobile responsiveness -->
+        <script>
+          function updateHeroLite() {
+            const mq = window.matchMedia('(max-width: 768px)');
+            const heroLite = document.getElementById('heroLite');
+            const dark = document.getElementById('splineDark');
+            const light = document.getElementById('splineLight');
+            if (!heroLite) return;
+            if (mq.matches) {
+              heroLite.style.display = 'block';
+              if (dark) dark.style.display = 'none';
+              if (light) light.style.display = 'none';
+            } else {
+              heroLite.style.display = 'none';
+              if (dark) dark.style.display = 'block';
+              if (light) light.style.display = 'block';
+            }
+          }
+          window.addEventListener('load', updateHeroLite);
+          window.addEventListener('resize', updateHeroLite);
         </script>
 
         <div class="hero__ambient">
@@ -755,6 +787,33 @@
         });
     </script>
 
+    <!-- Mobile navigation accessibility enhancements -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const toggle = document.getElementById('navToggle');
+        const menu = document.getElementById('navMenu');
+        const overlay = document.getElementById('navOverlay');
+        if (!toggle || !menu) return;
+        function openMenu() {
+          menu.style.display = 'flex';
+          toggle.setAttribute('aria-expanded', 'true');
+          if (overlay) overlay.style.display = 'block';
+        }
+        function closeMenu() {
+          menu.style.display = 'none';
+          toggle.setAttribute('aria-expanded', 'false');
+          if (overlay) overlay.style.display = 'none';
+        }
+        toggle.addEventListener('click', () => {
+          const expanded = toggle.getAttribute('aria-expanded') === 'true';
+          expanded ? closeMenu() : openMenu();
+        });
+        if (overlay) overlay.addEventListener('click', closeMenu);
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') closeMenu();
+        });
+      });
+    </script>
     <!-- GTM noscript -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W8RCKKSV" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </body>

@@ -467,3 +467,13 @@ a[href*="spline.design"] {
     white-space: nowrap;
     border-width: 0;
 }
+/* Mobile lite hero handling for English view */
+@media (max-width: 768px) {
+  #splineDark, #splineLight { display: none !important; }
+  #heroLite { display: block !important; }
+  .hero__subtitle { display: none; }
+  .hero__title { font-size: 2.6rem; }
+}
+
+/* Default: hide mobile lite hero on desktop */
+#heroLite { display: none; }

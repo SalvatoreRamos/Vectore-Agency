@@ -1129,10 +1129,6 @@
     }
 }
 
-.mobile-toggle {
-    display: none;
-}
-
 .mobile-toggle svg {
     width: 24px;
     height: 24px;
@@ -1696,4 +1692,3 @@
         max-width: none;
     }
 }
-
