@@ -769,11 +769,15 @@
     top: 6px;
     right: 6px;
     padding: 3px 8px;
-    font-size: 0.65rem;
+    font-size: 0.6rem; /* smaller to avoid overflow on long labels */
     font-weight: 600;
     border-radius: 999px;
     color: var(--white);
     z-index: 6;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 110px;
 }
 
 .product-protection-overlay {
