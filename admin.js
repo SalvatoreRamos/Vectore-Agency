@@ -831,16 +831,16 @@ function renderProjects() {
 
         return `
         <div class="admin-product-card" data-id="${projectId}" data-name="${project.title}">
-            <div class="admin-product-image">
-                ${isVideo ?
-                `<video src="${project.thumbnail}" autoplay loop muted playsinline style="width:100%; height:100%; object-fit:cover;"></video>` :
-                `<img src="${project.thumbnail}" alt="${project.title}" onerror="this.src='https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg'">`
-            }
-                <div class="product-protection-overlay"></div>
-                <span class="category-badge digital" style="top: 10px; right: 10px;">${scopeLabel}</span>
-                <span class="category-badge digital" style="bottom: 10px; right: 10px;">${project.category}</span>
-                ${isVideo ? `<span class="video-badge" style="position:absolute; top:10px; left:10px; background:rgba(0,0,0,0.7); color:white; padding:2px 8px; border-radius:4px; font-size:10px;">VIDEO</span>` : ''}
-            </div>
+                        <div class="admin-product-image">
+                            ${isVideo ?
+                            `<video src="${project.thumbnail}" autoplay loop muted playsinline style="width:100%; height:100%; object-fit:cover;"></video>` :
+                            `<img src="${project.thumbnail}" alt="${project.title}" onerror="this.src='https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg'">`
+                        }
+                            <div class="product-protection-overlay"></div>
+                            <span class="category-badge badge-scope">${scopeLabel}</span>
+                            <span class="category-badge badge-cat">${project.category}</span>
+                            ${isVideo ? `<span class="video-badge" style="position:absolute; top:10px; left:10px; background:rgba(0,0,0,0.7); color:white; padding:2px 8px; border-radius:4px; font-size:10px;">VIDEO</span>` : ''}
+                        </div>
             <div class="admin-product-info">
                 <h3>${project.title}</h3>
                 <p><strong>Cliente:</strong> ${project.client}</p>
@@ -2183,11 +2183,14 @@ document.addEventListener('change', async function (e) {
 });
 // Mobile admin navigation: ensure the left sidebar toggles on small screens
 document.addEventListener('DOMContentLoaded', () => {
-  const toggle = document.querySelector('.mobile-toggle');
+  const toggles = document.querySelectorAll('.mobile-toggle');
   const body = document.body;
-  if (toggle && document.querySelector('.admin-sidebar')) {
-    toggle.addEventListener('click', () => {
-      body.classList.toggle('sidebar-open');
+  if (toggles.length > 0 && document.querySelector('.admin-sidebar')) {
+    toggles.forEach(toggle => {
+      toggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        body.classList.toggle('sidebar-open');
+      });
     });
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') body.classList.remove('sidebar-open');

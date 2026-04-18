@@ -770,18 +770,28 @@
 
 .admin-product-image .category-badge {
     position: absolute;
-    top: 6px;
-    right: 6px;
-    padding: 3px 8px;
-    font-size: 0.6rem; /* smaller to avoid overflow on long labels */
+    padding: 4px 10px;
+    font-size: 10px;
     font-weight: 600;
     border-radius: 999px;
     color: var(--white);
-    z-index: 6;
+    z-index: 10;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 110px;
+    max-width: 100px;
+    background: var(--primary);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.badge-scope {
+    top: 8px;
+    right: 8px;
+}
+
+.badge-cat {
+    bottom: 8px;
+    right: 8px;
 }
 
 .product-protection-overlay {
@@ -1074,16 +1084,74 @@
 @media (max-width: 768px) {
     .admin-sidebar {
         position: fixed;
-        left: -100%;
+        left: -260px;
         top: 0;
         bottom: 0;
+        width: 260px;
         z-index: 3000;
-        transition: var(--transition);
-        box-shadow: var(--shadow-lg);
+        transition: transform 0.3s ease, left 0.3s ease;
+        transform: translateX(0);
     }
 
     .sidebar-open .admin-sidebar {
         left: 0;
+        transform: translateX(0);
+    }
+
+    .admin-main {
+        margin-left: 0;
+        padding: 16px;
+        padding-top: 70px;
+    }
+
+    .mobile-toggle {
+        display: flex !important;
+        position: fixed;
+        top: 15px;
+        right: 15px;
+        z-index: 4000;
+        background: var(--primary);
+        border: none;
+        width: 44px;
+        height: 44px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        box-shadow: 0 4px 12px rgba(134, 85, 255, 0.3);
+        cursor: pointer;
+        color: white;
+    }
+
+    .admin-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+
+    .admin-header .btn {
+        width: 100%;
+        max-width: none;
+        padding: 12px;
+        font-size: 1rem;
+        justify-content: center;
+        height: auto;
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+    }
+
+    .products-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+    .sidebar-open .admin-sidebar {
+        left: 0;
+        transform: translateX(0);
     }
 
     .admin-main {
@@ -1093,22 +1161,18 @@
     }
 
     .mobile-toggle {
-        display: flex;
+        display: flex !important;
         position: fixed;
         top: 20px;
         right: 20px;
-        /* Changed to right to avoid overlap with sidebar if it opens */
         z-index: 4000;
-        /* Higher than sidebar (3000) */
         background: var(--primary);
-        /* Use primary color to be more visible */
         border: none;
         width: 50px;
         height: 50px;
         align-items: center;
         justify-content: center;
         border-radius: 50%;
-        /* Circular for better look */
         box-shadow: 0 4px 12px rgba(134, 85, 255, 0.3);
         cursor: pointer;
         transition: var(--transition);
@@ -1118,14 +1182,22 @@
         color: var(--white);
     }
 
-    .mobile-toggle:active {
-        transform: scale(0.9);
-    }
-
     .admin-header {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
         gap: 16px;
+    }
+
+    .admin-header .btn {
+        width: 100%;
+        justify-content: center;
+        padding: 12px;
+        font-size: 1rem;
+    }
+
+    .admin-header .btn svg {
+        width: 20px;
+        height: 20px;
     }
 
     .products-grid {
