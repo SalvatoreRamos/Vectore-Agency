@@ -1345,8 +1345,13 @@
     }
 
     .admin-sidebar {
-        width: min(88vw, 320px);
-        left: min(-88vw, -320px);
+        width: 100vw;
+        left: -100vw;
+        max-width: none;
+        border-right: none;
+        padding-left: max(22px, env(safe-area-inset-left));
+        padding-right: max(22px, env(safe-area-inset-right));
+        padding-bottom: max(22px, env(safe-area-inset-bottom));
     }
 }
 

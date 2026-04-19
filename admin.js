@@ -109,6 +109,7 @@ const catalogSearchInput = document.getElementById('catalogSearchInput');
 const portfolioSearchInput = document.getElementById('portfolioSearchInput');
 const testimonialSearchInput = document.getElementById('testimonialSearchInput');
 const MOBILE_NAV_BREAKPOINT = 1024;
+let sidebarHistoryPushed = false;
 
 // Brief Inbox
 const leadSearchInput = document.getElementById('leadSearchInput');
@@ -299,15 +300,60 @@ function logout() {
     showLogin();
 }
 
-function closeSidebar() {
-    if (adminDashboard) adminDashboard.classList.remove('sidebar-open');
-    document.body.classList.remove('admin-nav-locked');
+function isMobileSidebarViewport() {
+    return window.innerWidth <= MOBILE_NAV_BREAKPOINT;
+}
+
+function syncSidebarLock(isOpen) {
+    if (adminDashboard) adminDashboard.classList.toggle('sidebar-open', isOpen);
+    document.body.classList.toggle('admin-nav-locked', isOpen);
+}
+
+function openSidebar() {
+    if (!adminDashboard || !isMobileSidebarViewport()) return;
+    syncSidebarLock(true);
+
+    if (!sidebarHistoryPushed) {
+        history.pushState({ ...(history.state || {}), adminSidebar: true }, '', window.location.href);
+        sidebarHistoryPushed = true;
+    }
+}
+
+function closeSidebar(fromHistory = false) {
+    syncSidebarLock(false);
+
+    if (fromHistory) {
+        sidebarHistoryPushed = false;
+        return;
+    }
+
+    if (sidebarHistoryPushed) {
+        sidebarHistoryPushed = false;
+        history.back();
+    }
 }
 
 function toggleSidebar() {
-    if (!adminDashboard) return;
-    const isOpen = adminDashboard.classList.toggle('sidebar-open');
-    document.body.classList.toggle('admin-nav-locked', isOpen);
+    if (!adminDashboard || !isMobileSidebarViewport()) return;
+    if (adminDashboard.classList.contains('sidebar-open')) {
+        closeSidebar();
+        return;
+    }
+    openSidebar();
+}
+
+function handleSidebarPopState(event) {
+    if (event.state?.adminSidebar) {
+        if (isMobileSidebarViewport()) {
+            syncSidebarLock(true);
+            sidebarHistoryPushed = true;
+        }
+        return;
+    }
+
+    if (adminDashboard?.classList.contains('sidebar-open') || sidebarHistoryPushed) {
+        closeSidebar(true);
+    }
 }
 
 // ===================================
@@ -1407,6 +1453,8 @@ function setupEventListeners() {
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') closeSidebar();
     });
+
+    window.addEventListener('popstate', handleSidebarPopState);
 
     window.addEventListener('resize', () => {
         if (window.innerWidth > MOBILE_NAV_BREAKPOINT) closeSidebar();
