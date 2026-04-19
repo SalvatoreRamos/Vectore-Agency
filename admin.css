@@ -29,11 +29,6 @@
     overflow: hidden;
 }
 
-.admin-body .custom-cursor,
-.admin-body .custom-cursor-dot {
-    display: none !important;
-}
-
 /* ===================================
    Login Screen
    =================================== */
