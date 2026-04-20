@@ -34,6 +34,11 @@ const __dirname = path.dirname(__filename);
 const app = express();
 app.set('trust proxy', 1); // Trust first proxy (Render)
 const PORT = process.env.PORT || 3000;
+const PRIMARY_GLOBAL_HOST = process.env.PRIMARY_GLOBAL_HOST || 'www.agenciavectore.com';
+const LEGACY_GLOBAL_HOSTS = (process.env.LEGACY_GLOBAL_HOSTS || 'agenciavectore.com')
+  .split(',')
+  .map((host) => host.trim().toLowerCase())
+  .filter(Boolean);
 
 // Security middleware
 app.use(helmet({
@@ -118,6 +123,19 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Consolidate the international site on the canonical www host.
+app.use((req, res, next) => {
+  const hostname = (req.hostname || '').toLowerCase();
+  const isLegacyGlobalHost = LEGACY_GLOBAL_HOSTS.includes(hostname);
+  const isApiRequest = req.path === '/api' || req.path.startsWith('/api/');
+
+  if (isLegacyGlobalHost && !isApiRequest) {
+    return res.redirect(301, `https://${PRIMARY_GLOBAL_HOST}${req.originalUrl}`);
+  }
+
+  next();
+});
+
 // ===================================
 // Static Files
 // ===================================
@@ -193,19 +211,31 @@ app.get('/software', (req, res) => {
 
 // Checkout (Peru only)
 app.get('/checkout', (req, res) => {
+  if (req.site !== 'pe') {
+    return res.redirect(301, 'https://pe.agenciavectore.com/checkout');
+  }
   res.sendFile(path.join(__dirname, 'checkout.html'));
 });
 
 // Legal Pages (Peru)
 app.get('/terminos', (req, res) => {
+  if (req.site !== 'pe') {
+    return res.redirect(301, 'https://pe.agenciavectore.com/terminos');
+  }
   res.sendFile(path.join(__dirname, 'terminos.html'));
 });
 
 app.get('/politica-devoluciones', (req, res) => {
+  if (req.site !== 'pe') {
+    return res.redirect(301, 'https://pe.agenciavectore.com/politica-devoluciones');
+  }
   res.sendFile(path.join(__dirname, 'politica-devoluciones.html'));
 });
 
 app.get('/libro-reclamaciones', (req, res) => {
+  if (req.site !== 'pe') {
+    return res.redirect(301, 'https://pe.agenciavectore.com/libro-reclamaciones');
+  }
   res.sendFile(path.join(__dirname, 'libro-reclamaciones.html'));
 });
 

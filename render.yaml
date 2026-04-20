@@ -8,6 +8,7 @@ services:
     startCommand: npm start
     # Custom Domains — both point to this same service
     customDomains:
+      - name: www.agenciavectore.com
       - name: agenciavectore.com
       - name: pe.agenciavectore.com
     envVars:

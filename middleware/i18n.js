@@ -38,15 +38,20 @@ export function subdomainMiddleware(req, res, next) {
         res.set('X-Suggest-Locale', 'pe');
     }
 
-    // Set hreflang headers for SEO
-    const globalUrl = process.env.SITE_URL || 'https://agenciavectore.com';
+    // Only emit alternate headers for routes that truly have equivalents on both sites.
+    const globalUrl = process.env.SITE_URL || 'https://www.agenciavectore.com';
     const peruUrl = process.env.PERU_SITE_URL || 'https://pe.agenciavectore.com';
+    const normalizedPath = req.path || '/';
+    const hasReciprocalAlternate = normalizedPath === '/';
 
-    res.set('Link', [
-        `<${globalUrl}/>; rel="alternate"; hreflang="en"`,
-        `<${peruUrl}/>; rel="alternate"; hreflang="es-PE"`,
-        `<${globalUrl}/>; rel="alternate"; hreflang="x-default"`
-    ].join(', '));
+    if (hasReciprocalAlternate) {
+        res.set('Link', [
+            `<${globalUrl}/>; rel="alternate"; hreflang="en"`,
+            `<${peruUrl}/>; rel="alternate"; hreflang="es-PE"`,
+            `<${globalUrl}/>; rel="alternate"; hreflang="x-default"`
+        ].join(', '));
+        res.vary('Host');
+    }
 
     next();
 }

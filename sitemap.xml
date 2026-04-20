@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
     <!--
         Sitemap strategy based on the current codebase:
-        - agenciavectore.com = international lead-generation landing (EN, brief-first)
+        - www.agenciavectore.com = international lead-generation landing (EN, brief-first)
         - pe.agenciavectore.com = Peru local/commercial site (catalog, WhatsApp, payments, legal)
-
-        We do not mark both sites as hreflang alternates here because they do not
-        represent the same page intent anymore.
     -->
 
     <!-- International site: studio positioning + project intake -->
     <url>
-        <loc>https://agenciavectore.com/</loc>
+        <loc>https://www.agenciavectore.com/</loc>
         <lastmod>2026-04-18</lastmod>
+        <xhtml:link rel="alternate" hreflang="en" href="https://www.agenciavectore.com/" />
+        <xhtml:link rel="alternate" hreflang="es-PE" href="https://pe.agenciavectore.com/" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://www.agenciavectore.com/" />
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
     </url>
@@ -20,7 +21,10 @@
     <!-- Peru site: local services, catalog and conversion -->
     <url>
         <loc>https://pe.agenciavectore.com/</loc>
-        <lastmod>2026-03-25</lastmod>
+        <lastmod>2026-04-20</lastmod>
+        <xhtml:link rel="alternate" hreflang="en" href="https://www.agenciavectore.com/" />
+        <xhtml:link rel="alternate" hreflang="es-PE" href="https://pe.agenciavectore.com/" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://www.agenciavectore.com/" />
         <changefreq>weekly</changefreq>
         <priority>0.95</priority>
     </url>
