@@ -1,0 +1,437 @@
+/* ============================================
+   VECTORE ROOMS — SPA Container System
+   Room visibility, transitions, back button,
+   and content layouts for 4 themed rooms
+   ============================================ */
+
+/* ===== Room Visibility System ===== */
+.room {
+    display: none;
+    min-height: 100vh;
+    opacity: 0;
+    transition: opacity 0.5s var(--ease-out-quint);
+}
+
+.room.active {
+    display: block;
+    opacity: 1;
+}
+
+/* Lobby is flex for centering */
+.room--lobby {
+    position: relative;
+}
+
+.room--lobby.active {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Room accent color — overridden dynamically by JS */
+.room--studio  { --accent-room: #8655FF; }
+.room--wraps   { --accent-room: #FF6B2D; }
+.room--software { --accent-room: #2D7AFF; }
+.room--visuals { --accent-room: #00C896; }
+
+/* ===== Room Header ===== */
+.room__header {
+    padding: calc(80px + var(--space-10)) var(--space-5) var(--space-8);
+    text-align: center;
+    position: relative;
+}
+
+.room__header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: var(--accent-room, var(--accent-primary));
+    border-radius: var(--radius-full);
+}
+
+.room__title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    color: var(--accent-room, var(--accent-primary));
+    letter-spacing: var(--tracking-tight);
+    margin-bottom: var(--space-2);
+}
+
+.room__subtitle {
+    font-size: var(--text-lg);
+    color: var(--text-secondary);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* ===== Room Content Container ===== */
+.room__content {
+    padding: var(--space-10) var(--space-5);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ===== Back to Lobby Button ===== */
+#backToLobby {
+    display: none;
+    position: fixed;
+    top: var(--space-5);
+    left: var(--space-5);
+    z-index: var(--z-sticky);
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-radius: var(--radius-full);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        transform var(--duration-200) var(--ease-out-expo),
+        background var(--duration-200) ease,
+        box-shadow var(--duration-200) ease;
+}
+
+#backToLobby:hover {
+    transform: translateX(-4px);
+    background: var(--bg-elevated);
+    box-shadow: var(--shadow-md);
+}
+
+#backToLobby svg {
+    width: 16px;
+    height: 16px;
+    transition: transform var(--duration-200) var(--ease-out-expo);
+}
+
+#backToLobby:hover svg {
+    transform: translateX(-3px);
+}
+
+/* ===== Room 1: Studio — Product Catalog ===== */
+.catalog-filters {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: var(--space-8);
+}
+
+.catalog-filter-btn {
+    padding: var(--space-2) var(--space-4);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(12px);
+    border-radius: var(--radius-full);
+    color: var(--text-secondary);
+    font-family: inherit;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--duration-200) ease;
+}
+
+.catalog-filter-btn:hover,
+.catalog-filter-btn.active {
+    background: var(--accent-room, var(--accent-primary));
+    color: white;
+    border-color: transparent;
+}
+
+.catalog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-5);
+}
+
+/* Product Card */
+.product-card {
+    background: var(--bg-card, var(--bg-elevated));
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition:
+        transform var(--duration-300) var(--ease-out-expo),
+        box-shadow var(--duration-300) ease;
+}
+
+.product-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lg);
+}
+
+.product-card__image {
+    width: 100%;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+    display: block;
+}
+
+.product-card__body {
+    padding: var(--space-4);
+}
+
+.product-card__category {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-widest);
+    color: var(--accent-room, var(--accent-primary));
+    margin-bottom: var(--space-1);
+}
+
+.product-card__name {
+    font-size: var(--text-base);
+    font-weight: 700;
+    margin-bottom: var(--space-1);
+    color: var(--text-primary);
+}
+
+.product-card__price {
+    font-size: var(--text-lg);
+    font-weight: 800;
+    color: var(--accent-room, var(--accent-primary));
+    margin-bottom: var(--space-3);
+}
+
+.product-card__actions {
+    display: flex;
+    gap: var(--space-2);
+}
+
+/* ===== Room 2: Wraps — Gallery ===== */
+.wraps-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: var(--space-5);
+}
+
+.wraps-card {
+    background: var(--bg-card, var(--bg-elevated));
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    transition: transform var(--duration-300) var(--ease-out-expo);
+}
+
+.wraps-card:hover {
+    transform: scale(1.02);
+}
+
+.wraps-card__image {
+    width: 100%;
+    aspect-ratio: 16/10;
+    object-fit: cover;
+    display: block;
+}
+
+.wraps-card__overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: var(--space-5);
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+    color: white;
+}
+
+.wraps-card__title {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    margin-bottom: var(--space-1);
+}
+
+.wraps-card__client {
+    font-size: var(--text-sm);
+    opacity: 0.7;
+}
+
+/* ===== Room 3: Software — Showcase ===== */
+.software-showcase {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--space-5);
+    margin-bottom: var(--space-12);
+}
+
+.software-feature-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(var(--glass-blur));
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    transition: transform var(--duration-300) var(--ease-out-expo);
+}
+
+.software-feature-card:hover {
+    transform: translateY(-4px);
+}
+
+.software-feature-card__icon {
+    font-size: 2rem;
+    margin-bottom: var(--space-3);
+}
+
+.software-feature-card h3 {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    margin-bottom: var(--space-2);
+    color: var(--accent-room, var(--accent-primary));
+}
+
+.software-feature-card p {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: var(--leading-relaxed);
+}
+
+/* Software form wrapper */
+.software-form-section {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.software-form-section .section-header {
+    text-align: center;
+    margin-bottom: var(--space-8);
+}
+
+/* ===== Room 4: Visuals — Gallery + Disclaimer ===== */
+.visuals-sections {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+}
+
+.visuals-section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-full);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--accent-room, var(--accent-primary));
+    margin-bottom: var(--space-4);
+}
+
+.visuals-disclaimer {
+    margin-top: var(--space-8);
+    text-align: center;
+}
+
+.visuals-disclaimer .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-5);
+    background: rgba(255, 152, 0, 0.1);
+    border: 1px solid rgba(255, 152, 0, 0.3);
+    color: #FFB74D;
+    border-radius: var(--radius-lg);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: var(--leading-relaxed);
+}
+
+/* ===== Room Transition Animations ===== */
+@keyframes roomFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.room.active .room__header,
+.room.active .room__content {
+    animation: roomFadeIn 0.6s var(--ease-out-expo) both;
+}
+
+.room.active .room__content {
+    animation-delay: 0.15s;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .room__header {
+        padding: calc(70px + var(--space-6)) var(--space-4) var(--space-6);
+    }
+    .room__content {
+        padding: var(--space-6) var(--space-3);
+    }
+    .catalog-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: var(--space-3);
+    }
+    .wraps-gallery {
+        grid-template-columns: 1fr;
+    }
+    .software-showcase {
+        grid-template-columns: 1fr;
+    }
+    #backToLobby {
+        top: var(--space-3);
+        left: var(--space-3);
+        padding: var(--space-2) var(--space-3);
+        font-size: var(--text-xs);
+    }
+}
+
+/* ===== LIGHT MODE ===== */
+[data-theme="light"] .room__header::after {
+    opacity: 0.7;
+}
+
+[data-theme="light"] .product-card {
+    background: white;
+    border-color: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .product-card:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .wraps-card {
+    border-color: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .software-feature-card {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] #backToLobby {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(0, 0, 0, 0.08);
+    color: var(--text-primary);
+}
+
+[data-theme="light"] .catalog-filter-btn {
+    background: rgba(255, 255, 255, 0.7);
+    border-color: rgba(0, 0, 0, 0.08);
+    color: var(--text-secondary);
+}
+
+[data-theme="light"] .visuals-disclaimer .badge {
+    background: rgba(255, 152, 0, 0.08);
+    color: #E65100;
+    border-color: rgba(255, 152, 0, 0.2);
+}

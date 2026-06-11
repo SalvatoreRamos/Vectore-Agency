@@ -22,8 +22,7 @@ import paymentRoutes from './routes/payments.js';
 import internalEmailRoutes from './routes/internal-email.js';
 import contactFormRoutes from './routes/contact-form.js';
 
-// Import subdomain middleware
-import { subdomainMiddleware } from './middleware/i18n.js';
+// Subdomain middleware removed — unified SPA architecture
 
 // Load environment variables
 dotenv.config();
@@ -123,13 +122,16 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Consolidate the international site on the canonical www host.
+// Canonical host redirect: bare domain & pe.* subdomain → www
+// In development (localhost), skip this redirect
 app.use((req, res, next) => {
   const hostname = (req.hostname || '').toLowerCase();
-  const isLegacyGlobalHost = LEGACY_GLOBAL_HOSTS.includes(hostname);
+  const isLocalhost = hostname.includes('localhost') || hostname.includes('127.0.0.1');
   const isApiRequest = req.path === '/api' || req.path.startsWith('/api/');
+  const isLegacyHost = LEGACY_GLOBAL_HOSTS.includes(hostname);
+  const isPeruSubdomain = hostname.startsWith('pe.');
 
-  if (isLegacyGlobalHost && !isApiRequest) {
+  if (!isLocalhost && (isLegacyHost || isPeruSubdomain) && !isApiRequest) {
     return res.redirect(301, `https://${PRIMARY_GLOBAL_HOST}${req.originalUrl}`);
   }
 
@@ -178,78 +180,22 @@ app.get('/api/health', (req, res) => {
 });
 
 // ===================================
-// Subdomain Middleware (must be after API routes)
-// Detects pe.agenciavectore.com vs agenciavectore.com
+// Page Routes — Unified SPA
 // ===================================
-app.use(subdomainMiddleware);
+const masterHTML = path.join(__dirname, 'views/en/index.html');
 
-// ===================================
-// Page Routes — Subdomain-based
-// ===================================
+// SPA root
+app.get('/', (req, res) => res.sendFile(masterHTML));
 
-// Home
-app.get('/', (req, res) => {
-  if (req.site === 'pe') {
-    // Peru: serve the existing light-mode tienda
-    return res.sendFile(path.join(__dirname, 'index.html'));
-  }
-  // Global: serve the new premium EN landing
-  res.sendFile(path.join(__dirname, 'views/en/index.html'));
-});
+// Standalone pages (legal compliance & checkout)
+app.get('/checkout', (req, res) => res.sendFile(path.join(__dirname, 'checkout.html')));
+app.get('/terminos', (req, res) => res.sendFile(path.join(__dirname, 'terminos.html')));
+app.get('/politica-devoluciones', (req, res) => res.sendFile(path.join(__dirname, 'politica-devoluciones.html')));
+app.get('/libro-reclamaciones', (req, res) => res.sendFile(path.join(__dirname, 'libro-reclamaciones.html')));
+app.get('/admin.html', (req, res) => res.sendFile(path.join(__dirname, 'admin.html')));
 
-// Software / Vectore Flow
-app.get('/software', (req, res) => {
-  if (req.site === 'pe') {
-    return res.sendFile(path.join(__dirname, 'software.html'));
-  }
-  const enPath = path.join(__dirname, 'views/en/software.html');
-  const legacyPath = path.join(__dirname, 'software.html');
-  res.sendFile(enPath, (err) => {
-    if (err) res.sendFile(legacyPath);
-  });
-});
-
-// Checkout (Peru only)
-app.get('/checkout', (req, res) => {
-  if (req.site !== 'pe') {
-    return res.redirect(301, 'https://pe.agenciavectore.com/checkout');
-  }
-  res.sendFile(path.join(__dirname, 'checkout.html'));
-});
-
-// Legal Pages (Peru)
-app.get('/terminos', (req, res) => {
-  if (req.site !== 'pe') {
-    return res.redirect(301, 'https://pe.agenciavectore.com/terminos');
-  }
-  res.sendFile(path.join(__dirname, 'terminos.html'));
-});
-
-app.get('/politica-devoluciones', (req, res) => {
-  if (req.site !== 'pe') {
-    return res.redirect(301, 'https://pe.agenciavectore.com/politica-devoluciones');
-  }
-  res.sendFile(path.join(__dirname, 'politica-devoluciones.html'));
-});
-
-app.get('/libro-reclamaciones', (req, res) => {
-  if (req.site !== 'pe') {
-    return res.redirect(301, 'https://pe.agenciavectore.com/libro-reclamaciones');
-  }
-  res.sendFile(path.join(__dirname, 'libro-reclamaciones.html'));
-});
-
-// ===================================
-// Catch-all: Serve site-appropriate page
-// ===================================
-app.get('*', (req, res) => {
-  if (req.site === 'pe') {
-    // Peru: serve the existing index.html for any unknown route
-    return res.sendFile(path.join(__dirname, 'index.html'));
-  }
-  // Global: serve premium EN landing
-  res.sendFile(path.join(__dirname, 'views/en/index.html'));
-});
+// SPA catch-all — deep links to rooms resolve to master HTML
+app.get('*', (req, res) => res.sendFile(masterHTML));
 
 // Error handling middleware
 app.use((err, req, res, next) => {

@@ -39,7 +39,7 @@ export function initCursor() {
     animate();
 
     // Hover effects — event delegation for dynamic elements
-    const interactiveSelector = 'a, button, .service-card, .case-card, .portfolio-scroll__item, .social-link, .form-option, .lang-switch__btn, .nav-link, .btn';
+    const interactiveSelector = 'a, button, .service-card, .case-card, .portfolio-scroll__item, .social-link, .form-option, .lang-switch__btn, .nav-link, .btn, .lobby__card, .product-card, .wraps-card, .software-feature-card, .catalog-filter-btn';
 
     document.addEventListener('mouseover', (e) => {
         if (e.target.closest(interactiveSelector)) {
@@ -52,4 +52,11 @@ export function initCursor() {
             ring.classList.remove('active');
         }
     });
+}
+
+// Room-aware cursor color mutation
+let _ring = null;
+export function setCursorColor(color) {
+    if (!_ring) _ring = document.getElementById('cursorRing');
+    if (_ring) _ring.style.borderColor = color;
 }

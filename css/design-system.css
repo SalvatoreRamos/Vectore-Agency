@@ -25,6 +25,12 @@
     --accent-glow: #A67FFF;
     --accent-neon: #B794FF;
     --accent-muted: rgba(134, 85, 255, 0.15);
+
+    /* Room accent colors */
+    --room-studio:   #8655FF;
+    --room-wraps:    #FF6B2D;
+    --room-software: #2D7AFF;
+    --room-visuals:  #00C896;
     --accent-subtle: rgba(134, 85, 255, 0.08);
 
     /* Gradient Accents */

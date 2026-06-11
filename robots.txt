@@ -1,6 +1,9 @@
 User-agent: *
 Allow: /
-Allow: /es/
+Allow: /studio
+Allow: /wraps
+Allow: /software
+Allow: /visuals
 Disallow: /admin.html
 Disallow: /admin.js
 Disallow: /admin.css

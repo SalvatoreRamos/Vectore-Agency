@@ -1,58 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <!--
-        Sitemap strategy based on the current codebase:
-        - www.agenciavectore.com = international lead-generation landing (EN, brief-first)
-        - pe.agenciavectore.com = Peru local/commercial site (catalog, WhatsApp, payments, legal)
+        Sitemap for unified SPA architecture:
+        All content served from www.agenciavectore.com
+        Rooms: /studio, /wraps, /software, /visuals
     -->
 
-    <!-- International site: studio positioning + project intake -->
+    <!-- Home / Lobby -->
     <url>
         <loc>https://www.agenciavectore.com/</loc>
-        <lastmod>2026-04-18</lastmod>
-        <xhtml:link rel="alternate" hreflang="en" href="https://www.agenciavectore.com/" />
-        <xhtml:link rel="alternate" hreflang="es-PE" href="https://pe.agenciavectore.com/" />
-        <xhtml:link rel="alternate" hreflang="x-default" href="https://www.agenciavectore.com/" />
+        <lastmod>2026-06-11</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
     </url>
 
-    <!-- Peru site: local services, catalog and conversion -->
+    <!-- Room 1: Vectore Studio -->
     <url>
-        <loc>https://pe.agenciavectore.com/</loc>
-        <lastmod>2026-04-20</lastmod>
-        <xhtml:link rel="alternate" hreflang="en" href="https://www.agenciavectore.com/" />
-        <xhtml:link rel="alternate" hreflang="es-PE" href="https://pe.agenciavectore.com/" />
-        <xhtml:link rel="alternate" hreflang="x-default" href="https://www.agenciavectore.com/" />
+        <loc>https://www.agenciavectore.com/studio</loc>
+        <lastmod>2026-06-11</lastmod>
         <changefreq>weekly</changefreq>
-        <priority>0.95</priority>
+        <priority>0.9</priority>
     </url>
 
+    <!-- Room 2: Vectore Wraps -->
     <url>
-        <loc>https://pe.agenciavectore.com/software</loc>
-        <lastmod>2026-03-25</lastmod>
+        <loc>https://www.agenciavectore.com/wraps</loc>
+        <lastmod>2026-06-11</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <!-- Room 3: Vectore Software -->
+    <url>
+        <loc>https://www.agenciavectore.com/software</loc>
+        <lastmod>2026-06-11</lastmod>
         <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
+        <priority>0.9</priority>
     </url>
 
-    <!-- Peru legal/compliance pages -->
+    <!-- Room 4: Vectore Visuals -->
     <url>
-        <loc>https://pe.agenciavectore.com/terminos</loc>
+        <loc>https://www.agenciavectore.com/visuals</loc>
+        <lastmod>2026-06-11</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <!-- Legal / Compliance Pages -->
+    <url>
+        <loc>https://www.agenciavectore.com/terminos</loc>
         <lastmod>2026-03-02</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.3</priority>
     </url>
 
     <url>
-        <loc>https://pe.agenciavectore.com/politica-devoluciones</loc>
+        <loc>https://www.agenciavectore.com/politica-devoluciones</loc>
         <lastmod>2026-03-02</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.3</priority>
     </url>
 
     <url>
-        <loc>https://pe.agenciavectore.com/libro-reclamaciones</loc>
+        <loc>https://www.agenciavectore.com/libro-reclamaciones</loc>
         <lastmod>2026-03-02</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.3</priority>
