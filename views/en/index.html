@@ -16,10 +16,15 @@
     <!-- SEO Meta -->
     <title>Vectore — AI-Driven Creative Studio</title>
     <meta name="description" content="We engineer digital experiences that scale. From AI automation to immersive 3D — Vectore builds the systems that grow your brand globally.">
-    <meta name="keywords" content="AI-driven branding agency, high-end 3D product rendering, SaaS workflow automation, AI automation agency, premium brand engineering studio, creative technology studio, digital experience design, vehicle wraps, large format printing">
+    <meta name="keywords" content="AI-driven branding agency, high-end 3D product rendering, SaaS workflow automation, AI automation agency, premium brand engineering studio, creative technology studio, digital experience design">
     <meta name="author" content="Vectore Studio">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://www.agenciavectore.com/">
+
+    <!-- Hreflang -->
+    <link rel="alternate" hreflang="en" href="https://www.agenciavectore.com/">
+    <link rel="alternate" hreflang="es-PE" href="https://pe.agenciavectore.com/">
+    <link rel="alternate" hreflang="x-default" href="https://www.agenciavectore.com/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
@@ -38,21 +43,19 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/favicon.png">
 
-    <!-- Fonts: Inter -->
+    <!-- Fonts: Inter (self-hosted or preconnected) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="/css/design-system.css?v=23">
-    <link rel="stylesheet" href="/css/global.css?v=23">
-    <link rel="stylesheet" href="/css/hero.css?v=23">
-    <link rel="stylesheet" href="/css/components.css?v=23">
-    <link rel="stylesheet" href="/css/services.css?v=23">
-    <link rel="stylesheet" href="/css/portfolio.css?v=23">
-    <link rel="stylesheet" href="/css/contact.css?v=23">
-    <link rel="stylesheet" href="/css/lobby.css?v=23">
-    <link rel="stylesheet" href="/css/rooms.css?v=23">
+    <link rel="stylesheet" href="/css/design-system.css?v=22">
+    <link rel="stylesheet" href="/css/global.css?v=22">
+    <link rel="stylesheet" href="/css/hero.css?v=22">
+    <link rel="stylesheet" href="/css/components.css?v=22">
+    <link rel="stylesheet" href="/css/services.css?v=22">
+    <link rel="stylesheet" href="/css/portfolio.css?v=22">
+    <link rel="stylesheet" href="/css/contact.css?v=22">
 
     <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
@@ -61,7 +64,7 @@
         "@type": "ProfessionalService",
         "name": "Vectore",
         "alternateName": "Vectore Studio",
-        "description": "AI-driven creative studio specializing in brand engineering, SaaS development, vehicle wraps, and immersive digital experiences.",
+        "description": "AI-driven creative studio specializing in brand engineering, SaaS development, and immersive digital experiences.",
         "url": "https://www.agenciavectore.com",
         "image": "https://www.agenciavectore.com/favicon.png",
         "telephone": "+51950699910",
@@ -85,13 +88,12 @@
         ],
         "hasOfferCatalog": {
             "@type": "OfferCatalog",
-            "name": "Creative Services",
+            "name": "Digital Services",
             "itemListElement": [
                 { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "AI Agent Development" }},
                 { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "3D Digital Asset Creation" }},
                 { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Vectore Flow SaaS" }},
-                { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Brand Engineering" }},
-                { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Vehicle Wraps & Signage" }}
+                { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Brand Engineering" }}
             ]
         }
     }
@@ -108,11 +110,17 @@
         </div>
     </div>
 
+    <!-- Geo-suggestion banner (shown to PE visitors on global site) -->
+    <div class="geo-banner" id="geoBanner" style="display: none;">
+        <p>🇵🇪 ¿Buscas nuestra tienda en Perú? <a href="https://pe.agenciavectore.com">Visita pe.agenciavectore.com</a></p>
+        <button class="geo-banner__close" id="geoBannerClose" aria-label="Close">&times;</button>
+    </div>
+
     <!-- Navigation -->
     <div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
     <nav class="navbar" id="navbar">
         <div class="nav-container">
-            <a href="/" class="logo" id="navLogo">
+            <a href="/" class="logo">
                 <img src="/Vectore-logo.svg" alt="Vectore Studio" class="logo-img">
             </a>
             <button class="nav-toggle" id="navToggle" type="button" aria-label="Open navigation menu" aria-controls="navMenu" aria-expanded="false">
@@ -124,6 +132,10 @@
                 <button class="nav-menu__close" id="navMenuClose" type="button" aria-label="Close menu">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
                 </button>
+                <li><a href="#services" class="nav-link">Services</a></li>
+                <li><a href="#work" class="nav-link">Work</a></li>
+                <li><a href="#flow" class="nav-link">Flow</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
                 <li>
                     <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle theme">
                         <!-- Moon icon (shown in dark mode) -->
@@ -136,33 +148,32 @@
         </div>
     </nav>
 
-    <!-- Back to Lobby (floating pill — shown inside rooms) -->
-    <button id="backToLobby" type="button" aria-label="Back to Lobby">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-        Lobby
-    </button>
-
-    <!-- ════════════════════════════════════════════
-         LOBBY (Room 0) — Hero + Navigation Cards
-         ════════════════════════════════════════════ -->
-    <section class="hero room room--lobby active" id="lobby">
+    <!-- ============================================
+         HERO SECTION
+         ============================================ -->
+    <section class="hero" id="home">
         <!-- Load Hana Viewer Web Component -->
         <script type="module" src="https://cdn.spline.design/@splinetool/hana-viewer@1.2.51/hana-viewer.js"></script>
 
         <div class="hero__spline-background" style="position: absolute; inset: 0; z-index: 0; pointer-events: auto;">
             <!-- Dark Mode Hana Viewer -->
             <hana-viewer id="splineDark" class="spline-frame spline-frame--dark" url="https://prod.spline.design/v56A8ziXxfRqa3zo-VbK/scene.hanacode" style="width: 100%; height: 100%; position: absolute; inset: 0; transition: opacity 0.8s ease;"></hana-viewer>
-            <!-- Light Mode Hana Viewer -->
+            <!-- Light Mode Hana Viewer with lazy load logic -->
             <hana-viewer id="splineLight" class="spline-frame spline-frame--light" url="https://prod.spline.design/v56A8ziXxfRqa3zo-rG6/scene.hanacode" style="width: 100%; height: 100%; position: absolute; inset: 0; transition: opacity 0.8s ease; opacity: 0; pointer-events: none;" loading="lazy"></hana-viewer>
         </div>
-
-        <!-- Mobile Lite Hero -->
+        
+        <!-- Mobile Lite Hero (mobile optimization) -->
         <div id="heroLite" class="hero-lite" style="display:none; text-align:center; padding: 40px 16px;">
             <div class="badge" style="display:inline-block; background: rgba(134,85,255,.22); color:white; padding:6px 12px; border-radius:999px; margin-bottom:12px; font-weight:700; text-transform:uppercase; font-size:12px;">AI-Driven Creative Studio</div>
-            <h1 class="hero-lite__title" style="font-size: 2.6rem; line-height: 1.1; color:white; font-weight:900; margin:8px 0 12px;">Choose your<br>experience.</h1>
+            <h1 class="hero-lite__title" style="font-size: 2.6rem; line-height: 1.1; color:white; font-weight:900; margin:8px 0 12px;">We create digital experiences that scale.</h1>
+            <p class="hero-lite__subtitle" style="color:#e5e7eb; max-width:720px; margin:0 auto 20px;">Lightweight hero optimized for mobile: fast, readable, and accessible.</p>
+            <div class="hero__actions" style="display:flex; justify-content:center; gap:12px;">
+                <a href="#contact" class="btn btn--primary btn--lg" style="padding:14px 20px;">Start a Project</a>
+                <a href="#work" class="btn btn--ghost btn--lg" style="padding:14px 20px;">See Our Work</a>
+            </div>
         </div>
 
-        <!-- Spline watermark removal -->
+        <!-- Script to aggressively remove the Spline/Hana watermark inside Shadow DOM -->
         <script>
             document.addEventListener("DOMContentLoaded", () => {
                 const removeLogo = () => {
@@ -173,11 +184,12 @@
                         }
                     });
                 };
+                // Run multiple times to catch delayed rendering
                 const interval = setInterval(removeLogo, 500);
                 setTimeout(() => clearInterval(interval), 5000);
             });
         </script>
-        <!-- Mobile hero lite loader -->
+        <!-- Mobile hero lite loader for mobile responsiveness -->
         <script>
           function updateHeroLite() {
             const mq = window.matchMedia('(max-width: 768px)');
@@ -205,118 +217,310 @@
             <div class="hero__orb hero__orb--3"></div>
         </div>
 
-        <!-- Mobile Dynamic Background -->
+        <!-- Mobile Dynamic Background (Peru Web style) -->
         <div class="hero-bg hero-bg--mobile">
-            <div class="shape-container"><div class="floating-shape shape-1"></div></div>
-            <div class="shape-container"><div class="floating-shape shape-2"></div></div>
-            <div class="shape-container"><div class="floating-shape shape-3"></div></div>
-            <div class="shape-container"><div class="floating-shape shape-4"></div></div>
+            <div class="shape-container">
+                <div class="floating-shape shape-1"></div>
+            </div>
+            <div class="shape-container">
+                <div class="floating-shape shape-2"></div>
+            </div>
+            <div class="shape-container">
+                <div class="floating-shape shape-3"></div>
+            </div>
+            <div class="shape-container">
+                <div class="floating-shape shape-4"></div>
+            </div>
         </div>
 
         <div class="hero__grid"></div>
 
-        <!-- Lobby Content: Title + Navigation Cards -->
-        <div class="lobby__content">
-            <div class="lobby__header">
-                <div class="badge badge--neon">AI-Driven Creative Studio</div>
-                <h1 class="lobby__title text-gradient">Vectore</h1>
-                <p class="lobby__subtitle">Choose your experience</p>
+        <div class="hero__container">
+            <div class="hero__content">
+                <div class="badge badge--neon hero__badge">AI-Driven Creative Studio</div>
+                <h1 class="hero__title">
+                    We create digital<br>
+                    <span class="text-gradient">experiences</span> that <span class="text-gradient">scale.</span>
+                </h1>
+                <p class="hero__subtitle">
+                    From AI automation to immersive 3D — we build the systems that grow your brand globally.
+                </p>
+                <div class="hero__actions">
+                    <a href="#contact" class="btn btn--primary btn--lg" id="heroCta">
+                        Start a Project
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                    <a href="#work" class="btn btn--ghost btn--lg">See Our Work</a>
+                </div>
+                <div class="hero__stats">
+                    <div class="hero__stat">
+                        <span class="hero__stat-number" data-count-target="500" data-count-suffix="+">0</span>
+                        <span class="hero__stat-label">Projects Delivered</span>
+                    </div>
+                    <div class="hero__stat">
+                        <span class="hero__stat-number" data-count-target="150" data-count-suffix="+">0</span>
+                        <span class="hero__stat-label">Happy Clients</span>
+                    </div>
+                    <div class="hero__stat">
+                        <span class="hero__stat-number" data-count-target="5" data-count-suffix="y">0</span>
+                        <span class="hero__stat-label">Years Growing</span>
+                    </div>
+                </div>
+        </div>
+
+        <div class="hero__scroll hide-mobile">
+            <div class="hero__scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SERVICES SECTION
+         ============================================ -->
+    <section class="services section" id="services">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="badge">What We Build</div>
+                <h2>Growth Systems, Not<br>Just Pretty Pixels.</h2>
+                <p>We don't sell designs. We engineer scalable digital infrastructure that drives measurable business outcomes.</p>
             </div>
 
-            <div class="lobby__grid">
-                <!-- Studio -->
-                <button class="lobby__card" data-room="studio" type="button">
-                    <div class="lobby__card-icon">🎨</div>
-                    <h2 class="lobby__card-title">Vectore Studio</h2>
-                    <p class="lobby__card-desc">Design, print & packaging</p>
-                </button>
-                <!-- Wraps -->
-                <button class="lobby__card" data-room="wraps" type="button">
-                    <div class="lobby__card-icon">🏎️</div>
-                    <h2 class="lobby__card-title">Vectore Wraps</h2>
-                    <p class="lobby__card-desc">Vehicle wraps & signage</p>
-                </button>
-                <!-- Software -->
-                <button class="lobby__card" data-room="software" type="button">
-                    <div class="lobby__card-icon">💻</div>
-                    <h2 class="lobby__card-title">Vectore Software</h2>
-                    <p class="lobby__card-desc">SaaS & PrintFlow OS</p>
-                </button>
-                <!-- Visuals -->
-                <button class="lobby__card" data-room="visuals" type="button">
-                    <div class="lobby__card-icon">🌌</div>
-                    <h2 class="lobby__card-title">Vectore Visuals</h2>
-                    <p class="lobby__card-desc">Astrophotography & ArchViz</p>
-                </button>
-            </div>
+            <div class="services-grid reveal-stagger">
+                <!-- AI Agents -->
+                <div class="service-card service-card--featured" data-tilt>
+                    <span class="service-card__badge">High Demand</span>
+                    <div class="service-card__icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="10" rx="2"/>
+                            <circle cx="9" cy="16" r="1.5"/>
+                            <circle cx="15" cy="16" r="1.5"/>
+                            <path d="M8 11V7a4 4 0 1 1 8 0v4"/>
+                            <path d="M12 3v-1"/>
+                            <path d="M9 3h6"/>
+                        </svg>
+                    </div>
+                    <h3>AI Agents</h3>
+                    <p>Intelligent automation that handles customer interactions, workflow routing, and data processing — so your team focuses on what matters.</p>
+                    <ul class="service-card__features">
+                        <li>Custom GPT-powered assistants</li>
+                        <li>Workflow automation pipelines</li>
+                        <li>CRM & support integration</li>
+                    </ul>
+                </div>
 
-            <div class="hero__stats lobby__stats">
-                <div class="hero__stat">
-                    <span class="hero__stat-number" data-count-target="500" data-count-suffix="+">0</span>
-                    <span class="hero__stat-label">Projects Delivered</span>
+                <!-- Vectore Flow (SaaS) -->
+                <div class="service-card" data-tilt>
+                    <div class="service-card__icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                        </svg>
+                    </div>
+                    <h3>Vectore Flow <span class="text-gradient">SaaS</span></h3>
+                    <p>The production operating system for creative studios and print shops. Real-time order tracking, Kanban boards, and installer apps — all in one.</p>
+                    <ul class="service-card__features">
+                        <li>Order-to-install pipeline</li>
+                        <li>Real-time sync across devices</li>
+                        <li>PDF exports & analytics</li>
+                    </ul>
                 </div>
-                <div class="hero__stat">
-                    <span class="hero__stat-number" data-count-target="150" data-count-suffix="+">0</span>
-                    <span class="hero__stat-label">Happy Clients</span>
+
+                <!-- 3D Digital Assets -->
+                <div class="service-card" data-tilt>
+                    <div class="service-card__icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2l9 5v10l-9 5-9-5V7z"/>
+                            <path d="M12 22V12"/>
+                            <path d="M21 7l-9 5-9-5"/>
+                        </svg>
+                    </div>
+                    <h3>3D Digital Assets</h3>
+                    <p>Photorealistic product renders and immersive 3D experiences that sell. No photoshoots needed — just pure digital craftsmanship.</p>
+                    <ul class="service-card__features">
+                        <li>Product visualization</li>
+                        <li>Architectural renders</li>
+                        <li>Interactive 3D for web</li>
+                    </ul>
                 </div>
-                <div class="hero__stat">
-                    <span class="hero__stat-number" data-count-target="5" data-count-suffix="y">0</span>
-                    <span class="hero__stat-label">Years Growing</span>
+
+                <!-- Brand Engineering -->
+                <div class="service-card" data-tilt>
+                    <div class="service-card__icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <circle cx="12" cy="12" r="6"/>
+                            <circle cx="12" cy="12" r="2"/>
+                        </svg>
+                    </div>
+                    <h3>Brand Engineering</h3>
+                    <p>Strategic identity systems built for scale. We don't just make logos — we build the entire visual language that makes your brand unforgettable.</p>
+                    <ul class="service-card__features">
+                        <li>Identity & naming systems</li>
+                        <li>Brand guidelines & kits</li>
+                        <li>Packaging & print design</li>
+                    </ul>
+                </div>
+
+                <!-- Full-Stack Development -->
+                <div class="service-card" data-tilt>
+                    <div class="service-card__icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="16 18 22 12 16 6"/>
+                            <polyline points="8 6 2 12 8 18"/>
+                            <line x1="14.5" y1="4" x2="9.5" y2="20"/>
+                        </svg>
+                    </div>
+                    <h3>Full-Stack Development</h3>
+                    <p>High-performance web applications and platforms built with modern tooling. From landing pages to complex SaaS dashboards.</p>
+                    <ul class="service-card__features">
+                        <li>React, Next.js, Node.js</li>
+                        <li>Database & API design</li>
+                        <li>Cloud deployment & CI/CD</li>
+                    </ul>
+                </div>
+
+                <!-- Large Format Print -->
+                <div class="service-card" data-tilt>
+                    <div class="service-card__icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 6 2 18 2 18 9"/>
+                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                            <rect x="6" y="14" width="12" height="8"/>
+                        </svg>
+                    </div>
+                    <h3>Large Format & Print</h3>
+                    <p>Professional-grade printing for brands that demand physical presence. Banners, vehicle wraps, signage, and environmental graphics.</p>
+                    <ul class="service-card__features">
+                        <li>Vehicle wraps & signage</li>
+                        <li>Environmental graphics</li>
+                        <li>Packaging & labels</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ════════════════════════════════════════════
-         ROOM 1: VECTORE STUDIO (Purple #8655FF)
-         Products: diseño, impresión, packaging, digital, espacios
-         ════════════════════════════════════════════ -->
-    <section id="room-studio" class="room room--studio" data-accent="#8655FF">
-        <div class="room__header">
-            <h2 class="room__title">🎨 Vectore Studio</h2>
-            <p class="room__subtitle">Creative solutions for your brand</p>
+    <!-- ============================================
+         PORTFOLIO / WORK SECTION
+         ============================================ -->
+    <section class="portfolio-scroll section" id="work">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="badge">Selected Work</div>
+                <h2>Case Studies</h2>
+                <p>A curated selection of projects where strategy met craft.</p>
+            </div>
         </div>
-        <div class="room__content">
-            <div id="studioFilters" class="catalog-filters"></div>
-            <div id="studioCatalog" class="catalog-grid"></div>
-        </div>
-    </section>
 
-    <!-- ════════════════════════════════════════════
-         ROOM 2: VECTORE WRAPS (Orange #FF6B2D)
-         Products: vinilo, señalización + project gallery
-         ════════════════════════════════════════════ -->
-    <section id="room-wraps" class="room room--wraps" data-accent="#FF6B2D">
-        <div class="room__header">
-            <h2 class="room__title">🏎️ Vectore Wraps</h2>
-            <p class="room__subtitle">Premium vehicle wrapping & signage</p>
-        </div>
-        <div class="room__content">
-            <div id="wrapsGallery" class="wraps-gallery"></div>
-        </div>
-    </section>
-
-    <!-- ════════════════════════════════════════════
-         ROOM 3: VECTORE SOFTWARE (Blue #2D7AFF)
-         SoftwareAsset + Smart qualifying form
-         ════════════════════════════════════════════ -->
-    <section id="room-software" class="room room--software" data-accent="#2D7AFF">
-        <div class="room__header">
-            <h2 class="room__title">💻 Vectore Software</h2>
-            <p class="room__subtitle">PrintFlow OS & custom SaaS solutions</p>
-        </div>
-        <div class="room__content">
-            <div id="softwareShowcase" class="software-showcase"></div>
-            <div id="softwarePreview" style="margin-bottom: var(--space-12);"></div>
-
-            <!-- Smart Qualifying Form -->
-            <div class="software-form-section">
-                <div class="section-header reveal">
-                    <div class="badge">Get In Touch</div>
-                    <h2>Let's Build Something<br><span class="text-gradient">Extraordinary.</span></h2>
-                    <p>Tell us about your project and we'll get back to you within 24 hours.</p>
+        <div class="portfolio-scroll__track" id="portfolioTrack">
+            <!-- Portfolio items loaded dynamically or hardcoded -->
+            <div class="portfolio-scroll__item reveal--scale">
+                <div class="portfolio-scroll__image">
+                    <img src="https://images.pexels.com/photos/3182773/pexels-photo-3182773.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Brand Identity Project" loading="lazy">
                 </div>
+                <div class="portfolio-scroll__overlay">
+                    <span class="portfolio-scroll__category">Branding</span>
+                    <h3 class="portfolio-scroll__title">Vectore Identity System</h3>
+                    <span class="portfolio-scroll__client">Vectore Agency</span>
+                </div>
+            </div>
 
+            <div class="portfolio-scroll__item reveal--scale">
+                <div class="portfolio-scroll__image">
+                    <img src="https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=800" alt="App Design Project" loading="lazy">
+                </div>
+                <div class="portfolio-scroll__overlay">
+                    <span class="portfolio-scroll__category">UI/UX Design</span>
+                    <h3 class="portfolio-scroll__title">Eco Home Control App</h3>
+                    <span class="portfolio-scroll__client">EcoSmart</span>
+                </div>
+            </div>
+
+            <div class="portfolio-scroll__item reveal--scale">
+                <div class="portfolio-scroll__image">
+                    <img src="https://images.pexels.com/photos/4264049/pexels-photo-4264049.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Packaging Design" loading="lazy">
+                </div>
+                <div class="portfolio-scroll__overlay">
+                    <span class="portfolio-scroll__category">Packaging</span>
+                    <h3 class="portfolio-scroll__title">Nebula Coffee Collection</h3>
+                    <span class="portfolio-scroll__client">Nebula</span>
+                </div>
+            </div>
+
+            <div class="portfolio-scroll__item reveal--scale">
+                <div class="portfolio-scroll__image">
+                    <img src="https://images.pexels.com/photos/3853338/pexels-photo-3853338.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Vehicle Wrap Project" loading="lazy">
+                </div>
+                <div class="portfolio-scroll__overlay">
+                    <span class="portfolio-scroll__category">Vehicle Wrap</span>
+                    <h3 class="portfolio-scroll__title">Urban Fleet Branding</h3>
+                    <span class="portfolio-scroll__client">Urban Express</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="portfolio-nav">
+            <button class="portfolio-nav__btn" id="portfolioPrev" aria-label="Previous project">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <button class="portfolio-nav__btn" id="portfolioNext" aria-label="Next project">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+        </div>
+    </section>
+
+    <!-- ============================================
+         VECTORE FLOW TEASER
+         ============================================ -->
+    <section class="section" id="flow" style="background: var(--bg-secondary);">
+        <div class="container">
+            <div class="flow-grid">
+                <div class="reveal">
+                    <div class="badge">Product</div>
+                    <h2 style="margin-bottom: var(--space-4);">Vectore Flow <span class="text-gradient">v1.0</span></h2>
+                    <p style="margin-bottom: var(--space-8); max-width: 480px; line-height: var(--leading-relaxed);">
+                        The production operating system built for the chaos of creative studios and print shops. From quote to install — one unified workflow.
+                    </p>
+                    <ul style="list-style: none; margin-bottom: var(--space-8);">
+                        <li style="padding: var(--space-2) 0; color: var(--text-secondary); display: flex; align-items: center; gap: var(--space-3);">
+                            <span style="color: var(--accent-primary); font-weight: 700;">→</span> End-to-end order management
+                        </li>
+                        <li style="padding: var(--space-2) 0; color: var(--text-secondary); display: flex; align-items: center; gap: var(--space-3);">
+                            <span style="color: var(--accent-primary); font-weight: 700;">→</span> Real-time production sync
+                        </li>
+                        <li style="padding: var(--space-2) 0; color: var(--text-secondary); display: flex; align-items: center; gap: var(--space-3);">
+                            <span style="color: var(--accent-primary); font-weight: 700;">→</span> Installer mobile app
+                        </li>
+                    </ul>
+                    <a href="/software" class="btn btn--primary">
+                        Learn More
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+                <div class="reveal--scale" style="perspective: 1000px;">
+                    <div id="vectoreFlowPreviewContainer" style="background: var(--bg-elevated); border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--glass-border); transform: rotateY(-3deg) rotateX(3deg); transition: transform 0.4s var(--ease-out-expo); box-shadow: var(--shadow-xl);" onmouseenter="this.style.transform='rotateY(0) rotateX(0)'" onmouseleave="this.style.transform='rotateY(-3deg) rotateX(3deg)'">
+                        <div style="aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; color: var(--text-tertiary);">
+                            <div style="text-align: center;">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="margin-bottom: 12px; opacity: 0.4;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                                <p style="font-size: var(--text-sm);">App Preview</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         CONTACT / SMART FORM SECTION
+         ============================================ -->
+    <section class="contact section" id="contact">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="badge">Get In Touch</div>
+                <h2>Let's Build Something<br><span class="text-gradient">Extraordinary.</span></h2>
+                <p>Tell us about your project and we'll get back to you within 24 hours.</p>
+            </div>
+
+            <div class="contact__wrapper">
                 <div class="smart-form" id="smartForm">
                     <!-- Progress -->
                     <div class="form-progress">
@@ -332,11 +536,26 @@
                         <h3 class="form-step__title">What can we help with?</h3>
                         <p class="form-step__subtitle">Select the service that best fits your needs.</p>
                         <div class="form-options">
-                            <div class="form-option" data-value="ai_agents"><span class="form-option__icon">🤖</span><span>AI Agents & Automation</span></div>
-                            <div class="form-option" data-value="3d_renders"><span class="form-option__icon">💎</span><span>3D Renders & Digital Assets</span></div>
-                            <div class="form-option" data-value="branding"><span class="form-option__icon">🎯</span><span>Brand Identity & Design</span></div>
-                            <div class="form-option" data-value="saas"><span class="form-option__icon">⚡</span><span>SaaS / Web Application</span></div>
-                            <div class="form-option" data-value="other"><span class="form-option__icon">🚀</span><span>Other / Not Sure Yet</span></div>
+                            <div class="form-option" data-value="ai_agents">
+                                <span class="form-option__icon">🤖</span>
+                                <span>AI Agents & Automation</span>
+                            </div>
+                            <div class="form-option" data-value="3d_renders">
+                                <span class="form-option__icon">💎</span>
+                                <span>3D Renders & Digital Assets</span>
+                            </div>
+                            <div class="form-option" data-value="branding">
+                                <span class="form-option__icon">🎯</span>
+                                <span>Brand Identity & Design</span>
+                            </div>
+                            <div class="form-option" data-value="saas">
+                                <span class="form-option__icon">⚡</span>
+                                <span>SaaS / Web Application</span>
+                            </div>
+                            <div class="form-option" data-value="other">
+                                <span class="form-option__icon">🚀</span>
+                                <span>Other / Not Sure Yet</span>
+                            </div>
                         </div>
                     </div>
 
@@ -345,12 +564,27 @@
                         <h3 class="form-step__title">What's your timeline?</h3>
                         <p class="form-step__subtitle">This helps us prioritize and allocate the right team.</p>
                         <div class="form-options">
-                            <div class="form-option" data-value="asap"><span class="form-option__icon">🔥</span><span>ASAP — We need it yesterday</span></div>
-                            <div class="form-option" data-value="1-2_months"><span class="form-option__icon">📅</span><span>1–2 months</span></div>
-                            <div class="form-option" data-value="3+_months"><span class="form-option__icon">🗓️</span><span>3+ months — Let's plan it right</span></div>
-                            <div class="form-option" data-value="exploring"><span class="form-option__icon">🔍</span><span>Just exploring options</span></div>
+                            <div class="form-option" data-value="asap">
+                                <span class="form-option__icon">🔥</span>
+                                <span>ASAP — We need it yesterday</span>
+                            </div>
+                            <div class="form-option" data-value="1-2_months">
+                                <span class="form-option__icon">📅</span>
+                                <span>1–2 months</span>
+                            </div>
+                            <div class="form-option" data-value="3+_months">
+                                <span class="form-option__icon">🗓️</span>
+                                <span>3+ months — Let's plan it right</span>
+                            </div>
+                            <div class="form-option" data-value="exploring">
+                                <span class="form-option__icon">🔍</span>
+                                <span>Just exploring options</span>
+                            </div>
                         </div>
-                        <div class="form-nav"><button class="form-nav__back" type="button">← Back</button><span></span></div>
+                        <div class="form-nav">
+                            <button class="form-nav__back" type="button">← Back</button>
+                            <span></span>
+                        </div>
                     </div>
 
                     <!-- Step 3: Budget -->
@@ -358,23 +592,53 @@
                         <h3 class="form-step__title">Estimated investment?</h3>
                         <p class="form-step__subtitle">No commitment — just helps us tailor the conversation.</p>
                         <div class="form-options">
-                            <div class="form-option" data-value="under_5k"><span class="form-option__icon">💰</span><span>Under $5,000</span></div>
-                            <div class="form-option" data-value="5k-15k"><span class="form-option__icon">💰💰</span><span>$5,000 – $15,000</span></div>
-                            <div class="form-option" data-value="15k-50k"><span class="form-option__icon">💰💰💰</span><span>$15,000 – $50,000</span></div>
-                            <div class="form-option" data-value="50k+"><span class="form-option__icon">🏦</span><span>$50,000+</span></div>
-                            <div class="form-option" data-value="not_sure"><span class="form-option__icon">🤷</span><span>Not sure yet</span></div>
+                            <div class="form-option" data-value="under_5k">
+                                <span class="form-option__icon">💰</span>
+                                <span>Under $5,000</span>
+                            </div>
+                            <div class="form-option" data-value="5k-15k">
+                                <span class="form-option__icon">💰💰</span>
+                                <span>$5,000 – $15,000</span>
+                            </div>
+                            <div class="form-option" data-value="15k-50k">
+                                <span class="form-option__icon">💰💰💰</span>
+                                <span>$15,000 – $50,000</span>
+                            </div>
+                            <div class="form-option" data-value="50k+">
+                                <span class="form-option__icon">🏦</span>
+                                <span>$50,000+</span>
+                            </div>
+                            <div class="form-option" data-value="not_sure">
+                                <span class="form-option__icon">🤷</span>
+                                <span>Not sure yet</span>
+                            </div>
                         </div>
-                        <div class="form-nav"><button class="form-nav__back" type="button">← Back</button><span></span></div>
+                        <div class="form-nav">
+                            <button class="form-nav__back" type="button">← Back</button>
+                            <span></span>
+                        </div>
                     </div>
 
                     <!-- Step 4: Contact Details -->
                     <div class="form-step" data-field="details">
                         <h3 class="form-step__title">Almost there! Tell us about you.</h3>
                         <p class="form-step__subtitle">We'll respond within 24 hours with a tailored approach.</p>
-                        <div class="form-group"><label for="contactName">Your Name *</label><input type="text" id="contactName" placeholder="John Carter" required></div>
-                        <div class="form-group"><label for="contactEmail">Email *</label><input type="email" id="contactEmail" placeholder="john@company.com" required></div>
-                        <div class="form-group"><label for="contactCompany">Company</label><input type="text" id="contactCompany" placeholder="Acme Inc."></div>
-                        <div class="form-group"><label for="contactDescription">Project Brief</label><textarea id="contactDescription" placeholder="Tell us what you're looking to build..." rows="4"></textarea></div>
+                        <div class="form-group">
+                            <label for="contactName">Your Name *</label>
+                            <input type="text" id="contactName" placeholder="John Carter" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactEmail">Email *</label>
+                            <input type="email" id="contactEmail" placeholder="john@company.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactCompany">Company</label>
+                            <input type="text" id="contactCompany" placeholder="Acme Inc.">
+                        </div>
+                        <div class="form-group">
+                            <label for="contactDescription">Project Brief</label>
+                            <textarea id="contactDescription" placeholder="Tell us what you're looking to build..." rows="4"></textarea>
+                        </div>
                         <div class="form-nav">
                             <button class="form-nav__back" type="button">← Back</button>
                             <button class="btn btn--primary form-submit" type="button">
@@ -395,40 +659,9 @@
         </div>
     </section>
 
-    <!-- ════════════════════════════════════════════
-         ROOM 4: VECTORE VISUALS (Green #00C896)
-         Astrophotography + ArchViz portfolio
-         ════════════════════════════════════════════ -->
-    <section id="room-visuals" class="room room--visuals" data-accent="#00C896">
-        <div class="room__header">
-            <h2 class="room__title">🌌 Vectore Visuals</h2>
-            <p class="room__subtitle">Astrophotography & Hyperrealistic ArchViz</p>
-        </div>
-        <div class="room__content">
-            <div class="portfolio-scroll">
-                <div class="portfolio-scroll__track" id="visualsTrack">
-                    <!-- Loaded dynamically from API -->
-                </div>
-                <div class="portfolio-nav">
-                    <button class="portfolio-nav__btn" id="visualsPrev" aria-label="Previous project">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-                    </button>
-                    <button class="portfolio-nav__btn" id="visualsNext" aria-label="Next project">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Mandatory disclaimer badge -->
-            <div class="visuals-disclaimer">
-                <div class="badge">⚠️ Exclusive 3D modeling & hyperrealistic visualization service. Does not include design or structural calculations.</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ════════════════════════════════════════════
+    <!-- ============================================
          FOOTER
-         ════════════════════════════════════════════ -->
+         ============================================ -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -450,28 +683,28 @@
                     </div>
                 </div>
                 <div class="footer-column">
-                    <h4>Rooms</h4>
+                    <h4>Services</h4>
                     <ul>
-                        <li><a href="/studio">Vectore Studio</a></li>
-                        <li><a href="/wraps">Vectore Wraps</a></li>
-                        <li><a href="/software">Vectore Software</a></li>
-                        <li><a href="/visuals">Vectore Visuals</a></li>
+                        <li><a href="#services">AI Agents</a></li>
+                        <li><a href="#services">3D Assets</a></li>
+                        <li><a href="#services">Branding</a></li>
+                        <li><a href="#services">Development</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
-                    <h4>Legal</h4>
+                    <h4>Product</h4>
                     <ul>
-                        <li><a href="/terminos">Términos</a></li>
-                        <li><a href="/politica-devoluciones">Devoluciones</a></li>
-                        <li><a href="/libro-reclamaciones">Libro de Reclamaciones</a></li>
+                        <li><a href="/software">Vectore Flow</a></li>
+                        <li><a href="/software#pricing">Pricing</a></li>
+                        <li><a href="/software#download">Download</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
-                    <h4>Contact</h4>
+                    <h4>Company</h4>
                     <ul>
-                        <li><a href="mailto:agenciavectore@gmail.com">agenciavectore@gmail.com</a></li>
-                        <li><a href="https://wa.me/51950699910" target="_blank" rel="noopener">+51 950 699 910</a></li>
-                        <li><a href="https://www.instagram.com/vectore_ap/" target="_blank" rel="noopener">@vectore_ap</a></li>
+                        <li><a href="#work">Our Work</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="https://pe.agenciavectore.com" target="_blank">Tienda Perú</a></li>
                     </ul>
                 </div>
             </div>
@@ -486,10 +719,101 @@
     <div class="cursor-dot" id="cursorDot"></div>
 
     <!-- Scripts -->
-    <script src="/api-client.js"></script>
-    <script src="/cart.js"></script>
-    <script type="module" src="/js/core/app.js?v=23"></script>
+    <script type="module" src="/js/core/app.js?v=22"></script>
 
+    <!-- External dynamic assets loader -->
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const port = window.location.port ? `:${window.location.port}` : '';
+                const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+                    ? `http://${window.location.hostname}${port}/api` 
+                    : '/api';
+                
+                // Fetch Software Assets
+                fetch(`${API_URL}/software`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success && data.data) {
+                            const heroAsset = data.data.find(a => a.section === 'hero' || a.section === 'mockup');
+                            if (heroAsset && heroAsset.url) {
+                                const container = document.getElementById('vectoreFlowPreviewContainer');
+                                if (container) {
+                                    container.innerHTML = `
+                                        <img src="${heroAsset.url}" alt="Vectore Flow Preview" style="width: 100%; height: 100%; object-fit: cover; display: block;" loading="lazy">
+                                    `;
+                                }
+                            }
+                        }
+                    }).catch(console.error);
+
+                // Fetch Portfolio Projects
+                fetch(`${API_URL}/projects`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success && data.data && data.data.length > 0) {
+                            const portfolioTrack = document.getElementById('portfolioTrack');
+                            if (portfolioTrack) {
+                                // Filter exactly global OR all projects (fallback to global mostly)
+                                const projects = data.data.filter(p => p.scope === 'global' || !p.scope).slice(0, 8); // Max 8 for horizontal flow
+                                if (projects.length > 0) {
+                                    portfolioTrack.innerHTML = projects.map(p => {
+                                        const isVideo = p.thumbnail && (p.thumbnail.match(/\.(mp4|webm|ogg|mov|avi|flv|wmv)$/i) || p.thumbnail.includes('/video/upload/'));
+                                        const mediaHtml = isVideo 
+                                            ? `<video src="${p.thumbnail}" autoplay loop muted playsinline style="width:100%; height:100%; object-fit:cover;"></video>`
+                                            : `<img src="${p.thumbnail}" alt="${p.title}" loading="lazy">`;
+                                            
+                                        return `
+                                        <div class="portfolio-scroll__item reveal--scale">
+                                            <div class="portfolio-scroll__image">
+                                                ${mediaHtml}
+                                            </div>
+                                            <div class="portfolio-scroll__overlay">
+                                                <span class="portfolio-scroll__category">${p.category}</span>
+                                                <h3 class="portfolio-scroll__title">${p.title}</h3>
+                                                <span class="portfolio-scroll__client">${p.client}</span>
+                                            </div>
+                                        </div>
+                                        `;
+                                    }).join('');
+                                }
+                            }
+                        }
+                    }).catch(console.error);
+                
+            } catch (error) {
+                console.error('Error in dynamic loaders:', error);
+            }
+        });
+    </script>
+
+    <!-- Mobile navigation accessibility enhancements -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const toggle = document.getElementById('navToggle');
+        const menu = document.getElementById('navMenu');
+        const overlay = document.getElementById('navOverlay');
+        if (!toggle || !menu) return;
+        function openMenu() {
+          menu.style.display = 'flex';
+          toggle.setAttribute('aria-expanded', 'true');
+          if (overlay) overlay.style.display = 'block';
+        }
+        function closeMenu() {
+          menu.style.display = 'none';
+          toggle.setAttribute('aria-expanded', 'false');
+          if (overlay) overlay.style.display = 'none';
+        }
+        toggle.addEventListener('click', () => {
+          const expanded = toggle.getAttribute('aria-expanded') === 'true';
+          expanded ? closeMenu() : openMenu();
+        });
+        if (overlay) overlay.addEventListener('click', closeMenu);
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') closeMenu();
+        });
+      });
+    </script>
     <!-- GTM noscript -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W8RCKKSV" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </body>

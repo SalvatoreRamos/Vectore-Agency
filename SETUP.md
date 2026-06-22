@@ -1,290 +1,303 @@
-# Guía de Configuración — Vectore Agency
+# Guía de Configuración del Backend - Vectore Agency
 
-Guía paso a paso para levantar el proyecto localmente desde cero.
+## 📋 Pasos de Configuración
 
----
+### 1. Instalar MongoDB
 
-## 📋 Requisitos Previos
+#### Opción A: MongoDB Local (Windows)
 
-| Herramienta | Versión | Propósito |
-|-------------|---------|-----------|
-| Node.js | v18+ | Runtime del servidor |
-| npm | v9+ | Gestor de paquetes (incluido con Node) |
-| MongoDB | v6+ o Atlas | Base de datos |
-| Git | Cualquiera | Control de versiones |
-
----
-
-## 1. Instalar Dependencias
-
+1. Descargar MongoDB Community Server desde: https://www.mongodb.com/try/download/community
+2. Instalar MongoDB siguiendo el asistente
+3. MongoDB se ejecutará automáticamente como servicio de Windows
+4. Verificar que esté corriendo:
 ```bash
-npm install
+cmd /c mongod --version
 ```
 
-Esto instala: Express, Mongoose, Helmet, JWT, Bcrypt, Multer, Cloudinary, Nodemailer, Culqi (vía fetch), entre otros.
-
----
-
-## 2. Configurar Variables de Entorno
-
-```bash
-copy .env.example .env
-```
-
-Edita `.env` con tus credenciales. A continuación la guía para cada servicio:
-
-### 2.1 MongoDB
-
-#### Opción A: MongoDB Atlas (Recomendado)
+#### Opción B: MongoDB Atlas (Cloud - Recomendado)
 
 1. Crear cuenta gratuita en: https://www.mongodb.com/cloud/atlas/register
-2. Crear un cluster Free Tier (M0)
+2. Crear un nuevo cluster (Free Tier M0)
 3. Configurar acceso:
-   - **Database Access:** Crear usuario con contraseña
-   - **Network Access:** Agregar tu IP o `0.0.0.0/0` para desarrollo
-4. Copiar la URI de conexión:
-   - Click en "Connect" → "Connect your application"
-   - Formato: `mongodb+srv://usuario:password@cluster.mongodb.net/vectore-agency`
-5. Pegar en `.env`:
+   - Database Access: Crear un usuario con contraseña
+   - Network Access: Agregar tu IP o permitir acceso desde cualquier lugar (0.0.0.0/0)
+4. Obtener la URI de conexión:
+   - Click en "Connect" en tu cluster
+   - Seleccionar "Connect your application"
+   - Copiar la URI (ejemplo: `mongodb+srv://usuario:password@cluster.mongodb.net/vectore-agency`)
+5. Actualizar `.env` con tu URI:
 ```env
 MONGODB_URI=mongodb+srv://usuario:password@cluster.mongodb.net/vectore-agency
 ```
 
-#### Opción B: MongoDB Local (Windows)
+### 2. Configurar Stripe (Pagos con Tarjeta)
 
-1. Descargar desde: https://www.mongodb.com/try/download/community
-2. Instalar (se ejecuta como servicio de Windows)
-3. Verificar:
-```bash
-mongod --version
-```
-4. Usar la URI local:
+1. Crear cuenta en: https://dashboard.stripe.com/register
+2. Ir a "Developers" > "API keys"
+3. Copiar las claves de test:
+   - Secret key (sk_test_...)
+   - Publishable key (pk_test_...)
+4. Actualizar `.env`:
 ```env
-MONGODB_URI=mongodb://localhost:27017/vectore-agency
+STRIPE_SECRET_KEY=sk_test_tu_clave_secreta
+STRIPE_PUBLISHABLE_KEY=pk_test_tu_clave_publica
 ```
 
-### 2.2 JWT Secret
+### 3. Configurar PayPal (Opcional)
 
-Generar una clave secreta segura:
+1. Crear cuenta de desarrollador: https://developer.paypal.com/
+2. Ir a "Dashboard" > "My Apps & Credentials"
+3. Crear una nueva app en modo Sandbox
+4. Copiar Client ID y Secret
+5. Actualizar `.env`:
+```env
+PAYPAL_CLIENT_ID=tu_client_id
+PAYPAL_CLIENT_SECRET=tu_client_secret
+PAYPAL_MODE=sandbox
+```
+
+### 4. Configurar OpenAI (Opcional - Para Cotizaciones con IA)
+
+1. Crear cuenta en: https://platform.openai.com/signup
+2. Ir a "API keys" y crear una nueva clave
+3. Actualizar `.env`:
+```env
+OPENAI_API_KEY=sk-tu_clave_de_openai
+```
+
+**Nota:** Si no configuras OpenAI, el sistema funcionará normalmente pero no generará sugerencias automáticas en las cotizaciones.
+
+### 5. Configurar JWT Secret
+
+Generar una clave secreta segura para JWT:
 
 ```bash
-node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+# En PowerShell
+cmd /c node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 ```
 
+Actualizar `.env`:
 ```env
 JWT_SECRET=tu_clave_generada_aqui
 ```
 
-### 2.3 Cloudinary (Subida de Imágenes)
+## 🚀 Iniciar el Backend
 
-1. Crear cuenta en: https://cloudinary.com/
-2. Ir al Dashboard y copiar:
-   - Cloud name
-   - API key
-   - API secret
-
-```env
-CLOUDINARY_CLOUD_NAME=tu_cloud_name
-CLOUDINARY_API_KEY=tu_api_key
-CLOUDINARY_API_SECRET=tu_api_secret
-```
-
-> **Sin Cloudinary:** La subida de imágenes desde el admin panel no funcionará, pero el resto de la app sí.
-
-### 2.4 Email (Nodemailer)
-
-Para que las confirmaciones de pedido y formularios de contacto envíen emails reales:
-
-1. Usar una **Contraseña de Aplicación** de Gmail:
-   - Ir a https://myaccount.google.com/apppasswords
-   - Generar contraseña para "Correo" → "Otro (nombre personalizado)"
-
-```env
-EMAIL_SERVICE=gmail
-EMAIL_USER=tu-correo@gmail.com
-EMAIL_PASS=tu-contraseña-de-aplicacion
-CONTACT_EMAIL=correo-donde-recibiras@gmail.com
-```
-
-> **Sin Email configurado:** El sistema usa Ethereal (servicio de testing) automáticamente y muestra un link en la consola para ver el email enviado.
-
-### 2.5 Culqi (Pagos — Solo para Peru site)
-
-1. Crear cuenta en: https://culqi.com/
-2. Ir a "Desarrollo" → "API Keys"
-3. Copiar claves de test:
-
-```env
-CULQI_PUBLIC_KEY=pk_test_xxxxxx
-CULQI_SECRET_KEY=sk_test_xxxxxx
-CULQI_RSA_ID=tu_rsa_id
-CULQI_RSA_PUBLIC_KEY=tu_rsa_public_key
-```
-
-> **Sin Culqi:** El checkout con tarjeta/Yape no procesará pagos reales, pero el resto del carrito y WhatsApp checkout funcionan.
-
-### 2.6 Google OAuth (Opcional)
-
-1. Ir a https://console.cloud.google.com/
-2. Crear un proyecto → APIs & Services → Credentials
-3. Crear OAuth 2.0 Client ID
-
-```env
-GOOGLE_CLIENT_ID=tu_google_client_id
-```
-
-### 2.7 URLs del Sitio
-
-```env
-SITE_URL=https://www.agenciavectore.com
-PERU_SITE_URL=https://pe.agenciavectore.com
-FRONTEND_URL=http://localhost:5500
-```
-
----
-
-## 3. Poblar la Base de Datos
+### 1. Poblar la Base de Datos (Primera vez)
 
 ```bash
-npm run seed
+cmd /c npm run seed
 ```
 
-Esto crea:
-- **1 usuario administrador** (email y password del `.env`)
-- **28 productos** de ejemplo en 7 categorías (diseño, impresión, packaging, señalización, vinilos, digital, espacios)
+Esto creará:
+- Usuario administrador (admin@vectore.com / Admin123!)
+- 6 productos de ejemplo
 
----
+### 2. Iniciar el Servidor
 
-## 4. Iniciar el Servidor
-
-### Modo Desarrollo (con auto-reload)
+**Modo Desarrollo (con auto-reload):**
 ```bash
-npm run dev
+cmd /c npm run dev
 ```
 
-### Modo Producción
+**Modo Producción:**
 ```bash
-npm start
+cmd /c npm start
 ```
 
 El servidor estará disponible en: `http://localhost:3000`
 
----
+### 3. Verificar que Funciona
 
-## 5. Acceder a las Diferentes Vistas
-
-| URL | Vista |
-|-----|-------|
-| `http://localhost:3000/` | Global site (EN) — landing premium |
-| `http://localhost:3000/?_site=pe` | Peru site (ES) — catálogo + tienda |
-| `http://localhost:3000/admin.html` | Panel de administración |
-| `http://localhost:3000/software` | Página de Vectore Flow |
-| `http://localhost:3000/checkout` | Checkout (requiere `?_site=pe`) |
-| `http://localhost:3000/api/health` | Health check de la API |
-
-> **Nota:** En desarrollo local, el parámetro `?_site=pe` simula el subdominio `pe.agenciavectore.com`.
-
----
-
-## 6. Verificar que Funciona
-
-Abre en el navegador: `http://localhost:3000/api/health`
+Abrir en el navegador: `http://localhost:3000/api/health`
 
 Deberías ver:
 ```json
 {
   "status": "OK",
   "message": "Vectore API is running",
-  "timestamp": "2026-04-21T..."
+  "timestamp": "2026-01-06T..."
 }
 ```
 
----
+## 🔗 Conectar Frontend con Backend
 
-## 7. Usar el Admin Panel
+### Opción 1: Usar el Cliente API Incluido
 
-1. Ir a `http://localhost:3000/admin.html`
-2. Iniciar sesión con las credenciales del seed:
-   - **Email:** `admin@vectore.com` (o tu `ADMIN_EMAIL`)
-   - **Password:** `Admin123!` (o tu `ADMIN_PASSWORD`)
-3. Desde aquí puedes gestionar:
-   - Productos del catálogo
-   - Proyectos del portafolio
-   - Testimonios de clientes
-   - Eventos/Sorteos
-   - Leads/Briefs del formulario de contacto
-   - Pedidos y estadísticas de pago
-   - Notificaciones push
-   - Assets del software (Vectore Flow)
+Agregar al HTML antes de tus scripts:
+```html
+<script src="api-client.js"></script>
+```
 
----
+Usar en tu código:
+```javascript
+// Login
+const result = await api.login('admin@vectore.com', 'Admin123!');
+
+// Obtener productos
+const products = await api.getProducts({ category: 'digital' });
+
+// Crear orden
+const order = await api.createOrder({
+  customer: { name: 'Juan', email: 'juan@example.com', phone: '123456' },
+  items: [{ productId: '...', quantity: 1 }],
+  paymentMethod: 'stripe'
+});
+```
+
+### Opción 2: Fetch Directo
+
+```javascript
+// Ejemplo de login
+const response = await fetch('http://localhost:3000/api/auth/login', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ 
+    email: 'admin@vectore.com', 
+    password: 'Admin123!' 
+  })
+});
+const data = await response.json();
+const token = data.token;
+
+// Usar token en peticiones autenticadas
+const productsResponse = await fetch('http://localhost:3000/api/products', {
+  headers: { 
+    'Authorization': `Bearer ${token}` 
+  }
+});
+```
 
 ## 🧪 Probar la API
 
-### Con el navegador (GET)
+### Usando el Navegador
+
+Endpoints GET se pueden probar directamente:
 - http://localhost:3000/api/products
 - http://localhost:3000/api/products/featured/list
-- http://localhost:3000/api/projects
-- http://localhost:3000/api/testimonials
 
-### Con el API Client incluido
+### Usando Postman o Thunder Client
+
+1. Importar la colección de endpoints
+2. Configurar variable de entorno: `baseURL = http://localhost:3000/api`
+3. Para rutas protegidas, agregar header:
+   - Key: `Authorization`
+   - Value: `Bearer <tu_token>`
+
+## 📝 Ejemplos de Uso
+
+### Crear un Producto (Admin)
 
 ```javascript
-// En la consola del navegador (Peru site carga api-client.js):
-const result = await api.login('admin@vectore.com', 'Admin123!');
-const products = await api.getProducts({ category: 'digital' });
+// 1. Login como admin
+const loginData = await api.login('admin@vectore.com', 'Admin123!');
+
+// 2. Crear producto
+const product = await api.createProduct({
+  name: 'Nuevo Servicio',
+  description: 'Descripción del servicio',
+  category: 'digital',
+  subcategory: 'Marketing',
+  price: 299,
+  images: [
+    { url: '/images/servicio.jpg', alt: 'Servicio', isPrimary: true }
+  ],
+  features: ['Feature 1', 'Feature 2'],
+  stock: 999,
+  isAvailable: true,
+  tags: ['marketing', 'digital']
+});
 ```
 
-### Con Postman / Thunder Client
+### Procesar un Pago con Stripe
 
-1. `baseURL = http://localhost:3000/api`
-2. Para rutas protegidas, agregar header:
-   ```
-   Authorization: Bearer <token_del_login>
-   ```
+```javascript
+// 1. Crear orden
+const order = await api.createOrder({
+  customer: {
+    name: 'Cliente Test',
+    email: 'cliente@test.com',
+    phone: '1234567890'
+  },
+  items: [
+    { productId: 'ID_DEL_PRODUCTO', quantity: 1 }
+  ],
+  paymentMethod: 'stripe'
+});
 
----
+// 2. Obtener client secret para Stripe
+const payment = await api.createStripePayment(order.data._id);
+
+// 3. Usar Stripe.js en el frontend para procesar el pago
+// (Ver documentación de Stripe Elements)
+
+// 4. Confirmar pago
+await api.confirmPayment(order.data._id, 'transaction_id', {
+  method: 'stripe'
+});
+```
+
+### Crear Cotización con IA
+
+```javascript
+const quotation = await api.createQuotation({
+  customer: {
+    name: 'Empresa XYZ',
+    email: 'contacto@xyz.com',
+    phone: '9876543210',
+    company: 'XYZ Corp'
+  },
+  projectType: 'branding',
+  description: 'Necesitamos un rebranding completo de nuestra empresa',
+  requirements: [
+    'Nuevo logo',
+    'Paleta de colores',
+    'Manual de marca'
+  ],
+  budget: {
+    min: 500,
+    max: 1500
+  }
+});
+
+// La respuesta incluirá sugerencias generadas por IA en quotation.data.aiSuggestions
+```
 
 ## 🔧 Troubleshooting
 
-### "Cannot connect to MongoDB"
+### Error: "Cannot connect to MongoDB"
 - Verificar que MongoDB esté corriendo
 - Verificar la URI en `.env`
 - Si usas Atlas, verificar que tu IP esté en la whitelist
 
-### "npm is not recognized" / "npm no se reconoce"
+### Error: "npm no se reconoce"
 - Instalar Node.js desde: https://nodejs.org/
 - Reiniciar la terminal después de instalar
 
-### "Execution of scripts is disabled" (PowerShell)
+### Error: "Execution of scripts is disabled"
 - Usar `cmd /c npm ...` en lugar de `npm ...`
 - O ejecutar: `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`
 
 ### Puerto 3000 en uso
-- Cambiar en `.env`: `PORT=3001`
+- Cambiar el puerto en `.env`: `PORT=3001`
 - O cerrar la aplicación que usa el puerto 3000
 
 ### Error de CORS en el frontend
 - Verificar que `FRONTEND_URL` en `.env` coincida con tu URL del frontend
-- Default: `http://localhost:5500` (Live Server) o `http://localhost:3000` (Express)
+- Por defecto: `http://localhost:5500` (Live Server)
 
-### Imágenes no cargan en admin
-- Verificar que las credenciales de Cloudinary estén configuradas en `.env`
-- Los uploads requieren autenticación (admin login)
+## 📚 Recursos Adicionales
 
-### Emails no se envían
-- Sin `EMAIL_USER` configurado, el sistema usa Ethereal automáticamente
-- Los links de preview aparecen en la consola del servidor
+- [Documentación de Express](https://expressjs.com/)
+- [Documentación de MongoDB](https://docs.mongodb.com/)
+- [Documentación de Stripe](https://stripe.com/docs)
+- [Documentación de OpenAI](https://platform.openai.com/docs)
+- [JWT.io](https://jwt.io/) - Para decodificar tokens
 
----
+## 🆘 Soporte
 
-## 📚 Recursos
-
-- [Express.js](https://expressjs.com/)
-- [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
-- [Mongoose ODM](https://mongoosejs.com/)
-- [Cloudinary](https://cloudinary.com/documentation)
-- [Culqi API](https://docs.culqi.com/)
-- [Nodemailer](https://nodemailer.com/)
-- [Spline 3D](https://spline.design/)
-- [JWT.io](https://jwt.io/)
+Si encuentras problemas:
+1. Revisar los logs del servidor en la consola
+2. Verificar que todas las variables de entorno estén configuradas
+3. Asegurarte de que MongoDB esté corriendo
+4. Verificar que las credenciales de las APIs sean correctas

@@ -362,14 +362,3 @@ export function initMobileNav() {
         closeMenu({ restoreFocus: menu.classList.contains('active') });
     });
 }
-
-// ============================================
-// Refresh animations for dynamically loaded room content
-// Called after room content is injected into the DOM
-// ============================================
-export function refreshAnimations() {
-    initScrollReveal();
-    initTiltEffect();
-    initMagneticButtons();
-    initCounters();
-}

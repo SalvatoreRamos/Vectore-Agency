@@ -1,15 +1,13 @@
 // ============================================
-// VECTORE GLOBAL — App Entry Point
-// Unified SPA architecture with room navigation
+// VECTORE GLOBAL — App Entry Point (EN)
+// Initializes all modules for the global site
 // ============================================
 
 import { initCursor } from '../components/cursor.js';
-import { initScrollReveal, initCounters, initTiltEffect, initMagneticButtons, initParallaxOrbs, initSmoothScroll, initNavbarScroll, initMobileNav, refreshAnimations } from '../components/animations.js?v=23';
+import { initScrollReveal, initCounters, initTiltEffect, initMagneticButtons, initParallaxOrbs, initSmoothScroll, initNavbarScroll, initMobileNav } from '../components/animations.js?v=22';
 import { initSplineViewer } from '../components/spline-viewer.js';
 import { initSmartForm } from '../components/forms.js';
 import { initThemeToggle } from '../components/theme-toggle.js';
-import { initSPARouter } from '../components/spa-router.js';
-import { initRoomContent } from '../components/room-content.js';
 
 // ===================================
 // Boot
@@ -32,81 +30,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3D
     initSplineViewer();
 
-    // SPA Router — room navigation
-    initSPARouter();
+    // Forms
+    initSmartForm();
 
-    // Room content lazy-loader
-    initRoomContent();
+    // Geo-detection banner (Cloudflare cf-ipcountry)
+    initGeoBanner();
 
-    // Refresh animations when room content loads
-    window.addEventListener('room:enter', () => {
-        // Small delay to let DOM render
-        setTimeout(() => {
-            refreshAnimations();
-        }, 100);
-    });
+    // Portfolio scroll navigation
+    initPortfolioScroll();
 
     // Preloader
     initPreloader();
-
-    // Logo click → back to lobby
-    const navLogo = document.getElementById('navLogo');
-    if (navLogo) {
-        navLogo.addEventListener('click', (e) => {
-            e.preventDefault();
-            const backBtn = document.getElementById('backToLobby');
-            if (backBtn && backBtn.style.display === 'flex') {
-                backBtn.click();
-            } else {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        });
-    }
-
-    // SPA-aware internal link interception
-    // Intercept clicks on <a href="/studio">, <a href="/wraps"> etc.
-    // so they navigate via SPA router instead of full page reload
-    const ROOM_PATHS = ['studio', 'wraps', 'software', 'visuals'];
-    document.addEventListener('click', (e) => {
-        const anchor = e.target.closest('a[href]');
-        if (!anchor) return;
-
-        const href = anchor.getAttribute('href');
-        // Only intercept local paths (not external, mailto, tel, etc.)
-        if (!href || !href.startsWith('/')) return;
-
-        const path = href.slice(1).toLowerCase().split('?')[0].split('#')[0];
-
-        if (path === '' || path === '/') {
-            // Home/lobby link
-            e.preventDefault();
-            const backBtn = document.getElementById('backToLobby');
-            if (backBtn && backBtn.style.display === 'flex') {
-                backBtn.click();
-            } else {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        } else if (ROOM_PATHS.includes(path)) {
-            // Room link — find the lobby card and click it
-            e.preventDefault();
-            const card = document.querySelector(`.lobby__card[data-room="${path}"]`);
-            if (card) {
-                // If we're already in a room, go back first
-                const backBtn = document.getElementById('backToLobby');
-                if (backBtn && backBtn.style.display === 'flex') {
-                    backBtn.click();
-                    // Wait for transition then navigate
-                    setTimeout(() => card.click(), 600);
-                } else {
-                    card.click();
-                }
-            }
-        }
-        // All other paths (external links, /terminos, etc.) pass through normally
-    });
-
-    // Forms
-    initSmartForm();
 });
 
 // ===================================
@@ -119,4 +53,61 @@ function initPreloader() {
             setTimeout(() => preloader.classList.add('hidden'), 600);
         }
     });
+}
+
+// ===================================
+// Portfolio horizontal scroll nav
+// ===================================
+function initPortfolioScroll() {
+    const track = document.querySelector('.portfolio-scroll__track');
+    const prevBtn = document.getElementById('portfolioPrev');
+    const nextBtn = document.getElementById('portfolioNext');
+
+    if (!track) return;
+
+    const scrollAmount = 500;
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            track.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        });
+    }
+}
+
+// ===================================
+// Geo-detection Banner
+// Shows a Peru site suggestion if Cloudflare detects PE country
+// ===================================
+function initGeoBanner() {
+    const banner = document.getElementById('geoBanner');
+    const closeBtn = document.getElementById('geoBannerClose');
+    if (!banner) return;
+
+    // Don't show if already dismissed this session
+    if (sessionStorage.getItem('geo_banner_dismissed')) return;
+
+    // Check server response for geo-detection header
+    fetch(window.location.href, { method: 'HEAD' })
+        .then(res => {
+            const suggest = res.headers.get('X-Suggest-Locale');
+            if (suggest === 'pe') {
+                banner.style.display = 'flex';
+                banner.classList.add('is-visible');
+            }
+        })
+        .catch(() => { /* silent fail */ });
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            banner.style.display = 'none';
+            banner.classList.remove('is-visible');
+            sessionStorage.setItem('geo_banner_dismissed', '1');
+        });
+    }
 }
