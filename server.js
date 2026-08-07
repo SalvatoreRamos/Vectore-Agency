@@ -239,6 +239,14 @@ app.get('/libro-reclamaciones', (req, res) => {
   res.sendFile(path.join(__dirname, 'libro-reclamaciones.html'));
 });
 
+// Real Estate Investment (Peru only)
+app.get('/inversiones', (req, res) => {
+  if (req.site !== 'pe') {
+    return res.redirect(301, 'https://pe.agenciavectore.com/inversiones');
+  }
+  res.sendFile(path.join(__dirname, 'inversiones.html'));
+});
+
 // ===================================
 // Catch-all: Serve site-appropriate page
 // ===================================
