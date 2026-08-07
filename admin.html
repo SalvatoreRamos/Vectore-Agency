@@ -193,17 +193,17 @@
                         </div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon digital">💻</div>
+                        <div class="stat-icon digital">🇵🇪</div>
                         <div class="stat-info">
                             <span class="stat-number" id="digitalProducts">0</span>
-                            <span class="stat-label">Digitales</span>
+                            <span class="stat-label">Perú (Local)</span>
                         </div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon physical">📄</div>
+                        <div class="stat-icon physical">🌍</div>
                         <div class="stat-info">
                             <span class="stat-number" id="physicalProducts">0</span>
-                            <span class="stat-label">Físicos</span>
+                            <span class="stat-label">Internacional (Global)</span>
                         </div>
                     </div>
                 </div>
@@ -811,6 +811,22 @@
                     <div class="form-group">
                         <label for="productSubcategory">Subcategoría</label>
                         <input type="text" id="productSubcategory" required placeholder="Ej: Branding">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productScope">Sección / Web</label>
+                        <select id="productScope" required>
+                            <option value="local">🇵🇪 Perú (Local)</option>
+                            <option value="global">🌍 Internacional (Global)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="productCurrency">Moneda</label>
+                        <select id="productCurrency" required>
+                            <option value="PEN">S/ Soles (PEN)</option>
+                            <option value="USD">$ Dólares (USD)</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-row">

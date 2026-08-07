@@ -39,9 +39,79 @@ document.addEventListener('DOMContentLoaded', () => {
     // Portfolio scroll navigation
     initPortfolioScroll();
 
+    // Services (Products with global scope)
+    initServices();
+
     // Preloader
     initPreloader();
 });
+
+// ===================================
+// Services (Global Products)
+// ===================================
+async function initServices() {
+    const servicesGrid = document.getElementById('servicesGrid');
+    if (!servicesGrid) return;
+
+    try {
+        const res = await fetch('/api/products?scope=global');
+        const data = await res.json();
+        
+        if (data.success && data.data && data.data.length > 0) {
+            // Empty the grid (removes fallbacks)
+            servicesGrid.innerHTML = '';
+            
+            data.data.forEach(product => {
+                const currencySymbol = product.currency === 'USD' ? '$' : 'S/';
+                
+                const card = document.createElement('div');
+                card.className = 'service-card';
+                card.setAttribute('data-tilt', '');
+                
+                // Construct the features list
+                let featuresHtml = '';
+                if (product.features && product.features.length > 0) {
+                    featuresHtml = product.features.map(f => `<li>${f}</li>`).join('');
+                } else {
+                    if (product.material) featuresHtml += `<li>${product.material}</li>`;
+                    if (product.dimensions) featuresHtml += `<li>${product.dimensions}</li>`;
+                    if (product.deliveryTime) featuresHtml += `<li>${product.deliveryTime}</li>`;
+                }
+
+                card.innerHTML = `
+                    <div class="service-card__icon" style="font-size: 2rem; display: flex; align-items: center; justify-content: center;">
+                        ${product.icon || '✨'}
+                    </div>
+                    <h3>${product.name}</h3>
+                    <p>${product.description}</p>
+                    <div style="margin-top: auto;">
+                        <p style="font-weight: 600; color: var(--color-primary); font-size: 1.1rem; margin-top: 15px;">
+                            ${product.unit && product.unit !== 'unidad' ? `${currencySymbol} ${product.price} / ${product.unit}` : `Desde ${currencySymbol} ${product.price}`}
+                        </p>
+                    </div>
+                    <ul class="service-card__features">
+                        ${featuresHtml}
+                    </ul>
+                `;
+                
+                servicesGrid.appendChild(card);
+            });
+            
+            // Re-initialize tilt effect for new dynamically added cards if the function exists
+            if (typeof VanillaTilt !== 'undefined') {
+                VanillaTilt.init(document.querySelectorAll(".service-card[data-tilt]"), {
+                    max: 5,
+                    speed: 400,
+                    glare: true,
+                    "max-glare": 0.2,
+                });
+            }
+        }
+    } catch (err) {
+        console.error('Failed to fetch services:', err);
+        // Silently fail and leave the fallback HTML intact
+    }
+}
 
 // ===================================
 // Preloader

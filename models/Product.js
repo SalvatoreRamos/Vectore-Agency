@@ -62,6 +62,10 @@ const productSchema = new mongoose.Schema({
     features: [{
         type: String
     }],
+    icon: {
+        type: String,
+        default: '✨'
+    },
     specifications: {
         type: Map,
         of: String
@@ -90,6 +94,16 @@ const productSchema = new mongoose.Schema({
             type: Number,
             default: 0
         }
+    },
+    scope: {
+        type: String,
+        enum: ['local', 'global'],
+        default: 'local'
+    },
+    currency: {
+        type: String,
+        enum: ['PEN', 'USD'],
+        default: 'PEN'
     },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,

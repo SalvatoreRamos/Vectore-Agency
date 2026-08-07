@@ -13,6 +13,7 @@ router.get('/', async (req, res) => {
         const {
             category,
             subcategory,
+            scope,
             search,
             minPrice,
             maxPrice,
@@ -26,6 +27,7 @@ router.get('/', async (req, res) => {
 
         if (category) query.category = category;
         if (subcategory) query.subcategory = subcategory;
+        if (scope) query.scope = scope;
         if (search) {
             query.$text = { $search: search };
         }

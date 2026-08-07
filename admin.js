@@ -390,8 +390,8 @@ function switchSection(section) {
 // ===================================
 function updateStats() {
     if (totalProductsEl) totalProductsEl.textContent = products.length;
-    if (digitalProductsEl) digitalProductsEl.textContent = products.filter(p => p.category === 'digital').length;
-    if (physicalProductsEl) physicalProductsEl.textContent = products.filter(p => p.category !== 'digital').length;
+    if (digitalProductsEl) digitalProductsEl.textContent = products.filter(p => p.scope === 'local' || !p.scope).length;
+    if (physicalProductsEl) physicalProductsEl.textContent = products.filter(p => p.scope === 'global').length;
     if (totalProjectsEl) totalProjectsEl.textContent = projects.length;
     if (document.getElementById('totalTestimonials')) {
         document.getElementById('totalTestimonials').textContent = testimonials.length;
@@ -821,19 +821,29 @@ function renderProducts() {
         };
         const catLabel = categoryMap[product.category] || product.category;
 
+        const scopeLabel = (product.scope === 'global') ? '🌍 Global' : '🇵🇪 Local';
+        const scopeColor = (product.scope === 'global') ? '#2563eb' : '#16a34a';
+        const currencySymbol = (product.currency === 'USD') ? '$' : 'S/';
+
+        // Override price display with currency
+        const priceDisplayFinal = (product.unit && product.unit !== 'unidad')
+            ? `${currencySymbol} ${product.price} / ${product.unit}`
+            : `Desde ${currencySymbol} ${product.price}`;
+
         return `
         <div class="admin-product-card admin-card--catalog" data-id="${productId}" data-name="${product.name}">
             <div class="admin-product-image" style="background: ${getGradient(product.category, productId)}">
                 ${imageContent}
                 <div class="product-protection-overlay"></div>
                 ${product.material ? `<span class="category-badge" style="background: rgba(0,0,0,0.6); top: 10px; left: 10px; position: absolute;">${product.material}</span>` : ''}
+                <span class="category-badge" style="background: ${scopeColor}; top: 10px; right: 10px; position: absolute; font-size: 0.7rem;">${scopeLabel}</span>
             </div>
             <div class="admin-product-info">
                 <h3>${product.name}</h3>
                 <p class="product-kicker">${catLabel}${product.subcategory ? ` • ${product.subcategory}` : ''}</p>
                 <p class="product-description">${product.description}</p>
                 ${product.deliveryTime ? `<p>⏳ ${product.deliveryTime}</p>` : ''}
-                <div class="admin-product-price">${priceDisplay}</div>
+                <div class="admin-product-price">${priceDisplayFinal}</div>
                 <div class="admin-product-actions">
                     <button class="btn-edit">Editar</button>
                     <button class="btn-delete">Eliminar</button>
@@ -1197,6 +1207,8 @@ function openEditModal(id) {
     document.getElementById('productName').value = product.name;
     document.getElementById('productCategory').value = product.category;
     document.getElementById('productSubcategory').value = product.subcategory || '';
+    document.getElementById('productScope').value = product.scope || 'local';
+    document.getElementById('productCurrency').value = product.currency || 'PEN';
     document.getElementById('productPrice').value = product.price;
     document.getElementById('productUnit').value = product.unit || 'unidad';
     document.getElementById('productDeliveryTime').value = product.deliveryTime || '';
@@ -1590,6 +1602,8 @@ function setupEventListeners() {
             description: document.getElementById('productDescription').value,
             category: cat,
             subcategory: document.getElementById('productSubcategory').value || 'General',
+            scope: document.getElementById('productScope').value || 'local',
+            currency: document.getElementById('productCurrency').value || 'PEN',
             price: parseInt(document.getElementById('productPrice').value) || 0,
             unit: document.getElementById('productUnit').value || 'unidad',
             deliveryTime: document.getElementById('productDeliveryTime').value || '',
