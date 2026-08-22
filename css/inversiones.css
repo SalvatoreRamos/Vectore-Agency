@@ -3,14 +3,15 @@
    ========================================================================== */
 
 :root {
-    /* Industrial Modern Palette */
-    --color-bg: #222222; /* Gris antracita */
-    --color-text: #ffffff; /* Blanco puro */
-    --color-text-muted: #a0a0a0;
-    --color-primary: #10B981; /* Verde esmeralda (Rentabilidad) */
-    --color-primary-hover: #059669;
-    --color-card-bg: #2a2a2a;
-    --color-card-border: #333333;
+    /* Premium Navy & Gold Palette */
+    --color-bg: #ffffff; /* Blanco puro de fondo */
+    --color-text: #0A2540; /* Azul Marino Premium para texto */
+    --color-text-muted: #5E718D;
+    --color-primary: #C5A059; /* Dorado Sólido */
+    --color-primary-hover: #A88647;
+    --color-navy: #0A2540;
+    --color-card-bg: #F8FAFC;
+    --color-card-border: #E2E8F0;
     
     --font-primary: 'Inter', system-ui, -apple-system, sans-serif;
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -69,7 +70,7 @@ h1, h2, h3, h4 {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to bottom, rgba(34, 34, 34, 0.7) 0%, rgba(34, 34, 34, 0.95) 100%);
+    background: linear-gradient(to bottom, rgba(10, 37, 64, 0.8) 0%, rgba(10, 37, 64, 0.95) 100%);
     z-index: 2;
 }
 
@@ -78,12 +79,13 @@ h1, h2, h3, h4 {
     z-index: 3;
     max-width: 800px;
     animation: fadeInUp 1s ease forwards;
+    color: #ffffff;
 }
 
 .hero__badge {
     display: inline-block;
     padding: 0.5rem 1rem;
-    background: rgba(16, 185, 129, 0.1);
+    background: rgba(197, 160, 89, 0.1);
     color: var(--color-primary);
     border: 1px solid var(--color-primary);
     border-radius: 50px;
@@ -102,7 +104,7 @@ h1, h2, h3, h4 {
 
 .hero__subtitle {
     font-size: clamp(1.25rem, 2vw, 1.5rem);
-    color: var(--color-text-muted);
+    color: #E2E8F0;
     margin-bottom: 3rem;
 }
 
@@ -122,14 +124,15 @@ h1, h2, h3, h4 {
 
 .btn-primary {
     background-color: var(--color-primary);
-    color: white;
-    box-shadow: 0 4px 14px 0 rgba(16, 185, 129, 0.39);
+    color: var(--color-navy);
+    box-shadow: 0 4px 14px 0 rgba(197, 160, 89, 0.39);
 }
 
 .btn-primary:hover {
     background-color: var(--color-primary-hover);
+    color: var(--color-navy);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    box-shadow: 0 6px 20px rgba(197, 160, 89, 0.4);
 }
 
 /* ==========================================================================

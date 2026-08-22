@@ -2271,3 +2271,82 @@ document.addEventListener('change', async function (e) {
         fetchAndRenderOrders();
     }
 });
+
+
+// ==========================================
+// FLOW EXPRESS INTEGRATION
+// ==========================================
+const SUPABASE_URL = 'https://ppdirywkrmuexufadekw.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBwZGlyeXdrcm11ZXh1ZmFkZWt3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEyMTAzNzUsImV4cCI6MjA4Njc4NjM3NX0.SRfTT08pn-x1sEUk9yUvulhZuWHBY1NzgXUyZRHrH9w';
+
+let supabaseClient = null;
+
+async function initExpressOrders() {
+    if (typeof supabase === 'undefined') return;
+    
+    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
+    // Solo cargamos los pedidos Express al hacer clic en el tab
+    const tabBtn = document.getElementById('tab-express');
+    if (tabBtn) {
+        tabBtn.addEventListener('click', () => {
+            loadExpressOrders();
+        });
+    }
+}
+
+async function loadExpressOrders() {
+    const tbody = document.getElementById('express-table-body');
+    if (!tbody) return;
+    
+    tbody.innerHTML = '<tr><td colspan="5" class="text-center">Cargando pedidos...</td></tr>';
+    
+    try {
+        const { data, error } = await supabaseClient
+            .from('quick_orders')
+            .select('*')
+            .order('created_at', { ascending: false })
+            .limit(50);
+            
+        if (error) throw error;
+        
+        if (!data || data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" class="text-center">No hay pedidos express.</td></tr>';
+            return;
+        }
+        
+        tbody.innerHTML = data.map(order => {
+            const date = new Date(order.created_at).toLocaleDateString('es-PE', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+            
+            let statusBadge = '';
+            if (order.status === 'pendiente') statusBadge = '<span class="status-badge" style="background:#FFBB55;color:#1a1354;padding:4px 8px;border-radius:4px;font-weight:bold;">PENDIENTE</span>';
+            else if (order.status === 'procesado') statusBadge = '<span class="status-badge" style="background:#4DA8FF;color:white;padding:4px 8px;border-radius:4px;">PROCESADO</span>';
+            else statusBadge = '<span class="status-badge" style="background:#00D68F;color:white;padding:4px 8px;border-radius:4px;">COMPLETADO</span>';
+            
+            return `
+                <tr>
+                    <td>${date}</td>
+                    <td style="font-weight:bold;">${escapeHtml(order.client_name)}</td>
+                    <td>${escapeHtml(order.detail)}</td>
+                    <td style="color:#FFBB55;font-weight:bold;">S/. ${Number(order.price).toFixed(2)}</td>
+                    <td>${statusBadge}</td>
+                </tr>
+            `;
+        }).join('');
+        
+    } catch (e) {
+        console.error('Error cargando pedidos express:', e);
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-red-500">Error al cargar los pedidos.</td></tr>';
+    }
+}
+
+function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+
+// Inicializar cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(initExpressOrders, 1000); // Esperar a que Supabase cargue
+});

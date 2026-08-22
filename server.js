@@ -47,6 +47,7 @@ app.use(helmet({
       ...helmet.contentSecurityPolicy.getDefaultDirectives(),
       "default-src": ["'self'", "https:", "http:", "data:", "blob:"],
       "script-src": [
+        "https://cdn.jsdelivr.net/npm/@supabase/",
         "'self'",
         "'unsafe-inline'",
         "'unsafe-eval'",
@@ -75,6 +76,7 @@ app.use(helmet({
       "worker-src": ["'self'", "blob:"],
       "frame-src": ["'self'", "https://accounts.google.com/", "https://checkout.culqi.com", "https://3ds.culqi.com", "https://my.spline.design", "https://prod.spline.design", "https://cdn.spline.design"],
       "connect-src": [
+        "https://ppdirywkrmuexufadekw.supabase.co",
         "'self'",
         "https://www.googletagmanager.com",
         "https://www.google-analytics.com",
@@ -245,6 +247,13 @@ app.get('/inversiones', (req, res) => {
     return res.redirect(301, 'https://pe.agenciavectore.com/inversiones');
   }
   res.sendFile(path.join(__dirname, 'inversiones.html'));
+});
+
+// ===================================
+// Flow Express (Mobile Quick Orders)
+// ===================================
+app.get('/vf', (req, res) => {
+  res.sendFile(path.join(__dirname, 'flow-express.html'));
 });
 
 // ===================================

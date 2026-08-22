@@ -526,8 +526,8 @@ function initCartUI() {
         '<h2>Iniciar sesión</h2>' +
         '<p>Ingresa para guardar tu carrito y realizar pedidos</p>' +
         '</div>' +
-        '<div id="googleBtnContainer" class="google-btn-container"></div>' +
-        '<div class="auth-divider"><span>o</span></div>' +
+        '<div id="googleBtnContainer" class="google-btn-container" style="display: none;"></div>' +
+        '<div class="auth-divider" style="display: none;"><span>o</span></div>' +
         '<form id="emailLoginForm" class="email-login-form">' +
         '<input type="email" id="loginEmail" placeholder="Correo electrónico" required autocomplete="email">' +
         '<input type="password" id="loginPassword" placeholder="Contraseña" required autocomplete="current-password">' +
