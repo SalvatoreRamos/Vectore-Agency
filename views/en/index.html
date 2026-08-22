@@ -152,64 +152,7 @@
          HERO SECTION
          ============================================ -->
     <section class="hero" id="home">
-        <!-- Load Hana Viewer Web Component -->
-        <script type="module" src="https://cdn.spline.design/@splinetool/hana-viewer@1.2.51/hana-viewer.js"></script>
-
-        <div class="hero__spline-background" style="position: absolute; inset: 0; z-index: 0; pointer-events: auto;">
-            <!-- Dark Mode Hana Viewer -->
-            <hana-viewer id="splineDark" class="spline-frame spline-frame--dark" url="https://prod.spline.design/v56A8ziXxfRqa3zo-VbK/scene.hanacode" style="width: 100%; height: 100%; position: absolute; inset: 0; transition: opacity 0.8s ease;"></hana-viewer>
-            <!-- Light Mode Hana Viewer with lazy load logic -->
-            <hana-viewer id="splineLight" class="spline-frame spline-frame--light" url="https://prod.spline.design/v56A8ziXxfRqa3zo-rG6/scene.hanacode" style="width: 100%; height: 100%; position: absolute; inset: 0; transition: opacity 0.8s ease; opacity: 0; pointer-events: none;" loading="lazy"></hana-viewer>
-        </div>
-        
-        <!-- Mobile Lite Hero (mobile optimization) -->
-        <div id="heroLite" class="hero-lite" style="display:none; text-align:center; padding: 40px 16px;">
-            <div class="badge" style="display:inline-block; background: rgba(134,85,255,.22); color:white; padding:6px 12px; border-radius:999px; margin-bottom:12px; font-weight:700; text-transform:uppercase; font-size:12px;">AI-Driven Creative Studio</div>
-            <h1 class="hero-lite__title" style="font-size: 2.6rem; line-height: 1.1; color:white; font-weight:900; margin:8px 0 12px;">We create digital experiences that scale.</h1>
-            <p class="hero-lite__subtitle" style="color:#e5e7eb; max-width:720px; margin:0 auto 20px;">Lightweight hero optimized for mobile: fast, readable, and accessible.</p>
-            <div class="hero__actions" style="display:flex; justify-content:center; gap:12px;">
-                <a href="#contact" class="btn btn--primary btn--lg" style="padding:14px 20px;">Start a Project</a>
-                <a href="#work" class="btn btn--ghost btn--lg" style="padding:14px 20px;">See Our Work</a>
-            </div>
-        </div>
-
-        <!-- Script to aggressively remove the Spline/Hana watermark inside Shadow DOM -->
-        <script>
-            document.addEventListener("DOMContentLoaded", () => {
-                const removeLogo = () => {
-                    document.querySelectorAll('hana-viewer').forEach(viewer => {
-                        if (viewer.shadowRoot) {
-                            const logo = viewer.shadowRoot.querySelector('#logo') || viewer.shadowRoot.querySelector('.spline-watermark') || viewer.shadowRoot.querySelector('a');
-                            if (logo) logo.remove();
-                        }
-                    });
-                };
-                // Run multiple times to catch delayed rendering
-                const interval = setInterval(removeLogo, 500);
-                setTimeout(() => clearInterval(interval), 5000);
-            });
-        </script>
-        <!-- Mobile hero lite loader for mobile responsiveness -->
-        <script>
-          function updateHeroLite() {
-            const mq = window.matchMedia('(max-width: 768px)');
-            const heroLite = document.getElementById('heroLite');
-            const dark = document.getElementById('splineDark');
-            const light = document.getElementById('splineLight');
-            if (!heroLite) return;
-            if (mq.matches) {
-              heroLite.style.display = 'block';
-              if (dark) dark.style.display = 'none';
-              if (light) light.style.display = 'none';
-            } else {
-              heroLite.style.display = 'none';
-              if (dark) dark.style.display = 'block';
-              if (light) light.style.display = 'block';
-            }
-          }
-          window.addEventListener('load', updateHeroLite);
-          window.addEventListener('resize', updateHeroLite);
-        </script>
+        <!-- Ambient background (Lightweight and fast) -->
 
         <div class="hero__ambient">
             <div class="hero__orb hero__orb--1"></div>
@@ -475,20 +418,20 @@
         <div class="container">
             <div class="flow-grid">
                 <div class="reveal">
-                    <div class="badge">Product</div>
-                    <h2 style="margin-bottom: var(--space-4);">Vectore Flow <span class="text-gradient">v1.0</span></h2>
+                    <div class="badge" style="color: var(--accent-gold); border-color: var(--accent-gold); background: rgba(255, 187, 85, 0.1);">Product</div>
+                    <h2 style="margin-bottom: var(--space-4);">Vectore Flow <span style="color: var(--accent-gold);">v1.0</span></h2>
                     <p style="margin-bottom: var(--space-8); max-width: 480px; line-height: var(--leading-relaxed);">
                         The production operating system built for the chaos of creative studios and print shops. From quote to install — one unified workflow.
                     </p>
                     <ul style="list-style: none; margin-bottom: var(--space-8);">
                         <li style="padding: var(--space-2) 0; color: var(--text-secondary); display: flex; align-items: center; gap: var(--space-3);">
-                            <span style="color: var(--accent-primary); font-weight: 700;">→</span> End-to-end order management
+                            <span style="color: var(--accent-gold); font-weight: 700;">→</span> End-to-end order management
                         </li>
                         <li style="padding: var(--space-2) 0; color: var(--text-secondary); display: flex; align-items: center; gap: var(--space-3);">
-                            <span style="color: var(--accent-primary); font-weight: 700;">→</span> Real-time production sync
+                            <span style="color: var(--accent-gold); font-weight: 700;">→</span> Real-time production sync
                         </li>
                         <li style="padding: var(--space-2) 0; color: var(--text-secondary); display: flex; align-items: center; gap: var(--space-3);">
-                            <span style="color: var(--accent-primary); font-weight: 700;">→</span> Installer mobile app
+                            <span style="color: var(--accent-gold); font-weight: 700;">→</span> Installer mobile app
                         </li>
                     </ul>
                     <a href="/software" class="btn btn--primary">
@@ -538,23 +481,33 @@
                         <p class="form-step__subtitle">Select the service that best fits your needs.</p>
                         <div class="form-options">
                             <div class="form-option" data-value="ai_agents">
-                                <span class="form-option__icon">🤖</span>
+                                <span class="form-option__icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-4 0V4a2 2 0 0 1 2-2zM4 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8z"/><path d="M8 14h.01M16 14h.01M9 18h6"/></svg>
+                                </span>
                                 <span>AI Agents & Automation</span>
                             </div>
                             <div class="form-option" data-value="3d_renders">
-                                <span class="form-option__icon">💎</span>
+                                <span class="form-option__icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+                                </span>
                                 <span>3D Renders & Digital Assets</span>
                             </div>
                             <div class="form-option" data-value="branding">
-                                <span class="form-option__icon">🎯</span>
+                                <span class="form-option__icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                                </span>
                                 <span>Brand Identity & Design</span>
                             </div>
                             <div class="form-option" data-value="saas">
-                                <span class="form-option__icon">⚡</span>
+                                <span class="form-option__icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                                </span>
                                 <span>SaaS / Web Application</span>
                             </div>
                             <div class="form-option" data-value="other">
-                                <span class="form-option__icon">🚀</span>
+                                <span class="form-option__icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+                                </span>
                                 <span>Other / Not Sure Yet</span>
                             </div>
                         </div>
@@ -566,19 +519,27 @@
                         <p class="form-step__subtitle">This helps us prioritize and allocate the right team.</p>
                         <div class="form-options">
                             <div class="form-option" data-value="asap">
-                                <span class="form-option__icon">🔥</span>
+                                <span class="form-option__icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+                                </span>
                                 <span>ASAP — We need it yesterday</span>
                             </div>
                             <div class="form-option" data-value="1-2_months">
-                                <span class="form-option__icon">📅</span>
+                                <span class="form-option__icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+                                </span>
                                 <span>1–2 months</span>
                             </div>
                             <div class="form-option" data-value="3+_months">
-                                <span class="form-option__icon">🗓️</span>
+                                <span class="form-option__icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/><path d="m9 16 2 2 4-4"/></svg>
+                                </span>
                                 <span>3+ months — Let's plan it right</span>
                             </div>
                             <div class="form-option" data-value="exploring">
-                                <span class="form-option__icon">🔍</span>
+                                <span class="form-option__icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                                </span>
                                 <span>Just exploring options</span>
                             </div>
                         </div>
@@ -594,23 +555,33 @@
                         <p class="form-step__subtitle">No commitment — just helps us tailor the conversation.</p>
                         <div class="form-options">
                             <div class="form-option" data-value="under_5k">
-                                <span class="form-option__icon">💰</span>
+                                <span class="form-option__icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><line x1="12" x2="12" y1="16" y2="8"/><line x1="10" x2="14" y1="10" y2="10"/><line x1="10" x2="14" y1="14" y2="14"/></svg>
+                                </span>
                                 <span>Under $5,000</span>
                             </div>
                             <div class="form-option" data-value="5k-15k">
-                                <span class="form-option__icon">💰💰</span>
+                                <span class="form-option__icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
+                                </span>
                                 <span>$5,000 – $15,000</span>
                             </div>
                             <div class="form-option" data-value="15k-50k">
-                                <span class="form-option__icon">💰💰💰</span>
+                                <span class="form-option__icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                                </span>
                                 <span>$15,000 – $50,000</span>
                             </div>
                             <div class="form-option" data-value="50k+">
-                                <span class="form-option__icon">🏦</span>
+                                <span class="form-option__icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h16v10H4z"/><path d="M8 10V7c0-2.209 1.791-4 4-4s4 1.791 4 4v3"/><path d="M12 14v2"/></svg>
+                                </span>
                                 <span>$50,000+</span>
                             </div>
                             <div class="form-option" data-value="not_sure">
-                                <span class="form-option__icon">🤷</span>
+                                <span class="form-option__icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+                                </span>
                                 <span>Not sure yet</span>
                             </div>
                         </div>

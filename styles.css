@@ -14,6 +14,7 @@
     --gray-400: #ced4da;
     --gray-500: #adb5bd;
     --gray-600: #6c757d;
+    --accent-gold: #FFBB55;
 
     --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
     --gradient-dark: linear-gradient(135deg, var(--dark) 0%, var(--dark-light) 100%);

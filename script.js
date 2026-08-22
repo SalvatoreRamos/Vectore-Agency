@@ -689,29 +689,25 @@ function initTiltEffect() {
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
 
-            // Dividir la tarjeta en una rejilla 3x3 para obtener ángulos preestablecidos
-            const zoneX = Math.floor((x / rect.width) * 3);
-            const zoneY = Math.floor((y / rect.height) * 3);
+            // Calculate continuous rotation based on mouse position relative to center
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const maxTilt = 8; // degrees
+            const rotX = -((y - centerY) / centerY) * maxTilt;
+            const rotY = ((x - centerX) / centerX) * maxTilt;
 
-            // Ángulos fijos y suaves (ajustado para evitar deformación excesiva)
-            let rotX = 0;
-            let rotY = 0;
-
-            // Mapeo de zonas a ángulos (Arriba: pos, Abajo: neg | Izquierda: neg, Derecha: pos)
-            // Zona Y: 0 (Arriba), 1 (Centro), 2 (Abajo)
-            if (zoneY === 0) rotX = 5;
-            else if (zoneY === 2) rotX = -5;
-
-            // Zona X: 0 (Izquierda), 1 (Centro), 2 (Derecha)
-            if (zoneX === 0) rotY = -5;
-            else if (zoneX === 2) rotY = 5;
-
-            // Aplicamos la transformación con escala reducida (1.02)
+            // Aplicamos la transformación de forma fluida
             card.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.02, 1.02, 1.02)`;
         });
 
         card.addEventListener('mouseleave', () => {
             card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+            card.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
+        });
+        
+        card.addEventListener('mouseenter', () => {
+            card.style.transition = 'none';
         });
     });
 }
