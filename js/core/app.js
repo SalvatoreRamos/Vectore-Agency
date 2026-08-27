@@ -54,7 +54,7 @@ async function initServices() {
     if (!servicesGrid) return;
 
     try {
-        const res = await fetch('/api/products?scope=global');
+        const res = await fetch('/api/products?scope=local');
         const data = await res.json();
         
         if (data.success && data.data && data.data.length > 0) {
