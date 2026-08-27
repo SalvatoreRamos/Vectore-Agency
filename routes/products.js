@@ -27,7 +27,13 @@ router.get('/', async (req, res) => {
 
         if (category) query.category = category;
         if (subcategory) query.subcategory = subcategory;
-        if (scope) query.scope = scope;
+        if (scope) {
+            if (scope === 'local') {
+                query.$or = [{ scope: 'local' }, { scope: { $exists: false } }];
+            } else {
+                query.scope = scope;
+            }
+        }
         if (search) {
             query.$text = { $search: search };
         }
