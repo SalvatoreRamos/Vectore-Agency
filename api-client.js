@@ -130,8 +130,9 @@ class VectoreAPI {
     }
 
     // Projects (Portfolio)
-    async getProjects() {
-        return this.request('/projects');
+    async getProjects(params = {}) {
+        const queryString = new URLSearchParams(params).toString();
+        return this.request(`/projects${queryString ? '?' + queryString : ''}`);
     }
 
     async createProject(projectData) {

@@ -81,7 +81,7 @@ async function loadProjects() {
     if (!marquee) return;
 
     try {
-        const response = await api.getProjects();
+        const response = await api.getProjects({ scope: 'local' });
         const projects = response.data || [];
 
         if (projects.length === 0) {

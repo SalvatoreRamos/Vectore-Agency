@@ -10,7 +10,18 @@ const router = express.Router();
 // @access  Public
 router.get('/', async (req, res) => {
     try {
-        const projects = await Project.find().sort('-createdAt');
+        const { scope } = req.query;
+        const query = {};
+        
+        if (scope) {
+            if (scope === 'local') {
+                query.$or = [{ scope: 'local' }, { scope: { $exists: false } }];
+            } else {
+                query.scope = scope;
+            }
+        }
+
+        const projects = await Project.find(query).sort('-createdAt');
         res.json({ success: true, data: projects });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Error fetching projects', error: error.message });
