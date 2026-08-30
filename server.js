@@ -93,6 +93,7 @@ app.use(helmet({
         "https://vectore-agency.onrender.com",
         "https://agenciavectore.com",
         "https://www.agenciavectore.com",
+        "https://pe.agenciavectore.com",
         "https://api.culqi.com",
         "https://checkout.culqi.com",
         "https://3ds.culqi.com",
@@ -101,6 +102,7 @@ app.use(helmet({
         "https://cdn.spline.design",
         "https://unpkg.com"
       ],
+      "media-src": ["'self'", "https:", "blob:", "https://res.cloudinary.com"],
       "img-src": ["'self'", "data:", "https:", "http:", "blob:", "https://www.google-analytics.com", "https://www.googletagmanager.com", "https://lh3.googleusercontent.com", "https://res.cloudinary.com"]
     },
   },
@@ -122,7 +124,8 @@ app.use(cors({
     'http://localhost:5500',
     'https://vectore-agency.onrender.com',
     'https://agenciavectore.com',
-    'https://www.agenciavectore.com'
+    'https://www.agenciavectore.com',
+    'https://pe.agenciavectore.com'
   ],
   credentials: true
 }));
