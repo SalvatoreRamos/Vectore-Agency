@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
         
         if (scope) {
             if (scope === 'local') {
-                query.$or = [{ scope: 'local' }, { scope: { $exists: false } }];
+                query.$or = [{ scope: 'local' }, { scope: { $exists: false } }, { scope: null }];
             } else {
                 query.scope = scope;
             }

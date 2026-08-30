@@ -328,7 +328,7 @@ async function loadProducts(retries = 3) {
     const catalogGrid = document.getElementById('catalogGrid');
 
     try {
-        const response = await api.getProducts({ scope: 'local' });
+        const response = await api.getProducts({ scope: 'local', limit: 100 });
         let products = response.data || [];
 
         // Clear current content

@@ -19,17 +19,17 @@ router.get('/', async (req, res) => {
             maxPrice,
             sort = '-createdAt',
             page = 1,
-            limit = 12
+            limit = 100
         } = req.query;
 
         // Build query
-        const query = { isAvailable: true };
+        const query = { isAvailable: { $ne: false } };
 
         if (category) query.category = category;
         if (subcategory) query.subcategory = subcategory;
         if (scope) {
             if (scope === 'local') {
-                query.$or = [{ scope: 'local' }, { scope: { $exists: false } }];
+                query.$or = [{ scope: 'local' }, { scope: { $exists: false } }, { scope: null }];
             } else {
                 query.scope = scope;
             }

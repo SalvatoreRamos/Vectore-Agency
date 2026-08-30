@@ -6,6 +6,17 @@ import dotenv from 'dotenv';
 import rateLimit from 'express-rate-limit';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import dns from 'dns';
+
+// Ensure reliable DNS resolution for MongoDB Atlas SRV on all platforms
+try {
+  dns.setServers(['8.8.8.8', '1.1.1.1', '8.8.4.4']);
+} catch (e) {
+  // Ignore if not supported in environment
+}
+
+// Load environment variables
+dotenv.config();
 
 // Import routes
 import authRoutes from './routes/auth.js';
@@ -24,9 +35,6 @@ import contactFormRoutes from './routes/contact-form.js';
 
 // Import subdomain middleware
 import { subdomainMiddleware } from './middleware/i18n.js';
-
-// Load environment variables
-dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -93,13 +101,12 @@ app.use(helmet({
         "https://cdn.spline.design",
         "https://unpkg.com"
       ],
-      "img-src": ["'self'", "data:", "https:", "http:", "blob:", "https://www.google-analytics.com", "https://www.googletagmanager.com", "https://lh3.googleusercontent.com"]
+      "img-src": ["'self'", "data:", "https:", "http:", "blob:", "https://www.google-analytics.com", "https://www.googletagmanager.com", "https://lh3.googleusercontent.com", "https://res.cloudinary.com"]
     },
   },
   crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" },
   crossOriginEmbedderPolicy: false,
 }));
-
 
 // Rate limiting
 const limiter = rateLimit({
@@ -119,7 +126,6 @@ app.use(cors({
   ],
   credentials: true
 }));
-
 
 // Body parser middleware
 app.use(express.json());
@@ -192,10 +198,24 @@ app.use(subdomainMiddleware);
 // Home
 app.get('/', (req, res) => {
   if (req.site === 'pe') {
-    // Peru: serve the existing light-mode tienda
+    // Peru: serve the existing complete agency site with catalog, portfolio & testimonials
     return res.sendFile(path.join(__dirname, 'index.html'));
   }
   // Global: serve the new premium EN landing
+  res.sendFile(path.join(__dirname, 'views/en/index.html'));
+});
+
+// Explicit site routes
+app.get('/pe', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+app.get('/es', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+app.get('/catalogo', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+app.get('/en', (req, res) => {
   res.sendFile(path.join(__dirname, 'views/en/index.html'));
 });
 

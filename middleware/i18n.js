@@ -16,16 +16,18 @@ const PERU_SUBDOMAINS = ['pe'];
 export function subdomainMiddleware(req, res, next) {
     const host = req.hostname || req.headers.host || '';
 
-    // Check if it's a Peru subdomain
-    const subdomain = host.split('.')[0];
+    const subdomain = host.split('.')[0].toLowerCase();
 
     if (PERU_SUBDOMAINS.includes(subdomain)) {
         req.site = 'pe';
-    } else if (host.includes('localhost') || host.includes('127.0.0.1')) {
-        // In development, ?_site=pe simulates the Peru subdomain
-        req.site = req.query._site || 'global';
-    } else {
+    } else if (subdomain === 'en') {
         req.site = 'global';
+    } else if (host.includes('localhost') || host.includes('127.0.0.1')) {
+        req.site = req.query._site || 'pe';
+    } else if (host.includes('onrender.com')) {
+        req.site = req.query._site || 'pe';
+    } else {
+        req.site = req.query._site || 'pe';
     }
 
     // Geo-detection: Cloudflare sends cf-ipcountry header
