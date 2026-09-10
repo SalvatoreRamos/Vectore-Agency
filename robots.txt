@@ -7,4 +7,5 @@ Disallow: /admin.css
 Disallow: /api/
 Disallow: /uploads/
 
+Sitemap: https://pe.agenciavectore.com/sitemap.xml
 Sitemap: https://www.agenciavectore.com/sitemap.xml
