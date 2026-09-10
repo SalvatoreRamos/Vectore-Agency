@@ -134,21 +134,64 @@ function initGlobalDelegation() {
 }
 
 // ===================================
-// Google Sign-In
-// ===================================
-function initGoogleSignIn() {
-    const script = document.createElement('script');
-    script.src = 'https://accounts.google.com/gsi/client';
-    script.async = true;
-    script.defer = true;
-    script.onload = () => {
-        google.accounts.id.initialize({
-            client_id: GOOGLE_CLIENT_ID,
-            callback: handleGoogleResponse,
-            auto_select: false
+function renderGoogleButtons() {
+    if (typeof google === 'undefined' || !google.accounts || !google.accounts.id) return;
+
+    const loginContainer = document.getElementById('googleBtnContainer');
+    if (loginContainer) {
+        loginContainer.innerHTML = '';
+        google.accounts.id.renderButton(loginContainer, {
+            type: 'standard',
+            theme: 'outline',
+            size: 'large',
+            text: 'signin_with',
+            shape: 'pill',
+            logo_alignment: 'center',
+            width: 280
         });
-    };
-    document.head.appendChild(script);
+    }
+
+    const regContainer = document.getElementById('googleBtnContainerRegister');
+    if (regContainer) {
+        regContainer.innerHTML = '';
+        google.accounts.id.renderButton(regContainer, {
+            type: 'standard',
+            theme: 'outline',
+            size: 'large',
+            text: 'signup_with',
+            shape: 'pill',
+            logo_alignment: 'center',
+            width: 280
+        });
+    }
+}
+
+function initGoogleSignIn() {
+    function setupGSI() {
+        if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+            google.accounts.id.initialize({
+                client_id: GOOGLE_CLIENT_ID,
+                callback: handleGoogleResponse,
+                auto_select: false
+            });
+            renderGoogleButtons();
+        }
+    }
+
+    if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+        setupGSI();
+        return;
+    }
+
+    let script = document.querySelector('script[src="https://accounts.google.com/gsi/client"]');
+    if (!script) {
+        script = document.createElement('script');
+        script.src = 'https://accounts.google.com/gsi/client';
+        script.async = true;
+        script.defer = true;
+        document.head.appendChild(script);
+    }
+    script.addEventListener('load', setupGSI);
 }
 
 async function handleGoogleResponse(response) {
@@ -302,7 +345,13 @@ async function handleForgotPassword(e) {
 
 function showAuthView(view) {
     document.querySelectorAll('.auth-view').forEach(v => v.style.display = 'none');
-    document.getElementById('authView-' + view).style.display = 'block';
+    const target = document.getElementById('authView-' + view);
+    if (target) {
+        target.style.display = 'block';
+        if (view === 'login' || view === 'register') {
+            setTimeout(renderGoogleButtons, 50);
+        }
+    }
 }
 
 function loadSession() {
@@ -384,21 +433,8 @@ function openAuthModal() {
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
         showAuthView('login'); // Reset view to login by default
-        setTimeout(() => {
-            const container = document.getElementById('googleBtnContainer');
-            if (container && typeof google !== 'undefined' && google.accounts && google.accounts.id) {
-                container.innerHTML = '';
-                google.accounts.id.renderButton(container, {
-                    type: 'standard',
-                    theme: 'outline',
-                    size: 'large',
-                    text: 'signin_with',
-                    shape: 'pill',
-                    logo_alignment: 'center',
-                    width: 300
-                });
-            }
-        }, 200);
+        renderGoogleButtons();
+        setTimeout(renderGoogleButtons, 150);
     }
 }
 
@@ -526,8 +562,8 @@ function initCartUI() {
         '<h2>Iniciar sesión</h2>' +
         '<p>Ingresa para guardar tu carrito y realizar pedidos</p>' +
         '</div>' +
-        '<div id="googleBtnContainer" class="google-btn-container" style="display: none;"></div>' +
-        '<div class="auth-divider" style="display: none;"><span>o</span></div>' +
+        '<div id="googleBtnContainer" class="google-btn-container"></div>' +
+        '<div class="auth-divider"><span>o</span></div>' +
         '<form id="emailLoginForm" class="email-login-form">' +
         '<input type="email" id="loginEmail" placeholder="Correo electrónico" required autocomplete="email">' +
         '<input type="password" id="loginPassword" placeholder="Contraseña" required autocomplete="current-password">' +
@@ -544,6 +580,8 @@ function initCartUI() {
         '<h2>Crear cuenta</h2>' +
         '<p>Registra tus datos para comprar en Vectore</p>' +
         '</div>' +
+        '<div id="googleBtnContainerRegister" class="google-btn-container"></div>' +
+        '<div class="auth-divider"><span>o</span></div>' +
         '<form id="emailRegisterForm" class="email-login-form">' +
         '<input type="text" id="registerName" placeholder="Nombre completo" required autocomplete="name">' +
         '<input type="email" id="registerEmail" placeholder="Correo electrónico" required autocomplete="email">' +

@@ -14,20 +14,23 @@
 const PERU_SUBDOMAINS = ['pe'];
 
 export function subdomainMiddleware(req, res, next) {
-    const host = req.hostname || req.headers.host || '';
+    const host = (req.hostname || req.headers.host || '').toLowerCase();
 
     const subdomain = host.split('.')[0].toLowerCase();
 
-    if (PERU_SUBDOMAINS.includes(subdomain)) {
+    if (PERU_SUBDOMAINS.includes(subdomain) || host.startsWith('pe.')) {
         req.site = 'pe';
     } else if (subdomain === 'en') {
         req.site = 'global';
     } else if (host.includes('localhost') || host.includes('127.0.0.1')) {
+        // In local development, default to 'pe' for catalog testing or ?_site=global
         req.site = req.query._site || 'pe';
     } else if (host.includes('onrender.com')) {
-        req.site = req.query._site || 'pe';
+        // Direct onrender URL: allow ?_site=pe or ?_site=global, defaults to global
+        req.site = req.query._site || 'global';
     } else {
-        req.site = req.query._site || 'pe';
+        // Production custom domains (e.g. www.agenciavectore.com, agenciavectore.com)
+        req.site = 'global';
     }
 
     // Geo-detection: Cloudflare sends cf-ipcountry header

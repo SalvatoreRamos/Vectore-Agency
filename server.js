@@ -283,6 +283,9 @@ app.get('/vf', (req, res) => {
 // Catch-all: Serve site-appropriate page
 // ===================================
 app.get('*', (req, res) => {
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).json({ success: false, message: 'Route not found' });
+  }
   if (req.site === 'pe') {
     // Peru: serve the existing index.html for any unknown route
     return res.sendFile(path.join(__dirname, 'index.html'));
