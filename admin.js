@@ -368,6 +368,7 @@ function handleSidebarPopState(event) {
 // Navigation Logic
 // ===================================
 function switchSection(section) {
+    if (!section) return;
     activeSection = section;
 
     // Update Nav
@@ -1508,7 +1509,7 @@ function setupEventListeners() {
     // Navigation
     navItems.forEach(item => {
         item.addEventListener('click', (e) => {
-            if (item.getAttribute('href') === 'index.html') return;
+            if (!item.dataset.section) return;
             e.preventDefault();
             switchSection(item.dataset.section);
             // Hide sidebar on mobile after clicking

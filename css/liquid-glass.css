@@ -21,7 +21,11 @@
     --vf-primary-glow: rgba(134, 85, 255, 0.28);
 
     --vf-emerald: #00D68F;
-    --vf-amber: #FFB547;
+    --vf-amber: #FFBB55;
+    --vf-amber-hover: #ffca7a;
+    --vf-amber-text: #FFBB55;
+    --vf-amber-glow: rgba(255, 187, 85, 0.28);
+    --vf-amber-ink: #160F50;
     --vf-cyan: #00B4D8;
     --vf-info: #4DA8FF;
     --vf-danger: #FF4757;
@@ -73,7 +77,11 @@
     --vf-primary-glow: rgba(110, 60, 232, 0.18);
 
     --vf-emerald: #059669;
-    --vf-amber: #D97706;
+    --vf-amber: #FFBB55;
+    --vf-amber-hover: #f5ad3e;
+    --vf-amber-text: #b86e00;
+    --vf-amber-glow: rgba(255, 187, 85, 0.32);
+    --vf-amber-ink: #160F50;
     --vf-cyan: #0284C7;
     --vf-info: #2563EB;
 
@@ -172,10 +180,11 @@
     inset: 0;
     border-radius: inherit;
     padding: 1px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.48) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(166, 127, 255, 0.38) 100%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.48) 0%, rgba(166, 127, 255, 0.25) 55%, rgba(255, 187, 85, 0.42) 100%);
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     mask-composite: exclude;
     pointer-events: none;
 }
+

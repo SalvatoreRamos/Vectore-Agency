@@ -55,19 +55,11 @@
     margin-bottom: 32px;
 }
 
-.login-header .logo-icon {
-    font-size: 3rem;
-    color: var(--primary);
+.admin-brand-logo-login {
+    height: 44px;
+    width: auto;
+    margin: 0 auto 14px;
     display: block;
-    margin-bottom: 16px;
-    animation: pulse 2s infinite;
-}
-
-.login-header h1 {
-    font-size: 2rem;
-    font-weight: 800;
-    color: var(--dark);
-    margin-bottom: 8px;
 }
 
 .login-header p {
@@ -128,34 +120,74 @@
 
 .sidebar-header {
     text-align: center;
-    padding: 6px 10px 24px;
+    padding: 8px 10px 22px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    margin-bottom: 24px;
+    margin-bottom: 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
 
-.sidebar-header .logo-icon {
-    font-size: 2.5rem;
-    color: #bda5ff;
+.sidebar-brand-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.sidebar-brand-link:hover {
+    transform: translateY(-1px);
+    opacity: 0.92;
+}
+
+.admin-brand-logo {
+    height: 36px;
+    width: auto;
     display: block;
-    margin-bottom: 12px;
-}
-
-.sidebar-header h2 {
-    color: var(--white);
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 8px;
 }
 
 .admin-badge {
     display: inline-block;
-    padding: 6px 14px;
-    background: linear-gradient(135deg, rgba(189, 165, 255, 0.95), rgba(134, 85, 255, 0.95));
-    color: var(--white);
-    font-size: 0.75rem;
-    font-weight: 600;
+    padding: 4px 14px;
+    background: rgba(255, 187, 85, 0.16);
+    border: 1px solid rgba(255, 187, 85, 0.42);
+    color: #FFBB55;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     border-radius: var(--radius-xl);
-    box-shadow: 0 10px 20px rgba(134, 85, 255, 0.22);
+}
+
+.sidebar-web-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 8px;
+    padding: 13px 16px;
+    background: rgba(255, 187, 85, 0.14);
+    border: 1px solid rgba(255, 187, 85, 0.42);
+    color: #FFBB55;
+    text-decoration: none;
+    border-radius: 16px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.22s ease;
+}
+
+.sidebar-web-btn:hover {
+    background: #FFBB55;
+    border-color: #FFBB55;
+    color: #160F50;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px rgba(255, 187, 85, 0.25);
+}
+
+.sidebar-web-btn svg {
+    width: 18px;
+    height: 18px;
 }
 
 .sidebar-nav {

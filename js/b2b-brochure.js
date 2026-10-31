@@ -1,173 +1,166 @@
 /**
  * AGENCIA VECTORE — Unified B2B Corporate Brochure Controller
- * Handles Admin-driven Hero + Fallback, OPEN PROJECT card, Sectors Marquee,
- * White-Label (NDA) Portfolio, In-House Workshop, Theme Toggle, Liquid Glass Sheen,
- * and Dual Direct-Close Quotation Funnel (Instant WhatsApp Bridge + Formal Email Proforma).
+ * Streamlined copy, zero repetitive filler tags, dynamic Vectore Flow showcase,
+ * Admin-controlled Hero + Fallback, OPEN PROJECT card, and Dual Direct-Close Funnel.
  */
 
 (function () {
     'use strict';
 
+    const VECTORE_FLOW_DEFAULT_IMAGE = 'https://res.cloudinary.com/ddyrdetvm/image/upload/v1786081269/vectore-agency/xmtxp0blh5x6ftrx0ah1.avif';
+
     // =========================================================================
-    // CURATED FALLBACK DATA (Used if MongoDB collection is empty or offline)
+    // CURATED FALLBACK DATA (Concise & Scannable)
     // =========================================================================
     const FALLBACK_SECTORS = [
-        { id: 'malls', name: 'Centros Comerciales & Retail Moderno', subtitle: 'Islas, escaparates, tótems y campañas de temporada', icon: 'building', isActive: true, order: 1 },
-        { id: 'government', name: 'Entidades del Estado & Sector Público', subtitle: 'Señalética normativa, módulos institucionales y eventos', icon: 'landmark', isActive: true, order: 2 },
-        { id: 'cinema', name: 'Cadenas de Cines & Entretenimiento', subtitle: 'Corpóreos, carteleras retroiluminadas y estrenos BTL', icon: 'film', isActive: true, order: 3 },
-        { id: 'wholesale', name: 'Distribuidoras Mayoristas & Consumo Masivo', subtitle: 'Trade marketing, vestimenta de PDV y flotas de reparto', icon: 'truck', isActive: true, order: 4 },
-        { id: 'agro', name: 'Agroindustria, Forestal & Exportadoras', subtitle: 'Packaging 3D, etiquetado industrial y stands feriales', icon: 'leaf', isActive: true, order: 5 },
-        { id: 'banking', name: 'Banca, Cajas & Finanzas', subtitle: 'Acondicionamiento de agencias, fachadas y letreros LED', icon: 'shield', isActive: true, order: 6 },
-        { id: 'health', name: 'Clínicas, Laboratorios & Salud', subtitle: 'Arquitectura interior aséptica, señalización y software', icon: 'activity', isActive: true, order: 7 },
-        { id: 'automotive', name: 'Concesionarios Automotrices & Logística', subtitle: 'Showrooms comerciales y wrapping vehicular de alta resistencia', icon: 'compass', isActive: true, order: 8 },
-        { id: 'realestate', name: 'Inmobiliarias, Constructoras & Hotelería', subtitle: 'Casetas de venta, vallas perimetrales y visualización 3D', icon: 'layers', isActive: true, order: 9 }
+        { id: 'malls', name: 'Centros Comerciales & Retail', subtitle: '', icon: 'building', isActive: true, order: 1 },
+        { id: 'government', name: 'Entidades del Estado', subtitle: '', icon: 'landmark', isActive: true, order: 2 },
+        { id: 'cinema', name: 'Cines & Entretenimiento', subtitle: '', icon: 'film', isActive: true, order: 3 },
+        { id: 'wholesale', name: 'Distribuidoras Mayoristas', subtitle: '', icon: 'truck', isActive: true, order: 4 },
+        { id: 'agro', name: 'Agroindustria & Exportación', subtitle: '', icon: 'leaf', isActive: true, order: 5 },
+        { id: 'banking', name: 'Banca & Finanzas', subtitle: '', icon: 'shield', isActive: true, order: 6 },
+        { id: 'health', name: 'Clínicas & Salud', subtitle: '', icon: 'activity', isActive: true, order: 7 },
+        { id: 'automotive', name: 'Automotriz & Flotas', subtitle: '', icon: 'compass', isActive: true, order: 8 },
+        { id: 'realestate', name: 'Inmobiliarias & Hotelería', subtitle: '', icon: 'layers', isActive: true, order: 9 }
     ];
 
     const FALLBACK_CASES = [
         {
             _id: 'case-btl-retail',
-            title: 'Implementación Integral de Campaña Retail & Corpóreos Retroiluminados',
-            client: 'Ejecución Marca Blanca · Cadena Retail Nacional',
+            title: 'Despliegue Retail & Corpóreos LED en Centro Comercial',
+            client: 'Marca Blanca · Agencia BTL Lima',
             isWhiteLabel: true,
-            publicClientLabel: 'Ejecución Marca Blanca · Agencia BTL Lima',
-            sector: 'Centros Comerciales & Retail',
-            location: 'Pucallpa, Ucayali',
-            category: 'Ejecución BTL & Producción',
-            description: 'Producción en planta propia de estructuras autoportantes, viniles laminados de alto tránsito, cajas de luz LED y montaje nocturno certificado en centro comercial sin costo de flete desde Lima.',
-            deliverables: ['Producción Gran Formato UV', 'Corpóreo Acrílico LED', 'Montaje Nocturno Certificado', 'Dossier Fotográfico HD'],
+            publicClientLabel: 'Marca Blanca · Agencia BTL Lima',
+            sector: 'Centros Comerciales',
+            location: 'Pucallpa',
+            category: 'Ejecución BTL',
+            description: 'Fabricación local de estructuras, viniles de alto tránsito y montaje nocturno certificado sin flete desde Lima.',
+            deliverables: ['Gran Formato UV', 'Corpóreo LED', 'Montaje Nocturno'],
             thumbnail: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1200&q=80',
             images: [
-                { url: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1400&q=85', caption: 'Despliegue estructural e iluminación en piso de exhibición.' }
+                { url: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1400&q=85', caption: 'Montaje estructural e iluminación en sala comercial.' }
             ],
             date: '2026-09-15',
             isFeatured: true
         },
         {
+            _id: 'case-vectore-flow',
+            title: 'Vectore Flow: ERP para Imprentas, Talleres y Agencias',
+            client: 'Producto Propio Vectore',
+            isWhiteLabel: false,
+            sector: 'Software & SaaS',
+            location: 'Cloud / Desktop',
+            category: 'Software B2B',
+            description: 'Plataforma propia para cotizar por m², controlar órdenes de trabajo en taller, kárdex de sustratos y finanzas.',
+            deliverables: ['App Desktop & Web', 'Cotizador al Milímetro', 'SSO Google'],
+            thumbnail: VECTORE_FLOW_DEFAULT_IMAGE,
+            images: [
+                { url: VECTORE_FLOW_DEFAULT_IMAGE, caption: 'Identidad oficial del ecosistema Vectore Flow.' }
+            ],
+            date: '2026-10-01',
+            isFeatured: true
+        },
+        {
             _id: 'case-3d-packaging',
-            title: 'Ingeniería de Empaque & Visualización CGI 3D para Línea Agroindustrial',
-            client: 'Consorcio Agroexportador Amazónico',
+            title: 'Packaging 3D & Renders CGI para Línea Agroindustrial',
+            client: 'Proyecto Confidencial · Agroexportación',
             isWhiteLabel: true,
-            publicClientLabel: 'Proyecto Confidencial · Sector Agroexportador',
-            sector: 'Agroindustria & Consumo Masivo',
+            publicClientLabel: 'Proyecto Confidencial · Agroexportación',
+            sector: 'Agroindustria',
             location: 'Lima / Ucayali',
-            category: 'Packaging 3D & Diseño Especializado',
-            description: 'Modelado tridimensional de envases doy-pack y frascos de vidrio, texturizado PBR con acabados metalizados/barniz sectorizado y artes finales calibrados para rotograbado industrial.',
-            deliverables: ['Modelado & Render 3D 4K', 'Planos de Troquel Industrial', 'Pre-prensa Cromática', 'Key Visuals de Lanzamiento'],
+            category: 'Packaging 3D',
+            description: 'Modelado 3D de envases, acabados metalizados fotorrealistas y artes finales calibrados para imprenta industrial.',
+            deliverables: ['Render 3D 4K', 'Planos de Troquel', 'Pre-prensa'],
             thumbnail: 'https://images.unsplash.com/photo-1634942537034-2531766767d1?auto=format&fit=crop&w=1200&q=80',
             images: [
-                { url: 'https://images.unsplash.com/photo-1634942537034-2531766767d1?auto=format&fit=crop&w=1400&q=85', caption: 'Render fotorrealista de línea de empaques previo a tiraje industrial.' }
+                { url: 'https://images.unsplash.com/photo-1634942537034-2531766767d1?auto=format&fit=crop&w=1400&q=85', caption: 'Visualización CGI previa a tiraje masivo.' }
             ],
             date: '2026-08-20',
             isFeatured: true
         },
         {
             _id: 'case-arquitectura-stand',
-            title: 'Diseño Espacial, Planimetría y Fabricación de Módulo Comercial',
+            title: 'Diseño y Fabricación de Módulo Comercial Llave en Mano',
             client: 'Operador Corporativo Regional',
             isWhiteLabel: false,
-            sector: 'Arquitectura Comercial & Stands',
-            location: 'Pucallpa, Ucayali',
-            category: 'Arquitectura Comercial & Stands',
-            description: 'Desarrollo arquitectónico llave en mano: expediente técnico para centro comercial, estructura metálica, mobiliario en melamina RH, iluminación indirecta y señalética normativa.',
-            deliverables: ['Expediente Técnico Mall', 'Renders 3D Aprobados', 'Carpintería & Metalmecánica', 'Instalación Eléctrica LED'],
+            sector: 'Arquitectura Comercial',
+            location: 'Pucallpa',
+            category: 'Arquitectura & Stands',
+            description: 'Expediente técnico para centro comercial, estructura metálica, mobiliario corporativo e iluminación LED.',
+            deliverables: ['Expediente Mall', 'Renders 3D', 'Fabricación & Montaje'],
             thumbnail: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80',
             images: [
-                { url: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1400&q=85', caption: 'Acabados corporativos de alta durabilidad para atención al público.' }
+                { url: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1400&q=85', caption: 'Acabados comerciales de alto tránsito.' }
             ],
             date: '2026-07-10',
             isFeatured: false
-        },
-        {
-            _id: 'case-vectore-flow',
-            title: 'Vectore Flow: Sistema ERP Desktop & Cloud para Gestión de Planta Gráfica',
-            client: 'División Ingeniería Vectore',
-            isWhiteLabel: false,
-            sector: 'Ingeniería de Software & SaaS',
-            location: 'Nacional / Cloud',
-            category: 'Software & Plataformas B2B',
-            description: 'Arquitectura de software propia creada para controlar cotizaciones por metro cuadrado, órdenes de trabajo en taller, kárdex de sustratos, facturación y autenticación SSO.',
-            deliverables: ['Aplicación Desktop & Web', 'Motor de Costeo Paramétrico', 'Tablero Kanban de Producción', 'SSO Google OAuth + JWT'],
-            thumbnail: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80',
-            images: [
-                { url: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1400&q=85', caption: 'Panel ejecutivo en modo oscuro de alta legibilidad operativa.' }
-            ],
-            date: '2026-10-01',
-            isFeatured: true
         }
     ];
 
     const FALLBACK_WORKSHOP = [
         {
             _id: 'ws-1',
-            name: 'Gigantografías, Lonas & Viniles de Alta Durabilidad Amazónica',
+            name: 'Gigantografías, Lonas & Viniles UV',
             category: 'gran-formato',
-            tagLabel: 'Gran Formato UV',
+            tagLabel: 'Gran Formato',
             icon: '🖨️',
-            description: 'Impresión de alta resolución resistente a radiación solar intensa y lluvias tropicales para vallas, fachadas y puntos de venta.',
-            specs: ['Lona 13oz / Backlight', 'Vinil Arlon / 3M Laminado', 'Ancho continuo 3.20m']
+            description: 'Impresión de alta resistencia solar y lluvia para fachadas, vallas y PDV.'
         },
         {
             _id: 'ws-2',
-            name: 'Letreros Corpóreos 3D, Cajas de Luz & Acrílico LED',
+            name: 'Letreros Corpóreos 3D & Cajas LED',
             category: 'estructuras',
-            tagLabel: 'Metalmecánica & LED',
+            tagLabel: 'Estructuras',
             icon: '💡',
-            description: 'Fabricación en taller propio de letras volumétricas en acrílico, PVC espumado, aluminio compuesto ( Alucobond ) y módulos LED IP67.',
-            specs: ['Corte Router / Láser', 'Iluminación LED IP67', 'Instalación en Altura']
+            description: 'Letras volumétricas en acrílico, PVC, Alucobond e iluminación LED IP67.'
         },
         {
             _id: 'ws-3',
-            name: 'Brandeo y Rotulación Integral de Flotas Vehiculares',
+            name: 'Brandeo de Flotas Vehiculares',
             category: 'gran-formato',
-            tagLabel: 'Flotas Comerciales',
+            tagLabel: 'Vehicular',
             icon: '🚚',
-            description: 'Forrado parcial o integral de camiones repartidores, camionetas 4x4 y unidades logísticas con laminado protector UV.',
-            specs: ['Vinil Conformable', 'Laminado Mate / Brillo', 'Garantía de Adherencia']
+            description: 'Rotulación parcial o integral de unidades comerciales con laminado UV.'
         },
         {
             _id: 'ws-4',
-            name: 'Señalética Normativa INDECI, Industrial & Corporativa',
+            name: 'Señalética Normativa INDECI',
             category: 'estructuras',
-            tagLabel: 'Normativa Técnica',
+            tagLabel: 'Señalética',
             icon: '🛡️',
-            description: 'Señalización fotoluminiscente, reflectiva grado ingeniería y directorios arquitectónicos para plantas, clínicas y entidades públicas.',
-            specs: ['Celtex / Acrílico / Alucobond', 'Reflectivo 3M', 'Norma NTP 399.010']
+            description: 'Señalización reflectiva, fotoluminiscente y directorios corporativos.'
         },
         {
             _id: 'ws-5',
-            name: 'Stickers Troquelados UV, Etiquetas en Rollo & DTF UV',
+            name: 'Stickers Troquelados & DTF UV',
             category: 'impresion',
-            tagLabel: 'Etiquetado Industrial',
+            tagLabel: 'Etiquetas',
             icon: '🏷️',
-            description: 'Etiquetas resistentes al agua, frío y fricción para envases agroindustriales, bebidas, cosmética y sellos de seguridad.',
-            specs: ['Troquel Digital Exacto', 'DTF UV Alto Relieve', 'Tirajes Cortos y Masivos']
+            description: 'Etiquetas resistentes al agua y fricción para envases y promociones.'
         },
         {
             _id: 'ws-6',
-            name: 'Displays POP, Exhibidores, Backing de Prensa & Counters',
+            name: 'Displays POP, Counters & Backings',
             category: 'estructuras',
-            tagLabel: 'Activaciones BTL',
+            tagLabel: 'Activaciones',
             icon: '🏛️',
-            description: 'Módulos desarmables de activación, ruletas corporativas, marcos selfie, tótems publicitarios y estructuras spider listas en Pucallpa.',
-            specs: ['PVC / MDF / Aluminio', 'Cero Flete desde Lima', 'Entrega en Punto de Evento']
+            description: 'Módulos desarmables, tótems y estructuras listas para eventos en Pucallpa.'
         },
         {
             _id: 'ws-7',
-            name: 'Papelería Corporativa, Brochures, Carpetas & Credenciales PVC',
+            name: 'Papelería Corporativa & Fotochecks PVC',
             category: 'impresion',
-            tagLabel: 'Imprenta Ejecutiva',
+            tagLabel: 'Imprenta',
             icon: '📑',
-            description: 'Carpetas institucionales con bolsillo, fotochecks PVC con cinta impresa, memorias anuales, talonarios y material de capacitación.',
-            specs: ['Couché 300g Plastificado', 'Fotochecks PVC Térmico', 'Acabado Mate / UV']
+            description: 'Carpetas institucionales, brochures y credenciales PVC laminadas.'
         },
         {
             _id: 'ws-8',
-            name: 'Merchandising Corporativo, Textil Bordado & Kits de Evento',
+            name: 'Merchandising & Textil Corporativo',
             category: 'merch',
-            tagLabel: 'Merchandising B2B',
+            tagLabel: 'Merchandising',
             icon: '🎁',
-            description: 'Polos piqué/jersey para staff de activación, gorras, tomatodos grabados en láser, libretas ejecutivas y bolsas ecológicas.',
-            specs: ['Grabado Láser / DTF', 'Uniformes de Campaña', 'Despacho Local Inmediato']
+            description: 'Uniformes de campaña, gorras, tomatodos láser y kits empresariales.'
         }
     ];
 
@@ -235,7 +228,7 @@
         initQuotationForms();
         initCopyButtons();
 
-        // Render immediate resilient defaults so first paint feels instantaneous
+        // Immediate crisp first paint
         renderSectorsMarquee(FALLBACK_SECTORS);
         state.cases = FALLBACK_CASES;
         renderCasesGrid();
@@ -253,8 +246,7 @@
             hidePreloader();
         });
 
-        // Safety cap so preloader never blocks UX
-        setTimeout(hidePreloader, 850);
+        setTimeout(hidePreloader, 800);
     });
 
     function hidePreloader() {
@@ -309,7 +301,7 @@
             document.documentElement.setAttribute('data-theme', next);
             try {
                 localStorage.setItem('vectore_theme', next);
-            } catch (_) { /* ignore storage quota */ }
+            } catch (_) { /* ignore */ }
         });
     }
 
@@ -357,7 +349,6 @@
         const cfg = res.data;
         const hero = cfg.hero || {};
 
-        // 1. Hero Texts
         const setTxt = (id, val) => {
             const el = document.getElementById(id);
             if (el && val) el.textContent = val;
@@ -369,16 +360,13 @@
         setTxt('heroPrimaryCtaLabel', hero.primaryCtaText);
         setTxt('heroSecondaryCtaLabel', hero.secondaryCtaText);
 
-        // 2. Scrim Opacity
         const heroEl = document.getElementById('inicio');
         if (heroEl && typeof hero.overlayOpacity === 'number') {
             heroEl.style.setProperty('--hero-overlay', String(hero.overlayOpacity));
         }
 
-        // 3. Hero Background Media with Guaranteed Fallback
         applyHeroBackground(hero);
 
-        // 4. Floating OPEN PROJECT Card
         const floatingCardCfg = hero.floatingCard || {};
         const floatingEl = document.getElementById('heroFloatingProject');
         if (floatingEl) {
@@ -391,7 +379,6 @@
             }
         }
 
-        // 5. Sectors Marquee
         if (Array.isArray(cfg.sectors) && cfg.sectors.length > 0) {
             const activeSectors = cfg.sectors
                 .filter(s => s.isActive !== false && s.name)
@@ -401,7 +388,6 @@
             }
         }
 
-        // 6. Corporate Footer & WhatsApp Number
         if (cfg.corporate) {
             const corp = cfg.corporate;
             if (corp.whatsappNumber) {
@@ -431,7 +417,7 @@
                 if (girosGrid) {
                     girosGrid.innerHTML = corp.businessLines.map(line => `
                         <div class="giro-card">
-                            <span class="giro-card__code">${escapeHtml(line.code || 'GIRO REGISTRADO')}</span>
+                            <span class="giro-card__code">${escapeHtml(line.code || 'GIRO')}</span>
                             <h4>${escapeHtml(line.title)}</h4>
                             <p>${escapeHtml(line.description)}</p>
                         </div>
@@ -448,7 +434,6 @@
         const isMobile = window.matchMedia('(max-width: 640px)').matches;
         const rawUrl = (isMobile && hero.mobileBackgroundUrl) ? hero.mobileBackgroundUrl : hero.backgroundUrl;
 
-        // Rule: If no custom media is set in Admin, keep original animated dark fallback intact
         if (!rawUrl || hero.backgroundType === 'default') {
             mediaContainer.classList.remove('is-loaded');
             mediaContainer.innerHTML = '';
@@ -503,12 +488,12 @@
 
         if (labelEl) labelEl.textContent = labelText || 'OPEN PROJECT';
         if (dateEl) dateEl.textContent = formatShortDate(project.date || project.createdAt);
-        if (catEl) catEl.textContent = project.sector || project.category || 'Caso Corporativo';
-        if (titleEl) titleEl.textContent = project.title || 'Ver Caso de Éxito';
+        if (catEl) catEl.textContent = project.sector || project.category || 'Caso Destacado';
+        if (titleEl) titleEl.textContent = project.title || 'Ver proyecto';
 
         if (mediaEl && project.thumbnail) {
             const ndaBadge = project.isWhiteLabel
-                ? `<span class="open-project-card__nda">🔒 Marca Blanca · NDA</span>`
+                ? `<span class="open-project-card__nda">🔒 NDA</span>`
                 : '';
             if (isVideoUrl(project.thumbnail)) {
                 mediaEl.innerHTML = `<video src="${escapeHtml(project.thumbnail)}" autoplay muted loop playsinline></video>${ndaBadge}`;
@@ -533,19 +518,18 @@
     }
 
     // =========================================================================
-    // FASE 3A: SECTORS MARQUEE
+    // FASE 3A: SECTORS MARQUEE (Clean Single-Line Pills)
     // =========================================================================
     function renderSectorsMarquee(sectors) {
         const track = document.getElementById('sectorsMarquee');
         if (!track || !Array.isArray(sectors) || sectors.length === 0) return;
 
-        // Duplicate array once so translateX(-50%) creates a seamless infinite belt
         const belt = [...sectors, ...sectors];
         track.innerHTML = belt.map((sec) => {
             const svg = SECTOR_ICONS[sec.icon] || SECTOR_ICONS.layers;
             return `
                 <div class="sector-pill liquid-glass" role="button" tabindex="0"
-                     data-open-quote data-quote-service="Soluciones para ${escapeHtml(sec.name)}"
+                     data-open-quote data-quote-service="${escapeHtml(sec.name)}"
                      data-quote-ref="Rubro: ${escapeHtml(sec.name)}">
                     <span class="sector-pill__icon">${svg}</span>
                     <div>
@@ -579,7 +563,6 @@
         if (dbProjects.length > 0) {
             state.cases = dbProjects;
             renderCasesGrid();
-            // If SiteConfig didn't already pin a DB floatingProject, update OPEN PROJECT to latest real DB case
             if (!state.floatingProject || String(state.floatingProject._id).startsWith('case-')) {
                 bindFloatingProjectCard(dbProjects[0], document.getElementById('openProjectLabel')?.textContent || 'OPEN PROJECT');
             }
@@ -612,9 +595,9 @@
 
         grid.innerHTML = list.map((proj, idx) => {
             const clientLabel = proj.isWhiteLabel
-                ? (proj.publicClientLabel || proj.client || 'Ejecución Marca Blanca (NDA)')
+                ? (proj.publicClientLabel || proj.client || 'Marca Blanca (NDA)')
                 : (proj.client || 'Cliente Corporativo');
-            const location = proj.location || 'Pucallpa, Ucayali';
+            const location = proj.location || 'Pucallpa';
             const mediaHtml = isVideoUrl(proj.thumbnail)
                 ? `<video src="${escapeHtml(proj.thumbnail)}" autoplay muted loop playsinline></video>`
                 : `<img src="${escapeHtml(proj.thumbnail)}" alt="${escapeHtml(proj.title)}" loading="lazy">`;
@@ -624,8 +607,8 @@
                     <div class="case-card__media">
                         ${mediaHtml}
                         <div class="case-card__badges">
-                            <span class="badge-pill badge-pill--cat">${escapeHtml(proj.category || 'Caso B2B')}</span>
-                            ${proj.isWhiteLabel ? `<span class="badge-pill badge-pill--nda">🔒 Marca Blanca · NDA</span>` : ''}
+                            <span class="badge-pill badge-pill--cat">${escapeHtml(proj.category || 'Proyecto')}</span>
+                            ${proj.isWhiteLabel ? `<span class="badge-pill badge-pill--nda">🔒 NDA</span>` : ''}
                         </div>
                     </div>
                     <div class="case-card__body">
@@ -639,7 +622,7 @@
                             <p class="case-card__desc">${escapeHtml(proj.description)}</p>
                         </div>
                         <div class="case-card__footer">
-                            <span>Abrir Expediente del Caso</span>
+                            <span>Ver proyecto</span>
                             <span>↗</span>
                         </div>
                     </div>
@@ -666,8 +649,8 @@
         if (!modal || !body || !proj) return;
 
         const clientDisplay = proj.isWhiteLabel
-            ? (proj.publicClientLabel || proj.client || 'Proyecto bajo Acuerdo de Confidencialidad (NDA)')
-            : (proj.client || 'Cuenta Corporativa');
+            ? (proj.publicClientLabel || proj.client || 'Marca Blanca (NDA)')
+            : (proj.client || 'Cliente Corporativo');
 
         const galleryItems = Array.isArray(proj.images) && proj.images.length > 0
             ? proj.images
@@ -681,35 +664,35 @@
             <div style="padding-right:42px;">
                 <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px;">
                     <span class="eyebrow-tag" style="margin-bottom:0;">${escapeHtml(proj.category || 'Caso de Éxito')}</span>
-                    ${proj.isWhiteLabel ? `<span class="badge-pill badge-pill--nda">🔒 Ejecución Marca Blanca (NDA Protegido)</span>` : ''}
+                    ${proj.isWhiteLabel ? `<span class="badge-pill badge-pill--nda">🔒 Marca Blanca · NDA</span>` : ''}
                     <span class="mono" style="font-size:0.75rem;color:var(--vf-text-muted);">${escapeHtml(formatShortDate(proj.date || proj.createdAt))}</span>
                 </div>
 
-                <h2 style="font-size:clamp(1.45rem,2.6vw,2.15rem);font-weight:800;color:var(--vf-heading-contrast);line-height:1.18;margin-bottom:12px;">
+                <h2 style="font-size:clamp(1.4rem,2.5vw,2.05rem);font-weight:800;color:var(--vf-heading-contrast);line-height:1.18;margin-bottom:10px;">
                     ${escapeHtml(proj.title)}
                 </h2>
 
-                <p style="font-size:0.96rem;color:var(--vf-text-secondary);line-height:1.68;margin-bottom:20px;">
+                <p style="font-size:0.95rem;color:var(--vf-text-secondary);line-height:1.62;margin-bottom:18px;">
                     ${escapeHtml(proj.description)}
                 </p>
 
-                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;padding:16px;border-radius:var(--radius-md);background:var(--vf-bg);border:1px solid var(--vf-border-subtle);margin-bottom:20px;">
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;padding:14px 16px;border-radius:var(--radius-md);background:var(--vf-bg);border:1px solid var(--vf-border-subtle);margin-bottom:18px;">
                     <div>
-                        <span class="mono" style="font-size:0.68rem;color:var(--vf-text-muted);display:block;">MODALIDAD / CLIENTE</span>
-                        <strong style="font-size:0.88rem;color:var(--vf-heading-contrast);">${escapeHtml(clientDisplay)}</strong>
+                        <span class="mono" style="font-size:0.68rem;color:var(--vf-text-muted);display:block;">CLIENTE / MODALIDAD</span>
+                        <strong style="font-size:0.86rem;color:var(--vf-heading-contrast);">${escapeHtml(clientDisplay)}</strong>
                     </div>
                     <div>
-                        <span class="mono" style="font-size:0.68rem;color:var(--vf-text-muted);display:block;">SECTOR ATENDIDO</span>
-                        <strong style="font-size:0.88rem;color:var(--vf-heading-contrast);">${escapeHtml(proj.sector || proj.category || 'Corporativo')}</strong>
+                        <span class="mono" style="font-size:0.68rem;color:var(--vf-text-muted);display:block;">SECTOR</span>
+                        <strong style="font-size:0.86rem;color:var(--vf-heading-contrast);">${escapeHtml(proj.sector || proj.category || 'Corporativo')}</strong>
                     </div>
                     <div>
-                        <span class="mono" style="font-size:0.68rem;color:var(--vf-text-muted);display:block;">SEDE DE EJECUCIÓN</span>
-                        <strong style="font-size:0.88rem;color:var(--vf-heading-contrast);">📍 ${escapeHtml(proj.location || 'Pucallpa, Ucayali')}</strong>
+                        <span class="mono" style="font-size:0.68rem;color:var(--vf-text-muted);display:block;">UBICACIÓN</span>
+                        <strong style="font-size:0.86rem;color:var(--vf-heading-contrast);">📍 ${escapeHtml(proj.location || 'Pucallpa')}</strong>
                     </div>
                 </div>
 
                 ${deliverables.length > 0 ? `
-                    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;">
+                    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;">
                         ${deliverables.map(d => `<span class="workshop-spec">✓ ${escapeHtml(d)}</span>`).join('')}
                     </div>
                 ` : ''}
@@ -731,12 +714,12 @@
                 }).join('')}
             </div>
 
-            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;padding-top:18px;border-top:1px solid var(--vf-border-subtle);">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;padding-top:16px;border-top:1px solid var(--vf-border-subtle);">
                 <span style="font-size:0.86rem;color:var(--vf-text-secondary);">
-                    ¿Necesitas un despliegue similar para tu marca o agencia aliada?
+                    ¿Buscas un resultado similar para tu empresa?
                 </span>
                 <button type="button" class="btn-cta-pill" id="quoteSimilarProjectBtn">
-                    <span>Cotizar un Proyecto Similar</span>
+                    <span>Cotizar</span>
                     <span>↗</span>
                 </button>
             </div>
@@ -747,8 +730,8 @@
             quoteSimilarBtn.addEventListener('click', () => {
                 closeModal('projectModal');
                 openQuotationModal({
-                    service: proj.category || 'Proyecto Similar de Portafolio',
-                    referenceItem: `Caso de Referencia: ${proj.title}`
+                    service: proj.category || 'Proyecto de Portafolio',
+                    referenceItem: `Referencia: ${proj.title}`
                 });
             });
         }
@@ -757,7 +740,7 @@
     }
 
     // =========================================================================
-    // SECONDARY SECTION: IN-HOUSE WORKSHOP (/api/products WITHOUT PRICES/STOCK)
+    // IN-HOUSE WORKSHOP (/api/products WITHOUT REPETITIVE TAGS OR RETAIL PRICES)
     // =========================================================================
     async function loadWorkshop() {
         const chipsWrap = document.getElementById('workshopChips');
@@ -784,26 +767,24 @@
     function mapDbProductToWorkshopItem(p) {
         const rawCat = `${p.category || ''} ${p.subcategory || ''} ${p.name || ''}`.toLowerCase();
         let normCat = 'impresion';
-        let tagLabel = 'Planta Propia';
+        let tagLabel = p.subcategory || 'Taller Propio';
 
         if (/gigantograf|banner|lona|vinil|flota|vehicul|gran formato|rollup/.test(rawCat)) {
             normCat = 'gran-formato';
-            tagLabel = 'Gran Formato & Viniles';
+            tagLabel = p.subcategory || 'Gran Formato';
         } else if (/letrero|corp|acr[ií]lico|led|stand|estructura|se[ñn]al|interior|arquitect/.test(rawCat)) {
             normCat = 'estructuras';
-            tagLabel = 'Estructuras & LED';
+            tagLabel = p.subcategory || 'Estructuras';
         } else if (/merch|polo|gorra|taza|tomatodo|lapicero|llavero|bolsa|regalo/.test(rawCat)) {
             normCat = 'merch';
-            tagLabel = 'Merchandising B2B';
-        } else {
-            normCat = 'impresion';
-            tagLabel = p.subcategory || 'Producción In-House';
+            tagLabel = p.subcategory || 'Merchandising';
         }
 
         const imgUrl = Array.isArray(p.images) && p.images[0]?.url ? p.images[0].url : '';
+        // Only show custom specs if explicitly defined on that specific item (zero repetitive filler tags)
         const specs = Array.isArray(p.features) && p.features.length > 0
-            ? p.features.slice(0, 3)
-            : ['Producción en Pucallpa', 'Control de Calidad', 'Factura RUC 20'];
+            ? p.features.slice(0, 2)
+            : [];
 
         return {
             _id: p._id,
@@ -812,7 +793,7 @@
             tagLabel,
             imageUrl: imgUrl,
             icon: p.icon || '⚙️',
-            description: p.description || 'Fabricación directa en nuestro taller propio en Pucallpa con acabados corporativos.',
+            description: p.description || 'Producción directa en nuestro taller de Pucallpa.',
             specs
         };
     }
@@ -832,25 +813,27 @@
                 ? `<img src="${escapeHtml(item.imageUrl)}" alt="${escapeHtml(item.name)}" loading="lazy">`
                 : `<span class="workshop-card__placeholder">${escapeHtml(item.icon || '⚙️')}</span>`;
 
+            const specsHtml = Array.isArray(item.specs) && item.specs.length > 0
+                ? `<div class="workshop-specs">${item.specs.map(s => `<span class="workshop-spec">${escapeHtml(s)}</span>`).join('')}</div>`
+                : '';
+
             return `
                 <article class="workshop-card">
                     <div class="workshop-card__visual">
                         ${visual}
-                        <span class="workshop-card__tag">${escapeHtml(item.tagLabel || 'Taller Propio')}</span>
+                        ${item.tagLabel ? `<span class="workshop-card__tag">${escapeHtml(item.tagLabel)}</span>` : ''}
                     </div>
                     <div class="workshop-card__body">
                         <div>
                             <h3 class="workshop-card__title">${escapeHtml(item.name)}</h3>
                             <p class="workshop-card__desc">${escapeHtml(item.description)}</p>
-                            <div class="workshop-specs">
-                                ${(item.specs || []).map(s => `<span class="workshop-spec">${escapeHtml(s)}</span>`).join('')}
-                            </div>
+                            ${specsHtml}
                         </div>
                         <button type="button" class="btn-card-quote"
                             data-open-quote
-                            data-quote-service="Producción Taller In-House (Pucallpa)"
-                            data-quote-ref="Línea de Taller: ${escapeHtml(item.name)}">
-                            <span>Cotizar Producción / Lote</span>
+                            data-quote-service="Taller Propio In-House"
+                            data-quote-ref="${escapeHtml(item.name)}">
+                            <span>Cotizar</span>
                             <span>↗</span>
                         </button>
                     </div>
@@ -860,7 +843,7 @@
     }
 
     // =========================================================================
-    // VECTORE FLOW SCREENSHOT PREVIEW (/api/software)
+    // VECTORE FLOW OFFICIAL ASSET PREVIEW (/api/software)
     // =========================================================================
     async function loadSoftwarePreview() {
         const frame = document.getElementById('vectoreFlowPreview');
@@ -868,9 +851,16 @@
 
         const res = await api.getSoftwareAssets();
         const assets = Array.isArray(res?.data) ? res.data : (Array.isArray(res) ? res : []);
-        const mainShot = assets.find(a => a.section === 'main_screenshot' || a.type === 'screenshot') || assets[0];
-        if (mainShot && mainShot.imageUrl) {
-            frame.innerHTML = `<img src="${escapeHtml(mainShot.imageUrl)}" alt="${escapeHtml(mainShot.title || 'Vectore Flow SaaS')}" loading="lazy">`;
+        if (assets.length === 0) return;
+
+        // Prioritize 'hero' asset uploaded in Admin -> Vectore Flow, then 'general', then first item
+        const mainShot = assets.find(a => a.section === 'hero')
+            || assets.find(a => a.section === 'general' || a.section === 'mockup' || a.section === 'main_screenshot')
+            || assets[0];
+
+        const assetUrl = mainShot?.url || mainShot?.imageUrl;
+        if (assetUrl) {
+            frame.innerHTML = `<img src="${escapeHtml(assetUrl)}" alt="${escapeHtml(mainShot.title || 'Vectore Flow')}" loading="lazy">`;
         }
     }
 
@@ -883,7 +873,7 @@
             if (openQuoteTrigger) {
                 e.preventDefault();
                 openQuotationModal({
-                    service: openQuoteTrigger.getAttribute('data-quote-service') || 'Proyecto Corporativo Integral',
+                    service: openQuoteTrigger.getAttribute('data-quote-service') || 'Proyecto Corporativo',
                     referenceItem: openQuoteTrigger.getAttribute('data-quote-ref') || ''
                 });
                 return;
@@ -921,7 +911,7 @@
         }
     }
 
-    function openQuotationModal({ service = 'Proyecto Corporativo Integral', referenceItem = '' } = {}) {
+    function openQuotationModal({ service = 'Proyecto Corporativo', referenceItem = '' } = {}) {
         const form = document.getElementById('modalQuotationForm');
         const successBox = document.getElementById('modalQuotationSuccess');
         const serviceInput = document.getElementById('mqService');
@@ -934,8 +924,8 @@
         if (refInput) refInput.value = referenceItem;
         if (subEl) {
             subEl.textContent = referenceItem
-                ? `Referencia seleccionada: ${referenceItem}`
-                : `División: ${service}`;
+                ? `Referencia: ${referenceItem}`
+                : `Servicio: ${service}`;
         }
 
         openModal('quotationModal');
@@ -945,7 +935,6 @@
     // FASE 4: DUAL DIRECT-CLOSE QUOTATION FUNNEL (WhatsApp + Email Proforma)
     // =========================================================================
     function initQuotationForms() {
-        // 1. Channel Tab Switching (WhatsApp vs Email Proforma)
         document.querySelectorAll('[data-channel-select]').forEach((tabBtn) => {
             tabBtn.addEventListener('click', () => {
                 const channel = tabBtn.getAttribute('data-channel-select');
@@ -973,18 +962,17 @@
                 }
                 if (submitLabel) {
                     submitLabel.textContent = isProforma
-                        ? 'Enviar Solicitud de Proforma Formal ✉️'
-                        : 'Registrar y Abrir WhatsApp Corporativo ↗';
+                        ? 'Enviar por Correo ✉️'
+                        : 'Enviar por WhatsApp ↗';
                 }
                 if (submitHint) {
                     submitHint.textContent = isProforma
-                        ? 'Recibirás código de expediente oficial (COT-XXXX) sin abrir WhatsApp.'
-                        : 'Guarda tu solicitud en nuestro CRM y abre WhatsApp con el resumen listo.';
+                        ? 'Recibirás código de expediente (COT-XXXX) sin abrir WhatsApp.'
+                        : 'Abre nuestro WhatsApp oficial con el resumen listo.';
                 }
             });
         });
 
-        // 2. Live RUC 20 / 10 Detector
         document.querySelectorAll('input[name="companyOrRuc"]').forEach((input) => {
             input.addEventListener('input', () => {
                 const field = input.closest('.b2b-field');
@@ -994,10 +982,10 @@
                 const isRuc20 = /\b20\d{9}\b/.test(val);
                 const isRuc10 = /\b10\d{9}\b/.test(val);
                 if (isRuc20) {
-                    badge.textContent = '✓ RUC 20 CORPORATIVO';
+                    badge.textContent = '✓ RUC 20';
                     badge.classList.add('is-visible');
                 } else if (isRuc10) {
-                    badge.textContent = '✓ RUC 10 NEGOCIO';
+                    badge.textContent = '✓ RUC 10';
                     badge.classList.add('is-visible');
                 } else {
                     badge.classList.remove('is-visible');
@@ -1005,7 +993,6 @@
             });
         });
 
-        // 3. Reset Form Buttons
         document.querySelectorAll('[data-reset-form]').forEach((btn) => {
             btn.addEventListener('click', () => {
                 const form = document.getElementById(btn.getAttribute('data-reset-form'));
@@ -1019,7 +1006,6 @@
             });
         });
 
-        // 4. Form Submit Handler
         ['inlineQuotationForm', 'modalQuotationForm'].forEach((formId) => {
             const form = document.getElementById(formId);
             if (!form) return;
@@ -1047,14 +1033,14 @@
         };
 
         if (!payload.name || !payload.companyOrRuc || !payload.city || !payload.description) {
-            alert('Por favor completa Nombre, Empresa o RUC, Ciudad y la Descripción de tu proyecto.');
+            alert('Por favor completa Nombre, Empresa o RUC, Ciudad y el Resumen del proyecto.');
             return;
         }
 
         if (channel === 'formal_proforma') {
             const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email);
             if (!emailOk) {
-                alert('Por favor ingresa un correo corporativo válido para remitirte la Proforma Formal.');
+                alert('Ingresa un correo corporativo válido para enviarte la proforma.');
                 return;
             }
         }
@@ -1065,70 +1051,64 @@
             form.id === 'inlineQuotationForm' ? 'inlineQuotationSuccess' : 'modalQuotationSuccess'
         );
 
-        // =====================================================================
-        // CHANNEL A: INSTANT WHATSAPP BRIDGE (Zero Popup-Blocker Synchronous Open)
-        // =====================================================================
+        // CHANNEL A: INSTANT WHATSAPP BRIDGE
         if (channel === 'whatsapp_direct') {
             const waLines = [
-                '*SOLICITUD CORPORATIVA — AGENCIA VECTORE*',
+                '*COTIZACIÓN — AGENCIA VECTORE*',
                 '────────────────────────',
                 `• *Contacto:* ${payload.name}`,
                 `• *Empresa / RUC:* ${payload.companyOrRuc}`,
-                `• *Ciudad / Eje:* ${payload.city}`,
-                `• *División:* ${payload.service}`
+                `• *Ciudad:* ${payload.city}`,
+                `• *Servicio:* ${payload.service}`
             ];
             if (payload.referenceItem) {
-                waLines.push(`• *Referencia:* ${payload.referenceItem}`);
+                waLines.push(`• *Ítem:* ${payload.referenceItem}`);
             }
             waLines.push('────────────────────────');
-            waLines.push(`*Alcance del Proyecto:*\n${payload.description}`);
+            waLines.push(`*Proyecto:*\n${payload.description}`);
 
             const waUrl = `https://wa.me/${state.whatsappNumber}?text=${encodeURIComponent(waLines.join('\n'))}`;
 
-            // Persist prospect to MongoDB asynchronously with keepalive:true
             api.createQuotation(payload, true).catch((err) => {
-                console.warn('Background CRM save warning:', err.message);
+                console.warn('CRM save warning:', err.message);
             });
 
-            // Open WhatsApp synchronously inside user gesture so iOS Safari / Mobile Chrome never block it
             window.open(waUrl, '_blank', 'noopener,noreferrer');
 
             form.style.display = 'none';
             if (successBox) {
                 const titleEl = successBox.querySelector('[data-success-title]');
                 const msgEl = successBox.querySelector('[data-success-msg]');
-                if (titleEl) titleEl.textContent = '¡Solicitud Registrada y Puente WhatsApp Abierto!';
+                if (titleEl) titleEl.textContent = '¡Abriendo WhatsApp!';
                 if (msgEl) {
-                    msgEl.innerHTML = `Hemos guardado tu requerimiento para <strong>${escapeHtml(payload.companyOrRuc)}</strong>. Si tu navegador no abrió la pestaña automáticamente, <a href="${escapeHtml(waUrl)}" target="_blank" rel="noopener" style="color:var(--vf-emerald);text-decoration:underline;font-weight:600;">haz clic aquí para abrir WhatsApp</a>.`;
+                    msgEl.innerHTML = `Solicitud guardada para <strong>${escapeHtml(payload.companyOrRuc)}</strong>. Si no abrió automáticamente, <a href="${escapeHtml(waUrl)}" target="_blank" rel="noopener" style="color:var(--vf-amber-text);text-decoration:underline;font-weight:600;">pulsa aquí para ir a WhatsApp</a>.`;
                 }
                 successBox.classList.add('is-visible');
             }
             return;
         }
 
-        // =====================================================================
-        // CHANNEL B: FORMAL CORPORATE EMAIL PROFORMA (No WhatsApp)
-        // =====================================================================
+        // CHANNEL B: FORMAL EMAIL PROFORMA
         const prevText = submitLabel ? submitLabel.textContent : '';
         if (submitBtn) submitBtn.disabled = true;
-        if (submitLabel) submitLabel.textContent = 'Registrando Expediente Corporativo...';
+        if (submitLabel) submitLabel.textContent = 'Enviando...';
 
         try {
             const res = await api.createQuotation(payload, false);
-            const code = res?.quotationCode || res?.data?.quotationCode || 'COT-REGISTRADO';
+            const code = res?.quotationCode || res?.data?.quotationCode || 'COT-OK';
 
             form.style.display = 'none';
             if (successBox) {
                 const titleEl = successBox.querySelector('[data-success-title]');
                 const msgEl = successBox.querySelector('[data-success-msg]');
-                if (titleEl) titleEl.textContent = `Expediente ${code} Recibido`;
+                if (titleEl) titleEl.textContent = `Solicitud ${code} Recibida`;
                 if (msgEl) {
-                    msgEl.textContent = `Hemos registrado tu solicitud formal para ${payload.companyOrRuc}. Nuestro equipo remitirá la evaluación y proforma al correo ${payload.email}.`;
+                    msgEl.textContent = `Enviaremos la evaluación formal al correo ${payload.email}.`;
                 }
                 successBox.classList.add('is-visible');
             }
         } catch (err) {
-            alert(err.message || 'No se pudo registrar la solicitud. Intenta nuevamente o usa la pestaña de WhatsApp.');
+            alert(err.message || 'No se pudo enviar. Intenta por WhatsApp.');
         } finally {
             if (submitBtn) submitBtn.disabled = false;
             if (submitLabel) submitLabel.textContent = prevText;
