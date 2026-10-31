@@ -8,7 +8,11 @@ let testimonials = [];
 let events = [];
 let flowAssets = [];
 let leads = [];
-let activeSection = 'catalog';
+let siteConfigState = null;
+let adminClientProjects = [];
+let editingClientOtId = null;
+let currentOtDeliverables = [];
+let activeSection = 'siteconfig';
 let selectedLeadId = null;
 let leadFilter = 'all';
 let leadSearchTerm = '';
@@ -36,6 +40,8 @@ const btnLogout = document.getElementById('btnLogout');
 const mobileMenuToggle = document.getElementById('mobileMenuToggle');
 
 // Sections
+const siteConfigSection = document.getElementById('siteConfigSection');
+const clientPortalSection = document.getElementById('clientPortalSection');
 const catalogSection = document.getElementById('catalogSection');
 const portfolioSection = document.getElementById('portfolioSection');
 const testimonialsSection = document.getElementById('testimonialsSection');
@@ -271,13 +277,15 @@ async function showDashboard() {
     if (loginScreen) loginScreen.style.display = 'none';
     if (adminDashboard) adminDashboard.style.display = 'flex';
     closeSidebar();
-    await Promise.all([
-        fetchAndRenderProducts(),
+    switchSection(activeSection || 'siteconfig');
+    await Promise.allSettled([
         fetchAndRenderProjects(),
+        fetchAndRenderSiteConfig(),
+        fetchAndRenderProducts(),
         fetchAndRenderTestimonials(),
-        fetchAndRenderEvents(),
         fetchAndRenderFlowAssets(),
-        fetchAndRenderLeads()
+        fetchAndRenderLeads(),
+        fetchAndRenderClientProjects()
     ]);
 }
 
@@ -368,6 +376,8 @@ function switchSection(section) {
     });
 
     // Toggle Visibility
+    if (siteConfigSection) siteConfigSection.style.display = section === 'siteconfig' ? 'grid' : 'none';
+    if (clientPortalSection) clientPortalSection.style.display = section === 'clientportal' ? 'grid' : 'none';
     if (catalogSection) catalogSection.style.display = section === 'catalog' ? 'grid' : 'none';
     if (portfolioSection) portfolioSection.style.display = section === 'portfolio' ? 'grid' : 'none';
     if (testimonialsSection) testimonialsSection.style.display = section === 'testimonials' ? 'grid' : 'none';
@@ -379,6 +389,8 @@ function switchSection(section) {
     if (ordersSection) ordersSection.style.display = section === 'orders' ? 'grid' : 'none';
 
     // Load data when switching to specific sections
+    if (section === 'siteconfig') fetchAndRenderSiteConfig();
+    if (section === 'clientportal') fetchAndRenderClientProjects();
     if (section === 'briefs') fetchAndRenderLeads();
     if (section === 'notifications') fetchAndRenderAdminNotifs();
     if (section === 'users') fetchAndRenderUsers();
@@ -458,8 +470,11 @@ function getLeadBudgetLabel(budget) {
     return leadBudgetLabels[budget] || budget || 'Sin definir';
 }
 
-function getLeadSourceLabel(source) {
-    return source === 'es' ? 'Peru' : 'Internacional';
+function getLeadSourceLabel(source, channel) {
+    if (channel === 'whatsapp_direct') return '💬 WhatsApp Directo';
+    if (channel === 'formal_proforma') return '✉️ Proforma Correo';
+    if (source === 'b2b') return '🏢 Corporativo B2B';
+    return source === 'es' ? 'Perú' : 'Web B2B';
 }
 
 function formatLeadDate(dateValue, options = {}) {
@@ -541,9 +556,12 @@ function getFilteredLeads() {
             if (!query) return true;
 
             const haystack = [
+                lead.quotationCode,
                 lead.name,
                 lead.email,
+                lead.companyOrRuc,
                 lead.company,
+                lead.city,
                 getLeadServiceLabel(lead.service),
                 getLeadBudgetLabel(lead.budget),
                 getLeadTimelineLabel(lead.timeline)
@@ -611,8 +629,13 @@ function renderLeadList() {
     briefsList.innerHTML = filteredLeads.map(lead => {
         const statusInfo = getLeadStatusInfo(lead.status);
         const priorityInfo = getLeadPriorityInfo(lead.priority);
-        const companyOrEmail = lead.company || lead.email;
-        const summary = [getLeadServiceLabel(lead.service), getLeadBudgetLabel(lead.budget), getLeadTimelineLabel(lead.timeline)]
+        const entityLabel = lead.companyOrRuc || lead.company || lead.email || 'Prospecto B2B';
+        const codeTag = lead.quotationCode ? `[${lead.quotationCode}] ` : '';
+        const summary = [
+            getLeadServiceLabel(lead.service),
+            lead.city ? `📍 ${lead.city}` : '',
+            getLeadSourceLabel(lead.source, lead.channel)
+        ]
             .filter(Boolean)
             .join(' · ');
 
@@ -620,18 +643,19 @@ function renderLeadList() {
         <article class="lead-card ${selectedLeadId === lead._id ? 'is-selected' : ''} ${!lead.readAt ? 'is-unread' : ''}" data-lead-id="${lead._id}">
             <div class="lead-card__header">
                 <div>
-                    <h3>${lead.name}</h3>
-                    <p>${companyOrEmail}</p>
+                    <h3>${codeTag}${escapeHtml(lead.name)}</h3>
+                    <p>${escapeHtml(entityLabel)}</p>
                 </div>
                 <span class="lead-badge lead-badge--priority lead-badge--${priorityInfo.tone}">${priorityInfo.label}</span>
             </div>
             <div class="lead-card__meta">
                 <span class="lead-badge lead-badge--${statusInfo.tone}">${statusInfo.label}</span>
+                ${lead.entityType === 'ruc20' ? '<span class="lead-badge" style="background:rgba(0,214,143,0.18);color:#00D68F;">RUC 20</span>' : ''}
                 ${!lead.readAt ? '<span class="lead-badge lead-badge--unread">Nuevo</span>' : ''}
             </div>
-            <p class="lead-card__summary">${summary}</p>
+            <p class="lead-card__summary">${escapeHtml(summary)}</p>
             <div class="lead-card__footer">
-                <span>${lead.email}</span>
+                <span>${escapeHtml(lead.email || 'Vía WhatsApp Directo')}</span>
                 <span>${formatLeadShortDate(lead.createdAt)}</span>
             </div>
         </article>`;
@@ -659,17 +683,49 @@ function renderLeadDetail() {
     briefDetailPriorityBadge.textContent = `Prioridad ${priorityInfo.label}`;
     briefDetailPriorityBadge.className = `lead-badge lead-badge--priority lead-badge--${priorityInfo.tone}`;
 
-    briefDetailName.textContent = lead.name;
-    briefDetailMeta.textContent = `${lead.company || 'Sin empresa'} · ${formatLeadDate(lead.createdAt)}`;
+    const entityName = lead.companyOrRuc || lead.company || 'No especificada';
+    const codeStr = lead.quotationCode || 'COT-B2B';
+    briefDetailName.textContent = `${codeStr} · ${lead.name}`;
+    briefDetailMeta.textContent = `${entityName} · ${lead.city || 'Perú'} · ${formatLeadDate(lead.createdAt)}`;
     briefDetailScore.textContent = `${lead.qualificationScore || 0}/100`;
-    briefDetailService.textContent = getLeadServiceLabel(lead.service);
-    briefDetailTimeline.textContent = getLeadTimelineLabel(lead.timeline);
-    briefDetailBudget.textContent = getLeadBudgetLabel(lead.budget);
-    briefDetailSource.textContent = getLeadSourceLabel(lead.source);
+    briefDetailService.textContent = lead.referenceItem
+        ? `${getLeadServiceLabel(lead.service)} (${lead.referenceItem})`
+        : getLeadServiceLabel(lead.service);
+    briefDetailTimeline.textContent = lead.timeline ? getLeadTimelineLabel(lead.timeline) : (lead.city || 'Por coordinar');
+    briefDetailBudget.textContent = lead.budget ? getLeadBudgetLabel(lead.budget) : (lead.entityType === 'ruc20' ? 'Corporativo RUC 20' : 'A cotizar');
+    briefDetailSource.textContent = getLeadSourceLabel(lead.source, lead.channel);
     briefDetailDescription.textContent = lead.description || 'El cliente no dejó un brief detallado.';
-    briefDetailEmail.textContent = lead.email;
-    briefDetailEmail.href = `mailto:${lead.email}`;
-    briefDetailCompany.textContent = lead.company || 'No especificada';
+
+    const contactStr = [lead.email, lead.phone].filter(Boolean).join(' · ') || 'Vía WhatsApp Directo';
+    briefDetailEmail.textContent = contactStr;
+    briefDetailEmail.href = lead.email ? `mailto:${lead.email}` : '#';
+    briefDetailCompany.textContent = entityName;
+
+    const cityEl = document.getElementById('briefDetailCity');
+    if (cityEl) cityEl.textContent = lead.city || 'No especificada';
+
+    const rfpWrap = document.getElementById('briefDetailRfpWrap');
+    if (rfpWrap) {
+        rfpWrap.innerHTML = lead.rfpLink
+            ? `<a href="${escapeHtml(lead.rfpLink)}" target="_blank" rel="noopener" style="color:#a67fff;font-weight:600;">Abrir TDR / Archivos ↗</a>`
+            : '<span style="opacity:0.6;">Sin adjunto</span>';
+    }
+
+    const waReplyBtn = document.getElementById('briefWhatsappReplyBtn');
+    if (waReplyBtn) {
+        const cleanPhone = (lead.phone || '').replace(/[^\d]/g, '');
+        const waTarget = cleanPhone.length >= 9
+            ? (cleanPhone.startsWith('51') ? cleanPhone : `51${cleanPhone}`)
+            : '';
+        const replyMsg = `Hola ${lead.name}, te saludamos de *Agencia Vectore* respecto a tu solicitud corporativa *${codeStr}* para *${entityName}* (${lead.service || 'Proyecto B2B'}).`;
+        waReplyBtn.href = waTarget
+            ? `https://wa.me/${waTarget}?text=${encodeURIComponent(replyMsg)}`
+            : `https://wa.me/?text=${encodeURIComponent(replyMsg)}`;
+        waReplyBtn.textContent = waTarget
+            ? `💬 Responder a ${lead.phone} en WhatsApp`
+            : '💬 Preparar Mensaje en WhatsApp';
+    }
+
     briefDetailCreatedAt.textContent = formatLeadDate(lead.createdAt);
     briefDetailUpdatedAt.textContent = formatLeadDate(lead.lastStatusChangeAt || lead.updatedAt);
     briefStatusSelect.value = lead.status || 'new';
@@ -825,10 +881,10 @@ function renderProducts() {
         const scopeColor = (product.scope === 'global') ? '#2563eb' : '#16a34a';
         const currencySymbol = (product.currency === 'USD') ? '$' : 'S/';
 
-        // Override price display with currency
-        const priceDisplayFinal = (product.unit && product.unit !== 'unidad')
-            ? `${currencySymbol} ${product.price} / ${product.unit}`
-            : `Desde ${currencySymbol} ${product.price}`;
+        // Override price display: hide fixed retail prices when 0/unset (In-House B2B mode)
+        const priceDisplayFinal = (product.price && Number(product.price) > 0)
+            ? `Ref. Interna: ${currencySymbol} ${product.price} / ${product.unit || 'unid.'}`
+            : 'Cotización Corporativa (In-House)';
 
         return `
         <div class="admin-product-card admin-card--catalog" data-id="${productId}" data-name="${product.name}">
@@ -854,10 +910,11 @@ function renderProducts() {
 }
 async function fetchAndRenderProjects() {
     try {
-        if (adminProjectsGrid) adminProjectsGrid.innerHTML = '<div class=\"loader\">Loading...</div>';
-        const response = await api.getProjects();
+        if (adminProjectsGrid) adminProjectsGrid.innerHTML = '<div class="loader">Cargando casos...</div>';
+        const response = await api.getAdminProjects().catch(() => api.getProjects());
         projects = response.data || [];
         renderProjects();
+        populateFloatingProjectSelect();
         updateStats();
     } catch (error) {
         console.error('Error fetching projects:', error);
@@ -909,13 +966,13 @@ function renderProjects() {
                             `<img src="${project.thumbnail}" alt="${project.title}" onerror="this.src='https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg'">`
                         }
                             <div class="product-protection-overlay"></div>
-                            <span class="category-badge badge-scope">${scopeLabel}</span>
-                            <span class="category-badge badge-cat">${project.category}</span>
+                            <span class="category-badge badge-scope">${project.isWhiteLabel ? '🔒 NDA / Marca Blanca' : scopeLabel}</span>
+                            <span class="category-badge badge-cat">${project.isFeatured ? '⭐ ' : ''}${project.category}</span>
                             ${isVideo ? `<span class="video-badge">VIDEO</span>` : ''}
                         </div>
             <div class="admin-product-info">
                 <h3>${project.title}</h3>
-                <p class="product-kicker">${project.category || 'Proyecto'}${project.client ? ` • ${project.client}` : ''}</p>
+                <p class="product-kicker">${project.sector || project.category || 'Caso B2B'}${project.client ? ` • ${project.client}` : ''}${project.location ? ` • 📍 ${project.location}` : ''}</p>
                 <p class="product-description">${project.description || 'Proyecto listo para edición y seguimiento desde el panel.'}</p>
                 <div class="admin-product-actions">
                     <button class="btn-edit">Editar</button>
@@ -1171,6 +1228,7 @@ async function deleteItemAction() {
         else if (deletingType === 'testimonial') res = await api.deleteTestimonial(deletingId);
         else if (deletingType === 'event') res = await api.deleteEvent(deletingId);
         else if (deletingType === 'flow') res = await api.deleteSoftwareAsset(deletingId);
+        else if (deletingType === 'clientproject') res = await api.deleteAdminClientProject(deletingId);
 
         if (res.success) {
             setTimeout(async () => {
@@ -1179,6 +1237,7 @@ async function deleteItemAction() {
                 else if (deletingType === 'testimonial') await fetchAndRenderTestimonials();
                 else if (deletingType === 'event') await fetchAndRenderEvents();
                 else if (deletingType === 'flow') await fetchAndRenderFlowAssets();
+                else if (deletingType === 'clientproject') await fetchAndRenderClientProjects();
                 alert('Eliminado con éxito');
             }, 500);
         }
@@ -1238,13 +1297,21 @@ function openEditProjectModal(id) {
     editingProjectId = id;
     const project = projects.find(p => p._id === id || p.id === id);
     if (!project) return;
-    projectModalTitle.textContent = 'Editar Proyecto';
-    document.getElementById('pTitle').value = project.title;
-    document.getElementById('pClient').value = project.client;
-    document.getElementById('pCategory').value = project.category;
+    projectModalTitle.textContent = 'Editar Caso de Éxito B2B';
+    document.getElementById('pTitle').value = project.title || '';
+    document.getElementById('pClient').value = project.client || '';
+    document.getElementById('pCategory').value = project.category || '';
     document.getElementById('pScope').value = project.scope || 'local';
-    document.getElementById('pDescription').value = project.description;
-    document.getElementById('pThumbnail').value = project.thumbnail;
+    if (document.getElementById('pSector')) document.getElementById('pSector').value = project.sector || '';
+    if (document.getElementById('pLocation')) document.getElementById('pLocation').value = project.location || 'Pucallpa, Ucayali';
+    if (document.getElementById('pIsWhiteLabel')) document.getElementById('pIsWhiteLabel').checked = Boolean(project.isWhiteLabel);
+    if (document.getElementById('pPublicClientLabel')) document.getElementById('pPublicClientLabel').value = project.publicClientLabel || '';
+    if (document.getElementById('pIsFeatured')) document.getElementById('pIsFeatured').checked = Boolean(project.isFeatured);
+    if (document.getElementById('pDeliverables')) {
+        document.getElementById('pDeliverables').value = Array.isArray(project.deliverables) ? project.deliverables.join(', ') : '';
+    }
+    document.getElementById('pDescription').value = project.description || '';
+    document.getElementById('pThumbnail').value = project.thumbnail || '';
     const galleryUrls = (project.images || []).map(img => img.url).join(', ');
     document.getElementById('pImageGallery').value = galleryUrls;
     projectFormModal.classList.add('active');
@@ -1621,11 +1688,18 @@ function setupEventListeners() {
     if (projectForm) projectForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const gal = document.getElementById('pImageGallery').value;
+        const delivsRaw = document.getElementById('pDeliverables') ? document.getElementById('pDeliverables').value : '';
         const data = {
             title: document.getElementById('pTitle').value,
             client: document.getElementById('pClient').value,
             category: document.getElementById('pCategory').value,
-            scope: document.getElementById('pScope').value,
+            sector: document.getElementById('pSector') ? document.getElementById('pSector').value : '',
+            location: document.getElementById('pLocation') ? document.getElementById('pLocation').value : 'Pucallpa, Ucayali',
+            isWhiteLabel: document.getElementById('pIsWhiteLabel') ? document.getElementById('pIsWhiteLabel').checked : false,
+            publicClientLabel: document.getElementById('pPublicClientLabel') ? document.getElementById('pPublicClientLabel').value : '',
+            isFeatured: document.getElementById('pIsFeatured') ? document.getElementById('pIsFeatured').checked : false,
+            deliverables: delivsRaw.split(',').map(s => s.trim()).filter(Boolean),
+            scope: document.getElementById('pScope').value || 'local',
             description: document.getElementById('pDescription').value,
             thumbnail: document.getElementById('pThumbnail').value,
             images: gal.split(',').map(u => ({ url: u.trim() })).filter(u => u.url)
@@ -1921,6 +1995,475 @@ if (adminNotifsGrid) {
         }
     });
 }
+
+// ===================================
+// B2B SITE CONFIG CMS (Hero, Fallback, OPEN PROJECT, Sectors & Footer)
+// ===================================
+function populateFloatingProjectSelect() {
+    const sel = document.getElementById('scFloatingProjectSelect');
+    if (!sel) return;
+    const currentVal = siteConfigState?.hero?.floatingCard?.projectId || sel.value || '';
+    sel.innerHTML = '<option value="">-- Seleccionar proyecto --</option>' +
+        projects.map(p => `<option value="${p._id}" ${String(p._id) === String(currentVal) ? 'selected' : ''}>${escapeHtml(p.title)} (${escapeHtml(p.category || 'Caso')})</option>`).join('');
+}
+
+async function fetchAndRenderSiteConfig() {
+    if (!document.getElementById('siteConfigSection')) return;
+    try {
+        const res = await api.getSiteConfig();
+        if (!res?.success || !res.data) return;
+        const cfg = res.data;
+        siteConfigState = cfg;
+
+        const hero = cfg.hero || {};
+        const setVal = (id, val) => {
+            const el = document.getElementById(id);
+            if (el && val !== undefined && val !== null) el.value = val;
+        };
+
+        setVal('scHeroBgUrl', hero.backgroundUrl || '');
+        setVal('scHeroMobileUrl', hero.mobileBackgroundUrl || '');
+        const op = typeof hero.overlayOpacity === 'number' ? hero.overlayOpacity : 0.58;
+        setVal('scHeroOpacity', op);
+        const opLabel = document.getElementById('scHeroOpacityVal');
+        if (opLabel) opLabel.textContent = `${Math.round(op * 100)}%`;
+
+        setVal('scBadgeText', hero.badgeText || '');
+        setVal('scHeadline1', hero.headlineLine1 || '');
+        setVal('scHeadlineHighlight', hero.headlineHighlight || '');
+        setVal('scSubtitle', hero.subtitle || '');
+        setVal('scPrimaryCta', hero.primaryCtaText || '');
+        setVal('scSecondaryCta', hero.secondaryCtaText || '');
+
+        const fc = hero.floatingCard || {};
+        const flEnabled = document.getElementById('scFloatingEnabled');
+        if (flEnabled) flEnabled.checked = fc.enabled !== false;
+        setVal('scFloatingLabel', fc.label || 'OPEN PROJECT');
+        setVal('scFloatingMode', fc.mode || 'latest');
+        populateFloatingProjectSelect();
+        if (fc.projectId) setVal('scFloatingProjectSelect', fc.projectId);
+
+        renderAdminSectorsList(Array.isArray(cfg.sectors) ? cfg.sectors : []);
+
+        const corp = cfg.corporate || {};
+        setVal('scWhatsappNumber', corp.whatsappNumber || '51950699910');
+        setVal('scPhoneDisplay', corp.phoneDisplay || '+51 950 699 910');
+        setVal('scCorpEmail', corp.email || 'agenciavectore@gmail.com');
+        setVal('scCorpAddress', corp.address || '');
+        setVal('scCorpRucInfo', corp.rucInfo || '');
+    } catch (err) {
+        console.error('Error loading SiteConfig in Admin:', err);
+    }
+}
+
+function renderAdminSectorsList(sectors) {
+    const listEl = document.getElementById('scSectorsList');
+    if (!listEl) return;
+
+    const icons = ['building', 'landmark', 'film', 'truck', 'leaf', 'shield', 'activity', 'compass', 'layers'];
+    listEl.innerHTML = sectors.map((sec, idx) => `
+        <div class="sector-admin-row" data-sector-idx="${idx}" style="display:grid;grid-template-columns:auto 1.1fr 1.2fr 130px auto;gap:10px;align-items:center;padding:10px 12px;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.09);">
+            <input type="checkbox" class="sec-active" ${sec.isActive !== false ? 'checked' : ''} title="Mostrar sector">
+            <input type="text" class="sec-name" value="${escapeHtml(sec.name || '')}" placeholder="Nombre del rubro (ej. Centros Comerciales)">
+            <input type="text" class="sec-sub" value="${escapeHtml(sec.subtitle || '')}" placeholder="Especialidad breve">
+            <select class="sec-icon">
+                ${icons.map(ic => `<option value="${ic}" ${sec.icon === ic ? 'selected' : ''}>${ic}</option>`).join('')}
+            </select>
+            <button type="button" class="btn-delete sec-remove-btn" style="padding:6px 10px;">✕</button>
+        </div>
+    `).join('');
+}
+
+function collectAdminSectors() {
+    const rows = document.querySelectorAll('#scSectorsList .sector-admin-row');
+    return Array.from(rows).map((row, idx) => ({
+        id: `sec-${idx + 1}`,
+        isActive: row.querySelector('.sec-active')?.checked !== false,
+        name: (row.querySelector('.sec-name')?.value || '').trim(),
+        subtitle: (row.querySelector('.sec-sub')?.value || '').trim(),
+        icon: row.querySelector('.sec-icon')?.value || 'layers',
+        order: idx + 1
+    })).filter(s => s.name);
+}
+
+// Bind SiteConfig Events
+(function bindSiteConfigAdminEvents() {
+    const opacityInput = document.getElementById('scHeroOpacity');
+    if (opacityInput) {
+        opacityInput.addEventListener('input', () => {
+            const lbl = document.getElementById('scHeroOpacityVal');
+            if (lbl) lbl.textContent = `${Math.round(Number(opacityInput.value) * 100)}%`;
+        });
+    }
+
+    const heroFile = document.getElementById('scHeroFile');
+    if (heroFile) {
+        heroFile.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const urlInput = document.getElementById('scHeroBgUrl');
+            try {
+                if (urlInput) urlInput.value = 'Subiendo a Cloudinary...';
+                const res = await api.uploadImage(file);
+                if (res?.success && res.data?.url) {
+                    if (urlInput) urlInput.value = res.data.url;
+                } else {
+                    throw new Error(res?.message || 'Error al subir archivo');
+                }
+            } catch (err) {
+                alert('Error subiendo portada: ' + err.message);
+                if (urlInput) urlInput.value = '';
+                heroFile.value = '';
+            }
+        });
+    }
+
+    const addSecBtn = document.getElementById('btnAddSectorRow');
+    if (addSecBtn) {
+        addSecBtn.addEventListener('click', () => {
+            const current = collectAdminSectors();
+            current.push({ id: `sec-${Date.now()}`, name: '', subtitle: '', icon: 'layers', isActive: true });
+            renderAdminSectorsList(current);
+        });
+    }
+
+    const secList = document.getElementById('scSectorsList');
+    if (secList) {
+        secList.addEventListener('click', (e) => {
+            const rm = e.target.closest('.sec-remove-btn');
+            if (!rm) return;
+            const row = rm.closest('.sector-admin-row');
+            if (row) row.remove();
+        });
+    }
+
+    const saveBtn = document.getElementById('btnSaveSiteConfig');
+    if (saveBtn) {
+        saveBtn.addEventListener('click', async () => {
+            const bgUrl = (document.getElementById('scHeroBgUrl')?.value || '').trim();
+            const isVid = /\.(mp4|webm|mov|ogg)(\?|$)/i.test(bgUrl) || bgUrl.includes('/video/upload/');
+            const payload = {
+                hero: {
+                    backgroundType: !bgUrl ? 'default' : (isVid ? 'video' : 'image'),
+                    backgroundUrl: bgUrl,
+                    mobileBackgroundUrl: (document.getElementById('scHeroMobileUrl')?.value || '').trim(),
+                    overlayOpacity: Number(document.getElementById('scHeroOpacity')?.value || 0.58),
+                    badgeText: document.getElementById('scBadgeText')?.value || '',
+                    headlineLine1: document.getElementById('scHeadline1')?.value || '',
+                    headlineHighlight: document.getElementById('scHeadlineHighlight')?.value || '',
+                    subtitle: document.getElementById('scSubtitle')?.value || '',
+                    primaryCtaText: document.getElementById('scPrimaryCta')?.value || '',
+                    secondaryCtaText: document.getElementById('scSecondaryCta')?.value || '',
+                    floatingCard: {
+                        enabled: document.getElementById('scFloatingEnabled')?.checked !== false,
+                        label: document.getElementById('scFloatingLabel')?.value || 'OPEN PROJECT',
+                        mode: document.getElementById('scFloatingMode')?.value || 'latest',
+                        projectId: document.getElementById('scFloatingProjectSelect')?.value || null
+                    }
+                },
+                sectors: collectAdminSectors(),
+                corporate: {
+                    whatsappNumber: document.getElementById('scWhatsappNumber')?.value || '51950699910',
+                    phoneDisplay: document.getElementById('scPhoneDisplay')?.value || '+51 950 699 910',
+                    email: document.getElementById('scCorpEmail')?.value || 'agenciavectore@gmail.com',
+                    address: document.getElementById('scCorpAddress')?.value || '',
+                    rucInfo: document.getElementById('scCorpRucInfo')?.value || ''
+                }
+            };
+
+            const orig = saveBtn.textContent;
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Guardando...';
+            try {
+                await api.updateSiteConfig(payload);
+                alert('✅ Portada, Sectores y Datos Corporativos actualizados en vivo.');
+                await fetchAndRenderSiteConfig();
+            } catch (err) {
+                alert('Error al guardar: ' + err.message);
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.textContent = orig;
+            }
+        });
+    }
+
+    const resetBtn = document.getElementById('btnResetHeroBg');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', async () => {
+            if (!confirm('¿Restaurar el fondo oscuro animado original en la Portada?')) return;
+            try {
+                await api.resetHeroBackground();
+                document.getElementById('scHeroBgUrl').value = '';
+                document.getElementById('scHeroMobileUrl').value = '';
+                alert('✅ Fondo original restaurado.');
+            } catch (err) {
+                alert('Error: ' + err.message);
+            }
+        });
+    }
+
+    const copyCompBtn = document.getElementById('briefCopyCompanyBtn');
+    if (copyCompBtn) {
+        copyCompBtn.addEventListener('click', () => {
+            const txt = document.getElementById('briefDetailCompany')?.textContent || '';
+            if (txt && txt !== '-') copyTextToClipboard(txt, copyCompBtn);
+        });
+    }
+})();
+
+// ===================================
+// CORPORATE CLIENT PORTAL OTs & PRIVATE PAYMENT TICKETS
+// ===================================
+async function fetchAndRenderClientProjects() {
+    const grid = document.getElementById('adminClientOtsGrid');
+    if (!grid) return;
+    grid.innerHTML = '<div class="loader">Cargando Órdenes de Trabajo...</div>';
+
+    try {
+        const res = await api.getAdminClientProjects();
+        adminClientProjects = Array.isArray(res?.data) ? res.data : [];
+        renderAdminClientProjects();
+    } catch (err) {
+        grid.innerHTML = `<p class="no-products">Error al cargar OTs: ${escapeHtml(err.message)}</p>`;
+    }
+}
+
+function renderAdminClientProjects() {
+    const grid = document.getElementById('adminClientOtsGrid');
+    if (!grid) return;
+
+    if (adminClientProjects.length === 0) {
+        grid.innerHTML = '<p class="no-products">No hay Órdenes de Trabajo creadas aún. Pulsa "+ Nueva Orden de Trabajo (OT)" para habilitar el portal a un cliente.</p>';
+        return;
+    }
+
+    grid.innerHTML = adminClientProjects.map((ot) => {
+        const delivCount = Array.isArray(ot.deliverables) ? ot.deliverables.length : 0;
+        const approvedCount = (ot.deliverables || []).filter(d => d.approvalStatus === 'approved').length;
+        const ticket = ot.paymentTicket || {};
+        const ticketUrl = ticket.enabled && ticket.ticketToken
+            ? `${window.location.origin}/clientes?ticket=${ticket.ticketToken}`
+            : '';
+
+        return `
+            <div class="admin-product-card" data-id="${ot._id}" data-name="${escapeHtml(ot.title)}">
+                <div class="admin-product-info" style="padding:20px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                        <strong style="color:#a67fff;font-size:0.82rem;">${escapeHtml(ot.otCode || 'OT')}</strong>
+                        <span style="font-size:0.76rem;padding:3px 8px;border-radius:99px;background:rgba(134,85,255,0.16);color:#c4b5fd;">
+                            Avance ${Number(ot.progress) || 0}%
+                        </span>
+                    </div>
+                    <h3>${escapeHtml(ot.title)}</h3>
+                    <p style="font-size:0.84rem;opacity:0.85;margin-bottom:6px;">
+                        👤 ${escapeHtml(ot.clientCompany || ot.clientName || 'Cliente')} · ✉️ ${escapeHtml(ot.clientEmail)}
+                    </p>
+                    <p style="font-size:0.8rem;opacity:0.75;margin-bottom:10px;">
+                        📂 ${delivCount} archivos (${approvedCount} aprobados)
+                        ${ticket.enabled ? ` · 💳 Ticket S/ ${Number(ticket.amountPen || 0).toFixed(2)} (${ticket.status === 'paid' ? 'PAGADO' : 'PENDIENTE'})` : ''}
+                    </p>
+                    ${ticketUrl ? `
+                        <button type="button" class="btn btn-secondary btn-copy-ticket-link" data-ticket-url="${escapeHtml(ticketUrl)}" style="width:100%;margin-bottom:10px;font-size:0.78rem;padding:7px 10px;">
+                            🔗 Copiar Link de Pago Privado
+                        </button>
+                    ` : ''}
+                    <div class="admin-product-actions">
+                        <button class="btn-edit">Editar OT</button>
+                        <button class="btn-delete">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function renderDeliverableRowsInModal() {
+    const container = document.getElementById('cpDeliverablesList');
+    if (!container) return;
+
+    if (currentOtDeliverables.length === 0) {
+        container.innerHTML = '<small style="opacity:0.65;">Sin archivos aún. Sube uno arriba o pulsa "+ Agregar Archivo".</small>';
+        return;
+    }
+
+    container.innerHTML = currentOtDeliverables.map((d, i) => `
+        <div class="cp-deliv-row" data-idx="${i}" style="display:grid;grid-template-columns:140px 1fr 1fr auto;gap:8px;align-items:center;">
+            <select class="cpd-type">
+                <option value="art_hd" ${d.type === 'art_hd' ? 'selected' : ''}>🎨 Arte HD (Aprobable)</option>
+                <option value="photo_report" ${d.type === 'photo_report' ? 'selected' : ''}>📸 Reporte Instalación</option>
+                <option value="invoice_pdf" ${d.type === 'invoice_pdf' ? 'selected' : ''}>🧾 Factura PDF</option>
+                <option value="technical_doc" ${d.type === 'technical_doc' ? 'selected' : ''}>📐 Plano / Técnico</option>
+            </select>
+            <input type="text" class="cpd-title" value="${escapeHtml(d.title || '')}" placeholder="Título del entregable">
+            <input type="url" class="cpd-url" value="${escapeHtml(d.fileUrl || '')}" placeholder="https://...">
+            <button type="button" class="btn-delete cpd-remove" style="padding:6px 10px;">✕</button>
+        </div>
+    `).join('');
+}
+
+function syncDeliverablesFromModalDOM() {
+    const rows = document.querySelectorAll('#cpDeliverablesList .cp-deliv-row');
+    currentOtDeliverables = Array.from(rows).map((row, idx) => {
+        const prev = currentOtDeliverables[idx] || {};
+        return {
+            ...prev,
+            type: row.querySelector('.cpd-type')?.value || 'art_hd',
+            title: (row.querySelector('.cpd-title')?.value || '').trim(),
+            fileUrl: (row.querySelector('.cpd-url')?.value || '').trim()
+        };
+    });
+}
+
+function openClientProjectModal(id = null) {
+    const modal = document.getElementById('clientProjectModal');
+    const form = document.getElementById('clientProjectForm');
+    if (!modal || !form) return;
+
+    editingClientOtId = id;
+    form.reset();
+
+    if (id) {
+        const ot = adminClientProjects.find(p => p._id === id);
+        if (!ot) return;
+        document.getElementById('clientProjectModalTitle').textContent = `Editar ${ot.otCode || 'Orden de Trabajo'}`;
+        document.getElementById('cpTitle').value = ot.title || '';
+        document.getElementById('cpClientEmail').value = ot.clientEmail || '';
+        document.getElementById('cpClientCompany').value = ot.clientCompany || '';
+        document.getElementById('cpClientName').value = ot.clientName || '';
+        document.getElementById('cpStatus').value = ot.status || 'in_design';
+        document.getElementById('cpProgress').value = ot.progress ?? 25;
+        document.getElementById('cpLocation').value = ot.location || 'Pucallpa, Ucayali';
+        document.getElementById('cpTimelineNotes').value = ot.timelineNotes || '';
+        currentOtDeliverables = Array.isArray(ot.deliverables) ? ot.deliverables.map(d => ({ ...d })) : [];
+
+        const tk = ot.paymentTicket || {};
+        document.getElementById('cpTicketEnabled').checked = Boolean(tk.enabled);
+        document.getElementById('cpTicketConcept').value = tk.concept || '';
+        document.getElementById('cpTicketAmount').value = tk.amountPen || '';
+    } else {
+        document.getElementById('clientProjectModalTitle').textContent = 'Nueva Orden de Trabajo (Portal Clientes)';
+        currentOtDeliverables = [];
+    }
+
+    renderDeliverableRowsInModal();
+    modal.classList.add('active');
+}
+
+(function bindClientPortalAdminEvents() {
+    const btnAdd = document.getElementById('btnAddClientOt');
+    const modal = document.getElementById('clientProjectModal');
+    const closeBtn = document.getElementById('clientProjectModalClose');
+    const cancelBtn = document.getElementById('btnCancelClientProject');
+    const form = document.getElementById('clientProjectForm');
+    const grid = document.getElementById('adminClientOtsGrid');
+    const addDelivBtn = document.getElementById('btnAddDeliverableRow');
+    const quickUpload = document.getElementById('cpDeliverableQuickUpload');
+    const delivList = document.getElementById('cpDeliverablesList');
+
+    const closeModalFn = () => {
+        if (modal) modal.classList.remove('active');
+        editingClientOtId = null;
+    };
+
+    if (btnAdd) btnAdd.addEventListener('click', () => openClientProjectModal(null));
+    if (closeBtn) closeBtn.addEventListener('click', closeModalFn);
+    if (cancelBtn) cancelBtn.addEventListener('click', closeModalFn);
+
+    if (addDelivBtn) {
+        addDelivBtn.addEventListener('click', () => {
+            syncDeliverablesFromModalDOM();
+            currentOtDeliverables.push({ type: 'art_hd', title: '', fileUrl: '', approvalStatus: 'pending' });
+            renderDeliverableRowsInModal();
+        });
+    }
+
+    if (delivList) {
+        delivList.addEventListener('click', (e) => {
+            const rm = e.target.closest('.cpd-remove');
+            if (!rm) return;
+            syncDeliverablesFromModalDOM();
+            const idx = Number(rm.closest('.cp-deliv-row')?.dataset.idx);
+            if (!Number.isNaN(idx)) {
+                currentOtDeliverables.splice(idx, 1);
+                renderDeliverableRowsInModal();
+            }
+        });
+    }
+
+    if (quickUpload) {
+        quickUpload.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            syncDeliverablesFromModalDOM();
+            try {
+                const res = await api.uploadImage(file);
+                if (res?.success && res.data?.url) {
+                    const isPdf = /\.pdf$/i.test(file.name);
+                    currentOtDeliverables.push({
+                        type: isPdf ? 'invoice_pdf' : 'art_hd',
+                        title: file.name.replace(/\.[^/.]+$/, ''),
+                        fileUrl: res.data.url,
+                        approvalStatus: 'pending'
+                    });
+                    renderDeliverableRowsInModal();
+                }
+            } catch (err) {
+                alert('Error subiendo entregable: ' + err.message);
+            } finally {
+                quickUpload.value = '';
+            }
+        });
+    }
+
+    if (form) {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            syncDeliverablesFromModalDOM();
+            const payload = {
+                title: document.getElementById('cpTitle').value.trim(),
+                clientEmail: document.getElementById('cpClientEmail').value.trim().toLowerCase(),
+                clientCompany: document.getElementById('cpClientCompany').value.trim(),
+                clientName: document.getElementById('cpClientName').value.trim(),
+                status: document.getElementById('cpStatus').value,
+                progress: Number(document.getElementById('cpProgress').value) || 0,
+                location: document.getElementById('cpLocation').value.trim(),
+                timelineNotes: document.getElementById('cpTimelineNotes').value.trim(),
+                deliverables: currentOtDeliverables.filter(d => d.title && d.fileUrl),
+                paymentTicket: {
+                    enabled: document.getElementById('cpTicketEnabled').checked,
+                    concept: document.getElementById('cpTicketConcept').value.trim(),
+                    amountPen: Number(document.getElementById('cpTicketAmount').value) || 0
+                }
+            };
+
+            try {
+                if (editingClientOtId) {
+                    await api.updateAdminClientProject(editingClientOtId, payload);
+                } else {
+                    await api.createAdminClientProject(payload);
+                }
+                closeModalFn();
+                await fetchAndRenderClientProjects();
+            } catch (err) {
+                alert('Error guardando OT: ' + err.message);
+            }
+        });
+    }
+
+    if (grid) {
+        grid.addEventListener('click', (e) => {
+            const copyBtn = e.target.closest('.btn-copy-ticket-link');
+            if (copyBtn) {
+                copyTextToClipboard(copyBtn.getAttribute('data-ticket-url'), copyBtn, '¡Link Copiado!');
+                return;
+            }
+            const edit = getTargetData(e, '.btn-edit');
+            if (edit) openClientProjectModal(edit.id);
+            const del = getTargetData(e, '.btn-delete');
+            if (del) openDeleteModal(del.id, 'clientproject', del.name);
+        });
+    }
+})();
 
 init();
 

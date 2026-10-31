@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+
+<head>
+    <script>
+        (function () {
+            try {
+                var savedTheme = localStorage.getItem('vectore_theme');
+                document.documentElement.setAttribute('data-theme', savedTheme === 'light' ? 'light' : 'dark');
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Portal de Clientes &amp; Órdenes de Trabajo | Agencia Vectore</title>
+
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/liquid-glass.css">
+    <link rel="stylesheet" href="/css/b2b-corporate.css">
+
+    <style>
+        .portal-shell {
+            min-height: 100svh;
+            padding: 112px 0 72px;
+            background:
+                radial-gradient(ellipse 60% 45% at 80% 10%, rgba(134, 85, 255, 0.16) 0%, transparent 65%),
+                var(--vf-bg);
+        }
+
+        .portal-login-grid {
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+            gap: clamp(28px, 4vw, 52px);
+            align-items: center;
+            margin-top: 24px;
+        }
+
+        .portal-auth-card {
+            border-radius: var(--radius-xl);
+            padding: clamp(26px, 4vw, 40px);
+        }
+
+        .portal-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 20px 0;
+            color: var(--vf-text-muted);
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .portal-divider::before,
+        .portal-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--vf-border-subtle);
+        }
+
+        .portal-topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            padding: 20px 24px;
+            border-radius: var(--radius-lg);
+            margin-bottom: 28px;
+        }
+
+        .portal-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .portal-stat-card {
+            padding: 18px 20px;
+            border-radius: var(--radius-md);
+            background: var(--vf-surface);
+            border: 1px solid var(--vf-border-subtle);
+        }
+
+        .portal-stat-card strong {
+            display: block;
+            font-family: var(--font-mono);
+            font-size: 1.65rem;
+            color: var(--vf-heading-contrast);
+        }
+
+        .portal-stat-card span {
+            font-size: 0.8rem;
+            color: var(--vf-text-secondary);
+        }
+
+        .ot-card {
+            border-radius: var(--radius-lg);
+            background: var(--vf-surface);
+            border: 1px solid var(--vf-border);
+            padding: clamp(22px, 3vw, 32px);
+            margin-bottom: 24px;
+        }
+
+        .ot-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        .ot-status-pill {
+            padding: 6px 14px;
+            border-radius: var(--radius-pill);
+            font-family: var(--font-mono);
+            font-size: 0.74rem;
+            font-weight: 600;
+            background: rgba(134, 85, 255, 0.16);
+            color: var(--vf-primary-hover);
+            border: 1px solid rgba(134, 85, 255, 0.35);
+        }
+
+        .ot-status-pill--ready {
+            background: rgba(0, 214, 143, 0.15);
+            color: var(--vf-emerald);
+            border-color: rgba(0, 214, 143, 0.35);
+        }
+
+        .ot-status-pill--pending {
+            background: rgba(255, 181, 71, 0.16);
+            color: var(--vf-amber);
+            border-color: rgba(255, 181, 71, 0.38);
+        }
+
+        .ot-progress-track {
+            width: 100%;
+            height: 8px;
+            border-radius: 99px;
+            background: var(--vf-bg);
+            overflow: hidden;
+            margin: 10px 0 22px;
+            border: 1px solid var(--vf-border-subtle);
+        }
+
+        .ot-progress-fill {
+            height: 100%;
+            border-radius: 99px;
+            background: linear-gradient(90deg, var(--vf-primary), var(--vf-emerald));
+            transition: width 0.6s var(--ease-expo);
+        }
+
+        .deliverables-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .deliverable-item {
+            padding: 16px;
+            border-radius: var(--radius-md);
+            background: var(--vf-bg);
+            border: 1px solid var(--vf-border-subtle);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 14px;
+        }
+
+        .ticket-Spotlight {
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 28px;
+            border: 1px solid rgba(134, 85, 255, 0.5);
+            background: linear-gradient(135deg, rgba(134, 85, 255, 0.16) 0%, var(--vf-surface) 80%);
+        }
+
+        @media (max-width: 960px) {
+            .portal-login-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <!-- Google Identity Services (1-Click Corporate OAuth) -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+
+<body>
+    <header class="b2b-header is-scrolled" id="portalHeader">
+        <nav class="b2b-nav liquid-glass">
+            <a href="/" class="b2b-logo" aria-label="Volver a Agencia Vectore">
+                <img src="/Vectore-logo.svg" alt="Agencia Vectore">
+            </a>
+
+            <div class="b2b-nav__actions">
+                <button type="button" class="btn-theme-toggle" id="portalThemeBtn" title="Alternar modo oscuro/claro">
+                    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                    </svg>
+                </button>
+                <a href="/" class="btn-client-hub">
+                    <span>← Volver al Brochure</span>
+                </a>
+                <button type="button" class="btn-client-hub" id="portalLogoutBtn" style="display:none;">
+                    <span>Cerrar Sesión</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="portal-shell section-light-aware">
+        <div class="container">
+            <!-- =============================================================
+                 PRIVATE PAYMENT TICKET BANNER (Shown when ?ticket=TOKEN is in URL)
+                 ============================================================= -->
+            <section id="privateTicketSpotlight" class="ticket-Spotlight" style="display:none;"></section>
+
+            <!-- =============================================================
+                 VIEW A: LOGIN GATE (Google OAuth 1-Click + Credenciales / SSO)
+                 ============================================================= -->
+            <section id="portalLoginView">
+                <div class="portal-login-grid">
+                    <div>
+                        <span class="eyebrow-tag">// ÁREA DE CLIENTES &amp; PUENTE SSO VECTORE FLOW</span>
+                        <h1 class="section-title">
+                            Seguimiento de proyectos, <span class="text-gradient-vf">artes HD y facturación sin enlaces vencidos.</span>
+                        </h1>
+                        <p class="section-desc" style="margin-bottom:24px;">
+                            Inicia sesión con el correo corporativo o cuenta de Google asociada a tu Orden de Servicio para aprobar artes finales, descargar reportes fotográficos de montaje en Pucallpa y consultar tus comprobantes PDF.
+                        </p>
+
+                        <ul class="funnel-trust-list" style="margin-top:0;">
+                            <li class="funnel-trust-item">
+                                <div class="funnel-trust-item__icon">🎨</div>
+                                <div>
+                                    <strong style="display:block;font-size:0.92rem;color:var(--vf-heading-contrast);">Aprobación Digital de Artes en Alta Resolución</strong>
+                                    <span style="font-size:0.82rem;color:var(--vf-text-secondary);">Autoriza impresión o solicita ajustes con trazabilidad exacta de fecha y hora.</span>
+                                </div>
+                            </li>
+                            <li class="funnel-trust-item">
+                                <div class="funnel-trust-item__icon">📸</div>
+                                <div>
+                                    <strong style="display:block;font-size:0.92rem;color:var(--vf-heading-contrast);">Evidencia de Ejecución en Campo &amp; Facturas PDF</strong>
+                                    <span style="font-size:0.82rem;color:var(--vf-text-secondary);">Descarga permanente para auditoría de agencias de Lima y áreas de compras.</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="portal-auth-card liquid-glass liquid-glass--elevated">
+                        <h2 style="font-size:1.35rem;font-weight:800;color:var(--vf-heading-contrast);margin-bottom:6px;">
+                            Acceso Corporativo Seguro
+                        </h2>
+                        <p style="font-size:0.86rem;color:var(--vf-text-secondary);margin-bottom:22px;">
+                            Ingresa con un clic usando Google o tus credenciales asignadas.
+                        </p>
+
+                        <!-- Google 1-Click Container -->
+                        <div id="googleSignInContainer" style="display:flex;justify-content:center;min-height:44px;"></div>
+
+                        <div class="portal-divider">o ingresa con tu correo</div>
+
+                        <form id="clientLoginForm" class="b2b-form-grid" style="grid-template-columns:1fr;">
+                            <div class="b2b-field">
+                                <label for="portalEmail">Correo Corporativo</label>
+                                <input type="email" id="portalEmail" class="b2b-input" placeholder="nombre@empresa.com" required>
+                            </div>
+                            <div class="b2b-field">
+                                <label for="portalPassword">Contraseña</label>
+                                <input type="password" id="portalPassword" class="b2b-input" placeholder="••••••••" required>
+                            </div>
+                            <div id="portalAuthError" style="display:none;padding:10px 14px;border-radius:10px;background:rgba(255,71,87,0.14);border:1px solid rgba(255,71,87,0.35);color:#ff6b7a;font-size:0.84rem;"></div>
+                            <button type="submit" class="btn-submit-b2b btn-submit-b2b--email" id="portalLoginSubmit">
+                                <span>Iniciar Sesión en el Portal</span>
+                            </button>
+                        </form>
+
+                        <p style="font-size:0.76rem;color:var(--vf-text-muted);text-align:center;margin-top:18px;">
+                            ¿Aún no tienes una Orden de Trabajo activa? <a href="/#cotizar" style="color:var(--vf-primary-hover);font-weight:600;">Solicita una cotización aquí →</a>
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =============================================================
+                 VIEW B: AUTHENTICATED CLIENT DASHBOARD (OTs & Deliverables)
+                 ============================================================= -->
+            <section id="portalDashboardView" style="display:none;">
+                <div class="portal-topbar liquid-glass">
+                    <div>
+                        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                            <span class="live-dot"></span>
+                            <strong style="font-size:1.12rem;color:var(--vf-heading-contrast);" id="portalUserGreeting">
+                                Bienvenido
+                            </strong>
+                            <span class="mono" style="font-size:0.72rem;padding:3px 9px;border-radius:99px;background:rgba(0,214,143,0.14);color:var(--vf-emerald);border:1px solid rgba(0,214,143,0.3);">
+                                SSO VECTORE FLOW ACTIVO
+                            </span>
+                        </div>
+                        <span style="font-size:0.83rem;color:var(--vf-text-secondary);" id="portalUserEmailDisplay"></span>
+                    </div>
+
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                        <a href="https://wa.me/51950699910?text=Hola%20Vectore%2C%20escribo%20desde%20el%20Portal%20de%20Clientes."
+                            target="_blank" rel="noopener" class="btn-client-hub">
+                            <span>💬 Ejecutivo de Cuenta</span>
+                        </a>
+                        <button type="button" class="chip-btn" id="refreshPortalBtn">↻ Actualizar OTs</button>
+                    </div>
+                </div>
+
+                <div class="portal-stats" id="portalStatsRow">
+                    <div class="portal-stat-card">
+                        <strong id="statTotalOts">0</strong>
+                        <span>Órdenes de Trabajo (OTs)</span>
+                    </div>
+                    <div class="portal-stat-card">
+                        <strong id="statPendingArts" style="color:var(--vf-amber);">0</strong>
+                        <span>Artes por Aprobar</span>
+                    </div>
+                    <div class="portal-stat-card">
+                        <strong id="statTotalFiles" style="color:var(--vf-emerald);">0</strong>
+                        <span>Entregables HD &amp; Facturas</span>
+                    </div>
+                </div>
+
+                <div id="portalProjectsList"></div>
+            </section>
+        </div>
+    </main>
+
+    <script src="/api-client.js"></script>
+    <script src="/js/client-portal.js"></script>
+</body>
+
+</html>

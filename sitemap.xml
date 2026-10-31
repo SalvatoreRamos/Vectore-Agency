@@ -1,59 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
-    <!--
-        Sitemap strategy based on the current codebase:
-        - www.agenciavectore.com = international lead-generation landing (EN, brief-first)
-        - pe.agenciavectore.com = Peru local/commercial site (catalog, WhatsApp, payments, legal)
-    -->
-
-    <!-- International site: studio positioning + project intake -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <!-- Unified Corporate B2B Brochure: www.agenciavectore.com -->
     <url>
         <loc>https://www.agenciavectore.com/</loc>
-        <lastmod>2026-09-10</lastmod>
-        <xhtml:link rel="alternate" hreflang="en" href="https://www.agenciavectore.com/" />
-        <xhtml:link rel="alternate" hreflang="es-PE" href="https://pe.agenciavectore.com/" />
-        <xhtml:link rel="alternate" hreflang="x-default" href="https://www.agenciavectore.com/" />
+        <lastmod>2026-10-31</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
     </url>
 
-    <!-- Peru site: local services, catalog and conversion -->
     <url>
-        <loc>https://pe.agenciavectore.com/</loc>
-        <lastmod>2026-09-10</lastmod>
-        <xhtml:link rel="alternate" hreflang="en" href="https://www.agenciavectore.com/" />
-        <xhtml:link rel="alternate" hreflang="es-PE" href="https://pe.agenciavectore.com/" />
-        <xhtml:link rel="alternate" hreflang="x-default" href="https://www.agenciavectore.com/" />
-        <changefreq>weekly</changefreq>
-        <priority>0.95</priority>
-    </url>
-
-    <url>
-        <loc>https://pe.agenciavectore.com/software</loc>
-        <lastmod>2026-03-25</lastmod>
+        <loc>https://www.agenciavectore.com/software</loc>
+        <lastmod>2026-10-31</lastmod>
         <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
+        <priority>0.85</priority>
     </url>
 
-    <!-- Peru legal/compliance pages -->
     <url>
-        <loc>https://pe.agenciavectore.com/terminos</loc>
-        <lastmod>2026-03-02</lastmod>
+        <loc>https://www.agenciavectore.com/terminos</loc>
+        <lastmod>2026-10-31</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.3</priority>
     </url>
 
     <url>
-        <loc>https://pe.agenciavectore.com/politica-devoluciones</loc>
-        <lastmod>2026-03-02</lastmod>
+        <loc>https://www.agenciavectore.com/privacidad.html</loc>
+        <lastmod>2026-10-31</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.3</priority>
     </url>
 
     <url>
-        <loc>https://pe.agenciavectore.com/libro-reclamaciones</loc>
-        <lastmod>2026-03-02</lastmod>
+        <loc>https://www.agenciavectore.com/politica-devoluciones</loc>
+        <lastmod>2026-10-31</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.3</priority>
     </url>

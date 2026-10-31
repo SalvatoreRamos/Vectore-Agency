@@ -15,38 +15,40 @@ try {
   // Ignore if not supported in environment
 }
 
-// Load environment variables
 dotenv.config();
 
-// Import routes
+// Import active B2B & Corporate routes
 import authRoutes from './routes/auth.js';
+import siteConfigRoutes from './routes/site-config.js';
+import quotationRoutes from './routes/quotations.js';
+import clientPortalRoutes from './routes/client-portal.js';
 import productRoutes from './routes/products.js';
 import uploadRoutes from './routes/upload.js';
 import projectRoutes from './routes/projects.js';
 import testimonialRoutes from './routes/testimonials.js';
-import eventRoutes from './routes/events.js';
 import softwareRoutes from './routes/software.js';
 import complaintRoutes from './routes/complaints.js';
-import notificationRoutes from './routes/notifications.js';
 import userRoutes from './routes/users.js';
 import paymentRoutes from './routes/payments.js';
 import internalEmailRoutes from './routes/internal-email.js';
 import contactFormRoutes from './routes/contact-form.js';
 
-// Import subdomain middleware
-import { subdomainMiddleware } from './middleware/i18n.js';
+// B2C Store / Regional Raffles disabled in B2B transformation:
+// import eventRoutes from './routes/events.js';
+// import notificationRoutes from './routes/notifications.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-app.set('trust proxy', 1); // Trust first proxy (Render)
+app.set('trust proxy', 1);
 const PORT = process.env.PORT || 3000;
-const PRIMARY_GLOBAL_HOST = process.env.PRIMARY_GLOBAL_HOST || 'www.agenciavectore.com';
-const LEGACY_GLOBAL_HOSTS = (process.env.LEGACY_GLOBAL_HOSTS || 'agenciavectore.com')
-  .split(',')
-  .map((host) => host.trim().toLowerCase())
-  .filter(Boolean);
+const PRIMARY_HOST = (process.env.PRIMARY_GLOBAL_HOST || 'www.agenciavectore.com').toLowerCase();
+const REDIRECT_HOSTS = Array.from(new Set([
+  'agenciavectore.com',
+  'pe.agenciavectore.com',
+  ...(process.env.LEGACY_GLOBAL_HOSTS || '').split(',').map((host) => host.trim().toLowerCase()).filter(Boolean)
+])).filter((h) => h !== PRIMARY_HOST);
 
 // Security middleware
 app.use(helmet({
@@ -82,7 +84,15 @@ app.use(helmet({
         "https://fonts.googleapis.com"
       ],
       "worker-src": ["'self'", "blob:"],
-      "frame-src": ["'self'", "https://accounts.google.com/", "https://checkout.culqi.com", "https://3ds.culqi.com", "https://my.spline.design", "https://prod.spline.design", "https://cdn.spline.design"],
+      "frame-src": [
+        "'self'",
+        "https://accounts.google.com/",
+        "https://checkout.culqi.com",
+        "https://3ds.culqi.com",
+        "https://my.spline.design",
+        "https://prod.spline.design",
+        "https://cdn.spline.design"
+      ],
       "connect-src": [
         "https://ppdirywkrmuexufadekw.supabase.co",
         "'self'",
@@ -103,45 +113,59 @@ app.use(helmet({
         "https://unpkg.com"
       ],
       "media-src": ["'self'", "https:", "blob:", "https://res.cloudinary.com"],
-      "img-src": ["'self'", "data:", "https:", "http:", "blob:", "https://www.google-analytics.com", "https://www.googletagmanager.com", "https://lh3.googleusercontent.com", "https://res.cloudinary.com"]
-    },
+      "img-src": [
+        "'self'",
+        "data:",
+        "https:",
+        "http:",
+        "blob:",
+        "https://www.google-analytics.com",
+        "https://www.googletagmanager.com",
+        "https://lh3.googleusercontent.com",
+        "https://res.cloudinary.com"
+      ]
+    }
   },
   crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" },
-  crossOriginEmbedderPolicy: false,
+  crossOriginEmbedderPolicy: false
 }));
 
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
+  windowMs: 15 * 60 * 1000,
+  max: 150
 });
 app.use('/api/', limiter);
 
-// CORS configuration
+// CORS configuration (supports web + Vectore Flow desktop/SSO)
 app.use(cors({
   origin: [
     process.env.FRONTEND_URL,
+    'http://localhost:3000',
+    'http://localhost:5173',
     'http://localhost:5500',
     'https://vectore-agency.onrender.com',
     'https://agenciavectore.com',
     'https://www.agenciavectore.com',
     'https://pe.agenciavectore.com'
-  ],
+  ].filter(Boolean),
   credentials: true
 }));
 
-// Body parser middleware
-app.use(express.json());
+app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Consolidate the international site on the canonical www host.
+// ==================================================
+// Canonical Single-Domain Unification
+// Redirects agenciavectore.com and pe.agenciavectore.com -> www.agenciavectore.com
+// ==================================================
 app.use((req, res, next) => {
   const hostname = (req.hostname || '').toLowerCase();
-  const isLegacyGlobalHost = LEGACY_GLOBAL_HOSTS.includes(hostname);
+  const isLocalOrPreview = hostname.includes('localhost') || hostname.includes('127.0.0.1') || hostname.includes('onrender.com');
   const isApiRequest = req.path === '/api' || req.path.startsWith('/api/');
 
-  if (isLegacyGlobalHost && !isApiRequest) {
-    return res.redirect(301, `https://${PRIMARY_GLOBAL_HOST}${req.originalUrl}`);
+  if (!isLocalOrPreview && !isApiRequest && REDIRECT_HOSTS.includes(hostname) && hostname !== PRIMARY_HOST) {
+    return res.redirect(301, `https://${PRIMARY_HOST}${req.originalUrl}`);
   }
 
   next();
@@ -150,148 +174,107 @@ app.use((req, res, next) => {
 // ===================================
 // Static Files
 // ===================================
-// New organized assets (CSS, JS, images)
 app.use('/css', express.static(path.join(__dirname, 'css'), { maxAge: '1h' }));
-app.use('/js', express.static(path.join(__dirname, 'js'), { maxAge: '7d' }));
+app.use('/js', express.static(path.join(__dirname, 'js'), { maxAge: '1h' }));
 app.use('/assets', express.static(path.join(__dirname, 'public/assets'), { maxAge: '1y', immutable: true }));
-
-// Legacy static files (existing root files: SVGs, favicon, etc.)
-app.use(express.static(__dirname, {
-  // Don't serve index.html from root — we handle routing explicitly
-  index: false
-}));
+app.use(express.static(__dirname, { index: false }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // ===================================
 // API Routes
 // ===================================
 app.use('/api/auth', authRoutes);
+app.use('/api/site-config', siteConfigRoutes);
+app.use('/api/quotations', quotationRoutes);
+app.use('/api/client-portal', clientPortalRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/testimonials', testimonialRoutes);
-app.use('/api/events', eventRoutes);
 app.use('/api/software', softwareRoutes);
 app.use('/api/complaints', complaintRoutes);
-app.use('/api/notifications', notificationRoutes);
 app.use('/api/users', userRoutes);
-app.use('/api/payments', paymentRoutes);
+app.use('/api/payments', paymentRoutes); // Private B2B Ticket & Admin Order Audit only
 app.use('/api/internal', internalEmailRoutes);
 app.use('/api/contact', contactFormRoutes);
 
-// Health check endpoint
+// B2C Store modules deactivated:
+// app.use('/api/events', eventRoutes);
+// app.use('/api/notifications', notificationRoutes);
+
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'OK',
-    message: 'Vectore API is running',
+    mode: 'B2B_CORPORATE_UNIFIED',
+    message: 'Vectore Corporate API is running',
     timestamp: new Date().toISOString()
   });
 });
 
 // ===================================
-// Subdomain Middleware (must be after API routes)
-// Detects pe.agenciavectore.com vs agenciavectore.com
-// ===================================
-app.use(subdomainMiddleware);
-
-// ===================================
-// Page Routes — Subdomain-based
+// Unified Corporate Page Routes
 // ===================================
 
-// Home
+// Main Unified Corporate Brochure
 app.get('/', (req, res) => {
-  if (req.site === 'pe') {
-    // Peru: serve the existing complete agency site with catalog, portfolio & testimonials
-    return res.sendFile(path.join(__dirname, 'index.html'));
-  }
-  // Global: serve the new premium EN landing
-  res.sendFile(path.join(__dirname, 'views/en/index.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Explicit site routes
-app.get('/pe', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+// Legacy multi-site & store URLs cleanly redirected
+app.get(['/pe', '/es', '/en'], (req, res) => {
+  res.redirect(301, '/');
 });
-app.get('/es', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
+
 app.get('/catalogo', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
-app.get('/en', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views/en/index.html'));
+  res.redirect(301, '/#taller');
 });
 
-// Software / Vectore Flow
-app.get('/software', (req, res) => {
-  if (req.site === 'pe') {
-    return res.sendFile(path.join(__dirname, 'software.html'));
-  }
-  const enPath = path.join(__dirname, 'views/en/software.html');
-  const legacyPath = path.join(__dirname, 'software.html');
-  res.sendFile(enPath, (err) => {
-    if (err) res.sendFile(legacyPath);
-  });
-});
-
-// Checkout (Peru only)
 app.get('/checkout', (req, res) => {
-  if (req.site !== 'pe') {
-    return res.redirect(301, 'https://pe.agenciavectore.com/checkout');
-  }
-  res.sendFile(path.join(__dirname, 'checkout.html'));
+  res.redirect(301, '/#cotizar');
 });
 
-// Legal Pages (Peru)
+// Corporate Client Portal & Private Ticket Payment View
+app.get(['/clientes', '/portal', '/pago'], (req, res) => {
+  res.set('X-Robots-Tag', 'noindex, nofollow');
+  res.sendFile(path.join(__dirname, 'clientes.html'));
+});
+
+// Vectore Flow SaaS Page
+app.get('/software', (req, res) => {
+  res.sendFile(path.join(__dirname, 'software.html'));
+});
+
+// Legal & Corporate Compliance Pages
 app.get('/terminos', (req, res) => {
-  if (req.site !== 'pe') {
-    return res.redirect(301, 'https://pe.agenciavectore.com/terminos');
-  }
   res.sendFile(path.join(__dirname, 'terminos.html'));
 });
 
 app.get('/politica-devoluciones', (req, res) => {
-  if (req.site !== 'pe') {
-    return res.redirect(301, 'https://pe.agenciavectore.com/politica-devoluciones');
-  }
   res.sendFile(path.join(__dirname, 'politica-devoluciones.html'));
 });
 
 app.get('/libro-reclamaciones', (req, res) => {
-  if (req.site !== 'pe') {
-    return res.redirect(301, 'https://pe.agenciavectore.com/libro-reclamaciones');
-  }
   res.sendFile(path.join(__dirname, 'libro-reclamaciones.html'));
 });
 
-// Real Estate Investment (Peru only)
+// Private Real Estate Investment Dossier (Accessible ONLY via direct link)
 app.get('/inversiones', (req, res) => {
-  if (req.site !== 'pe') {
-    return res.redirect(301, 'https://pe.agenciavectore.com/inversiones');
-  }
+  res.set('X-Robots-Tag', 'noindex, nofollow');
   res.sendFile(path.join(__dirname, 'inversiones.html'));
 });
 
-// ===================================
-// Flow Express (Mobile Quick Orders)
-// ===================================
+// Flow Express (Mobile Quick Orders for Vectore Flow)
 app.get('/vf', (req, res) => {
+  res.set('X-Robots-Tag', 'noindex, nofollow');
   res.sendFile(path.join(__dirname, 'flow-express.html'));
 });
 
-// ===================================
-// Catch-all: Serve site-appropriate page
-// ===================================
+// Catch-all -> Serve Unified Corporate Home
 app.get('*', (req, res) => {
   if (req.path.startsWith('/api/')) {
     return res.status(404).json({ success: false, message: 'Route not found' });
   }
-  if (req.site === 'pe') {
-    // Peru: serve the existing index.html for any unknown route
-    return res.sendFile(path.join(__dirname, 'index.html'));
-  }
-  // Global: serve premium EN landing
-  res.sendFile(path.join(__dirname, 'views/en/index.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // Error handling middleware
@@ -304,20 +287,11 @@ app.use((err, req, res, next) => {
   });
 });
 
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({
-    success: false,
-    message: 'Route not found'
-  });
-});
-
 // Database connection
 mongoose.connect(process.env.MONGODB_URI)
   .then(async () => {
     console.log('✅ Connected to MongoDB');
 
-    // Drop stale indexes that conflict with current schema
     try {
       const db = mongoose.connection.db;
       const usersCollection = db.collection('users');
@@ -331,14 +305,11 @@ mongoose.connect(process.env.MONGODB_URI)
       }
     } catch (e) {
       // Ignore if index doesn't exist
-      console.log('Index cleanup skipped:', e.message);
     }
 
-    // Start server
     app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
+      console.log(`🚀 Vectore B2B Server running on port ${PORT}`);
       console.log(`📍 API available at http://localhost:${PORT}/api`);
-      console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
     });
   })
   .catch((err) => {
@@ -346,7 +317,6 @@ mongoose.connect(process.env.MONGODB_URI)
     process.exit(1);
   });
 
-// Handle unhandled promise rejections
 process.on('unhandledRejection', (err) => {
   console.error('Unhandled Promise Rejection:', err);
   process.exit(1);

@@ -14,20 +14,21 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Category is required'],
         enum: ['diseno', 'impresion', 'packaging', 'senalizacion', 'vinilo', 'digital', 'espacios'],
-        default: 'digital'
+        default: 'impresion'
     },
     subcategory: {
         type: String,
-        required: [true, 'Subcategory is required']
+        default: 'Manufactura In-House'
     },
     price: {
         type: Number,
-        required: [true, 'Price is required'],
+        required: false,
+        default: null,
         min: [0, 'Price cannot be negative']
     },
     deliveryTime: {
         type: String,
-        default: ''
+        default: '24 - 48 horas en Pucallpa'
     },
     material: {
         type: String,
@@ -35,7 +36,7 @@ const productSchema = new mongoose.Schema({
     },
     unit: {
         type: String,
-        default: 'unidad'
+        default: 'proyecto'
     },
     minQuantity: {
         type: Number,
@@ -64,7 +65,7 @@ const productSchema = new mongoose.Schema({
     }],
     icon: {
         type: String,
-        default: '✨'
+        default: '⚙️'
     },
     specifications: {
         type: Map,
@@ -113,16 +114,13 @@ const productSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// Index for search
 productSchema.index({ name: 'text', description: 'text', tags: 'text' });
 
-// Virtual for primary image
 productSchema.virtual('primaryImage').get(function () {
     const primary = this.images.find(img => img.isPrimary);
     return primary || this.images[0];
 });
 
-// Ensure virtuals are included in JSON
 productSchema.set('toJSON', { virtuals: true });
 productSchema.set('toObject', { virtuals: true });
 

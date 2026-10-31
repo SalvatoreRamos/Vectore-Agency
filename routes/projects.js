@@ -6,14 +6,14 @@ import { authenticate, isAdmin } from '../middleware/auth.js';
 const router = express.Router();
 
 // @route   GET /api/projects
-// @desc    Get all projects
+// @desc    Get all portfolio projects (sanitized for White-Label / NDA privacy)
 // @access  Public
 router.get('/', async (req, res) => {
     try {
-        const { scope } = req.query;
+        const { scope, sector } = req.query;
         const query = {};
-        
-        if (scope) {
+
+        if (scope && scope !== 'all') {
             if (scope === 'local') {
                 query.$or = [{ scope: 'local' }, { scope: { $exists: false } }, { scope: null }];
             } else {
@@ -21,19 +21,36 @@ router.get('/', async (req, res) => {
             }
         }
 
-        const projects = await Project.find(query).sort('-createdAt');
-        res.json({ success: true, data: projects });
+        if (sector) {
+            query.sector = sector;
+        }
+
+        const projects = await Project.find(query).sort({ isFeatured: -1, date: -1, createdAt: -1 });
+        const publicProjects = projects.map((p) => p.toPublicJSON());
+
+        res.json({ success: true, data: publicProjects });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Error fetching projects', error: error.message });
     }
 });
 
+// @route   GET /api/projects/admin/all
+// @desc    Get raw projects including internal NDA client names for Admin Panel
+// @access  Private/Admin
+router.get('/admin/all', [authenticate, isAdmin], async (req, res) => {
+    try {
+        const projects = await Project.find().sort({ createdAt: -1 });
+        res.json({ success: true, data: projects });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error fetching admin projects', error: error.message });
+    }
+});
+
 // @route   POST /api/projects
-// @desc    Create new project
+// @desc    Create new project (supports White-Label NDA mode)
 // @access  Private/Admin
 router.post('/', [authenticate, isAdmin], [
     body('title').notEmpty().withMessage('Title is required'),
-    body('client').notEmpty().withMessage('Client is required'),
     body('category').notEmpty().withMessage('Category is required'),
     body('description').notEmpty().withMessage('Description is required'),
     body('thumbnail').notEmpty().withMessage('Thumbnail is required')
@@ -44,7 +61,12 @@ router.post('/', [authenticate, isAdmin], [
             return res.status(400).json({ success: false, errors: errors.array() });
         }
 
-        const project = new Project(req.body);
+        const payload = { ...req.body };
+        if (!payload.client && payload.isWhiteLabel) {
+            payload.client = 'Confidencial (NDA)';
+        }
+
+        const project = new Project(payload);
         await project.save();
 
         res.status(201).json({ success: true, message: 'Project created successfully', data: project });

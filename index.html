@@ -1,7 +1,19 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="dark">
 
 <head>
+    <!-- Anti-FOUC Theme Initialization: Dark Mode by default, Light Mode on explicit user preference -->
+    <script>
+        (function () {
+            try {
+                var savedTheme = localStorage.getItem('vectore_theme');
+                document.documentElement.setAttribute('data-theme', savedTheme === 'light' ? 'light' : 'dark');
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
+
     <!-- Google Tag Manager -->
     <script>(function (w, d, s, l, i) {
             w[l] = w[l] || []; w[l].push({
@@ -12,9 +24,10 @@
                     'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
         })(window, document, 'script', 'dataLayer', 'GTM-W8RCKKSV');</script>
     <!-- End Google Tag Manager -->
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="p:domain_verify" content="8e11f68a31f63607de8789eaf7468788"/>
+    <meta name="p:domain_verify" content="8e11f68a31f63607de8789eaf7468788" />
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y0YGQ6DDHK"></script>
@@ -22,715 +35,1023 @@
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
-
         gtag('config', 'G-Y0YGQ6DDHK');
     </script>
 
+    <title>Agencia Vectore | Ejecución BTL en Pucallpa, Packaging 3D, Arquitectura Comercial & Software a Medida</title>
     <meta name="description"
-        content="Vectore | Agencia Publicitaria y de Marketing en Pucallpa. Expertos en diseño gráfico, impresiones de alta calidad, stickers, gigantografías, diseño web, diseño de interiores y merchandising. Potenciamos tu marca en Ucayali.">
+        content="Somos el aliado corporativo con taller propio en Pucallpa para marcas y agencias de Lima. Ejecución BTL en la Amazonía, arquitectura comercial, diseño especializado, packaging 3D e ingeniería de software a medida.">
     <meta name="keywords"
-        content="agencia publicitaria Pucallpa, diseño grafico Pucallpa, marketing digital Pucallpa, imprenta Pucallpa, impresiones Pucallpa, stickers Pucallpa, gigantografías Pucallpa, diseño web Pucallpa, diseño de interiores Pucallpa, merchandising Pucallpa, avisos luminosos Pucallpa, branding Pucallpa, publicidad Ucayali, rotulación vehicular Pucallpa, folletos Pucallpa, banners Pucallpa">
-    <meta name="author" content="Vectore Agency">
+        content="ejecución BTL Pucallpa, agencia BTL Ucayali para Lima, producción gráfica industrial Pucallpa, arquitectura comercial stands Pucallpa, packaging 3D Perú, desarrollo de software a medida Perú, Agencia Vectore, marca blanca agencias Lima">
+    <meta name="author" content="Agencia Vectore">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://pe.agenciavectore.com/">
-    <link rel="alternate" hreflang="en" href="https://www.agenciavectore.com/">
-    <link rel="alternate" hreflang="es-PE" href="https://pe.agenciavectore.com/">
-    <link rel="alternate" hreflang="x-default" href="https://www.agenciavectore.com/">
+    <link rel="canonical" href="https://www.agenciavectore.com/">
 
-
-    <!-- Open Graph / Facebook -->
+    <!-- Open Graph -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://pe.agenciavectore.com/">
-    <meta property="og:title" content="Vectore | Agencia de Publicidad, Impresiones y Diseño Web en Pucallpa">
+    <meta property="og:url" content="https://www.agenciavectore.com/">
+    <meta property="og:title" content="Agencia Vectore | Ejecución BTL, Arquitectura Comercial, Packaging 3D & Software">
     <meta property="og:description"
-        content="Impulsa tu negocio con diseño profesional, impresiones de calidad, stickers, diseño web y de interiores en Pucallpa.">
-    <meta property="og:image" content="https://pe.agenciavectore.com/favicon.png">
+        content="Ejecutamos tus despliegues BTL en Pucallpa con taller propio y desarrollamos diseño especializado, visualización 3D y software corporativo a medida.">
+    <meta property="og:image" content="https://www.agenciavectore.com/favicon.png">
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://pe.agenciavectore.com/">
-    <meta property="twitter:title" content="Vectore | Agencia Publicitaria en Pucallpa">
-    <meta property="twitter:description" content="Impulsamos tu marca en Pucallpa con diseño y marketing estratégico.">
-    <meta property="twitter:image" content="https://pe.agenciavectore.com/favicon.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://www.agenciavectore.com/">
+    <meta name="twitter:title" content="Agencia Vectore | Partner Corporativo BTL, 3D & Software">
+    <meta name="twitter:description"
+        content="Ejecución BTL en Pucallpa para marcas de Lima, arquitectura comercial, packaging 3D y software empresarial.">
+    <meta name="twitter:image" content="https://www.agenciavectore.com/favicon.png">
 
-    <title>Vectore | Agencia Publicitaria en Pucallpa</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
         rel="stylesheet">
-    <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="events.css">
-    <link rel="stylesheet" href="legal.css">
-    <link rel="stylesheet" href="cart.css?v=3">
 
-    <!-- Structured Data (JSON-LD) -->
+    <link rel="stylesheet" href="/css/liquid-glass.css">
+    <link rel="stylesheet" href="/css/b2b-corporate.css">
+
+    <!-- Structured Data (Corporate B2B Organization) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "AdvertisingAgency",
-      "name": "Vectore",
-      "image": "https://pe.agenciavectore.com/favicon.png",
-      "@id": "https://pe.agenciavectore.com/",
-      "url": "https://pe.agenciavectore.com/",
-      "telephone": "+51950699910",
+      "@type": "Organization",
+      "name": "Agencia Vectore",
+      "url": "https://www.agenciavectore.com/",
+      "logo": "https://www.agenciavectore.com/Vectore-logo.svg",
       "email": "agenciavectore@gmail.com",
+      "telephone": "+51950699910",
+      "description": "Agencia corporativa híbrida: Ejecución BTL e infraestructura de taller propio en Pucallpa para marcas nacionales, arquitectura comercial, packaging 3D e ingeniería de software a medida.",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "Jr. Tarapacá 390, Callería, Pucallpa",
+        "streetAddress": "Jr. Tarapacá 390, Callería",
         "addressLocality": "Pucallpa",
         "addressRegion": "Ucayali",
         "postalCode": "25001",
         "addressCountry": "PE"
       },
-      "description": "Agencia publicitaria líder en Pucallpa, Ucayali, especializada en diseño gráfico, marketing digital, diseño web, impresiones de gran formato, stickers y diseño de interiores profesional.",
-      "openingHoursSpecification": {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday"
-        ],
-        "opens": "09:00",
-        "closes": "18:00"
-      }
+      "areaServed": ["PE", "Lima", "Ucayali", "Global"]
     }
     </script>
 </head>
 
 <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W8RCKKSV" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe></noscript>
+
+    <!-- Optical SVG Filter for Apple-style Liquid Glass Progressive Refraction -->
+    <svg width="0" height="0" style="position:absolute;pointer-events:none;opacity:0;" aria-hidden="true">
+        <defs>
+            <filter id="vectore-liquid-refract" x="-10%" y="-10%" width="120%" height="120%"
+                color-interpolation-filters="sRGB">
+                <feTurbulence type="fractalNoise" baseFrequency="0.012 0.018" numOctaves="2" seed="7" result="noise" />
+                <feGaussianBlur in="noise" stdDeviation="1.8" result="softNoise" />
+                <feDisplacementMap in="SourceGraphic" in2="softNoise" scale="6" xChannelSelector="R"
+                    yChannelSelector="G" />
+            </filter>
+        </defs>
+    </svg>
 
     <!-- Preloader -->
-    <div class="preloader" id="preloader">
-        <div class="preloader-content">
-            <img src="Vectore-iso.svg" alt="Vectore" class="preloader-logo">
-            <div class="preloader-bar"></div>
+    <div class="b2b-preloader" id="b2bPreloader" aria-hidden="true">
+        <div class="b2b-preloader__inner">
+            <img src="/Vectore-iso.svg" alt="Agencia Vectore" class="b2b-preloader__logo">
+            <div class="b2b-preloader__track">
+                <div class="b2b-preloader__bar"></div>
+            </div>
         </div>
     </div>
 
-
-
-    <!-- Navigation -->
-    <nav class="navbar" id="navbar">
-        <div class="nav-container">
-            <a href="#" class="logo">
-                <img src="Vectore-logo.svg" alt="Vectore - Agencia Publicitaria" class="logo-img">
+    <!-- =====================================================================
+         FLOATING LIQUID GLASS NAVBAR (Sin Pestaña SHOP / Carrito)
+         ===================================================================== -->
+    <header class="b2b-header" id="b2bHeader">
+        <nav class="b2b-nav liquid-glass liquid-glass--refract liquid-glass--interactive" aria-label="Navegación Principal">
+            <a href="#inicio" class="b2b-logo" aria-label="Agencia Vectore Inicio">
+                <img src="/Vectore-logo.svg" alt="Agencia Vectore">
             </a>
-            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <ul class="nav-menu" id="navMenu">
-                <li><a href="#inicio" class="nav-link">Inicio</a></li>
-                <li><a href="#servicios" class="nav-link">Servicios</a></li>
-                <li><a href="#catalogo" class="nav-link">Catálogo</a></li>
-                <li><a href="#whatsapp" class="nav-link">Contacto</a></li>
+
+            <ul class="b2b-nav__links">
+                <li><a href="#portafolio" class="b2b-nav__link">Casos de Éxito</a></li>
+                <li><a href="#servicios" class="b2b-nav__link">Divisiones B2B</a></li>
+                <li><a href="#taller" class="b2b-nav__link">Taller In-House</a></li>
+                <li><a href="#sectores" class="b2b-nav__link">Sectores</a></li>
+                <li><a href="#ecosistema" class="b2b-nav__link">Vectore Flow</a></li>
             </ul>
-        </div>
-    </nav>
 
-    <!-- Hero Section -->
-    <section class="hero" id="inicio">
-        <div class="hero-bg">
-            <div class="shape-container">
-                <div class="floating-shape shape-1"></div>
-            </div>
-            <div class="shape-container">
-                <div class="floating-shape shape-2"></div>
-            </div>
-            <div class="shape-container">
-                <div class="floating-shape shape-3"></div>
-            </div>
-            <div class="shape-container">
-                <div class="floating-shape shape-4"></div>
-            </div>
-        </div>
-        <div class="hero-content">
-            <span class="hero-badge">🚀 Agencia Creativa #1 en Pucallpa</span>
-            <h1 class="hero-title">
-                <span class="title-line">Transformamos tus</span>
-                <span class="title-line"><span class="gradient-text">ideas</span> en <span
-                        class="gradient-text">realidad</span></span>
-            </h1>
-            <p class="hero-subtitle">
-                Expertos en diseño gráfico, impresiones de alta calidad, stickers y diseño web en Pucallpa.
-                Llevamos tu marca al siguiente nivel con soluciones creativas que impactan.
-            </p>
-            <div class="hero-cta">
-                <a href="#catalogo" class="btn btn-primary">
-                    <span>Ver Catálogo</span>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M5 12h14M12 5l7 7-7 7" />
+            <div class="b2b-nav__actions">
+                <button type="button" class="btn-theme-toggle" id="themeToggleBtn"
+                    aria-label="Cambiar modo oscuro o claro" title="Alternar modo de color">
+                    <!-- Moon icon shown in Dark Mode; Sun icon shown in Light Mode -->
+                    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                     </svg>
+                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+
+                <a href="/clientes" class="btn-client-hub" title="Portal Privado de Clientes Corporativos">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    <span>Área de Clientes</span>
                 </a>
-                <a href="#whatsapp" class="btn btn-secondary">Contactar</a>
-            </div>
-            <div class="hero-stats">
-                <div class="stat">
-                    <span class="stat-number" data-target="500">0</span>
-                    <span class="stat-label">Proyectos</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-number" data-target="150">0</span>
-                    <span class="stat-label">Clientes</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-number" data-target="4">0</span>
-                    <span class="stat-label">Años</span>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Vectore Flow Teaser Section -->
-    <section class="software-teaser" id="software-teaser"
-        style="padding: 100px 0; background: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #0f0f12 100%); color: white; overflow: hidden; position: relative;">
-        <div class="container">
-            <div class="row"
-                style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 40px;">
-                <div class="col-text" style="flex: 1; min-width: 300px;">
-                    <div class="section-badge"
-                        style="background: rgba(255, 187, 85, 0.1); color: var(--accent-gold); border: 1px solid rgba(255, 187, 85, 0.3); display: inline-block; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; margin-bottom: 15px;">
-                        Nuevo Lanzamiento</div>
-                    <h2 class="section-title"
-                        style="color: white; font-size: 2.5rem; margin-top: 0; margin-bottom: 20px;">Vectore Flow <span
-                            style="color: var(--accent-gold);">v1.0</span></h2>
-                    <p class="section-subtitle"
-                        style="color: rgba(255,255,255,0.7); max-width: 500px; margin-bottom: 30px; line-height: 1.6;">
-                        El primer sistema de productividad laboral diseñado específicamente para el caos de las agencias
-                        creativas y de impresión.
-                    </p>
-                    <ul class="feature-list" style="list-style: none; padding: 0; margin-bottom: 30px;">
-                        <li
-                            style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.9);">
-                            <span style="color: var(--accent-gold);">✓</span> Gestión integral de pedidos
-                        </li>
-                        <li
-                            style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.9);">
-                            <span style="color: var(--accent-gold);">✓</span> Control de producción en tiempo real
-                        </li>
-                        <li style="display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.9);">
-                            <span style="color: var(--accent-gold);">✓</span> App para instaladores
-                        </li>
-                    </ul>
-                    <a href="/software" class="btn btn-primary" style="margin-top: 10px;">
-                        Descubrir Más
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" style="margin-left: 8px;">
-                            <path d="M5 12h14M12 5l7 7-7 7" />
-                        </svg>
-                    </a>
-                </div>
-                <div class="col-image reveal" style="flex: 1.2; min-width: 300px; position: relative;">
-                    <div id="indexFlowPreview"
-                        style="background: #1E1E24; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); transform: perspective(1000px) rotateY(-5deg) rotateX(5deg); transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);" onmouseenter="this.style.transform='perspective(1000px) rotateY(0) rotateX(0)'" onmouseleave="this.style.transform='perspective(1000px) rotateY(-5deg) rotateX(5deg)'">
-                        <!-- Placeholder -->
-                        <div
-                            style="aspect-ratio: 16/9; width: 100%; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.3);">
-                            <p>Cargando vista previa...</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Services Section -->
-    <section class="services" id="servicios">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-badge">Nuestros Servicios</span>
-                <h2 class="section-title">Diseño Gráfico, Marketing e Impresión en Pucallpa</h2>
-                <p class="section-subtitle">Soluciones creativas integrales para posicionar tu marca en el mercado local
-                    y digital.</p>
-            </div>
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                        </svg>
-                    </div>
-                    <h3>Diseño Gráfico Pucallpa</h3>
-                    <p>Creamos identidades visuales únicas que conectan con tu audiencia y destacan tu marca.</p>
-                    <ul class="service-features">
-                        <li>Logos e identidad</li>
-                        <li>Material publicitario</li>
-                        <li>Diseño editorial</li>
-                    </ul>
-                </div>
-                <div class="service-card featured">
-                    <div class="service-badge">Popular</div>
-                    <div class="service-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M6.6 11.2L2 22l10.6-4.6M6.6 11.2L22 2l-9.4 9.2M6.6 11.2l5 2.6" />
-                        </svg>
-                    </div>
-                    <h3>Impresiones y Stickers</h3>
-                    <p>Impresión de alta calidad con tecnología de última generación para todo tipo de materiales y
-                        formatos.</p>
-                    <ul class="service-features">
-                        <li>Stickers y etiquetas</li>
-                        <li>Gigantografías y banners</li>
-                        <li>Vinilos y folletos</li>
-                    </ul>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-                        </svg>
-                    </div>
-                    <h3>Marketing y Diseño Web</h3>
-                    <p>Desarrollamos sitios web modernos y estrategias digitales que generan resultados reales para tu
-                        negocio.</p>
-                    <ul class="service-features">
-                        <li>Diseño de páginas web</li>
-                        <li>Gestión de redes sociales</li>
-                        <li>SEO local Pucallpa</li>
-                    </ul>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <circle cx="12" cy="12" r="10" />
-                            <path d="M12 6v6l4 2" />
-                        </svg>
-                    </div>
-                    <h3>Branding y Logos Pucallpa</h3>
-                    <p>Desarrollamos la personalidad de tu marca con estrategias de posicionamiento efectivas.</p>
-                    <ul class="service-features">
-                        <li>Estrategia de marca</li>
-                        <li>Manual de identidad</li>
-                        <li>Naming</li>
-                    </ul>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                            <polyline points="9 22 9 12 15 12 15 22" />
-                        </svg>
-                    </div>
-                    <h3>Diseño de Interiores Pucallpa</h3>
-                    <p>Transformamos tus espacios comerciales en lugares funcionales y visualmente impactantes.</p>
-                    <ul class="service-features">
-                        <li>Planificación de espacios</li>
-                        <li>Mobiliario comercial</li>
-                        <li>Visualización 3D</li>
-                    </ul>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path
-                                d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-1.1 0-2 .9-2 2v7c0 1.1.9 2 2 2h2" />
-                            <circle cx="7" cy="17" r="2" />
-                            <circle cx="17" cy="17" r="2" />
-                        </svg>
-                    </div>
-                    <h3>Publicidad Vehicular Pucallpa</h3>
-                    <p>Publicidad en movimiento con vinilos de alta resistencia y acabados profesionales para tu flota.
-                    </p>
-                    <ul class="service-features">
-                        <li>Rotulación integral</li>
-                        <li>Cambio de color</li>
-                        <li>Publicidad vehicular</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Catalog Section -->
-    <section class="catalog" id="catalogo">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-badge">Catálogo</span>
-                <h2 class="section-title">Nuestros productos</h2>
-                <p class="section-subtitle">Explora nuestra amplia gama de productos digitales y físicos</p>
-            </div>
-
-            <div class="catalog-filters">
-                <button class="filter-btn active" data-filter="all">Todos</button>
-                <button class="filter-btn" data-filter="diseno">🎨 Diseño</button>
-                <button class="filter-btn" data-filter="impresion">🖨️ Impresión</button>
-                <button class="filter-btn" data-filter="packaging">📦 Packaging</button>
-                <button class="filter-btn" data-filter="senalizacion">🔧 Señalización</button>
-                <button class="filter-btn" data-filter="vinilo">🚗 Vinilos</button>
-                <button class="filter-btn" data-filter="digital">💻 Digital</button>
-                <button class="filter-btn" data-filter="espacios">🏠 Espacios</button>
-            </div>
-
-            <div class="catalog-grid" id="catalogGrid">
-                <!-- Los productos se cargarán dinámicamente desde la base de datos -->
-            </div>
-
-        </div>
-    </section>
-
-    <!-- Portfolio Section -->
-    <section class="portfolio-section" id="portafolio">
-        <div class="container">
-            <div class="section-header reveal">
-                <span class="section-badge">Portafolio</span>
-                <h2 class="section-title">Trabajos Realizados</h2>
-                <p class="section-subtitle">Una muestra de nuestra pasión por el diseño y la estrategia</p>
-            </div>
-        </div>
-
-        <div class="portfolio-carousel-wrapper">
-            <div class="portfolio-marquee-container">
-                <div class="portfolio-marquee" id="portfolioMarquee">
-                    <!-- Proyectos cargados dinámicamente -->
-                </div>
-            </div>
-            <div class="portfolio-nav-controls">
-                <button class="portfolio-nav-btn prev" id="portfolioPrev" aria-label="Anterior">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M15 18l-6-6 6-6" />
+                <button type="button" class="btn-cta-pill" data-open-quote data-quote-service="Proyecto Corporativo Integral">
+                    <span>Cotizar Proyecto</span>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                        <line x1="7" y1="17" x2="17" y2="7"></line>
+                        <polyline points="7 7 17 7 17 17"></polyline>
                     </svg>
                 </button>
-                <button class="portfolio-nav-btn next" id="portfolioNext" aria-label="Siguiente">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 18l6-6-6-6" />
+
+                <button type="button" class="b2b-burger" id="mobileMenuBtn" aria-label="Abrir menú móvil">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="7" x2="21" y2="7"></line>
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="17" x2="21" y2="17"></line>
                     </svg>
                 </button>
             </div>
-        </div>
-    </section>
+        </nav>
+    </header>
 
-    <!-- Testimonials Section -->
-    <section class="testimonials-section" id="testimonios">
-        <div class="container">
-            <div class="section-header reveal">
-                <span class="section-badge">Prueba Social</span>
-                <h2 class="section-title">Clientes Destacados</h2>
-                <p class="section-subtitle">Personas y negocios locales que confían en Vectore para destacar</p>
+    <!-- Mobile Liquid Glass Drawer -->
+    <div class="b2b-mobile-drawer" id="mobileDrawer" aria-hidden="true">
+        <div class="b2b-mobile-drawer__panel liquid-glass liquid-glass--elevated">
+            <div>
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                    <img src="/Vectore-logo.svg" alt="Vectore" style="height:24px;filter:brightness(0) invert(1);">
+                    <button type="button" class="b2b-burger" id="mobileDrawerClose" style="display:inline-flex;"
+                        aria-label="Cerrar menú">
+                        ✕
+                    </button>
+                </div>
+
+                <ul class="b2b-mobile-drawer__links">
+                    <li><a href="#portafolio" data-drawer-link><span>Casos de Éxito</span><span>→</span></a></li>
+                    <li><a href="#servicios" data-drawer-link><span>Divisiones Corporativas</span><span>→</span></a></li>
+                    <li><a href="#taller" data-drawer-link><span>Taller Propio In-House</span><span>→</span></a></li>
+                    <li><a href="#sectores" data-drawer-link><span>Sectores Atendidos</span><span>→</span></a></li>
+                    <li><a href="#ecosistema" data-drawer-link><span>Ecosistema Vectore Flow</span><span>→</span></a></li>
+                    <li><a href="/clientes"><span>🔒 Portal de Clientes (OTs)</span><span>↗</span></a></li>
+                </ul>
             </div>
 
-            <div class="testimonials-grid" id="testimonialsGrid">
-                <!-- Testimonios cargados dinámicamente -->
+            <div style="display:flex;flex-direction:column;gap:10px;">
+                <button type="button" class="btn-hero-primary" style="width:100%;justify-content:center;"
+                    data-open-quote data-quote-service="Consulta Corporativa Móvil">
+                    <span>Solicitar Cotización Corporativa</span>
+                </button>
+                <p style="font-size:0.76rem;color:var(--vf-text-muted);text-align:center;">
+                    Atención bajo Orden de Servicio, RUC 20 &amp; NDA
+                </p>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- WhatsApp Contact Section -->
-    <section class="whatsapp-cta" id="whatsapp">
-        <div class="container">
-            <div class="whatsapp-wrapper">
-                <div class="whatsapp-content reveal">
-                    <span class="section-badge">Atención Personalizada</span>
-                    <h2 class="section-title">Contáctanos por WhatsApp</h2>
-                    <p class="section-subtitle">
-                        ¿Tienes dudas sobre algún producto o servicio? Chatea directamente con nosotros
-                        y obtén una respuesta inmediata y personalizada.
+    <main>
+        <!-- =================================================================
+             FASE 2: PORTADA DE IMPACTO VISUAL + FALLBACK + OPEN PROJECT
+             ================================================================= -->
+        <section class="b2b-hero" id="inicio">
+            <!-- Capa 1: Fondo Oscuro Animado Original (Fallback garantizado si Admin está vacío) -->
+            <div class="b2b-hero__fallback" id="heroFallbackBg" aria-hidden="true">
+                <div class="b2b-hero__grid-lines"></div>
+                <div class="b2b-hero__orb b2b-hero__orb--1"></div>
+                <div class="b2b-hero__orb b2b-hero__orb--2"></div>
+            </div>
+
+            <!-- Capa 2: Multimedia de Pantalla Completa controlada desde Admin (Imagen o Video) -->
+            <div class="b2b-hero__media" id="heroCustomMedia" aria-hidden="true"></div>
+
+            <!-- Capa 3: Scrim Editorial regulable desde Admin (--hero-overlay) -->
+            <div class="b2b-hero__scrim" id="heroOverlayScrim" aria-hidden="true"></div>
+
+            <!-- Capa 4: Tipografía Grande Inferior + Tarjeta Flotante OPEN PROJECT -->
+            <div class="container b2b-hero__container">
+                <div class="b2b-hero__editorial">
+                    <div class="b2b-hero__eyebrow" id="heroEyebrow">
+                        <span class="live-dot"></span>
+                        <span id="heroBadgeText">EJECUCIÓN BTL PUCALLPA · DISEÑO 3D &amp; SOFTWARE LIMA / NACIONAL</span>
+                    </div>
+
+                    <h1 class="b2b-hero__title">
+                        <span id="heroHeadline1">Ejecutamos tus despliegues BTL en Pucallpa</span>
+                        <span class="text-gradient-vf" id="heroHeadlineHighlight">y creamos diseño especializado, packaging 3D y software a medida.</span>
+                    </h1>
+
+                    <p class="b2b-hero__subtitle" id="heroSubtitle">
+                        Somos el brazo ejecutor con taller propio en la Amazonía para marcas y agencias de Lima, integrando producción gráfica e infraestructura en sitio con arquitectura comercial, visualización 3D e ingeniería de software empresarial.
                     </p>
-                    <div class="whatsapp-features">
-                        <div class="whatsapp-feature">
-                            <div class="feature-icon">💬</div>
-                            <div>
-                                <h4>Respuesta Inmediata</h4>
-                                <p>Estamos disponibles para ayudarte en tiempo real.</p>
+
+                    <div class="b2b-hero__actions">
+                        <button type="button" class="btn-hero-primary" id="heroPrimaryCta" data-open-quote
+                            data-quote-service="Cotización Corporativa desde Portada">
+                            <span id="heroPrimaryCtaLabel">Solicitar Cotización Corporativa</span>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.2">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </button>
+
+                        <a href="#portafolio" class="btn-hero-secondary liquid-glass--hero" id="heroSecondaryCta">
+                            <span id="heroSecondaryCtaLabel">Explorar Casos de Éxito</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Tarjeta Flotante OPEN PROJECT (Liquid Glass) -->
+                <article class="open-project-card liquid-glass--hero liquid-glass--interactive" id="heroFloatingProject"
+                    role="button" tabindex="0" aria-label="Abrir caso de éxito destacado">
+                    <div class="open-project-card__top">
+                        <span class="open-project-card__tag">
+                            <span class="live-dot"></span>
+                            <span id="openProjectLabel">OPEN PROJECT</span>
+                        </span>
+                        <span id="openProjectDate">2026</span>
+                    </div>
+
+                    <div class="open-project-card__media" id="openProjectMedia">
+                        <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a1354,#0c0927);color:#c4b5fd;font-family:var(--font-mono);font-size:0.78rem;">
+                            VECTORE · CASO DESTACADO
+                        </div>
+                    </div>
+
+                    <div class="open-project-card__bottom">
+                        <div>
+                            <span class="open-project-card__category" id="openProjectCategory">Ejecución BTL &amp; Arquitectura</span>
+                            <h2 class="open-project-card__title" id="openProjectTitle">Despliegue Integral Retail &amp; Producción en Sitio</h2>
+                        </div>
+                        <span class="open-project-card__arrow" aria-hidden="true">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.3">
+                                <line x1="7" y1="17" x2="17" y2="7"></line>
+                                <polyline points="7 7 17 7 17 17"></polyline>
+                            </svg>
+                        </span>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- =================================================================
+             FASE 3A: CINTILLO DE SECTORES ATENDIDOS (Reemplaza Sopa de Logos)
+             ================================================================= -->
+        <section class="sectors-band" id="sectores" aria-label="Sectores corporativos atendidos">
+            <div class="container">
+                <div class="sectors-band__header">
+                    <span class="sectors-band__label">// EXPERIENCIA COMPROBADA EN RUBROS DE ALTA EXIGENCIA</span>
+                    <span class="sectors-band__hint">Operamos de forma directa y en modalidad <strong>Marca Blanca (NDA)</strong> para agencias de Lima</span>
+                </div>
+            </div>
+
+            <div class="sectors-marquee-wrap">
+                <div class="sectors-marquee" id="sectorsMarquee">
+                    <!-- Renderizado dinámicamente desde SiteConfig con respaldo inmediato -->
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================
+             FASE 3B: PORTAFOLIO DE CASOS DE ÉXITO & MARCA BLANCA (NDA)
+             ================================================================= -->
+        <section class="b2b-section section-light-aware" id="portafolio">
+            <div class="container">
+                <div class="section-head">
+                    <div class="section-head__left">
+                        <span class="eyebrow-tag">// PORTAFOLIO CORPORATIVO &amp; MARCA BLANCA</span>
+                        <h2 class="section-title">Ejecución real en campo, <span class="text-gradient-vf">diseño 3D e ingeniería digital.</span></h2>
+                        <p class="section-desc">
+                            Documentamos nuestros despliegues técnicos respetando acuerdos de confidencialidad (NDA) con agencias BTL, productoras de Lima y corporaciones nacionales.
+                        </p>
+                    </div>
+
+                    <div class="chip-bar" id="portfolioChips" role="tablist" aria-label="Filtrar casos por especialidad">
+                        <button type="button" class="chip-btn is-active" data-case-filter="all">Todos los Casos</button>
+                        <button type="button" class="chip-btn" data-case-filter="btl">BTL &amp; Producción</button>
+                        <button type="button" class="chip-btn" data-case-filter="arquitectura">Arquitectura &amp; Stands</button>
+                        <button type="button" class="chip-btn" data-case-filter="3d">Packaging &amp; 3D</button>
+                        <button type="button" class="chip-btn" data-case-filter="software">Software &amp; Web</button>
+                    </div>
+                </div>
+
+                <div class="cases-grid" id="casesGrid">
+                    <!-- Poblado dinámicamente desde /api/projects (con sanitización NDA en servidor) -->
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================
+             SOLUCIONES CORPORATIVAS DE ALTO TICKET (Híbrido BTL + Global Rescue)
+             ================================================================= -->
+        <section class="b2b-section b2b-section--alt section-light-aware" id="servicios">
+            <div class="container">
+                <div class="section-head">
+                    <div class="section-head__left">
+                        <span class="eyebrow-tag">// CAPACIDADES INTEGRADAS DE ALTO TICKET</span>
+                        <h2 class="section-title">Un solo partner técnico para <span class="text-gradient-vf">el mundo físico y digital.</span></h2>
+                        <p class="section-desc">
+                            Consolidamos nuestras capacidades de ejecución territorial en la Amazonía con ingeniería creativa y tecnológica de estándar internacional.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="b2b-services-grid">
+                    <!-- 01: Ejecución BTL Pucallpa para Lima -->
+                    <article class="b2b-service-card b2b-service-card--featured">
+                        <div>
+                            <div class="b2b-service-card__top">
+                                <div class="b2b-service-card__icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                </div>
+                                <span class="b2b-service-card__code">DIV-01 · SEDE PUCALLPA</span>
+                            </div>
+                            <h3>Ejecución BTL &amp; Despliegue Regional (Lima → Ucayali)</h3>
+                            <p>Elimina sobrecostos de viáticos y fletes aéreos desde Lima. Producimos, instalamos y desmontamos campañas completas en Pucallpa con reporte fotográfico en tiempo real.</p>
+                            <ul class="b2b-service-card__list">
+                                <li>Modalidad Marca Blanca (NDA) para agencias de Lima</li>
+                                <li>Activaciones en malls, supermercados, cines y ruta mayorista</li>
+                                <li>Brandeo de flotas vehiculares, fachadas y puntos de venta</li>
+                                <li>Supervisión técnica y actas de conformidad en el Portal de Clientes</li>
+                            </ul>
+                        </div>
+                        <button type="button" class="btn-card-quote" data-open-quote
+                            data-quote-service="Ejecución BTL en Pucallpa (Lima → Ucayali)">
+                            <span>Solicitar Cotización BTL</span>
+                            <span>↗</span>
+                        </button>
+                    </article>
+
+                    <!-- 02: Arquitectura Comercial & Stands -->
+                    <article class="b2b-service-card">
+                        <div>
+                            <div class="b2b-service-card__top">
+                                <div class="b2b-service-card__icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                                        <polyline points="2 17 12 22 22 17"></polyline>
+                                        <polyline points="2 12 12 17 22 12"></polyline>
+                                    </svg>
+                                </div>
+                                <span class="b2b-service-card__code">DIV-02 · ARQUITECTURA</span>
+                            </div>
+                            <h3>Arquitectura Comercial, Islas Retail &amp; Stands Feriales</h3>
+                            <p>Diseño espacial, planimetría técnica y fabricación integral de módulos en centros comerciales, showrooms corporativos y stands de alto impacto.</p>
+                            <ul class="b2b-service-card__list">
+                                <li>Expedientes técnicos para aprobación en Centros Comerciales</li>
+                                <li>Estructuras metálicas, carpintería fina, acrílico termoformado y LED</li>
+                                <li>Señalética arquitectónica y normativa INDECI</li>
+                                <li>Llave en mano: render previo + montaje nocturno certificado</li>
+                            </ul>
+                        </div>
+                        <button type="button" class="btn-card-quote" data-open-quote
+                            data-quote-service="Arquitectura Comercial, Islas & Stands">
+                            <span>Cotizar Proyecto Arquitectónico</span>
+                            <span>↗</span>
+                        </button>
+                    </article>
+
+                    <!-- 03: Packaging 3D & CGI (Rescatado y potenciado) -->
+                    <article class="b2b-service-card">
+                        <div>
+                            <div class="b2b-service-card__top">
+                                <div class="b2b-service-card__icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                                        <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                                    </svg>
+                                </div>
+                                <span class="b2b-service-card__code">DIV-03 · PACKAGING &amp; CGI</span>
+                            </div>
+                            <h3>Diseño Especializado, Packaging 3D &amp; Activos Digitales</h3>
+                            <p>Ingeniería de envases, troqueles listos para imprenta industrial y visualización 3D fotorrealista para lanzamientos de consumo masivo y agroexportación.</p>
+                            <ul class="b2b-service-card__list">
+                                <li>Modelado 3D de producto, renders de estudio y key visuals</li>
+                                <li>Desarrollo estructural de empaques, etiquetas y exhibidores POP</li>
+                                <li>Pre-prensa calibrada para flexografía, offset y gran formato</li>
+                                <li>Prototipado físico de validación antes de tiraje masivo</li>
+                            </ul>
+                        </div>
+                        <button type="button" class="btn-card-quote" data-open-quote
+                            data-quote-service="Diseño Especializado & Packaging 3D">
+                            <span>Solicitar Cotización Packaging / 3D</span>
+                            <span>↗</span>
+                        </button>
+                    </article>
+
+                    <!-- 04: Ingeniería de Software a Medida -->
+                    <article class="b2b-service-card">
+                        <div>
+                            <div class="b2b-service-card__top">
+                                <div class="b2b-service-card__icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="16 18 22 12 16 6"></polyline>
+                                        <polyline points="8 6 2 12 8 18"></polyline>
+                                    </svg>
+                                </div>
+                                <span class="b2b-service-card__code">DIV-04 · SOFTWARE</span>
+                            </div>
+                            <h3>Ingeniería de Software a Medida &amp; Plataformas B2B</h3>
+                            <p>Construimos sistemas web, aplicaciones de escritorio y portales transaccionales de alto rendimiento diseñados alrededor de la operación real de tu empresa.</p>
+                            <ul class="b2b-service-card__list">
+                                <li>Sistemas ERP/CRM internos, control de producción e inventarios</li>
+                                <li>Portales corporativos, intranets y pasarelas de recaudación</li>
+                                <li>Arquitectura moderna Full-Stack (Node.js, React, Electron, Cloud)</li>
+                                <li>Creadores de <strong>Vectore Flow</strong>, nuestro propio SaaS industrial</li>
+                            </ul>
+                        </div>
+                        <button type="button" class="btn-card-quote" data-open-quote
+                            data-quote-service="Ingeniería de Software a Medida">
+                            <span>Cotizar Desarrollo de Software</span>
+                            <span>↗</span>
+                        </button>
+                    </article>
+
+                    <!-- 05: Agentes de IA & Automatización -->
+                    <article class="b2b-service-card">
+                        <div>
+                            <div class="b2b-service-card__top">
+                                <div class="b2b-service-card__icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                                        <rect x="9" y="9" width="6" height="6"></rect>
+                                        <line x1="9" y1="1" x2="9" y2="4"></line>
+                                        <line x1="15" y1="1" x2="15" y2="4"></line>
+                                        <line x1="9" y1="20" x2="9" y2="23"></line>
+                                        <line x1="15" y1="20" x2="15" y2="23"></line>
+                                    </svg>
+                                </div>
+                                <span class="b2b-service-card__code">DIV-05 · IA APLICADA</span>
+                            </div>
+                            <h3>Agentes de IA, Automatización &amp; Flujos Comerciales</h3>
+                            <p>Integramos inteligencia artificial conectada a tu WhatsApp Business, correo y base de datos para calificar prospectos, cotizar y operar 24/7.</p>
+                            <ul class="b2b-service-card__list">
+                                <li>Asistentes de ventas y atención entrenados con tus catálogos técnicos</li>
+                                <li>Automatización de órdenes de servicio, reportes y alertas</li>
+                                <li>Integración vía API con tus herramientas actuales</li>
+                                <li>Despliegue privado con control de datos empresariales</li>
+                            </ul>
+                        </div>
+                        <button type="button" class="btn-card-quote" data-open-quote
+                            data-quote-service="Agentes de IA & Automatización Corporativa">
+                            <span>Cotizar Solución con IA</span>
+                            <span>↗</span>
+                        </button>
+                    </article>
+
+                    <!-- 06: Ingeniería de Marca & Sistemas Corporativos -->
+                    <article class="b2b-service-card">
+                        <div>
+                            <div class="b2b-service-card__top">
+                                <div class="b2b-service-card__icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+                                    </svg>
+                                </div>
+                                <span class="b2b-service-card__code">DIV-06 · BRANDING B2B</span>
+                            </div>
+                            <h3>Ingeniería de Marca, Manuales &amp; Estandarización</h3>
+                            <p>Identidad corporativa pensada no solo para pantallas, sino para resistir reproducción industrial en fachadas, uniformes, flotas y empaques.</p>
+                            <ul class="b2b-service-card__list">
+                                <li>Rebranding corporativo y arquitectura de portafolio de marcas</li>
+                                <li>Manuales normativos de aplicación en PDV y franquicias</li>
+                                <li> Especificación cromática Pantone / CMYK / sustratos físicos</li>
+                                <li>Kits corporativos de bienvenida y presentaciones de directorio</li>
+                            </ul>
+                        </div>
+                        <button type="button" class="btn-card-quote" data-open-quote
+                            data-quote-service="Ingeniería de Marca & Rebranding Corporativo">
+                            <span>Solicitar Cotización de Marca</span>
+                            <span>↗</span>
+                        </button>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================
+             SECCIÓN SECUNDARIA ESTRATÉGICA: TALLER PROPIO IN-HOUSE (PUCALLPA)
+             (Sin precios retail ni stock: prueba de capacidad productiva local)
+             ================================================================= -->
+        <section class="b2b-section section-light-aware" id="taller">
+            <div class="container">
+                <div class="section-head">
+                    <div class="section-head__left">
+                        <span class="eyebrow-tag">// CAPACIDAD DE MANUFACTURA &amp; TALLER PROPIO EN PUCALLPA</span>
+                        <h2 class="section-title">No envíes carga frágil desde Lima: <span class="text-gradient-vf">lo fabricamos aquí mismo.</span></h2>
+                        <p class="section-desc">
+                            Contamos con producción gráfica, corte y acabados propios en Pucallpa. Tus campañas ahorran días de tránsito, evitan mermas en carretera o carga aérea y tienen reposición inmediata en sitio.
+                        </p>
+                    </div>
+
+                    <div class="chip-bar" id="workshopChips" role="tablist" aria-label="Filtrar líneas de producción">
+                        <button type="button" class="chip-btn is-active" data-workshop-filter="all">Toda la Planta</button>
+                        <button type="button" class="chip-btn" data-workshop-filter="gran-formato">Gran Formato &amp; Viniles</button>
+                        <button type="button" class="chip-btn" data-workshop-filter="estructuras">Corpóreos &amp; Estructuras</button>
+                        <button type="button" class="chip-btn" data-workshop-filter="impresion">Imprenta &amp; Stickers UV</button>
+                        <button type="button" class="chip-btn" data-workshop-filter="merch">Merchandising Corporativo</button>
+                    </div>
+                </div>
+
+                <!-- Cintillo Liquid Glass de Ventaja Logística -->
+                <div class="workshop-banner liquid-glass liquid-glass--interactive">
+                    <div>
+                        <strong style="font-size:1.05rem;color:var(--vf-heading-contrast);display:block;margin-bottom:4px;">
+                            Ventaja Operativa Directa para Jefes de Producto, Trade Marketing y Agencias Aliadas
+                        </strong>
+                        <span style="font-size:0.86rem;color:var(--vf-text-secondary);">
+                            Recibimos tus artes finales (o los adaptamos) y ejecutamos producción + instalación con personal propio en Ucayali.
+                        </span>
+                    </div>
+
+                    <div class="workshop-banner__metrics">
+                        <div class="workshop-metric">
+                            <strong>S/ 0</strong>
+                            <span>Flete Lima → Pucallpa</span>
+                        </div>
+                        <div class="workshop-metric">
+                            <strong>24–48h</strong>
+                            <span>Respuesta en Urgencias</span>
+                        </div>
+                        <div class="workshop-metric">
+                            <strong>RUC 20</strong>
+                            <span>Factura &amp; Orden de Servicio</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grilla Técnica de Líneas de Producción (Poblada por /api/products sin precios fijos) -->
+                <div class="workshop-grid" id="workshopGrid"></div>
+            </div>
+        </section>
+
+        <!-- =================================================================
+             ECOSISTEMA PROPIO: VECTORE FLOW SAAS & PORTAL DE CLIENTES
+             ================================================================= -->
+        <section class="b2b-section b2b-section--alt section-light-aware" id="ecosistema">
+            <div class="container">
+                <div class="section-head">
+                    <div class="section-head__left">
+                        <span class="eyebrow-tag">// TECNOLOGÍA PROPIA &amp; TRANSPARENCIA OPERATIVA</span>
+                        <h2 class="section-title">Ingeniería de software aplicada a <span class="text-gradient-vf">la gestión real de proyectos.</span></h2>
+                    </div>
+                </div>
+
+                <div class="ecosystem-grid">
+                    <!-- Panel Izquierdo: Vectore Flow SaaS -->
+                    <div class="ecosystem-panel ecosystem-panel--flow">
+                        <div>
+                            <span class="eyebrow-tag" style="background:rgba(0,214,143,0.14);border-color:rgba(0,214,143,0.35);color:#34f5b5;">
+                                PRODUCTO PROPIO · SAAS &amp; DESKTOP
+                            </span>
+                            <h3 style="font-size:clamp(1.5rem,2.4vw,2.1rem);font-weight:800;margin-bottom:10px;">
+                                Vectore Flow — ERP para Talleres Gráficos, Imprentas y Agencias
+                            </h3>
+                            <p style="font-size:0.95rem;line-height:1.65;margin-bottom:20px;">
+                                Nacido de nuestra propia planta de producción: cotizador paramétrico al milímetro, control de órdenes de trabajo (OT), inventario de bobinas/sustratos, caja chica y autenticación unificada con Google.
+                            </p>
+
+                            <div class="flow-preview-frame" id="vectoreFlowPreview">
+                                <div style="padding:24px;text-align:center;">
+                                    <span class="mono" style="font-size:0.76rem;color:#a67fff;display:block;margin-bottom:8px;">VECTORE FLOW ARCHITECTURE</span>
+                                    <strong style="font-size:1.15rem;color:#fff;">Cotización Técnica · Producción · Kárdex · Finanzas</strong>
+                                </div>
                             </div>
                         </div>
-                        <div class="whatsapp-feature">
-                            <div class="feature-icon">🛍️</div>
-                            <div>
-                                <h4>Asesoría de Compra</h4>
-                                <p>Te ayudamos a elegir el mejor producto para tus necesidades.</p>
+
+                        <div style="display:flex;flex-wrap:wrap;gap:12px;">
+                            <a href="/software" class="btn-cta-pill">
+                                <span>Explorar Vectore Flow</span>
+                                <span>→</span>
+                            </a>
+                            <button type="button" class="btn-client-hub" style="color:#fff;border-color:rgba(255,255,255,0.22);"
+                                data-open-quote data-quote-service="Licencia / Demo Corporativa Vectore Flow SaaS">
+                                <span>Solicitar Demo para mi Taller</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Panel Derecho: Portal de Seguimiento de Clientes -->
+                    <div class="ecosystem-panel">
+                        <div>
+                            <span class="eyebrow-tag">EXCLUSIVO PARA CUENTAS ACTIVAS</span>
+                            <h3 style="font-size:1.55rem;font-weight:800;color:var(--vf-heading-contrast);margin-bottom:12px;">
+                                Portal de Seguimiento &amp; Aprobación para Clientes
+                            </h3>
+                            <p style="font-size:0.93rem;color:var(--vf-text-secondary);margin-bottom:20px;">
+                                Olvídate de enlaces de Drive pesados que vencen o se pierden en el chat. Con un clic usando tu cuenta corporativa de Google accedes a tu expediente privado:
+                            </p>
+
+                            <ul class="b2b-service-card__list" style="margin-bottom:24px;">
+                                <li>Estado en vivo de tu Orden de Trabajo (Diseño → Producción → Montaje)</li>
+                                <li>Aprobación formal de artes en alta resolución con historial</li>
+                                <li>Descarga directa de dossiers fotográficos de instalación en Pucallpa</li>
+                                <li>Repositorio permanente de Facturas Electrónicas PDF y Tickets B2B</li>
+                            </ul>
+                        </div>
+
+                        <div style="display:flex;flex-direction:column;gap:10px;">
+                            <a href="/clientes" class="btn-submit-b2b btn-submit-b2b--email" style="margin-top:0;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                                    <polyline points="10 17 15 12 10 7"></polyline>
+                                    <line x1="15" y1="12" x2="3" y2="12"></line>
+                                </svg>
+                                <span>Ingresar al Área de Clientes</span>
+                            </a>
+                            <span style="font-size:0.76rem;color:var(--vf-text-muted);text-align:center;">
+                                Compatible con inicio de sesión rápido de Google Workspace &amp; SSO Vectore Flow
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================
+             FASE 4: EMBUDO DE CIERRE DIRECTO (WhatsApp Instantáneo + Proforma Email)
+             ================================================================= -->
+        <section class="b2b-section section-light-aware" id="cotizar">
+            <div class="container">
+                <div class="funnel-grid">
+                    <div>
+                        <span class="eyebrow-tag">// INICIAR ORDEN DE SERVICIO O COTIZACIÓN</span>
+                        <h2 class="section-title">Cuéntanos el alcance de tu <span class="text-gradient-vf">próximo proyecto corporativo.</span></h2>
+                        <p class="section-desc">
+                            Elige atención inmediata por WhatsApp Empresarial con el resumen técnico listo o solicita una proforma formal en bandeja corporativa para licitaciones y áreas de compras.
+                        </p>
+
+                        <ul class="funnel-trust-list">
+                            <li class="funnel-trust-item">
+                                <div class="funnel-trust-item__icon">✓</div>
+                                <div>
+                                    <strong style="display:block;font-size:0.94rem;color:var(--vf-heading-contrast);">Facturación Electrónica &amp; RUC Activo</strong>
+                                    <span style="font-size:0.83rem;color:var(--vf-text-secondary);">Trabajamos con Órdenes de Compra/Servicio, detracciones y cronogramas formales.</span>
+                                </div>
+                            </li>
+                            <li class="funnel-trust-item">
+                                <div class="funnel-trust-item__icon">🔒</div>
+                                <div>
+                                    <strong style="display:block;font-size:0.94rem;color:var(--vf-heading-contrast);">Respaldo Marca Blanca para Agencias de Lima</strong>
+                                    <span style="font-size:0.83rem;color:var(--vf-text-secondary);">Ejecutamos en Pucallpa cuidando la relación directa con tu cliente final bajo NDA.</span>
+                                </div>
+                            </li>
+                            <li class="funnel-trust-item">
+                                <div class="funnel-trust-item__icon">⚡</div>
+                                <div>
+                                    <strong style="display:block;font-size:0.94rem;color:var(--vf-heading-contrast);">Doble Vía de Atención Ejecutiva</strong>
+                                    <span style="font-size:0.83rem;color:var(--vf-text-secondary);">Puente instantáneo a WhatsApp o expediente formal por correo corporativo.</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Tarjeta Liquid Glass del Embudo Dual -->
+                    <div class="funnel-card liquid-glass liquid-glass--elevated" id="inlineFunnelWrapper">
+                        <div class="channel-tabs" role="tablist" aria-label="Seleccionar canal de cotización">
+                            <button type="button" class="channel-tab is-active" data-channel-select="whatsapp_direct"
+                                data-target-form="inlineQuotationForm">
+                                💬 Respuesta Inmediata WhatsApp
+                                <span>Guarda solicitud y abre chat directo</span>
+                            </button>
+                            <button type="button" class="channel-tab" data-channel-select="formal_proforma"
+                                data-target-form="inlineQuotationForm">
+                                ✉️ Solicitar Proforma por Correo
+                                <span>Sin WhatsApp · Para Compras / Licitaciones</span>
+                            </button>
+                        </div>
+
+                        <form id="inlineQuotationForm" class="b2b-quote-form" data-channel="whatsapp_direct" novalidate>
+                            <!-- Honeypot anti-bots -->
+                            <input type="text" name="website_url" tabindex="-1" autocomplete="off"
+                                style="position:absolute;left:-9999px;opacity:0;" aria-hidden="true">
+                            <input type="hidden" name="referenceItem" value="">
+
+                            <div class="b2b-form-grid">
+                                <div class="b2b-field">
+                                    <label for="iqName">Nombre y Cargo *</label>
+                                    <input type="text" id="iqName" name="name" class="b2b-input"
+                                        placeholder="Ej. Carlos Mendoza · Jefe de Trade" required>
+                                </div>
+
+                                <div class="b2b-field">
+                                    <label for="iqCompany">
+                                        <span>Empresa o RUC *</span>
+                                        <span class="ruc-badge-live" data-ruc-badge>✓ RUC 20 CORPORATIVO</span>
+                                    </label>
+                                    <input type="text" id="iqCompany" name="companyOrRuc" class="b2b-input"
+                                        placeholder="Razón Social o RUC 20..." required>
+                                </div>
+
+                                <div class="b2b-field">
+                                    <label for="iqCity">Ciudad / Sede del Proyecto *</label>
+                                    <input type="text" id="iqCity" name="city" class="b2b-input"
+                                        placeholder="Ej. Lima → Ejecución en Pucallpa" required>
+                                </div>
+
+                                <div class="b2b-field">
+                                    <label for="iqService">División Requerida</label>
+                                    <select id="iqService" name="service" class="b2b-select">
+                                        <option value="Ejecución BTL en Pucallpa">Ejecución BTL en Pucallpa</option>
+                                        <option value="Arquitectura Comercial & Stands">Arquitectura Comercial &amp; Stands</option>
+                                        <option value="Packaging 3D & Diseño Especializado">Packaging 3D &amp; Diseño Especializado</option>
+                                        <option value="Ingeniería de Software / IA">Ingeniería de Software / IA</option>
+                                        <option value="Producción Taller In-House">Producción Taller In-House</option>
+                                        <option value="Proyecto Integral Multidisciplinario">Proyecto Integral Multidisciplinario</option>
+                                    </select>
+                                </div>
+
+                                <!-- Campos adicionales visibles SOLO en modo Proforma Formal por Correo -->
+                                <div class="b2b-field proforma-only">
+                                    <label for="iqEmail">Correo Corporativo *</label>
+                                    <input type="email" id="iqEmail" name="email" class="b2b-input"
+                                        placeholder="compras@empresa.com.pe">
+                                </div>
+
+                                <div class="b2b-field proforma-only">
+                                    <label for="iqPhone">Teléfono / Anexo (Opcional)</label>
+                                    <input type="tel" id="iqPhone" name="phone" class="b2b-input"
+                                        placeholder="Ej. (01) 440-0000 / 999...">
+                                </div>
+
+                                <div class="b2b-field b2b-field--full proforma-only">
+                                    <label for="iqRfp">Enlace a TDR, Planos o Brief en Drive/WeTransfer (Opcional)</label>
+                                    <input type="url" id="iqRfp" name="rfpLink" class="b2b-input"
+                                        placeholder="https://drive.google.com/...">
+                                </div>
+
+                                <div class="b2b-field b2b-field--full">
+                                    <label for="iqDesc">Descripción del Proyecto, Medidas o Fechas Tentativas *</label>
+                                    <textarea id="iqDesc" name="description" rows="4" class="b2b-textarea"
+                                        placeholder="Detalla qué necesitas ejecutar, puntos de implementación, cantidades aproximadas o fecha objetivo..."
+                                        required></textarea>
+                                </div>
+
+                                <div class="b2b-field b2b-field--full">
+                                    <button type="submit" class="btn-submit-b2b btn-submit-b2b--wa" data-submit-btn>
+                                        <span data-submit-label>Registrar y Abrir WhatsApp Corporativo ↗</span>
+                                    </button>
+                                    <p style="font-size:0.75rem;color:var(--vf-text-muted);text-align:center;margin-top:8px;"
+                                        data-submit-hint>
+                                        No pedimos tu número porque abrirá directamente nuestro WhatsApp oficial con tu código de expediente listo.
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <a href="https://wa.me/51950699910" target="_blank" class="btn btn-whatsapp">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
-                        </svg>
-                        <span>Chatear en WhatsApp</span>
-                    </a>
-                </div>
-                <div class="whatsapp-mockup reveal">
-                    <div class="chat-bg">
-                        <div class="chat-bubble received">
-                            ¡Hola! 👋 Bienvenido a Vectore. ¿En qué podemos ayudarte hoy?
-                        </div>
-                        <div class="chat-bubble received">
-                            Nuestros asesores están listos para atenderte.
+                        </form>
+
+                        <div class="funnel-success-box" id="inlineQuotationSuccess">
+                            <div style="width:52px;height:52px;border-radius:50%;background:rgba(0,214,143,0.16);color:var(--vf-emerald);display:inline-flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:14px;">✓</div>
+                            <h3 style="font-size:1.28rem;color:var(--vf-heading-contrast);margin-bottom:8px;" data-success-title>
+                                Solicitud Corporativa Registrada
+                            </h3>
+                            <p style="font-size:0.9rem;color:var(--vf-text-secondary);margin-bottom:18px;" data-success-msg>
+                                Nuestro equipo evaluará el alcance y responderá a la brevedad.
+                            </p>
+                            <button type="button" class="chip-btn" data-reset-form="inlineQuotationForm">
+                                Enviar otra solicitud
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
-    <!-- Contact Info Section -->
-    <section class="contact-info-section" id="contacto">
+    <!-- =====================================================================
+         PIE DE PÁGINA CORPORATIVO FORMAL (Logo + Correo + 3 Giros Registrados)
+         ===================================================================== -->
+    <footer class="b2b-footer">
         <div class="container">
-            <div class="section-header reveal">
-                <span class="section-badge">Encuéntranos</span>
-                <h2 class="section-title">Información de Contacto</h2>
-                <p class="section-subtitle">Estamos listos para atenderte. Visítanos o comunícate con nosotros.</p>
-            </div>
-            <div class="contact-info-grid">
-                <div class="contact-info-card reveal">
-                    <div class="contact-info-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path
-                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                        </svg>
-                    </div>
-                    <h4>Teléfono / WhatsApp</h4>
-                    <a href="tel:+51950699910">+51 950 699 910</a>
+            <!-- Respaldo Formal de los 3 Giros Registrados -->
+            <div class="b2b-giros-grid" id="footerGirosGrid">
+                <div class="giro-card">
+                    <span class="giro-card__code">GIRO 01 · PUBLICIDAD &amp; BTL</span>
+                    <h4>Publicidad &amp; Ejecución BTL</h4>
+                    <p>Producción gráfica industrial en gran formato, señalética normativa, rotulación de flotas y despliegue de campañas en Ucayali para marcas de Lima.</p>
                 </div>
-                <div class="contact-info-card reveal">
-                    <div class="contact-info-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                            <polyline points="22,6 12,13 2,6" />
-                        </svg>
-                    </div>
-                    <h4>Correo Electrónico</h4>
-                    <a href="mailto:agenciavectore@gmail.com">agenciavectore@gmail.com</a>
+                <div class="giro-card">
+                    <span class="giro-card__code">GIRO 02 · ARQUITECTURA &amp; 3D</span>
+                    <h4>Arquitectura Comercial &amp; 3D</h4>
+                    <p>Diseño y fabricación de stands feriales, módulos retail, interiorismo corporativo, modelado de producto y packaging 3D fotorrealista.</p>
                 </div>
-                <div class="contact-info-card reveal">
-                    <div class="contact-info-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                            <circle cx="12" cy="10" r="3" />
-                        </svg>
-                    </div>
-                    <h4>Dirección</h4>
-                    <p>Jr. Tarapacá 390, Callería, Pucallpa, Ucayali, Perú</p>
+                <div class="giro-card">
+                    <span class="giro-card__code">GIRO 03 · SOFTWARE &amp; IA</span>
+                    <h4>Ingeniería de Software &amp; IA</h4>
+                    <p>Desarrollo de plataformas empresariales a medida, automatización con agentes de IA y nuestro ecosistema propio Vectore Flow SaaS.</p>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Floating WhatsApp Button -->
-    <a href="https://wa.me/51950699910" class="whatsapp-float" target="_blank" aria-label="WhatsApp">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-            <path
-                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
-        </svg>
-    </a>
+            <div class="b2b-footer__main">
+                <div>
+                    <img src="/Vectore-logo.svg" alt="Agencia Vectore" class="b2b-footer__logo">
+                    <p style="font-size:0.88rem;color:rgba(240,240,248,0.72);max-width:340px;margin-bottom:14px;" id="footerRucInfo">
+                        Facturación Electrónica RUC · Atención bajo Orden de Servicio &amp; Acuerdos de Confidencialidad (NDA).
+                    </p>
 
-
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <a href="#" class="logo">
-                        <img src="Vectore-logo.svg" alt="Vectore" class="logo-img footer-logo-img">
-                    </a>
-                    <p>Transformando ideas en realidad desde 2021. Tu agencia creativa de confianza.</p>
-                    <div class="footer-social">
-                        <a href="https://www.facebook.com/share/1AyNTc8kkm/" class="social-link facebook"
-                            aria-label="Facebook" target="_blank" rel="noopener noreferrer">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z" />
-                            </svg>
-                        </a>
-                        <a href="https://www.instagram.com/vectore_ap/" class="social-link instagram"
-                            aria-label="Instagram" target="_blank" rel="noopener noreferrer">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                            </svg>
-                        </a>
-                        <a href="https://www.tiktok.com/@salvatoreee_26?_r=1&_t=ZS-92uhQaH2CYb"
-                            class="social-link tiktok" aria-label="TikTok" target="_blank" rel="noopener noreferrer">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-5.201 1.743l-.002-.001.002.001a2.895 2.895 0 0 1 3.183-4.51v-3.5a6.329 6.329 0 0 0-5.394 10.692 6.33 6.33 0 0 0 10.857-4.424V8.687a8.182 8.182 0 0 0 4.773 1.526V6.79a4.831 4.831 0 0 1-1.003-.104z" />
-                            </svg>
-                        </a>
-                        <a href="https://www.pexels.com/es-es/@salvatore-r-142957418/" class="social-link pexels"
-                            aria-label="Pexels" target="_blank" rel="noopener noreferrer">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M1.5 6.38v11.23a4.05 4.05 0 0 0 4.05 4.05h12.9a4.05 4.05 0 0 0 4.05-4.05V6.38a4.05 4.05 0 0 0-4.05-4.05H5.55A4.05 4.05 0 0 0 1.5 6.38zm5.92 10.32V7.12h4.51c2.18 0 3.75 1.53 3.75 3.53 0 2.02-1.57 3.52-3.75 3.52H8.96v2.53H7.42zm1.54-4.06h3.04c1.17 0 2.1-.88 2.1-2.06s-.93-2.05-2.1-2.05H8.96v4.11z" />
-                            </svg>
-                        </a>
+                    <div class="b2b-footer__contact-item">
+                        <span>✉️</span>
+                        <a href="mailto:agenciavectore@gmail.com" id="footerEmailLink">agenciavectore@gmail.com</a>
+                        <button type="button" class="btn-copy-mini" id="copyEmailBtn" data-copy-email="agenciavectore@gmail.com">
+                            Copiar
+                        </button>
+                    </div>
+                    <div class="b2b-footer__contact-item">
+                        <span>📞</span>
+                        <a href="https://wa.me/51950699910" target="_blank" rel="noopener" id="footerPhoneLink">+51 950 699 910</a>
+                    </div>
+                    <div class="b2b-footer__contact-item">
+                        <span>📍</span>
+                        <span id="footerAddressText">Jr. Tarapacá 390, Callería — Pucallpa, Ucayali, Perú</span>
                     </div>
                 </div>
-                <div class="footer-links">
-                    <div class="footer-column">
-                        <h4>Servicios</h4>
-                        <ul>
-                            <li><a href="#servicios">Diseño Gráfico</a></li>
-                            <li><a href="#servicios">Impresión</a></li>
-                            <li><a href="#servicios">Marketing Digital</a></li>
-                            <li><a href="#servicios">Branding</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-column">
-                        <h4>Productos</h4>
-                        <ul>
-                            <li><a href="#catalogo">Digitales</a></li>
-                            <li><a href="#catalogo">Físicos</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-column">
-                        <h4>Empresa</h4>
-                        <ul>
-                            <li><a href="#inicio">Inicio</a></li>
-                            <li><a href="#contacto">Contacto</a></li>
-                            <li><a href="admin.html">Administración</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-column">
-                        <h4>Legal</h4>
-                        <ul>
-                            <li><a href="/terminos">Términos y Condiciones</a></li>
-                            <li><a href="/politica-devoluciones">Política de Devoluciones</a></li>
-                            <li><a href="/libro-reclamaciones" class="libro-reclamaciones-link">📋 Libro de
-                                    Reclamaciones</a></li>
-                        </ul>
-                    </div>
+
+                <div class="b2b-footer__col">
+                    <h5>Soluciones B2B</h5>
+                    <ul>
+                        <li><a href="#portafolio">Casos de Éxito &amp; NDA</a></li>
+                        <li><a href="#servicios">Ejecución BTL en Pucallpa</a></li>
+                        <li><a href="#servicios">Arquitectura Comercial &amp; 3D</a></li>
+                        <li><a href="#servicios">Software a Medida &amp; IA</a></li>
+                        <li><a href="#taller">Taller Propio In-House</a></li>
+                    </ul>
+                </div>
+
+                <div class="b2b-footer__col">
+                    <h5>Ecosistema Digital</h5>
+                    <ul>
+                        <li><a href="/clientes">Portal Privado de Clientes</a></li>
+                        <li><a href="/software">Vectore Flow SaaS</a></li>
+                        <li><a href="#cotizar">Solicitar Cotización</a></li>
+                        <li><a href="/admin.html">Acceso Administrativo</a></li>
+                    </ul>
+                </div>
+
+                <div class="b2b-footer__col">
+                    <h5>Marco Corporativo</h5>
+                    <ul>
+                        <li><a href="/terminos.html">Términos de Servicio B2B</a></li>
+                        <li><a href="/privacidad.html">Política de Privacidad &amp; NDA</a></li>
+                        <li><a href="/politica-devoluciones.html">Garantía Operativa &amp; SLA</a></li>
+                    </ul>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p>© 2026 Vectore | Pucallpa, Ucayali. Todos los derechos reservados.</p>
+
+            <div class="b2b-footer__bottom">
+                <span>© <span id="currentYear">2026</span> AGENCIA VECTORE. Todos los derechos reservados.</span>
+                <span class="mono" style="font-size:0.74rem;">LIMA · PUCALLPA · EJECUCIÓN FÍSICA &amp; DIGITAL</span>
             </div>
         </div>
     </footer>
 
-    <!-- Project Details Modal (Behance style) -->
-    <div class="project-modal" id="projectModal">
-        <div class="project-modal-overlay"></div>
-        <div class="project-modal-container">
-            <button class="project-modal-close" id="closeProjectModal">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-            </button>
-            <div class="project-modal-content" id="projectModalContent">
-                <!-- Contenido cargado dinámicamente -->
+    <!-- =====================================================================
+         MODAL 1: VISOR EJECUTIVO DE CASO DE ÉXITO (Estilo Behance B2B)
+         ===================================================================== -->
+    <div class="b2b-modal b2b-modal--wide" id="projectModal" aria-hidden="true" role="dialog" aria-modal="true">
+        <div class="b2b-modal__backdrop" data-close-modal="projectModal"></div>
+        <div class="b2b-modal__dialog liquid-glass liquid-glass--elevated">
+            <button type="button" class="b2b-modal__close" data-close-modal="projectModal" aria-label="Cerrar caso">✕</button>
+            <div id="projectModalBody"></div>
+        </div>
+    </div>
+
+    <!-- =====================================================================
+         MODAL 2: COTIZACIÓN CORPORATIVA CONTEXTUAL (Liquid Glass)
+         ===================================================================== -->
+    <div class="b2b-modal" id="quotationModal" aria-hidden="true" role="dialog" aria-modal="true">
+        <div class="b2b-modal__backdrop" data-close-modal="quotationModal"></div>
+        <div class="b2b-modal__dialog liquid-glass liquid-glass--elevated">
+            <button type="button" class="b2b-modal__close" data-close-modal="quotationModal" aria-label="Cerrar formulario">✕</button>
+
+            <div style="margin-bottom:18px;padding-right:42px;">
+                <span class="eyebrow-tag" style="margin-bottom:8px;">// SOLICITUD CORPORATIVA DIRECTA</span>
+                <h3 style="font-size:1.4rem;font-weight:800;color:var(--vf-heading-contrast);" id="modalQuoteHeading">
+                    Solicitar Cotización Corporativa
+                </h3>
+                <p style="font-size:0.84rem;color:var(--vf-text-secondary);margin-top:4px;" id="modalQuoteContextSub">
+                    Completa los datos clave de tu empresa para atención prioritaria.
+                </p>
+            </div>
+
+            <div class="channel-tabs" role="tablist">
+                <button type="button" class="channel-tab is-active" data-channel-select="whatsapp_direct"
+                    data-target-form="modalQuotationForm">
+                    💬 Puente Directo WhatsApp
+                    <span>Resumen listo al instante</span>
+                </button>
+                <button type="button" class="channel-tab" data-channel-select="formal_proforma"
+                    data-target-form="modalQuotationForm">
+                    ✉️ Proforma Formal Email
+                    <span>Alternativa sin WhatsApp</span>
+                </button>
+            </div>
+
+            <form id="modalQuotationForm" class="b2b-quote-form" data-channel="whatsapp_direct" novalidate>
+                <input type="text" name="website_url" tabindex="-1" autocomplete="off"
+                    style="position:absolute;left:-9999px;opacity:0;" aria-hidden="true">
+                <input type="hidden" name="referenceItem" id="mqReferenceItem" value="">
+
+                <div class="b2b-form-grid">
+                    <div class="b2b-field">
+                        <label for="mqName">Nombre y Cargo *</label>
+                        <input type="text" id="mqName" name="name" class="b2b-input"
+                            placeholder="Tu nombre y cargo" required>
+                    </div>
+
+                    <div class="b2b-field">
+                        <label for="mqCompany">
+                            <span>Empresa o RUC *</span>
+                            <span class="ruc-badge-live" data-ruc-badge>✓ RUC 20</span>
+                        </label>
+                        <input type="text" id="mqCompany" name="companyOrRuc" class="b2b-input"
+                            placeholder="Empresa o RUC 20..." required>
+                    </div>
+
+                    <div class="b2b-field">
+                        <label for="mqCity">Ciudad / Sede *</label>
+                        <input type="text" id="mqCity" name="city" class="b2b-input"
+                            placeholder="Ej. Lima / Pucallpa" required>
+                    </div>
+
+                    <div class="b2b-field">
+                        <label for="mqService">Línea de Solución</label>
+                        <input type="text" id="mqService" name="service" class="b2b-input"
+                            value="Proyecto Corporativo Integral">
+                    </div>
+
+                    <div class="b2b-field proforma-only">
+                        <label for="mqEmail">Correo Corporativo *</label>
+                        <input type="email" id="mqEmail" name="email" class="b2b-input"
+                            placeholder="nombre@empresa.com">
+                    </div>
+
+                    <div class="b2b-field proforma-only">
+                        <label for="mqPhone">Teléfono / Anexo (Opcional)</label>
+                        <input type="tel" id="mqPhone" name="phone" class="b2b-input"
+                            placeholder="(01) ... / 999...">
+                    </div>
+
+                    <div class="b2b-field b2b-field--full proforma-only">
+                        <label for="mqRfp">Enlace a TDR / Planos / Artes (Opcional)</label>
+                        <input type="url" id="mqRfp" name="rfpLink" class="b2b-input"
+                            placeholder="https://drive.google.com/...">
+                    </div>
+
+                    <div class="b2b-field b2b-field--full">
+                        <label for="mqDesc">Descripción del Requerimiento *</label>
+                        <textarea id="mqDesc" name="description" rows="3" class="b2b-textarea"
+                            placeholder="Describe brevemente el proyecto, medidas, entregables o fechas..."
+                            required></textarea>
+                    </div>
+
+                    <div class="b2b-field b2b-field--full">
+                        <button type="submit" class="btn-submit-b2b btn-submit-b2b--wa" data-submit-btn>
+                            <span data-submit-label>Registrar y Abrir WhatsApp Corporativo ↗</span>
+                        </button>
+                        <p style="font-size:0.74rem;color:var(--vf-text-muted);text-align:center;margin-top:8px;"
+                            data-submit-hint>
+                            Se registrará en nuestro CRM y abrirá WhatsApp listo para atenderte.
+                        </p>
+                    </div>
+                </div>
+            </form>
+
+            <div class="funnel-success-box" id="modalQuotationSuccess">
+                <div style="width:48px;height:48px;border-radius:50%;background:rgba(0,214,143,0.16);color:var(--vf-emerald);display:inline-flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:12px;">✓</div>
+                <h4 style="font-size:1.2rem;color:var(--vf-heading-contrast);margin-bottom:6px;" data-success-title>
+                    Solicitud Registrada
+                </h4>
+                <p style="font-size:0.88rem;color:var(--vf-text-secondary);margin-bottom:16px;" data-success-msg>
+                    Hemos recibido tu requerimiento corporativo.
+                </p>
+                <button type="button" class="chip-btn" data-close-modal="quotationModal">Cerrar ventana</button>
             </div>
         </div>
     </div>
 
-    <!-- Event / Giveaway Module -->
-    <div id="eventBalloonContainer" class="event-balloon-container" style="display: none;">
-        <div class="balloon-tooltip">¡Sorteo Activo! 🎁</div>
-        <div class="event-balloon" id="eventBalloon">
-            <div class="balloon-string"></div>
-            <div class="balloon-body">
-                <span>🎁</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Event Registration Modal -->
-    <div class="event-modal" id="eventModal">
-        <div class="event-modal-overlay"></div>
-        <div class="event-modal-container">
-            <button class="event-close" id="closeEventModal">&times;</button>
-
-
-
-            <div class="event-content">
-                <div class="event-header">
-                    <span class="event-badge">🎉 Evento Especial</span>
-                    <h3 id="eventTitle">Cargando evento...</h3>
-                    <p id="eventDescription">...</p>
-                </div>
-
-                <div class="event-prize-preview">
-                    <!-- Image or Icon loaded via JS -->
-                    <div id="eventPrizeImage" class="prize-image-placeholder">🎁</div>
-                </div>
-
-                <div class="event-timer" id="eventTimer">
-                    <div class="timer-block">
-                        <span id="timerDays">00</span>
-                        <label>Días</label>
-                    </div>
-                    <span class="timer-sep">:</span>
-                    <div class="timer-block">
-                        <span id="timerHours">00</span>
-                        <label>Hrs</label>
-                    </div>
-                    <span class="timer-sep">:</span>
-                    <div class="timer-block">
-                        <span id="timerMins">00</span>
-                        <label>Min</label>
-                    </div>
-                </div>
-
-                <form id="eventForm" class="event-form">
-                    <div class="form-group">
-                        <input type="text" id="participantName" placeholder="Tu Nombre" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="tel" id="participantPhone" placeholder="WhatsApp (9 dígitos)" required
-                            pattern="[0-9]{9}" maxlength="9">
-                    </div>
-                    <div class="form-group checkbox-group">
-                        <input type="checkbox" id="eventTerms" required>
-                        <label for="eventTerms">Acepto los términos y condiciones.</label>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-block btn-event">
-                        <span>¡Participar Ahora!</span>
-                    </button>
-                </form>
-
-                <!-- Success State (Hidden by default) -->
-                <div id="eventSuccess" class="event-success" style="display: none;">
-                    <div class="success-icon">✨</div>
-                    <h3>¡Estás dentro!</h3>
-                    <p>Mucha suerte en el sorteo.</p>
-
-                    <div class="ticket-card">
-                        <span class="ticket-label">TU TICKET</span>
-                        <div class="ticket-number" id="userTicketId">VEC-???</div>
-                        <div class="ticket-stub"></div>
-                    </div>
-
-                    <p class="ticket-note">Guarda una captura de este ticket</p>
-                    <button class="btn btn-secondary btn-sm" id="closeEventSuccess">Volver a la web</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Image Zoom Modal -->
-    <div class="zoom-modal" id="zoomModal">
-        <div class="zoom-modal-overlay"></div>
-        <button class="zoom-modal-close" id="closeZoomModal" aria-label="Cerrar">&times;</button>
-        <div class="zoom-modal-container">
-            <img src="" alt="Zoom" id="zoomModalImg">
-            <!-- Capa protectora para evitar clic derecho / descargas fáciles -->
-            <div class="product-protection-overlay"></div>
-        </div>
-    </div>
-
-    <!-- Custom Cursor -->
-    <div class="custom-cursor" id="cursor"></div>
-    <div class="custom-cursor-dot" id="cursorDot"></div>
-
-    <!-- Global Confetti Canvas -->
-    <canvas id="globalConfetti" class="confetti-canvas-global"></canvas>
-
-    <script src="confetti.browser.min.js"></script>
-    <script src="api-client.js?v=2"></script>
-    <script src="script.js?v=2"></script>
-    <script src="cart.js?v=3"></script>
-    <script src="events.js"></script>
+    <script src="/api-client.js"></script>
+    <script src="/js/b2b-brochure.js"></script>
 </body>
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W8RCKKSV" height="0" width="0"
-        style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-
 
 </html>
-

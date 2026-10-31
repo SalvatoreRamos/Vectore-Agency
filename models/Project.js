@@ -8,11 +8,36 @@ const projectSchema = new mongoose.Schema({
     },
     client: {
         type: String,
-        required: [true, 'Client name is required']
+        trim: true,
+        default: 'Cliente Corporativo'
     },
+    isWhiteLabel: {
+        type: Boolean,
+        default: false
+    },
+    publicClientLabel: {
+        type: String,
+        trim: true,
+        default: ''
+    },
+    sector: {
+        type: String,
+        trim: true,
+        default: ''
+    },
+    location: {
+        type: String,
+        trim: true,
+        default: 'Pucallpa, Ucayali'
+    },
+    deliverables: [{
+        type: String,
+        trim: true
+    }],
     category: {
         type: String,
-        required: [true, 'Category is required']
+        required: [true, 'Category is required'],
+        trim: true
     },
     description: {
         type: String,
@@ -46,6 +71,18 @@ const projectSchema = new mongoose.Schema({
 }, {
     timestamps: true
 });
+
+/**
+ * Helper method to sanitize confidential client data for public B2B responses
+ */
+projectSchema.methods.toPublicJSON = function () {
+    const obj = this.toObject();
+    if (obj.isWhiteLabel) {
+        obj.client = obj.publicClientLabel
+            || (obj.sector ? `Proyecto Confidencial · ${obj.sector}` : 'Ejecución Marca Blanca (NDA)');
+    }
+    return obj;
+};
 
 const Project = mongoose.model('Project', projectSchema);
 export default Project;

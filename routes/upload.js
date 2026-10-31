@@ -32,11 +32,14 @@ let storage;
 try {
     storage = new CloudinaryStorage({
         cloudinary: cloudinary,
-        params: {
-            folder: 'vectore-agency',
-            allowed_formats: ['jpg', 'png', 'jpeg', 'gif', 'webp', 'avif', 'mp4', 'mov', 'webm', 'avi', 'ogg'],
-            resource_type: 'auto', // Important for video support
-            transformation: [{ width: 1280, crop: 'limit' }]
+        params: async (req, file) => {
+            const isPdf = file.mimetype === 'application/pdf' || /\.pdf$/i.test(file.originalname || '');
+            return {
+                folder: 'vectore-agency',
+                allowed_formats: ['jpg', 'png', 'jpeg', 'gif', 'webp', 'avif', 'mp4', 'mov', 'webm', 'avi', 'ogg', 'pdf'],
+                resource_type: 'auto',
+                ...(isPdf ? {} : { transformation: [{ width: 2560, crop: 'limit' }] })
+            };
         }
     });
 } catch (error) {

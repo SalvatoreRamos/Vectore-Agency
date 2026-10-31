@@ -1,11 +1,15 @@
 User-agent: *
 Allow: /
-Allow: /es/
 Disallow: /admin.html
 Disallow: /admin.js
 Disallow: /admin.css
+Disallow: /clientes
+Disallow: /clientes.html
+Disallow: /portal
+Disallow: /pago
+Disallow: /inversiones
+Disallow: /inversiones.html
 Disallow: /api/
 Disallow: /uploads/
 
-Sitemap: https://pe.agenciavectore.com/sitemap.xml
 Sitemap: https://www.agenciavectore.com/sitemap.xml
