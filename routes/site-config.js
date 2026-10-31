@@ -5,6 +5,16 @@ import { authenticate, isAdmin } from '../middleware/auth.js';
 
 const router = express.Router();
 
+const LEGACY_HIGHLIGHTS = new Set([
+    'y creamos diseño especializado, packaging 3D y software a medida.',
+    'y creamos arquitectura, packaging 3D y software.'
+]);
+
+const LEGACY_SUBTITLES = new Set([
+    'Somos el brazo ejecutor con taller propio en la Amazonía para marcas y agencias de Lima, integrando producción en sitio, arquitectura comercial, visualización 3D e ingeniería de software.',
+    'Taller propio en Ucayali para marcas y agencias de Lima, integrado con diseño 3D y desarrollo tecnológico a medida.'
+]);
+
 async function getOrCreateMainConfig() {
     let config = await SiteConfig.findOne({ key: 'main' });
     if (!config) {
@@ -13,7 +23,39 @@ async function getOrCreateMainConfig() {
             sectors: DEFAULT_SECTORS,
             corporate: { businessLines: DEFAULT_BUSINESS_LINES }
         });
+        return config;
     }
+
+    // Non-destructive auto-upgrade of initial default texts (preserves custom Hero media & Admin edits)
+    let dirty = false;
+    if (config.hero && LEGACY_HIGHLIGHTS.has(config.hero.headlineHighlight)) {
+        config.hero.headlineHighlight = 'y creamos publicidad, diseño especializado, packaging 3D y software a medida.';
+        dirty = true;
+    }
+    if (config.hero?.subtitle && (LEGACY_SUBTITLES.has(config.hero.subtitle) || config.hero.subtitle.startsWith('Somos el brazo ejecutor con taller propio'))) {
+        config.hero.subtitle = 'Taller propio para marcas de Lima y todo el Perú, junto con diseño publicitario, visualización 3D y software para empresas a nivel internacional.';
+        dirty = true;
+    }
+    if (config.hero?.primaryCtaText === 'Solicitar Cotización Corporativa') {
+        config.hero.primaryCtaText = 'Cotizar proyecto';
+        dirty = true;
+    }
+    if (config.hero?.secondaryCtaText === 'Explorar Casos de Éxito') {
+        config.hero.secondaryCtaText = 'Ver portafolio';
+        dirty = true;
+    }
+    if (config.sectors?.[0]?.subtitle === 'Islas, escaparates, tótems y campañas de temporada') {
+        config.sectors = DEFAULT_SECTORS;
+        dirty = true;
+    }
+    if (config.corporate?.businessLines?.[0]?.description?.startsWith('Producción gráfica industrial en gran formato')) {
+        config.corporate.businessLines = DEFAULT_BUSINESS_LINES;
+        dirty = true;
+    }
+    if (dirty) {
+        await config.save();
+    }
+
     return config;
 }
 

@@ -172,12 +172,20 @@ app.use((req, res, next) => {
 });
 
 // ===================================
-// Static Files
+// Static Files (Immediate Revalidation for CSS/JS so deploys reflect instantly)
 // ===================================
-app.use('/css', express.static(path.join(__dirname, 'css'), { maxAge: '1h' }));
-app.use('/js', express.static(path.join(__dirname, 'js'), { maxAge: '1h' }));
+const revalidateStaticOpts = {
+  etag: true,
+  lastModified: true,
+  maxAge: 0,
+  setHeaders: (res) => {
+    res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+  }
+};
+app.use('/css', express.static(path.join(__dirname, 'css'), revalidateStaticOpts));
+app.use('/js', express.static(path.join(__dirname, 'js'), revalidateStaticOpts));
 app.use('/assets', express.static(path.join(__dirname, 'public/assets'), { maxAge: '1y', immutable: true }));
-app.use(express.static(__dirname, { index: false }));
+app.use(express.static(__dirname, { index: false, ...revalidateStaticOpts }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // ===================================

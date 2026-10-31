@@ -77,22 +77,22 @@ const siteConfigSchema = new mongoose.Schema({
         badgeText: {
             type: String,
             trim: true,
-            default: 'PUCALLPA · LIMA · BTL, ARQUITECTURA 3D & SOFTWARE'
+            default: 'PUBLICIDAD & BTL EN PERÚ · PACKAGING 3D & SOFTWARE GLOBAL'
         },
         headlineLine1: {
             type: String,
             trim: true,
-            default: 'Ejecutamos tus campañas BTL en Pucallpa'
+            default: 'Ejecutamos tus despliegues BTL en Pucallpa'
         },
         headlineHighlight: {
             type: String,
             trim: true,
-            default: 'y creamos arquitectura, packaging 3D y software.'
+            default: 'y creamos publicidad, diseño especializado, packaging 3D y software a medida.'
         },
         subtitle: {
             type: String,
             trim: true,
-            default: 'Taller propio en Ucayali para marcas y agencias de Lima, integrado con diseño 3D y desarrollo tecnológico a medida.'
+            default: 'Taller propio para marcas de Lima y todo el Perú, junto con diseño publicitario, visualización 3D y software para empresas a nivel internacional.'
         },
         primaryCtaText: {
             type: String,

@@ -5,16 +5,16 @@
 
 :root,
 [data-theme="dark"] {
-    /* SaaS Vectore Flow Core Surfaces */
-    --vf-bg: #0c0927;
-    --vf-bg-deep: #07051a;
-    --vf-surface: #130e3a;
-    --vf-surface-raised: #1a1354;
-    --vf-surface-overlay: #231b6a;
-    --vf-border: #2e2574;
-    --vf-border-subtle: #1e1750;
+    /* Refined Deep Midnight Surfaces (less purple-heavy, letting #8655FF & #FFBB55 pop) */
+    --vf-bg: #09081c;
+    --vf-bg-deep: #060513;
+    --vf-surface: #100e2b;
+    --vf-surface-raised: #17143b;
+    --vf-surface-overlay: #201b50;
+    --vf-border: #2b255c;
+    --vf-border-subtle: #1c1842;
 
-    /* Brand Accent & Minimal Semantic Tokens from Vectore Flow */
+    /* Brand Accent & Minimal Semantic Tokens from Vectore Flow + Business Card #FFBB55 */
     --vf-primary: #8655FF;
     --vf-primary-hover: #a67fff;
     --vf-primary-dim: #6B3FD6;
@@ -31,18 +31,18 @@
     --vf-danger: #FF4757;
 
     /* Typography Hierarchy */
-    --vf-text: #f0f0f8;
-    --vf-text-secondary: #b4afd3;
-    --vf-text-muted: #7870a6;
+    --vf-text: #f3f3fa;
+    --vf-text-secondary: #bdb9da;
+    --vf-text-muted: #827ca8;
     --vf-heading-contrast: #ffffff;
 
-    /* Liquid Glass Optical Tokens (Dark) */
-    --lg-fill: linear-gradient(135deg, rgba(255, 255, 255, 0.085) 0%, rgba(255, 255, 255, 0.025) 55%, rgba(134, 85, 255, 0.06) 100%);
-    --lg-fill-strong: linear-gradient(145deg, rgba(22, 16, 62, 0.78) 0%, rgba(12, 9, 39, 0.86) 100%);
-    --lg-rim-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.06) 45%, rgba(166, 127, 255, 0.32) 100%);
-    --lg-inner-shadow: inset 0 1px 0.5px rgba(255, 255, 255, 0.34), inset 0 -1px 1px rgba(134, 85, 255, 0.22);
-    --lg-drop-shadow: 0 20px 50px -12px rgba(4, 2, 18, 0.72);
-    --lg-sheen-color: rgba(255, 255, 255, 0.09);
+    /* Liquid Glass Optical Tokens (Dark with subtle #FFBB55 warm rim) */
+    --lg-fill: linear-gradient(135deg, rgba(255, 255, 255, 0.085) 0%, rgba(255, 255, 255, 0.025) 55%, rgba(255, 187, 85, 0.05) 100%);
+    --lg-fill-strong: linear-gradient(145deg, rgba(18, 15, 46, 0.84) 0%, rgba(9, 8, 28, 0.9) 100%);
+    --lg-rim-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 187, 85, 0.3) 50%, rgba(134, 85, 255, 0.35) 100%);
+    --lg-inner-shadow: inset 0 1px 0.5px rgba(255, 255, 255, 0.32), inset 0 -1px 1px rgba(255, 187, 85, 0.14);
+    --lg-drop-shadow: 0 20px 50px -12px rgba(4, 3, 16, 0.76);
+    --lg-sheen-color: rgba(255, 187, 85, 0.1);
 
     /* Fonts & Radii */
     --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
