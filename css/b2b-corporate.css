@@ -1870,10 +1870,14 @@ video {
     z-index: 2;
     width: 100%;
     max-width: 640px;
-    max-height: 92svh;
-    overflow-y: auto;
+    max-height: 90vh;
     border-radius: var(--radius-xl);
-    padding: clamp(22px, 3.5vw, 36px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Marco estático exterior: el contenedor permanece fijo y no corta las fotos con el borde rim */
+    padding: 0;
+    border: 1.5px solid rgba(134, 85, 255, 0.45);
+    box-shadow: 0 25px 60px -12px rgba(5, 2, 22, 0.85), 0 0 32px rgba(134, 85, 255, 0.2);
     transform: translateY(16px) scale(0.98);
     transition: transform 0.32s var(--ease-expo);
 }
@@ -1886,22 +1890,65 @@ video {
     transform: translateY(0) scale(1);
 }
 
+/* Modal Inner Scrollable Body (Todo el scroll ocurre aquí dentro, manteniendo el marco y la línea violeta fijos al fondo) */
+.b2b-modal__body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: clamp(22px, 3.5vw, 36px);
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Scrollbar estilizado sutil */
+.b2b-modal__body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.b2b-modal__body::-webkit-scrollbar-track {
+    background: rgba(18, 0, 66, 0.25);
+    margin: 12px 0;
+    border-radius: 99px;
+}
+
+.b2b-modal__body::-webkit-scrollbar-thumb {
+    background: rgba(134, 85, 255, 0.45);
+    border-radius: 99px;
+}
+
+.b2b-modal__body::-webkit-scrollbar-thumb:hover {
+    background: #8655FF;
+}
+
 .b2b-modal__close {
-    position: sticky;
-    top: 0;
-    float: right;
-    width: 38px;
-    height: 38px;
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    border: 1px solid var(--vf-border);
-    background: var(--vf-surface-raised);
-    color: var(--vf-text);
-    font-size: 1.2rem;
+    border: 1px solid rgba(134, 85, 255, 0.38);
+    background: rgba(18, 0, 66, 0.82);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #ffffff;
+    font-size: 1.15rem;
+    font-weight: 700;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    z-index: 5;
+    z-index: 20;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    transition: transform 0.22s ease, background 0.22s ease, border-color 0.22s ease;
+}
+
+.b2b-modal__close:hover {
+    transform: rotate(90deg) scale(1.08);
+    background: #8655FF;
+    border-color: #8655FF;
+    color: #ffffff;
 }
 
 .case-modal__gallery {
@@ -1914,8 +1961,11 @@ video {
 .case-modal__gallery img,
 .case-modal__gallery video {
     width: 100%;
+    height: auto;
+    display: block;
     border-radius: var(--radius-md);
     border: 1px solid var(--vf-border-subtle);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
 /* ==========================================================================
@@ -2025,6 +2075,27 @@ video {
 
     .b2b-footer__main {
         grid-template-columns: 1fr;
+    }
+
+    .b2b-modal {
+        padding: 10px;
+    }
+
+    .b2b-modal__dialog {
+        max-height: calc(100svh - 20px);
+        border-radius: 20px;
+    }
+
+    .b2b-modal__body {
+        padding: 20px 16px 24px;
+    }
+
+    .b2b-modal__close {
+        top: 12px;
+        right: 12px;
+        width: 34px;
+        height: 34px;
+        font-size: 1rem;
     }
 }
 

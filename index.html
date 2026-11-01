@@ -80,8 +80,8 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
         rel="stylesheet">
 
-    <link rel="stylesheet" href="/css/liquid-glass.css?v=20261031e">
-    <link rel="stylesheet" href="/css/b2b-corporate.css?v=20261031e">
+    <link rel="stylesheet" href="/css/liquid-glass.css?v=20261031f">
+    <link rel="stylesheet" href="/css/b2b-corporate.css?v=20261031f">
 
     <!-- Structured Data: SEO Nacional (Perú BTL/Arquitectura) + SEO Internacional (Diseño 3D, Software & IA) -->
     <script type="application/ld+json">
@@ -992,7 +992,7 @@
         <div class="b2b-modal__backdrop" data-close-modal="projectModal"></div>
         <div class="b2b-modal__dialog liquid-glass liquid-glass--elevated">
             <button type="button" class="b2b-modal__close" data-close-modal="projectModal" aria-label="Cerrar caso">✕</button>
-            <div id="projectModalBody"></div>
+            <div class="b2b-modal__body" id="projectModalBody"></div>
         </div>
     </div>
 
@@ -1003,115 +1003,116 @@
         <div class="b2b-modal__backdrop" data-close-modal="quotationModal"></div>
         <div class="b2b-modal__dialog liquid-glass liquid-glass--elevated">
             <button type="button" class="b2b-modal__close" data-close-modal="quotationModal" aria-label="Cerrar formulario">✕</button>
-
-            <div style="margin-bottom:16px;padding-right:42px;">
-                <span class="eyebrow-tag" style="margin-bottom:8px;">// COTIZACIÓN DIRECTA</span>
-                <h3 style="font-size:1.35rem;font-weight:800;color:var(--vf-heading-contrast);" id="modalQuoteHeading">
-                    Cotizar proyecto
-                </h3>
-                <p style="font-size:0.83rem;color:var(--vf-text-secondary);margin-top:3px;" id="modalQuoteContextSub">
-                    Respuesta prioritaria para empresas y agencias.
-                </p>
-            </div>
-
-            <div class="channel-tabs" role="tablist">
-                <button type="button" class="channel-tab is-active" data-channel-select="whatsapp_direct"
-                    data-target-form="modalQuotationForm">
-                    💬 WhatsApp Directo
-                    <span>Resumen al instante</span>
-                </button>
-                <button type="button" class="channel-tab" data-channel-select="formal_proforma"
-                    data-target-form="modalQuotationForm">
-                    ✉️ Por Correo
-                    <span>Proforma formal</span>
-                </button>
-            </div>
-
-            <form id="modalQuotationForm" class="b2b-quote-form" data-channel="whatsapp_direct" novalidate>
-                <input type="text" name="website_url" tabindex="-1" autocomplete="off"
-                    style="position:absolute;left:-9999px;opacity:0;" aria-hidden="true">
-                <input type="hidden" name="referenceItem" id="mqReferenceItem" value="">
-
-                <div class="b2b-form-grid">
-                    <div class="b2b-field">
-                        <label for="mqName">Nombre *</label>
-                        <input type="text" id="mqName" name="name" class="b2b-input"
-                            placeholder="Tu nombre y cargo" required>
-                    </div>
-
-                    <div class="b2b-field">
-                        <label for="mqCompany">
-                            <span>Empresa o RUC *</span>
-                            <span class="ruc-badge-live" data-ruc-badge>✓ Facturación &amp; OS</span>
-                        </label>
-                        <input type="text" id="mqCompany" name="companyOrRuc" class="b2b-input"
-                            placeholder="Empresa, RUC o ID Fiscal" required>
-                    </div>
-
-                    <div class="b2b-field">
-                        <label for="mqCity">Ciudad / País *</label>
-                        <input type="text" id="mqCity" name="city" class="b2b-input"
-                            placeholder="Ej. Lima, Pucallpa, Miami, Madrid..." required>
-                    </div>
-
-                    <div class="b2b-field">
-                        <label for="mqService">Servicio</label>
-                        <input type="text" id="mqService" name="service" class="b2b-input"
-                            value="Proyecto Corporativo">
-                    </div>
-
-                    <div class="b2b-field proforma-only">
-                        <label for="mqEmail">Correo Corporativo *</label>
-                        <input type="email" id="mqEmail" name="email" class="b2b-input"
-                            placeholder="nombre@empresa.com">
-                    </div>
-
-                    <div class="b2b-field proforma-only">
-                        <label for="mqPhone">Teléfono (Opcional)</label>
-                        <input type="tel" id="mqPhone" name="phone" class="b2b-input"
-                            placeholder="999 000 000">
-                    </div>
-
-                    <div class="b2b-field b2b-field--full proforma-only">
-                        <label for="mqRfp">Link a Planos / TDR (Opcional)</label>
-                        <input type="url" id="mqRfp" name="rfpLink" class="b2b-input"
-                            placeholder="https://drive.google.com/...">
-                    </div>
-
-                    <div class="b2b-field b2b-field--full">
-                        <label for="mqDesc">Resumen del requerimiento *</label>
-                        <textarea id="mqDesc" name="description" rows="3" class="b2b-textarea"
-                            placeholder="¿Qué necesitas ejecutar o cotizar?"
-                            required></textarea>
-                    </div>
-
-                    <div class="b2b-field b2b-field--full">
-                        <button type="submit" class="btn-submit-b2b btn-submit-b2b--wa" data-submit-btn>
-                            <span data-submit-label>Enviar por WhatsApp ↗</span>
-                        </button>
-                        <p style="font-size:0.73rem;color:var(--vf-text-muted);text-align:center;margin-top:8px;"
-                            data-submit-hint>
-                            Se abrirá WhatsApp con tu resumen listo.
-                        </p>
-                    </div>
+            <div class="b2b-modal__body">
+                <div style="margin-bottom:16px;padding-right:42px;">
+                    <span class="eyebrow-tag" style="margin-bottom:8px;">// COTIZACIÓN DIRECTA</span>
+                    <h3 style="font-size:1.35rem;font-weight:800;color:var(--vf-heading-contrast);" id="modalQuoteHeading">
+                        Cotizar proyecto
+                    </h3>
+                    <p style="font-size:0.83rem;color:var(--vf-text-secondary);margin-top:3px;" id="modalQuoteContextSub">
+                        Respuesta prioritaria para empresas y agencias.
+                    </p>
                 </div>
-            </form>
 
-            <div class="funnel-success-box" id="modalQuotationSuccess">
-                <div style="width:46px;height:46px;border-radius:50%;background:rgba(0,214,143,0.16);color:var(--vf-emerald);display:inline-flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:10px;">✓</div>
-                <h4 style="font-size:1.15rem;color:var(--vf-heading-contrast);margin-bottom:6px;" data-success-title>
-                    Solicitud Registrada
-                </h4>
-                <p style="font-size:0.86rem;color:var(--vf-text-secondary);margin-bottom:14px;" data-success-msg>
-                    Hemos recibido tu consulta.
-                </p>
-                <button type="button" class="chip-btn" data-close-modal="quotationModal">Cerrar</button>
+                <div class="channel-tabs" role="tablist">
+                    <button type="button" class="channel-tab is-active" data-channel-select="whatsapp_direct"
+                        data-target-form="modalQuotationForm">
+                        💬 WhatsApp Directo
+                        <span>Resumen al instante</span>
+                    </button>
+                    <button type="button" class="channel-tab" data-channel-select="formal_proforma"
+                        data-target-form="modalQuotationForm">
+                        ✉️ Por Correo
+                        <span>Proforma formal</span>
+                    </button>
+                </div>
+
+                <form id="modalQuotationForm" class="b2b-quote-form" data-channel="whatsapp_direct" novalidate>
+                    <input type="text" name="website_url" tabindex="-1" autocomplete="off"
+                        style="position:absolute;left:-9999px;opacity:0;" aria-hidden="true">
+                    <input type="hidden" name="referenceItem" id="mqReferenceItem" value="">
+
+                    <div class="b2b-form-grid">
+                        <div class="b2b-field">
+                            <label for="mqName">Nombre *</label>
+                            <input type="text" id="mqName" name="name" class="b2b-input"
+                                placeholder="Tu nombre y cargo" required>
+                        </div>
+
+                        <div class="b2b-field">
+                            <label for="mqCompany">
+                                <span>Empresa o RUC *</span>
+                                <span class="ruc-badge-live" data-ruc-badge>✓ Facturación &amp; OS</span>
+                            </label>
+                            <input type="text" id="mqCompany" name="companyOrRuc" class="b2b-input"
+                                placeholder="Empresa, RUC o ID Fiscal" required>
+                        </div>
+
+                        <div class="b2b-field">
+                            <label for="mqCity">Ciudad / País *</label>
+                            <input type="text" id="mqCity" name="city" class="b2b-input"
+                                placeholder="Ej. Lima, Pucallpa, Miami, Madrid..." required>
+                        </div>
+
+                        <div class="b2b-field">
+                            <label for="mqService">Servicio</label>
+                            <input type="text" id="mqService" name="service" class="b2b-input"
+                                value="Proyecto Corporativo">
+                        </div>
+
+                        <div class="b2b-field proforma-only">
+                            <label for="mqEmail">Correo Corporativo *</label>
+                            <input type="email" id="mqEmail" name="email" class="b2b-input"
+                                placeholder="nombre@empresa.com">
+                        </div>
+
+                        <div class="b2b-field proforma-only">
+                            <label for="mqPhone">Teléfono (Opcional)</label>
+                            <input type="tel" id="mqPhone" name="phone" class="b2b-input"
+                                placeholder="999 000 000">
+                        </div>
+
+                        <div class="b2b-field b2b-field--full proforma-only">
+                            <label for="mqRfp">Link a Planos / TDR (Opcional)</label>
+                            <input type="url" id="mqRfp" name="rfpLink" class="b2b-input"
+                                placeholder="https://drive.google.com/...">
+                        </div>
+
+                        <div class="b2b-field b2b-field--full">
+                            <label for="mqDesc">Resumen del requerimiento *</label>
+                            <textarea id="mqDesc" name="description" rows="3" class="b2b-textarea"
+                                placeholder="¿Qué necesitas ejecutar o cotizar?"
+                                required></textarea>
+                        </div>
+
+                        <div class="b2b-field b2b-field--full">
+                            <button type="submit" class="btn-submit-b2b btn-submit-b2b--wa" data-submit-btn>
+                                <span data-submit-label>Enviar por WhatsApp ↗</span>
+                            </button>
+                            <p style="font-size:0.73rem;color:var(--vf-text-muted);text-align:center;margin-top:8px;"
+                                data-submit-hint>
+                                Se abrirá WhatsApp con tu resumen listo.
+                            </p>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="funnel-success-box" id="modalQuotationSuccess">
+                    <div style="width:46px;height:46px;border-radius:50%;background:rgba(0,214,143,0.16);color:var(--vf-emerald);display:inline-flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:10px;">✓</div>
+                    <h4 style="font-size:1.15rem;color:var(--vf-heading-contrast);margin-bottom:6px;" data-success-title>
+                        Solicitud Registrada
+                    </h4>
+                    <p style="font-size:0.86rem;color:var(--vf-text-secondary);margin-bottom:14px;" data-success-msg>
+                        Hemos recibido tu consulta.
+                    </p>
+                    <button type="button" class="chip-btn" data-close-modal="quotationModal">Cerrar</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <script src="/api-client.js?v=20261031e"></script>
-    <script src="/js/b2b-brochure.js?v=20261031e"></script>
+    <script src="/api-client.js?v=20261031f"></script>
+    <script src="/js/b2b-brochure.js?v=20261031f"></script>
 </body>
 
 </html>

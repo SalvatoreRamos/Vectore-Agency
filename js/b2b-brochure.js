@@ -741,6 +741,7 @@
             });
         }
 
+        body.scrollTop = 0;
         openModal('projectModal');
     }
 
