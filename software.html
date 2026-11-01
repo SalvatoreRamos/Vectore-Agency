@@ -37,9 +37,12 @@
     <meta property="og:image" content="https://res.cloudinary.com/ddyrdetvm/image/upload/v1786081269/vectore-agency/xmtxp0blh5x6ftrx0ah1.avif">
 
     <link rel="preload" href="/assets/fonts/MarkPro-Regular.otf" as="font" type="font/otf" crossorigin>
-    <link rel="preload" href="/assets/fonts/Goldplay-Bold.otf" as="font" type="font/otf" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="stylesheet" href="styles.css?v=20261031d">
+    <link rel="stylesheet" href="styles.css?v=20261031e">
 
     <script type="application/ld+json">
     {
@@ -61,9 +64,40 @@
 
     <style>
         /* Software Page Specific Styles */
+        .hero-software,
+        #download {
+            color: #ffffff;
+        }
+
         .hero-software {
             background: radial-gradient(circle at 50% 45%, #4012A6 0%, #120042 78%);
             padding-top: 140px;
+        }
+
+        .hero-software .gradient-text {
+            background: linear-gradient(135deg, #ffffff 0%, #c4b5fd 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-software .hero-subtitle,
+        #download .hero-subtitle {
+            opacity: 1;
+            color: rgba(255, 255, 255, 0.88);
+            min-height: 0;
+            margin-bottom: 32px;
+        }
+
+        #download .hero-cta {
+            margin-bottom: 22px;
+        }
+
+        .download-version-note {
+            color: rgba(255, 255, 255, 0.84);
+            font-size: 0.92rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
         }
 
         .logo svg.vectore-logo-2027 {
@@ -423,7 +457,7 @@
                     Descargar para Windows
                 </a>
             </div>
-            <p style="opacity: 0.6; font-size: 0.9rem;">Versión 0.1.0-beta • Windows 10/11</p>
+            <p class="download-version-note">Versión 0.1.0-beta • Windows 10/11</p>
         </div>
     </section>
 

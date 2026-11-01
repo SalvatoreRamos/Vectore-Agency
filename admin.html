@@ -11,8 +11,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="stylesheet" href="styles.css?v=20261031d">
-    <link rel="stylesheet" href="admin.css?v=20261031d">
+    <link rel="stylesheet" href="styles.css?v=20261031e">
+    <link rel="stylesheet" href="admin.css?v=20261031e">
 </head>
 
 <body class="admin-body">
@@ -164,135 +164,255 @@
             <!-- ==========================================================
                  SITE CONFIG SECTION (Portada Hero, Fallback, OPEN PROJECT, Sectores & Footer)
                  ========================================================== -->
-            <div id="siteConfigSection">
-                <header class="admin-header">
+            <div id="siteConfigSection" class="cms-studio-wrap">
+                <header class="admin-header cms-top-banner">
                     <div class="header-left">
-                        <h1>Portada Hero, Sectores &amp; Configuración B2B</h1>
-                        <p>Controla la imagen o video de pantalla completa, el caso flotante OPEN PROJECT y el cintillo de rubros sin tocar código.</p>
+                        <span class="cms-status-pill">
+                            <span class="cms-status-dot"></span>
+                            CMS Corporativo en Vivo
+                        </span>
+                        <h1>Portada Hero, Sectores &amp; Identidad Web</h1>
+                        <p>Personaliza el fondo multimedia de pantalla completa, la tarjeta flotante OPEN PROJECT, el cintillo de rubros y los datos de contacto sin tocar código.</p>
                     </div>
-                    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                    <div class="cms-header-actions">
                         <button type="button" class="btn btn-secondary" id="btnResetHeroBg">
-                            ↺ Restaurar Fondo Original
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                                <polyline points="1 4 1 10 7 10"></polyline>
+                                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                            </svg>
+                            Restaurar Fondo Original
                         </button>
                         <button type="button" class="btn btn-primary" id="btnSaveSiteConfig">
-                            💾 Guardar Cambios del Sitio
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                                <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                                <polyline points="7 3 7 8 15 8"></polyline>
+                            </svg>
+                            Guardar Cambios
                         </button>
                     </div>
                 </header>
 
-                <!-- 1. Portada Hero & Fallback -->
-                <div class="admin-section">
-                    <div class="section-header">
-                        <h2>1. Imagen o Video de Portada (Hero Pantalla Completa)</h2>
+                <!-- 1. Portada Hero & Vista Previa en Vivo -->
+                <div class="admin-section cms-card">
+                    <div class="cms-card__head">
+                        <div class="cms-step-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                <line x1="8" y1="21" x2="16" y2="21"></line>
+                                <line x1="12" y1="17" x2="12" y2="21"></line>
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="cms-step-tag">MÓDULO 01 · HERO PORTADA</span>
+                            <h2>Fondo Multimedia &amp; Mensaje Principal</h2>
+                            <p class="section-subcopy">Si dejas la URL vacía o pulsas <strong>Restaurar Fondo Original</strong>, se mantiene automáticamente el fondo oscuro animado corporativo.</p>
+                        </div>
                     </div>
-                    <p style="font-size:0.88rem;color:#888;margin-bottom:18px;">
-                        Si dejas el enlace vacío o pulsas <strong>Restaurar Fondo Original</strong>, la web mostrará automáticamente el fondo oscuro animado corporativo.
-                    </p>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Subir Imagen o Video de Portada (Cloudinary)</label>
-                            <div class="file-upload-area">
-                                <input type="file" id="scHeroFile" accept="image/*,video/*" class="form-control">
-                                <small class="form-hint">O pega directamente la URL de imagen/video MP4:</small>
-                                <input type="url" id="scHeroBgUrl" placeholder="https://res.cloudinary.com/... (vacío = fondo animado original)">
+                    <div class="cms-hero-studio">
+                        <div class="cms-hero-controls">
+                            <div class="cms-upload-box">
+                                <div class="cms-upload-box__top">
+                                    <div class="cms-upload-box__badge">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                            <polyline points="17 8 12 3 7 8"></polyline>
+                                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                                        </svg>
+                                        Subir Imagen o Video MP4 (Cloudinary)
+                                    </div>
+                                    <span class="cms-upload-box__formats">JPG · PNG · AVIF · WEBP · MP4</span>
+                                </div>
+                                <input type="file" id="scHeroFile" accept="image/*,video/*" class="cms-file-input">
+                                <div class="cms-url-inline">
+                                    <label for="scHeroBgUrl">URL directa de fondo (Escritorio)</label>
+                                    <input type="url" id="scHeroBgUrl" class="cms-input" placeholder="https://res.cloudinary.com/... (vacío = fondo animado original)">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="scHeroMobileUrl">Imagen Vertical Opcional (Celulares)</label>
+                                    <input type="url" id="scHeroMobileUrl" placeholder="URL vertical opcional para móviles">
+                                </div>
+                                <div class="form-group">
+                                    <div class="cms-range-label-row">
+                                        <label for="scHeroOpacity" style="margin-bottom:0;">Velo de Contraste Editorial</label>
+                                        <span class="cms-range-pill" id="scHeroOpacityVal">58%</span>
+                                    </div>
+                                    <input type="range" id="scHeroOpacity" class="cms-range" min="0.20" max="0.90" step="0.02" value="0.58">
+                                    <small class="form-hint">Asegura que el titular blanco se lea nítido sobre fotos claras.</small>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="scBadgeText">Cintillo Superior (Eyebrow)</label>
+                                <input type="text" id="scBadgeText" placeholder="PUBLICIDAD & BTL EN PERÚ · PACKAGING 3D & SOFTWARE GLOBAL">
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="scHeadline1">Titular Principal — Parte 1</label>
+                                    <input type="text" id="scHeadline1" placeholder="Ejecutamos tus despliegues BTL en Pucallpa">
+                                </div>
+                                <div class="form-group">
+                                    <label for="scHeadlineHighlight">Titular Principal — Parte 2 (Continuación)</label>
+                                    <input type="text" id="scHeadlineHighlight" placeholder="y creamos publicidad, diseño especializado, packaging 3D y software a medida.">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="scSubtitle">Subtítulo Corporativo</label>
+                                <textarea id="scSubtitle" rows="2" placeholder="Taller propio para marcas de Lima y todo el Perú..."></textarea>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label for="scPrimaryCta">Botón Principal (Ámbar)</label>
+                                    <input type="text" id="scPrimaryCta" placeholder="Cotizar proyecto">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label for="scSecondaryCta">Botón Secundario (Glass)</label>
+                                    <input type="text" id="scSecondaryCta" placeholder="Ver portafolio">
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="scHeroMobileUrl">Imagen Vertical Opcional para Móvil</label>
-                            <input type="url" id="scHeroMobileUrl" placeholder="Opcional: URL vertical para celulares">
-                            <div style="margin-top:14px;">
-                                <label for="scHeroOpacity">Oscuridad del Velo Editorial (Contraste de Texto): <strong id="scHeroOpacityVal">58%</strong></label>
-                                <input type="range" id="scHeroOpacity" min="0.20" max="0.90" step="0.02" value="0.58" style="width:100%;margin-top:6px;">
+
+                        <!-- Live Mini Preview -->
+                        <aside class="cms-hero-preview-wrap">
+                            <div class="cms-preview-label">
+                                <span>Vista Previa Interactiva</span>
+                                <span class="cms-preview-tag" id="scHeroBgModeTag">Fondo Original</span>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="scBadgeText">Cintillo Superior de Portada</label>
-                        <input type="text" id="scBadgeText" placeholder="PUBLICIDAD & BTL EN PERÚ · PACKAGING 3D & SOFTWARE GLOBAL">
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="scHeadline1">Titular Principal (Blanco)</label>
-                            <input type="text" id="scHeadline1" placeholder="Ejecutamos tus despliegues BTL en Pucallpa">
-                        </div>
-                        <div class="form-group">
-                            <label for="scHeadlineHighlight">Titular en Gradiente (Continuación)</label>
-                            <input type="text" id="scHeadlineHighlight" placeholder="y creamos publicidad, diseño especializado, packaging 3D y software a medida.">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="scSubtitle">Subtítulo Corporativo en Plural</label>
-                        <textarea id="scSubtitle" rows="2"></textarea>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="scPrimaryCta">Texto Botón Principal</label>
-                            <input type="text" id="scPrimaryCta" placeholder="Solicitar Cotización Corporativa">
-                        </div>
-                        <div class="form-group">
-                            <label for="scSecondaryCta">Texto Botón Secundario</label>
-                            <input type="text" id="scSecondaryCta" placeholder="Explorar Casos de Éxito">
-                        </div>
+                            <div class="cms-hero-preview" id="scHeroLivePreview">
+                                <div class="cms-hero-preview__media" id="scHeroPreviewMedia"></div>
+                                <div class="cms-hero-preview__scrim" id="scHeroPreviewScrim"></div>
+                                <div class="cms-hero-preview__content">
+                                    <span class="cms-hero-preview__badge" id="scPrevBadge">PUBLICIDAD &amp; BTL EN PERÚ</span>
+                                    <h4 class="cms-hero-preview__title" id="scPrevTitle">Ejecutamos tus despliegues BTL en Pucallpa y creamos publicidad, diseño especializado, packaging 3D y software a medida.</h4>
+                                    <p class="cms-hero-preview__sub" id="scPrevSub">Taller propio para marcas de Lima y todo el Perú.</p>
+                                    <div class="cms-hero-preview__btns">
+                                        <span class="cms-prev-btn-amber" id="scPrevBtn1">Cotizar proyecto →</span>
+                                        <span class="cms-prev-btn-glass" id="scPrevBtn2">Ver portafolio</span>
+                                    </div>
+                                    <div class="cms-hero-preview__float" id="scPrevFloatCard">
+                                        <span class="cms-prev-dot"></span>
+                                        <span id="scPrevFloatLabel">OPEN PROJECT</span>
+                                        <span style="margin-left:auto;color:#FFBB55;">↗</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="cms-preview-footnote">El titular principal se muestra en blanco puro de alto contraste sobre la portada.</p>
+                        </aside>
                     </div>
                 </div>
 
                 <!-- 2. Tarjeta Flotante OPEN PROJECT -->
-                <div class="admin-section">
-                    <div class="section-header">
-                        <h2>2. Tarjeta Flotante «OPEN PROJECT» en Portada</h2>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
-                                <input type="checkbox" id="scFloatingEnabled" checked style="width:auto;">
-                                Mostrar tarjeta flotante de Caso de Éxito en la Portada
-                            </label>
-                            <div style="margin-top:12px;">
-                                <label for="scFloatingLabel">Etiqueta Superior</label>
-                                <input type="text" id="scFloatingLabel" value="OPEN PROJECT">
-                            </div>
+                <div class="admin-section cms-card">
+                    <div class="cms-card__head">
+                        <div class="cms-step-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                                <polyline points="2 17 12 22 22 17"></polyline>
+                                <polyline points="2 12 12 17 22 12"></polyline>
+                            </svg>
                         </div>
-                        <div class="form-group">
-                            <label for="scFloatingMode">Selección del Caso Mostrado</label>
+                        <div>
+                            <span class="cms-step-tag">MÓDULO 02 · CASO DESTACADO</span>
+                            <h2>Tarjeta Flotante «OPEN PROJECT» en Portada</h2>
+                            <p class="section-subcopy">Recuadro interactivo en la esquina inferior derecha del Hero que lleva directo a un proyecto real.</p>
+                        </div>
+                    </div>
+
+                    <div class="cms-toggle-banner">
+                        <div>
+                            <strong>Mostrar tarjeta flotante en la Portada</strong>
+                            <span>Activa o esconde el acceso rápido al caso de éxito reciente en el Hero.</span>
+                        </div>
+                        <label class="cms-switch" title="Activar o desactivar tarjeta flotante">
+                            <input type="checkbox" id="scFloatingEnabled" checked>
+                            <span class="cms-switch__slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="form-row" style="margin-top:20px;">
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label for="scFloatingLabel">Etiqueta Superior del Recuadro</label>
+                            <input type="text" id="scFloatingLabel" value="OPEN PROJECT" placeholder="OPEN PROJECT">
+                        </div>
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label for="scFloatingMode">Modo de Selección del Caso</label>
                             <select id="scFloatingMode">
                                 <option value="latest">Automático (Caso destacado / más reciente)</option>
                                 <option value="manual">Fijar manualmente un proyecto del Portafolio</option>
                             </select>
-                            <div style="margin-top:12px;" id="scFloatingManualGroup">
-                                <label for="scFloatingProjectSelect">Proyecto Fijado (si elegiste Manual)</label>
-                                <select id="scFloatingProjectSelect">
-                                    <option value="">-- Seleccionar proyecto --</option>
-                                </select>
-                            </div>
                         </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top:16px;margin-bottom:0;" id="scFloatingManualGroup">
+                        <label for="scFloatingProjectSelect">Proyecto Fijado (cuando eliges modo Manual)</label>
+                        <select id="scFloatingProjectSelect">
+                            <option value="">-- Seleccionar proyecto del portafolio --</option>
+                        </select>
                     </div>
                 </div>
 
                 <!-- 3. Cintillo de Sectores B2B -->
-                <div class="admin-section">
-                    <div class="section-header" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
-                        <div>
-                            <h2>3. Cintillo de Sectores Atendidos (Reemplaza Sopa de Logos)</h2>
-                            <p class="section-subcopy">Agrega, edita o reordena los rubros empresariales que aparecen en la barra continua.</p>
+                <div class="admin-section cms-card">
+                    <div class="cms-card__head cms-card__head--between">
+                        <div style="display:flex;align-items:flex-start;gap:16px;">
+                            <div class="cms-step-icon">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                                    <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                                    <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                                    <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="cms-step-tag">MÓDULO 03 · MARCA BLANCA &amp; RUBROS</span>
+                                <h2>Cintillo de Sectores Atendidos</h2>
+                                <p class="section-subcopy">Activa, edita o añade las industrias corporativas que desfilan en la barra continua debajo de la portada.</p>
+                            </div>
                         </div>
-                        <button type="button" class="btn btn-secondary" id="btnAddSectorRow">+ Añadir Sector</button>
+                        <button type="button" class="btn btn-secondary" id="btnAddSectorRow">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            Añadir Sector
+                        </button>
                     </div>
-                    <div id="scSectorsList" style="display:flex;flex-direction:column;gap:10px;margin-top:14px;"></div>
+
+                    <div class="cms-sectors-table-head">
+                        <span>Visible</span>
+                        <span>Rubro / Industria</span>
+                        <span>Especialidad o Alcance Breve</span>
+                        <span>Ícono Visual</span>
+                        <span></span>
+                    </div>
+                    <div id="scSectorsList" class="cms-sectors-list"></div>
                 </div>
 
                 <!-- 4. Datos Corporativos & WhatsApp -->
-                <div class="admin-section">
-                    <div class="section-header">
-                        <h2>4. Puente WhatsApp &amp; Pie de Página Corporativo</h2>
+                <div class="admin-section cms-card">
+                    <div class="cms-card__head">
+                        <div class="cms-step-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="cms-step-tag">MÓDULO 04 · EMBUDO &amp; PIE DE PÁGINA</span>
+                            <h2>Puente WhatsApp &amp; Pie de Página Corporativo</h2>
+                            <p class="section-subcopy">Configura el número receptor del cotizador directo y los datos oficiales mostrados en el footer.</p>
+                        </div>
                     </div>
+
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="scWhatsappNumber">Número WhatsApp Destino (con código país, sin +)</label>
+                            <label for="scWhatsappNumber">Número WhatsApp Destino (código país, sin +)</label>
                             <input type="text" id="scWhatsappNumber" placeholder="51950699910">
                         </div>
                         <div class="form-group">
@@ -310,7 +430,7 @@
                             <input type="text" id="scCorpAddress" placeholder="Jr. Tarapacá 390, Callería — Pucallpa, Ucayali, Perú">
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" style="margin-bottom:0;">
                         <label for="scCorpRucInfo">Línea de Respaldo Formal (Facturación Electrónica / OS / NDA)</label>
                         <input type="text" id="scCorpRucInfo" placeholder="Facturación Electrónica & OS · Confidencialidad (NDA)">
                     </div>
@@ -1443,9 +1563,9 @@
     <div class="custom-cursor-dot" id="cursorDot"></div>
 
     <script src="confetti.browser.min.js"></script>
-    <script src="api-client.js?v=20261031d"></script>
-    <script src="admin.js?v=20261031d"></script>
-    <script src="cursor.js?v=20261031d"></script>
+    <script src="api-client.js?v=20261031e"></script>
+    <script src="admin.js?v=20261031e"></script>
+    <script src="cursor.js?v=20261031e"></script>
     <!-- Supabase for Express Orders -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </body>

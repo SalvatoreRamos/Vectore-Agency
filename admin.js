@@ -2008,6 +2008,113 @@ function populateFloatingProjectSelect() {
         projects.map(p => `<option value="${p._id}" ${String(p._id) === String(currentVal) ? 'selected' : ''}>${escapeHtml(p.title)} (${escapeHtml(p.category || 'Caso')})</option>`).join('');
 }
 
+const CMS_SECTOR_ICONS = {
+    building: {
+        label: '🏢 Centros Comerciales',
+        svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01M16 6h.01M8 10h.01M16 10h.01M8 14h.01M16 14h.01"/></svg>'
+    },
+    landmark: {
+        label: '🏛️ Entidades / Estado',
+        svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>'
+    },
+    film: {
+        label: '🎬 Cines & Eventos',
+        svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg>'
+    },
+    truck: {
+        label: '🚚 Logística & Mayoristas',
+        svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>'
+    },
+    leaf: {
+        label: '🌿 Agroindustria',
+        svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>'
+    },
+    shield: {
+        label: '🛡️ Banca & Finanzas',
+        svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>'
+    },
+    activity: {
+        label: '🩺 Clínicas & Salud',
+        svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>'
+    },
+    compass: {
+        label: '🧭 Automotriz & Flotas',
+        svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>'
+    },
+    layers: {
+        label: '✨ Inmobiliaria / General',
+        svg: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>'
+    }
+};
+
+function syncHeroLivePreview() {
+    const bgUrl = (document.getElementById('scHeroBgUrl')?.value || '').trim();
+    const op = Number(document.getElementById('scHeroOpacity')?.value || 0.58);
+    const badge = (document.getElementById('scBadgeText')?.value || '').trim();
+    const h1 = (document.getElementById('scHeadline1')?.value || '').trim();
+    const h2 = (document.getElementById('scHeadlineHighlight')?.value || '').trim();
+    const sub = (document.getElementById('scSubtitle')?.value || '').trim();
+    const btn1 = (document.getElementById('scPrimaryCta')?.value || '').trim();
+    const btn2 = (document.getElementById('scSecondaryCta')?.value || '').trim();
+    const floatEnabled = document.getElementById('scFloatingEnabled')?.checked !== false;
+    const floatLabel = (document.getElementById('scFloatingLabel')?.value || 'OPEN PROJECT').trim();
+    const floatMode = document.getElementById('scFloatingMode')?.value || 'latest';
+
+    const manualGroup = document.getElementById('scFloatingManualGroup');
+    if (manualGroup) {
+        manualGroup.style.display = floatMode === 'manual' ? 'block' : 'none';
+    }
+
+    const modeTag = document.getElementById('scHeroBgModeTag');
+    const mediaEl = document.getElementById('scHeroPreviewMedia');
+    if (mediaEl) {
+        if (!bgUrl || bgUrl.startsWith('Subiendo')) {
+            mediaEl.style.backgroundImage = 'none';
+            mediaEl.innerHTML = '';
+            if (modeTag) modeTag.textContent = 'Fondo Animado Original';
+        } else {
+            const isVid = /\.(mp4|webm|mov|ogg)(\?|$)/i.test(bgUrl) || bgUrl.includes('/video/upload/');
+            if (isVid) {
+                mediaEl.style.backgroundImage = 'none';
+                if (!mediaEl.querySelector('video') || mediaEl.querySelector('video').src !== bgUrl) {
+                    mediaEl.innerHTML = `<video src="${escapeHtml(bgUrl)}" autoplay muted loop playsinline></video>`;
+                }
+                if (modeTag) modeTag.textContent = 'Video MP4 Activo';
+            } else {
+                mediaEl.innerHTML = '';
+                mediaEl.style.backgroundImage = `url("${bgUrl.replace(/"/g, '%22')}")`;
+                if (modeTag) modeTag.textContent = 'Imagen Personalizada';
+            }
+        }
+    }
+
+    const scrimEl = document.getElementById('scHeroPreviewScrim');
+    if (scrimEl) {
+        scrimEl.style.background = `linear-gradient(180deg, rgba(12,9,39,${(op * 0.65).toFixed(2)}) 0%, rgba(12,9,39,0.92) 100%)`;
+    }
+
+    const setTxt = (id, val, fallback) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val || fallback;
+    };
+
+    setTxt('scPrevBadge', badge, 'PUBLICIDAD & BTL EN PERÚ · PACKAGING 3D & SOFTWARE');
+    setTxt(
+        'scPrevTitle',
+        `${h1 || 'Ejecutamos tus despliegues BTL en Pucallpa'} ${h2 || 'y creamos publicidad, diseño especializado, packaging 3D y software a medida.'}`.trim(),
+        ''
+    );
+    setTxt('scPrevSub', sub, 'Taller propio para marcas de Lima y todo el Perú.');
+    setTxt('scPrevBtn1', btn1 ? `${btn1} →` : '', 'Cotizar proyecto →');
+    setTxt('scPrevBtn2', btn2, 'Ver portafolio');
+    setTxt('scPrevFloatLabel', floatLabel, 'OPEN PROJECT');
+
+    const floatCard = document.getElementById('scPrevFloatCard');
+    if (floatCard) {
+        floatCard.style.display = floatEnabled ? 'flex' : 'none';
+    }
+}
+
 async function fetchAndRenderSiteConfig() {
     if (!document.getElementById('siteConfigSection')) return;
     try {
@@ -2052,6 +2159,8 @@ async function fetchAndRenderSiteConfig() {
         setVal('scCorpEmail', corp.email || 'agenciavectore@gmail.com');
         setVal('scCorpAddress', corp.address || '');
         setVal('scCorpRucInfo', corp.rucInfo || '');
+
+        syncHeroLivePreview();
     } catch (err) {
         console.error('Error loading SiteConfig in Admin:', err);
     }
@@ -2061,18 +2170,30 @@ function renderAdminSectorsList(sectors) {
     const listEl = document.getElementById('scSectorsList');
     if (!listEl) return;
 
-    const icons = ['building', 'landmark', 'film', 'truck', 'leaf', 'shield', 'activity', 'compass', 'layers'];
-    listEl.innerHTML = sectors.map((sec, idx) => `
-        <div class="sector-admin-row" data-sector-idx="${idx}" style="display:grid;grid-template-columns:auto 1.1fr 1.2fr 130px auto;gap:10px;align-items:center;padding:10px 12px;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.09);">
-            <input type="checkbox" class="sec-active" ${sec.isActive !== false ? 'checked' : ''} title="Mostrar sector">
-            <input type="text" class="sec-name" value="${escapeHtml(sec.name || '')}" placeholder="Nombre del rubro (ej. Centros Comerciales)">
-            <input type="text" class="sec-sub" value="${escapeHtml(sec.subtitle || '')}" placeholder="Especialidad breve">
-            <select class="sec-icon">
-                ${icons.map(ic => `<option value="${ic}" ${sec.icon === ic ? 'selected' : ''}>${ic}</option>`).join('')}
-            </select>
-            <button type="button" class="btn-delete sec-remove-btn" style="padding:6px 10px;">✕</button>
-        </div>
-    `).join('');
+    const iconKeys = Object.keys(CMS_SECTOR_ICONS);
+    listEl.innerHTML = sectors.map((sec, idx) => {
+        const iconKey = CMS_SECTOR_ICONS[sec.icon] ? sec.icon : 'layers';
+        const isActive = sec.isActive !== false;
+        return `
+            <div class="sector-admin-row cms-sector-row ${isActive ? '' : 'is-inactive'}" data-sector-idx="${idx}">
+                <div class="cms-sector-status-cell">
+                    <label class="cms-switch" title="Mostrar u ocultar sector en la web">
+                        <input type="checkbox" class="sec-active" ${isActive ? 'checked' : ''}>
+                        <span class="cms-switch__slider"></span>
+                    </label>
+                </div>
+                <div class="cms-sector-name-wrap">
+                    <span class="cms-sector-icon-badge" data-sector-icon-box>${CMS_SECTOR_ICONS[iconKey].svg}</span>
+                    <input type="text" class="cms-input sec-name" value="${escapeHtml(sec.name || '')}" placeholder="Ej. Centros Comerciales & Retail">
+                </div>
+                <input type="text" class="cms-input sec-sub" value="${escapeHtml(sec.subtitle || '')}" placeholder="Ej. Módulos, activaciones y señalética">
+                <select class="cms-select sec-icon">
+                    ${iconKeys.map(ic => `<option value="${ic}" ${iconKey === ic ? 'selected' : ''}>${CMS_SECTOR_ICONS[ic].label}</option>`).join('')}
+                </select>
+                <button type="button" class="cms-remove-btn sec-remove-btn" title="Eliminar sector" aria-label="Eliminar sector">✕</button>
+            </div>
+        `;
+    }).join('');
 }
 
 function collectAdminSectors() {
@@ -2094,8 +2215,17 @@ function collectAdminSectors() {
         opacityInput.addEventListener('input', () => {
             const lbl = document.getElementById('scHeroOpacityVal');
             if (lbl) lbl.textContent = `${Math.round(Number(opacityInput.value) * 100)}%`;
+            syncHeroLivePreview();
         });
     }
+
+    ['scHeroBgUrl', 'scBadgeText', 'scHeadline1', 'scHeadlineHighlight', 'scSubtitle', 'scPrimaryCta', 'scSecondaryCta', 'scFloatingLabel', 'scFloatingEnabled', 'scFloatingMode'].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('input', syncHeroLivePreview);
+            el.addEventListener('change', syncHeroLivePreview);
+        }
+    });
 
     const heroFile = document.getElementById('scHeroFile');
     if (heroFile) {
@@ -2108,6 +2238,7 @@ function collectAdminSectors() {
                 const res = await api.uploadImage(file);
                 if (res?.success && res.data?.url) {
                     if (urlInput) urlInput.value = res.data.url;
+                    syncHeroLivePreview();
                 } else {
                     throw new Error(res?.message || 'Error al subir archivo');
                 }
@@ -2115,6 +2246,7 @@ function collectAdminSectors() {
                 alert('Error subiendo portada: ' + err.message);
                 if (urlInput) urlInput.value = '';
                 heroFile.value = '';
+                syncHeroLivePreview();
             }
         });
     }
@@ -2125,6 +2257,8 @@ function collectAdminSectors() {
             const current = collectAdminSectors();
             current.push({ id: `sec-${Date.now()}`, name: '', subtitle: '', icon: 'layers', isActive: true });
             renderAdminSectorsList(current);
+            const inputs = document.querySelectorAll('#scSectorsList .sec-name');
+            if (inputs.length) inputs[inputs.length - 1].focus();
         });
     }
 
@@ -2135,6 +2269,18 @@ function collectAdminSectors() {
             if (!rm) return;
             const row = rm.closest('.sector-admin-row');
             if (row) row.remove();
+        });
+
+        secList.addEventListener('change', (e) => {
+            const row = e.target.closest('.sector-admin-row');
+            if (!row) return;
+            if (e.target.classList.contains('sec-active')) {
+                row.classList.toggle('is-inactive', !e.target.checked);
+            } else if (e.target.classList.contains('sec-icon')) {
+                const iconBox = row.querySelector('[data-sector-icon-box]');
+                const cfg = CMS_SECTOR_ICONS[e.target.value] || CMS_SECTOR_ICONS.layers;
+                if (iconBox) iconBox.innerHTML = cfg.svg;
+            }
         });
     }
 
@@ -2172,9 +2318,9 @@ function collectAdminSectors() {
                 }
             };
 
-            const orig = saveBtn.textContent;
+            const origHtml = saveBtn.innerHTML;
             saveBtn.disabled = true;
-            saveBtn.textContent = 'Guardando...';
+            saveBtn.textContent = 'Guardando cambios...';
             try {
                 await api.updateSiteConfig(payload);
                 alert('✅ Portada, Sectores y Datos Corporativos actualizados en vivo.');
@@ -2183,7 +2329,7 @@ function collectAdminSectors() {
                 alert('Error al guardar: ' + err.message);
             } finally {
                 saveBtn.disabled = false;
-                saveBtn.textContent = orig;
+                saveBtn.innerHTML = origHtml;
             }
         });
     }
@@ -2196,12 +2342,15 @@ function collectAdminSectors() {
                 await api.resetHeroBackground();
                 document.getElementById('scHeroBgUrl').value = '';
                 document.getElementById('scHeroMobileUrl').value = '';
+                syncHeroLivePreview();
                 alert('✅ Fondo original restaurado.');
             } catch (err) {
                 alert('Error: ' + err.message);
             }
         });
     }
+
+    syncHeroLivePreview();
 
     const copyCompBtn = document.getElementById('briefCopyCompanyBtn');
     if (copyCompBtn) {

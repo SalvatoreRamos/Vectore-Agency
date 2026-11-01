@@ -29,27 +29,6 @@
     font-style: normal;
     font-display: swap;
 }
-@font-face {
-    font-family: 'Goldplay';
-    src: url('/assets/fonts/Goldplay-SemiBold.otf') format('opentype');
-    font-weight: 600;
-    font-style: normal;
-    font-display: swap;
-}
-@font-face {
-    font-family: 'Goldplay';
-    src: url('/assets/fonts/Goldplay-Bold.otf') format('opentype');
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
-}
-@font-face {
-    font-family: 'Goldplay';
-    src: url('/assets/fonts/Goldplay-Black.otf') format('opentype');
-    font-weight: 800 900;
-    font-style: normal;
-    font-display: swap;
-}
 
 :root {
     --primary: #8655FF;
@@ -70,7 +49,6 @@
     --gradient-primary: linear-gradient(135deg, #4012A6 0%, #8655FF 100%);
     --gradient-dark: linear-gradient(135deg, #120042 0%, #4012A6 100%);
     --gradient-hero: linear-gradient(135deg, #120042 0%, #4012A6 55%, #8655FF 100%);
-    --gradient-spectrum: linear-gradient(90deg, #4012A6 0%, #8655FF 30%, #FF696C 68%, #FFBB55 100%);
 
     --shadow-sm: 0 2px 8px rgba(18, 0, 66, 0.08);
     --shadow-md: 0 4px 20px rgba(18, 0, 66, 0.12);
@@ -96,7 +74,7 @@ html {
 }
 
 body {
-    font-family: 'FF Mark', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: 'FF Mark', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     background: var(--white);
     color: var(--dark);
     line-height: 1.6;
@@ -106,7 +84,7 @@ body {
 }
 
 h1, h2, h3, h4 {
-    font-family: 'Goldplay', 'FF Mark', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 /* Custom Cursor Styles */
