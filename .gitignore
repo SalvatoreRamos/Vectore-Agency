@@ -24,3 +24,7 @@ uploads/*
 # Build
 dist/
 build/
+
+# Raw font source packs (optimized web weights live in public/assets/fonts/)
+2027/FF-Mark/
+2027/Goldplay_Font_Family/

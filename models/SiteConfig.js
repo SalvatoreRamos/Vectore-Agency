@@ -139,7 +139,7 @@ const siteConfigSchema = new mongoose.Schema({
         rucInfo: {
             type: String,
             trim: true,
-            default: 'Facturación Electrónica RUC · Atención bajo Orden de Servicio & NDA'
+            default: 'Facturación Electrónica & OS · Confidencialidad (NDA)'
         },
         businessLines: {
             type: [businessLineSchema],

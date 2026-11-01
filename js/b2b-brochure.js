@@ -100,67 +100,67 @@
     const FALLBACK_WORKSHOP = [
         {
             _id: 'ws-1',
-            name: 'Gigantografías, Lonas & Viniles UV',
-            category: 'gran-formato',
-            tagLabel: 'Gran Formato',
-            icon: '🖨️',
-            description: 'Impresión de alta resistencia solar y lluvia para fachadas, vallas y PDV.'
+            name: 'Señalética Normativa',
+            category: 'estructuras',
+            tagLabel: 'Corpóreos & Señalética',
+            icon: '🛡️',
+            description: 'Señalización fotoluminiscente, reflectiva y directorios en PVC, Celtex y acrílico para plantas, clínicas y malls.'
         },
         {
             _id: 'ws-2',
-            name: 'Letreros Corpóreos 3D & Cajas LED',
-            category: 'estructuras',
-            tagLabel: 'Estructuras',
-            icon: '💡',
-            description: 'Letras volumétricas en acrílico, PVC, Alucobond e iluminación LED IP67.'
+            name: 'Viniles para Malls y Cines',
+            category: 'gran-formato',
+            tagLabel: 'Gran Formato UV',
+            icon: '🖨️',
+            description: 'Impresión UV de alto tránsito, murales promocionales, vinil microperforado y gráficas de estreno para salas y retail.'
         },
         {
             _id: 'ws-3',
+            name: 'Letreros Corpóreos LED',
+            category: 'estructuras',
+            tagLabel: 'Corpóreos & LED',
+            icon: '💡',
+            description: 'Fabricación de letras volumétricas en acrílico, Alucobond y acero con iluminación LED IP67 y montaje certificado.'
+        },
+        {
+            _id: 'ws-4',
+            name: 'Displays BTL',
+            category: 'estructuras',
+            tagLabel: 'Activaciones BTL',
+            icon: '🏛️',
+            description: 'Counters promocionales, backings de prensa, tótems rígidos y exhibidores listos para despliegues corporativos.'
+        },
+        {
+            _id: 'ws-5',
+            name: 'Gigantografías & Lonas UV',
+            category: 'gran-formato',
+            tagLabel: 'Gran Formato',
+            icon: '🖼️',
+            description: 'Impresión de alta resistencia solar y lluvia para fachadas comerciales, vallas y puntos de venta.'
+        },
+        {
+            _id: 'ws-6',
             name: 'Brandeo de Flotas Vehiculares',
             category: 'gran-formato',
             tagLabel: 'Vehicular',
             icon: '🚚',
-            description: 'Rotulación parcial o integral de unidades comerciales con laminado UV.'
-        },
-        {
-            _id: 'ws-4',
-            name: 'Señalética Normativa INDECI',
-            category: 'estructuras',
-            tagLabel: 'Señalética',
-            icon: '🛡️',
-            description: 'Señalización reflectiva, fotoluminiscente y directorios corporativos.'
-        },
-        {
-            _id: 'ws-5',
-            name: 'Stickers Troquelados & DTF UV',
-            category: 'impresion',
-            tagLabel: 'Etiquetas',
-            icon: '🏷️',
-            description: 'Etiquetas resistentes al agua y fricción para envases y promociones.'
-        },
-        {
-            _id: 'ws-6',
-            name: 'Displays POP, Counters & Backings',
-            category: 'estructuras',
-            tagLabel: 'Activaciones',
-            icon: '🏛️',
-            description: 'Módulos desarmables, tótems y estructuras listas para eventos en Pucallpa.'
+            description: 'Rotulación parcial o integral de unidades de reparto con vinil vehicular y laminado protector UV.'
         },
         {
             _id: 'ws-7',
-            name: 'Papelería Corporativa & Fotochecks PVC',
+            name: 'Etiquetas Troqueladas & DTF UV',
             category: 'impresion',
-            tagLabel: 'Imprenta',
-            icon: '📑',
-            description: 'Carpetas institucionales, brochures y credenciales PVC laminadas.'
+            tagLabel: 'Imprenta & UV',
+            icon: '🏷️',
+            description: 'Etiquetas autoadhesivas resistentes al agua y fricción para líneas de producto y promociones.'
         },
         {
             _id: 'ws-8',
-            name: 'Merchandising & Textil Corporativo',
+            name: 'Merchandising Corporativo',
             category: 'merch',
             tagLabel: 'Merchandising',
             icon: '🎁',
-            description: 'Uniformes de campaña, gorras, tomatodos láser y kits empresariales.'
+            description: 'Kits institucionales, tomatodos grabados en láser, tazas y textil corporativo por volumen.'
         }
     ];
 
@@ -410,7 +410,12 @@
                 }
             }
             setTxt('footerAddressText', corp.address);
-            setTxt('footerRucInfo', corp.rucInfo);
+            if (corp.rucInfo) {
+                const normalizedRucInfo = /RUC\s*20/i.test(corp.rucInfo)
+                    ? 'Facturación Electrónica & OS · Confidencialidad (NDA).'
+                    : corp.rucInfo;
+                setTxt('footerRucInfo', normalizedRucInfo);
+            }
 
             if (Array.isArray(corp.businessLines) && corp.businessLines.length > 0) {
                 const girosGrid = document.getElementById('footerGirosGrid');
@@ -619,7 +624,7 @@
                                 <span>📍 ${escapeHtml(location)}</span>
                             </div>
                             <h3 class="case-card__title">${escapeHtml(proj.title)}</h3>
-                            <p class="case-card__desc">${escapeHtml(proj.description)}</p>
+                            <p class="case-card__desc">${escapeHtml(String(proj.description || '').replace(/["”]+$/g, '').trim())}</p>
                         </div>
                         <div class="case-card__footer">
                             <span>Ver proyecto</span>
@@ -673,7 +678,7 @@
                 </h2>
 
                 <p style="font-size:0.95rem;color:var(--vf-text-secondary);line-height:1.62;margin-bottom:18px;">
-                    ${escapeHtml(proj.description)}
+                    ${escapeHtml(String(proj.description || '').replace(/["”]+$/g, '').trim())}
                 </p>
 
                 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;padding:14px 16px;border-radius:var(--radius-md);background:var(--vf-bg);border:1px solid var(--vf-border-subtle);margin-bottom:18px;">
@@ -769,22 +774,24 @@
         let normCat = 'impresion';
         let tagLabel = p.subcategory || 'Taller Propio';
 
-        if (/gigantograf|banner|lona|vinil|flota|vehicul|gran formato|rollup/.test(rawCat)) {
+        if (/gigantograf|banner|lona|vinil|flota|vehicul|gran formato|rollup|mall|cine|mural/.test(rawCat)) {
             normCat = 'gran-formato';
             tagLabel = p.subcategory || 'Gran Formato';
-        } else if (/letrero|corp|acr[ií]lico|led|stand|estructura|se[ñn]al|interior|arquitect/.test(rawCat)) {
+        } else if (/letrero|corp|acr[ií]lico|led|stand|estructura|se[ñn]al|interior|arquitect|display|btl|counter|backing|pop|m[oó]dulo|t[oó]tem/.test(rawCat)) {
             normCat = 'estructuras';
-            tagLabel = p.subcategory || 'Estructuras';
+            tagLabel = p.subcategory || 'Corpóreos & LED';
         } else if (/merch|polo|gorra|taza|tomatodo|lapicero|llavero|bolsa|regalo/.test(rawCat)) {
             normCat = 'merch';
             tagLabel = p.subcategory || 'Merchandising';
         }
 
         const imgUrl = Array.isArray(p.images) && p.images[0]?.url ? p.images[0].url : '';
-        // Only show custom specs if explicitly defined on that specific item (zero repetitive filler tags)
         const specs = Array.isArray(p.features) && p.features.length > 0
             ? p.features.slice(0, 2)
             : [];
+        const cleanDescription = String(p.description || 'Producción directa en nuestro taller de Pucallpa.')
+            .replace(/["”]+$/g, '')
+            .trim();
 
         return {
             _id: p._id,
@@ -793,7 +800,7 @@
             tagLabel,
             imageUrl: imgUrl,
             icon: p.icon || '⚙️',
-            description: p.description || 'Producción directa en nuestro taller de Pucallpa.',
+            description: cleanDescription,
             specs
         };
     }
@@ -979,13 +986,9 @@
                 const badge = field ? field.querySelector('[data-ruc-badge]') : null;
                 if (!badge) return;
                 const val = input.value.trim();
-                const isRuc20 = /\b20\d{9}\b/.test(val);
-                const isRuc10 = /\b10\d{9}\b/.test(val);
-                if (isRuc20) {
-                    badge.textContent = '✓ RUC 20';
-                    badge.classList.add('is-visible');
-                } else if (isRuc10) {
-                    badge.textContent = '✓ RUC 10';
+                const isValidRuc = /\b(10|20)\d{9}\b/.test(val);
+                if (isValidRuc) {
+                    badge.textContent = '✓ Facturación & OS';
                     badge.classList.add('is-visible');
                 } else {
                     badge.classList.remove('is-visible');

@@ -52,6 +52,14 @@ async function getOrCreateMainConfig() {
         config.corporate.businessLines = DEFAULT_BUSINESS_LINES;
         dirty = true;
     }
+    if (
+        config.corporate?.rucInfo &&
+        (config.corporate.rucInfo.includes('RUC 20') ||
+            config.corporate.rucInfo === 'Facturación Electrónica RUC · Atención bajo Orden de Servicio & NDA')
+    ) {
+        config.corporate.rucInfo = 'Facturación Electrónica & OS · Confidencialidad (NDA)';
+        dirty = true;
+    }
     if (dirty) {
         await config.save();
     }

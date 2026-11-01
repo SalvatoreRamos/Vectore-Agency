@@ -32,6 +32,7 @@ import userRoutes from './routes/users.js';
 import paymentRoutes from './routes/payments.js';
 import internalEmailRoutes from './routes/internal-email.js';
 import contactFormRoutes from './routes/contact-form.js';
+import { runB2BDataAlignment } from './utils/b2bDataMigration.js';
 
 // B2C Store / Regional Raffles disabled in B2B transformation:
 // import eventRoutes from './routes/events.js';
@@ -185,6 +186,7 @@ const revalidateStaticOpts = {
 app.use('/css', express.static(path.join(__dirname, 'css'), revalidateStaticOpts));
 app.use('/js', express.static(path.join(__dirname, 'js'), revalidateStaticOpts));
 app.use('/assets', express.static(path.join(__dirname, 'public/assets'), { maxAge: '1y', immutable: true }));
+app.use('/2027', express.static(path.join(__dirname, '2027'), { maxAge: '30d' }));
 app.use(express.static(__dirname, { index: false, ...revalidateStaticOpts }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
@@ -314,6 +316,8 @@ mongoose.connect(process.env.MONGODB_URI)
     } catch (e) {
       // Ignore if index doesn't exist
     }
+
+    await runB2BDataAlignment();
 
     app.listen(PORT, () => {
       console.log(`🚀 Vectore B2B Server running on port ${PORT}`);
