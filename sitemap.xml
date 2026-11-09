@@ -7,7 +7,7 @@
         <xhtml:link rel="alternate" hreflang="es-PE" href="https://www.agenciavectore.com/"/>
         <xhtml:link rel="alternate" hreflang="es" href="https://www.agenciavectore.com/"/>
         <xhtml:link rel="alternate" hreflang="x-default" href="https://www.agenciavectore.com/"/>
-        <lastmod>2026-10-31</lastmod>
+        <lastmod>2026-11-09</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
     </url>
@@ -17,29 +17,48 @@
         <xhtml:link rel="alternate" hreflang="es" href="https://www.agenciavectore.com/software"/>
         <xhtml:link rel="alternate" hreflang="es-PE" href="https://www.agenciavectore.com/software"/>
         <xhtml:link rel="alternate" hreflang="x-default" href="https://www.agenciavectore.com/software"/>
-        <lastmod>2026-10-31</lastmod>
+        <lastmod>2026-11-09</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.9</priority>
     </url>
 
     <url>
         <loc>https://www.agenciavectore.com/terminos</loc>
-        <lastmod>2026-10-31</lastmod>
+        <xhtml:link rel="alternate" hreflang="es-PE" href="https://www.agenciavectore.com/terminos"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://www.agenciavectore.com/terminos"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://www.agenciavectore.com/terminos"/>
+        <lastmod>2026-11-09</lastmod>
         <changefreq>yearly</changefreq>
-        <priority>0.3</priority>
+        <priority>0.4</priority>
     </url>
 
     <url>
-        <loc>https://www.agenciavectore.com/privacidad.html</loc>
-        <lastmod>2026-10-31</lastmod>
+        <loc>https://www.agenciavectore.com/privacidad</loc>
+        <xhtml:link rel="alternate" hreflang="es-PE" href="https://www.agenciavectore.com/privacidad"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://www.agenciavectore.com/privacidad"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://www.agenciavectore.com/privacidad"/>
+        <lastmod>2026-11-09</lastmod>
         <changefreq>yearly</changefreq>
-        <priority>0.3</priority>
+        <priority>0.4</priority>
     </url>
 
     <url>
         <loc>https://www.agenciavectore.com/politica-devoluciones</loc>
-        <lastmod>2026-10-31</lastmod>
+        <xhtml:link rel="alternate" hreflang="es-PE" href="https://www.agenciavectore.com/politica-devoluciones"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://www.agenciavectore.com/politica-devoluciones"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://www.agenciavectore.com/politica-devoluciones"/>
+        <lastmod>2026-11-09</lastmod>
         <changefreq>yearly</changefreq>
-        <priority>0.3</priority>
+        <priority>0.4</priority>
+    </url>
+
+    <url>
+        <loc>https://www.agenciavectore.com/libro-reclamaciones</loc>
+        <xhtml:link rel="alternate" hreflang="es-PE" href="https://www.agenciavectore.com/libro-reclamaciones"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://www.agenciavectore.com/libro-reclamaciones"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://www.agenciavectore.com/libro-reclamaciones"/>
+        <lastmod>2026-11-09</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.4</priority>
     </url>
 </urlset>

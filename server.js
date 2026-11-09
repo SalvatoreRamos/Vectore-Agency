@@ -157,6 +157,19 @@ app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // ==================================================
+// Robots.txt & Sitemap Direct Serving (Accessible on Apex & Subdomains with HTTP 200)
+// ==================================================
+app.get('/robots.txt', (req, res) => {
+  res.type('text/plain');
+  res.sendFile(path.join(__dirname, 'robots.txt'));
+});
+
+app.get('/sitemap.xml', (req, res) => {
+  res.type('application/xml');
+  res.sendFile(path.join(__dirname, 'sitemap.xml'));
+});
+
+// ==================================================
 // Canonical Single-Domain Unification
 // Redirects agenciavectore.com and pe.agenciavectore.com -> www.agenciavectore.com
 // ==================================================
@@ -167,6 +180,40 @@ app.use((req, res, next) => {
 
   if (!isLocalOrPreview && !isApiRequest && REDIRECT_HOSTS.includes(hostname) && hostname !== PRIMARY_HOST) {
     return res.redirect(301, `https://${PRIMARY_HOST}${req.originalUrl}`);
+  }
+
+  next();
+});
+
+// ==================================================
+// Clean URL Normalization & 301 Redirects
+// Strips .html extensions and trailing slashes to unify canonical URLs
+// ==================================================
+app.use((req, res, next) => {
+  const p = req.path;
+
+  // Skip API routes and static asset folders
+  if (p.startsWith('/api/') || p.startsWith('/css/') || p.startsWith('/js/') || p.startsWith('/assets/') || p.startsWith('/2027/') || p.startsWith('/uploads/')) {
+    return next();
+  }
+
+  // Normalize /index.html -> /
+  if (p === '/index.html') {
+    return res.redirect(301, '/');
+  }
+
+  // Strip .html extension for clean public URLs
+  if (p.endsWith('.html')) {
+    const cleanPath = p.slice(0, -5);
+    const query = req.url.slice(p.length);
+    return res.redirect(301, cleanPath + query);
+  }
+
+  // Remove trailing slashes (except root '/')
+  if (p.length > 1 && p.endsWith('/')) {
+    const cleanPath = p.slice(0, -1);
+    const query = req.url.slice(p.length);
+    return res.redirect(301, cleanPath + query);
   }
 
   next();
@@ -243,12 +290,6 @@ app.get('/checkout', (req, res) => {
   res.redirect(301, '/#cotizar');
 });
 
-// Corporate Client Portal & Private Ticket Payment View
-app.get(['/clientes', '/portal', '/pago'], (req, res) => {
-  res.set('X-Robots-Tag', 'noindex, nofollow');
-  res.sendFile(path.join(__dirname, 'clientes.html'));
-});
-
 // Vectore Flow SaaS Page
 app.get('/software', (req, res) => {
   res.sendFile(path.join(__dirname, 'software.html'));
@@ -259,12 +300,34 @@ app.get('/terminos', (req, res) => {
   res.sendFile(path.join(__dirname, 'terminos.html'));
 });
 
+app.get('/privacidad', (req, res) => {
+  res.sendFile(path.join(__dirname, 'privacidad.html'));
+});
+
 app.get('/politica-devoluciones', (req, res) => {
   res.sendFile(path.join(__dirname, 'politica-devoluciones.html'));
 });
 
 app.get('/libro-reclamaciones', (req, res) => {
   res.sendFile(path.join(__dirname, 'libro-reclamaciones.html'));
+});
+
+// Corporate Client Portal & Private Ticket Payment View
+app.get(['/clientes', '/portal', '/pago'], (req, res) => {
+  res.set('X-Robots-Tag', 'noindex, nofollow');
+  res.sendFile(path.join(__dirname, 'clientes.html'));
+});
+
+// Admin Panel (Protected / Noindex)
+app.get('/admin', (req, res) => {
+  res.set('X-Robots-Tag', 'noindex, nofollow');
+  res.sendFile(path.join(__dirname, 'admin.html'));
+});
+
+// Password Reset (Noindex)
+app.get('/reset-password', (req, res) => {
+  res.set('X-Robots-Tag', 'noindex, nofollow');
+  res.sendFile(path.join(__dirname, 'reset-password.html'));
 });
 
 // Private Real Estate Investment Dossier (Accessible ONLY via direct link)
